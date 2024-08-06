@@ -6,6 +6,7 @@ import JournalScreen from '../screens/JournalScreen';
 import AddPinModal from '../screens/AddPinScreen';
 import Icon from 'react-native-vector-icons/Ionicons';
 import * as Colors from '../constants/colors';
+import { Image } from 'react-native';
 
 const Tab = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = 'Map';
@@ -19,15 +20,17 @@ function NavBar(): React.JSX.Element {
     <NavigationContainer>
     <Tab.Navigator
       initialRouteName={INITIAL_ROUTE_NAME}
-      screenOptions={{tabBarActiveTintColor: Colors.lightOrange, tabBarInactiveTintColor: Colors.lightGray}}>
+      screenOptions={{tabBarLabelStyle: {paddingBottom: 5}, tabBarActiveTintColor: Colors.darkOrange, tabBarInactiveTintColor: Colors.lightGray}}>
       <Tab.Screen
         name="Map"
         component={MapScreen}
         options={{
-          tabBarLabel: 'Map',
-          tabBarIcon: ({ color, size }) => (
-            <Icon name="compass" color={color} size={size} />
-          ),
+            tabBarIcon: ({ color, size }) => (
+                <Icon name="compass" color={color} size={size} />
+            ),
+            headerLeft: () => <Image source={require('../assets/add-friends-icon.png')} style={{flex: 1, width: 30, height: 30, resizeMode: 'contain', marginLeft: 10}}/>,
+            headerTitle: () => <Image source={require('../assets/full-logo.png')} style={{flex: 1, width: 100, height: 100, resizeMode: 'contain'}}/>,
+            headerRight: () => <Icon name="settings-outline" size={30} style={{marginRight: 10}}/>
         }}
       />
       <Tab.Screen
@@ -41,10 +44,9 @@ function NavBar(): React.JSX.Element {
         name="Journal"
         component={JournalScreen}
         options={{
-          tabBarLabel: 'Journal',
-          tabBarIcon: ({ color, size }) => (
-            <Icon name="journal" color={color} size={size} />
-          ),
+            tabBarIcon: ({ color, size }) => (
+                <Icon name="journal" color={color} size={size} />
+            ),
         }}
       />
     </Tab.Navigator>

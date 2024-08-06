@@ -12,7 +12,7 @@ function AddPinScreen(): React.JSX.Element {
           setModalVisible(true);
         }}
         style={styles.buttonStyle}>
-        <Icon name={'add'} size={80} />
+        <Icon name={'add'} size={40} color={Colors.white}/>
       </TouchableOpacity>
 
       <View>
@@ -49,10 +49,16 @@ const styles = StyleSheet.create({
     margin: 0,
   },
   buttonStyle: {
-    height: 90,
-    width: 90,
+    height: 80,
+    width: 80,
     backgroundColor: Colors.darkOrange,
     borderRadius: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: 'black',
+    shadowOffset: { width: 4, height: 4 },
+    shadowOpacity: 0.6,
+    paddingBottom: 20,
   },
 });
 
