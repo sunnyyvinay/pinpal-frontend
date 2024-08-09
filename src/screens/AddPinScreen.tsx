@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
-import {StyleSheet, View, TouchableOpacity, Text, Modal} from 'react-native';
+import Modal from "react-native-modal";
+import {StyleSheet, View, TouchableOpacity, Text, Button} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import * as Colors from '../constants/colors';
 
@@ -17,14 +18,18 @@ function AddPinScreen(): React.JSX.Element {
 
       <View>
         <Modal
-          animationType="slide"
-          visible={modalVisible}
-          onRequestClose={() => setModalVisible(false)}
+          isVisible={modalVisible}
           style={styles.contentView}>
           <View style={styles.content}>
             <Text style={styles.contentTitle}>Add pin through..</Text>
             <Text>Map</Text>
             <Text>Journal</Text>
+            <Button
+                title="Close"
+                onPress={() => {
+                setModalVisible(false);
+                }}>
+            </Button>
           </View>
         </Modal>
       </View>
@@ -46,7 +51,7 @@ const styles = StyleSheet.create({
   },
   contentView: {
     justifyContent: 'flex-end',
-    margin: 0,
+    margin: 30,
   },
   buttonStyle: {
     height: 80,
