@@ -1,4 +1,3 @@
-import { NavigationContainer } from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import React from 'react';
 import Map from '../screens/Map';
@@ -6,7 +5,7 @@ import Journal from '../screens/Journal';
 import AddPinModal from '../screens/AddPinScreen';
 import Icon from 'react-native-vector-icons/Ionicons';
 import * as Colors from '../constants/colors';
-import { Image } from 'react-native';
+import { Image, StyleSheet } from 'react-native';
 
 const Tab = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = 'Map';
@@ -27,9 +26,9 @@ function NavBar(): React.JSX.Element {
             tabBarIcon: ({ color, size }) => (
                 <Icon name="compass" color={color} size={size} />
             ),
-            headerLeft: () => <Image source={require('../assets/add-friends-icon.png')} style={{flex: 1, width: 30, height: 30, resizeMode: 'contain', marginLeft: 10}}/>,
-            headerTitle: () => <Image source={require('../assets/full-logo.png')} style={{flex: 1, width: 100, height: 100, resizeMode: 'contain'}}/>,
-            headerRight: () => <Icon name="settings-outline" size={30} style={{marginRight: 10}}/>
+            headerLeft: () => <Image source={require('../../assets/images/add-friends-icon.png')} style={styles.addFriendsButton}/>,
+            headerTitle: () => <Image source={require('../../assets/images/full-logo.png')} style={styles.headerTitle}/>,
+            headerRight: () => <Icon name="settings-outline" size={30} style={styles.settingsButton}/>
         }}
       />
       <Tab.Screen
@@ -51,5 +50,24 @@ function NavBar(): React.JSX.Element {
     </Tab.Navigator>
   );
 }
+
+const styles = StyleSheet.create({
+  addFriendsButton: {
+    flex: 1,
+    width: 30,
+    height: 30,
+    resizeMode: 'contain',
+    marginLeft: 10
+  },
+  headerTitle: {
+    flex: 1,
+    width: 100,
+    height: 100,
+    resizeMode: 'contain',
+  },
+  settingsButton: {
+    marginRight: 10
+  }
+});
 
 export default NavBar;

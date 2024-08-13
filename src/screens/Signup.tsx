@@ -23,7 +23,7 @@ const Signup = ({navigation}: {navigation: any}) => {
                 buttonStyle={styles.nextButton}
                 containerStyle={styles.backButtonContainer} 
                 onPress={() => navigation.navigate("Welcome")} />
-            <Image source={require('../assets/full-logo.png')} style={styles.logo} />
+            <Image source={require('../../assets/images/full-logo.png')} style={styles.logo} />
             <PhoneInput 
                 layout="second" 
                 defaultCode={'US'} 
@@ -38,7 +38,7 @@ const Signup = ({navigation}: {navigation: any}) => {
                 color={Colors.black}
                 iconRight
                 iconContainerStyle={{ marginLeft: 10 }}
-                titleStyle={{ color: Colors.black, fontWeight: '700' }}
+                titleStyle={{ color: Colors.black, fontWeight: '700', fontFamily: 'Sansation' }}
                 buttonStyle={styles.nextButton}
                 containerStyle={styles.buttonContainerStyle} />
         </LinearGradient>

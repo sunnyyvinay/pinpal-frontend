@@ -7,18 +7,18 @@ import { Button } from '@rneui/themed';
 const Welcome = ({navigation}: {navigation: any}) => {
   return (
     <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 1}} colors={[Colors.darkOrange, Colors.darkYellow]} style={styles.gradientContainer}>
-        <Image source={require('../assets/full-logo.png')} style={styles.logo} />
+        <Image source={require('../../assets/images/full-logo.png')} style={styles.logo} />
         <Button 
             title="LOG IN" 
             color={Colors.black}
-            titleStyle={{ color: Colors.black, fontWeight: '700' }}
+            titleStyle={{ color: Colors.black, fontWeight: '700', fontFamily: 'Sansation' }}
             buttonStyle={styles.button}
             containerStyle={styles.loginButtonContainer} 
             onPress={() => navigation.navigate("Login")} />
         <Button 
             title="SIGN UP" 
             color={Colors.black}
-            titleStyle={{ color: Colors.black, fontWeight: '700' }}
+            titleStyle={{ color: Colors.black, fontWeight: '700', fontFamily: 'Sansation' }}
             buttonStyle={styles.button}
             containerStyle={styles.signupButtonContainer} 
             onPress={() => navigation.navigate("Signup")} />

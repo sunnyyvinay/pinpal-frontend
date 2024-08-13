@@ -1,0 +1,29 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "assets/fonts/Sansation_Bold.ttf",
+      "sha1": "cb34aa6e1b227aea85452ec2170723d702529d45"
+    },
+    {
+      "path": "assets/fonts/Sansation_Bold_Italic.ttf",
+      "sha1": "d78e5f0d0fe5b82f52d8f10b19abb0370fc8886c"
+    },
+    {
+      "path": "assets/fonts/Sansation_Italic.ttf",
+      "sha1": "b8db5b4e28642ccc9686dfff1e89481bea4609a3"
+    },
+    {
+      "path": "assets/fonts/Sansation_Light.ttf",
+      "sha1": "b238ba4e6e92afab7d1f4fee34cda9573ebfd547"
+    },
+    {
+      "path": "assets/fonts/Sansation_Light_Italic.ttf",
+      "sha1": "339f19f40bc7d65d45a075b57a554d1a5b5802aa"
+    },
+    {
+      "path": "assets/fonts/Sansation_Regular.ttf",
+      "sha1": "cce586ccae3991a117fb36f80e4f71cc321fd670"
+    }
+  ]
+}
