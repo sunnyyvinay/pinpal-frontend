@@ -1,8 +1,8 @@
 import { NavigationContainer } from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import React from 'react';
-import MapScreen from '../screens/MapScreen';
-import JournalScreen from '../screens/JournalScreen';
+import Map from '../screens/Map';
+import Journal from '../screens/Journal';
 import AddPinModal from '../screens/AddPinScreen';
 import Icon from 'react-native-vector-icons/Ionicons';
 import * as Colors from '../constants/colors';
@@ -17,13 +17,12 @@ const AddPinComponent = () => {
 
 function NavBar(): React.JSX.Element {
   return (
-    <NavigationContainer>
     <Tab.Navigator
       initialRouteName={INITIAL_ROUTE_NAME}
       screenOptions={{tabBarLabelStyle: {paddingBottom: 5}, tabBarActiveTintColor: Colors.darkOrange, tabBarInactiveTintColor: Colors.lightGray}}>
       <Tab.Screen
         name="Map"
-        component={MapScreen}
+        component={Map}
         options={{
             tabBarIcon: ({ color, size }) => (
                 <Icon name="compass" color={color} size={size} />
@@ -42,7 +41,7 @@ function NavBar(): React.JSX.Element {
       />
       <Tab.Screen
         name="Journal"
-        component={JournalScreen}
+        component={Journal}
         options={{
             tabBarIcon: ({ color, size }) => (
                 <Icon name="journal" color={color} size={size} />
@@ -50,7 +49,6 @@ function NavBar(): React.JSX.Element {
         }}
       />
     </Tab.Navigator>
-    </NavigationContainer>
   );
 }
 

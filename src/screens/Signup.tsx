@@ -7,7 +7,7 @@ import { Image } from '@rneui/base';
 import PhoneInput from "react-native-phone-number-input";
 import Icon from 'react-native-vector-icons/Ionicons';
 
-const Signup = () => {
+const Signup = ({navigation}: {navigation: any}) => {
     const [phoneNo, setPhoneNo] = useState<string | undefined>();
     const [formattedPhoneNo, setFormattedPhoneNo] = useState<string | undefined>();
     const [location, setLocation] = useState<string | undefined>();
@@ -17,6 +17,12 @@ const Signup = () => {
 
     return (
         <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 1}} colors={[Colors.darkOrange, Colors.darkYellow]} style={styles.gradientContainer}>
+            <Button
+                icon={<Icon name="arrow-back" size={20} color={Colors.black} />}
+                color={Colors.black}
+                buttonStyle={styles.nextButton}
+                containerStyle={styles.backButtonContainer} 
+                onPress={() => navigation.navigate("Welcome")} />
             <Image source={require('../assets/full-logo.png')} style={styles.logo} />
             <PhoneInput 
                 layout="second" 
@@ -63,8 +69,14 @@ const styles = StyleSheet.create({
     buttonContainerStyle: {
         width: '75%',
         marginHorizontal: 50,
-        marginVertical: 50,
+        marginTop: '30%',
     },
+    backButtonContainer: {
+        position: 'absolute',
+        marginLeft: 15,
+        marginTop: 30,
+        alignSelf: 'flex-start',
+    }
 });
 
 export default Signup;
