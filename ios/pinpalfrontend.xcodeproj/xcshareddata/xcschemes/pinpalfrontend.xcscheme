@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "PinPal.app"
-               BlueprintName = "PinPal"
-               ReferencedContainer = "container:PinPal.xcodeproj">
+               BuildableName = "pinpalfrontend.app"
+               BlueprintName = "pinpalfrontend"
+               ReferencedContainer = "container:pinpalfrontend.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "PinPalTests.xctest"
-               BlueprintName = "PinPalTests"
-               ReferencedContainer = "container:PinPal.xcodeproj">
+               BuildableName = "pinpalfrontendTests.xctest"
+               BlueprintName = "pinpalfrontendTests"
+               ReferencedContainer = "container:pinpalfrontend.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "PinPal.app"
-            BlueprintName = "PinPal"
-            ReferencedContainer = "container:PinPal.xcodeproj">
+            BuildableName = "pinpalfrontend.app"
+            BlueprintName = "pinpalfrontend"
+            ReferencedContainer = "container:pinpalfrontend.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "PinPal.app"
-            BlueprintName = "PinPal"
-            ReferencedContainer = "container:PinPal.xcodeproj">
+            BuildableName = "pinpalfrontend.app"
+            BlueprintName = "pinpalfrontend"
+            ReferencedContainer = "container:pinpalfrontend.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

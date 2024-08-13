@@ -14,7 +14,7 @@ if linkage != nil
   use_frameworks! :linkage => linkage.to_sym
 end
 
-target 'PinPal' do
+target 'pinpalfrontend' do
   config = use_native_modules!
 
   use_react_native!(
@@ -23,7 +23,7 @@ target 'PinPal' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
-  target 'PinPalTests' do
+  target 'pinpalfrontendTests' do
     inherit! :complete
     # Pods for testing
   end
