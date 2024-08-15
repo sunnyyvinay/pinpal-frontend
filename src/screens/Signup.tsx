@@ -1,19 +1,91 @@
-import React, {useState } from 'react';
+import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Button } from '@rneui/themed';
+import { Button, Input , Text } from '@rneui/themed';
 import LinearGradient from 'react-native-linear-gradient';
 import * as Colors from '../constants/colors';
 import { Image } from '@rneui/base';
-import PhoneInput from "react-native-phone-number-input";
 import Icon from 'react-native-vector-icons/Ionicons';
+import PhoneInput from "react-native-phone-number-input";
+import DatePicker from 'react-native-date-picker'
 
 const Signup = ({navigation}: {navigation: any}) => {
-    const [phoneNo, setPhoneNo] = useState<string | undefined>();
-    const [formattedPhoneNo, setFormattedPhoneNo] = useState<string | undefined>();
-    const [location, setLocation] = useState<string | undefined>();
-    const [fullName, setFullName] = useState<string | undefined>();
-    const [username, setUsername] = useState<string | undefined>();
-    const [password, setPassword] = useState<string | undefined>();
+    const [step, setStep] = useState<number>(1);
+
+    const [phoneNo, setPhoneNo] = useState<string | undefined>("");
+    const [formattedPhoneNo, setFormattedPhoneNo] = useState<string | undefined>("");
+    const [email, setEmail] = useState<string | undefined>("");
+    const [birthday, setBirthday] = useState(new Date());
+    const [fullName, setFullName] = useState<string>("");
+    const [username, setUsername] = useState<string>("");
+    const [password, setPassword] = useState<string>("");
+
+    function renderStep(step: number) {
+        switch (step) {
+            case 1:
+                return (
+                    <View style={styles.inputViewContainer}>
+                        <PhoneInput 
+                            layout="second" 
+                            defaultCode={'US'} 
+                            defaultValue={phoneNo} 
+                            onChangeText={(text: string | undefined) => {setPhoneNo(text)}} 
+                            onChangeFormattedText={(text: string | undefined) => {setFormattedPhoneNo(text)}}
+                            withShadow={true}
+                            autoFocus={true} />
+                    </View>
+                )
+            case 2:
+                return (
+                    <View style={styles.inputViewContainer}>
+                        <Text style={{fontSize: 20, textAlign: 'center', fontWeight: 'bold'}}>{birthday.toDateString()}</Text>
+                        <DatePicker 
+                            mode='date'
+                            date={birthday}
+                            onDateChange={setBirthday}
+                            maximumDate={new Date()}
+                            modal={false}
+                        />
+                    </View>
+                )
+            case 3:
+                return (
+                    <View style={styles.inputViewContainer}>
+                        <Input
+                            value={fullName}
+                            label="Full Name"
+                            placeholder="Enter full name"
+                            onChangeText={setFullName}
+                            containerStyle={styles.textInputContainer}
+                        />
+                    </View>
+                )
+            case 4:
+                return (
+                    <View style={styles.inputViewContainer}>
+                        <Input
+                            value={username}
+                            label="Username"
+                            placeholder="Enter username"
+                            onChangeText={setUsername}
+                            containerStyle={styles.textInputContainer}
+                        />
+                    </View>
+                )
+            case 5:
+                return (
+                    <View style={styles.inputViewContainer}>
+                        <Input
+                            value={password}
+                            label="Password"
+                            placeholder="Enter password"
+                            onChangeText={setPassword}
+                            secureTextEntry={true}
+                            containerStyle={styles.textInputContainer}
+                        />
+                    </View>
+                )
+        }
+    }
 
     return (
         <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 1}} colors={[Colors.darkOrange, Colors.darkYellow]} style={styles.gradientContainer}>
@@ -22,25 +94,33 @@ const Signup = ({navigation}: {navigation: any}) => {
                 color={Colors.black}
                 buttonStyle={styles.nextButton}
                 containerStyle={styles.backButtonContainer} 
-                onPress={() => navigation.navigate("Welcome")} />
+                onPress={() => {
+                    step == 1 ? navigation.navigate("Welcome") : setStep(step - 1)
+                }} />
             <Image source={require('../../assets/images/full-logo.png')} style={styles.logo} />
-            <PhoneInput 
-                layout="second" 
-                defaultCode={'US'} 
-                defaultValue={phoneNo} 
-                onChangeText={(text: string | undefined) => {setPhoneNo(text)}} 
-                onChangeFormattedText={(text: string | undefined) => {setFormattedPhoneNo(text)}}
-                withShadow={true}
-                autoFocus={true} />
-            <Button 
-                title="NEXT" 
-                icon={<Icon name="arrow-forward-circle-outline" size={20} color={Colors.black} />}
-                color={Colors.black}
-                iconRight
-                iconContainerStyle={{ marginLeft: 10 }}
-                titleStyle={{ color: Colors.black, fontWeight: '700', fontFamily: 'Sansation' }}
-                buttonStyle={styles.nextButton}
-                containerStyle={styles.buttonContainerStyle} />
+
+            {renderStep(step)}
+            
+            {
+                step < 5 ? 
+                <Button 
+                    title="NEXT" 
+                    icon={<Icon name="arrow-forward-circle-outline" size={20} color={Colors.black} />}
+                    color={Colors.black}
+                    iconRight
+                    iconContainerStyle={{ marginLeft: 10 }}
+                    titleStyle={{ color: Colors.black, fontWeight: '700', fontFamily: 'Sansation' }}
+                    buttonStyle={styles.nextButton}
+                    containerStyle={styles.buttonContainerStyle} 
+                    onPress={() => setStep(step + 1)}/> 
+                :
+                <Button 
+                    title="SIGN UP"
+                    color={Colors.black}
+                    titleStyle={{ color: Colors.black, fontWeight: '700', fontFamily: 'Sansation' }}
+                    buttonStyle={styles.nextButton}
+                    containerStyle={styles.buttonContainerStyle} />
+            }
         </LinearGradient>
   )
 }
@@ -76,6 +156,13 @@ const styles = StyleSheet.create({
         marginLeft: 15,
         marginTop: 30,
         alignSelf: 'flex-start',
+    },
+    inputViewContainer: {
+        width: '100%',
+        alignItems: 'center',
+    },
+    textInputContainer: {
+        width: '90%',
     }
 });
 
