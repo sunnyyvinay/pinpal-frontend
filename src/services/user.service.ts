@@ -37,9 +37,9 @@ export const loginUser = async (user: UserLogin) => {
 };
 
 // GET USER INFO
-export const getUser = async (user_id: string) => {
+export const getUser = async (id: string) => {
   try {
-      const response = await axios.get(`${apiUrl}/${user_id}`);
+      const response = await axios.get(`${apiUrl}/${id}`);
       return response.data;
   } catch (error) {
       return error;
