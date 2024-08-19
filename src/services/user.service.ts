@@ -9,6 +9,7 @@ interface UserSignup {
     birthday: Date;
     email: string | undefined;
     phone_no: string | undefined;
+    profile_pic: Buffer | null;
 }
 
 interface UserLogin {
@@ -45,3 +46,13 @@ export const getUser = async (id: string) => {
       return error;
   }
 };
+
+// UPDATE USER INFO
+export const updateUser = async (id: string, user: UserSignup) => {
+  try {
+      const response = await axios.put(`${apiUrl}/${id}`, user);
+      return response.data;
+  } catch (error) {
+      return error;
+  }
+}

@@ -48,6 +48,9 @@ function NavBar({ route, navigation }: any): React.JSX.Element {
             tabBarIcon: ({ color, size }) => (
                 <Icon name="journal" color={color} size={size} />
             ),
+            headerLeft: () => <Image source={require('../../assets/images/add-friends-icon.png')} style={styles.addFriendsButton}/>,
+            headerTitle: "My Journal",
+            headerRight: () => <Icon name="settings-outline" size={30} style={styles.settingsButton} onPress={() => navigation.navigate("Settings")}/>
         }}
       />
     </Tab.Navigator>

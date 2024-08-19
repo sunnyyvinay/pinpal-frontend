@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
-import { Button, Input, Header} from '@rneui/themed';
+import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Button } from '@rneui/themed';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import * as Colors from '../constants/colors';
-import BackButton from '../components/BackButton';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getUser } from '../services/user.service';
 
@@ -36,74 +35,78 @@ const Settings = ({ route, navigation }: any) => {
     return (
         <ScrollView contentContainerStyle={styles.container}>
             <Text style={styles.sectionTitle}>Account Information</Text>
-                <View style={styles.fieldView}>
-                    <View style={styles.textView}>
-                        <Text style={{...styles.fieldText}}>
-                            Username
-                        </Text>
-                        <Text style={{...styles.fieldText, fontWeight: 'normal', color: Colors.lightGray}}>
-                            {userData.username}
-                        </Text>
-                    </View>
-                    <FeatherIcon name="edit-2" size={15} style={styles.fieldIcon} />
-                </View>
+            <Image source={userData.profile_pic ? {uri: userData.profile_pic} : require('../../assets/images/default-pfp.jpg')} style={styles.pfpImage} />
 
-                <View style={styles.fieldView}>
-                    <View style={styles.textView}>
-                        <Text style={{...styles.fieldText}}>
-                            Full Name
-                        </Text>
-                        <Text style={{...styles.fieldText, fontWeight: 'normal', color: Colors.lightGray}}>
-                            {userData.full_name}
-                        </Text>
-                    </View>
-                    <FeatherIcon name="edit-2" size={15} style={styles.fieldIcon} />
+            <View style={styles.fieldView}>
+                <View style={styles.textView}>
+                    <Text style={{...styles.fieldText}}>
+                        Username
+                    </Text>
+                    <Text style={{...styles.fieldText, fontWeight: 'normal', color: Colors.lightGray}}>
+                        {userData.username}
+                    </Text>
                 </View>
+                <FeatherIcon name="edit-2" size={15} style={styles.fieldIcon} />
+            </View>
 
-                <View style={styles.fieldView}>
-                    <View style={styles.textView}>
-                        <Text style={{...styles.fieldText}}>
-                            Birthday
-                        </Text>
-                        <Text style={{...styles.fieldText, fontWeight: 'normal', color: Colors.lightGray}}>
-                            {formattedBirthday}
-                        </Text>
-                    </View>
-                    <FeatherIcon name="edit-2" size={15} style={styles.fieldIcon} />
+            <View style={styles.fieldView}>
+                <View style={styles.textView}>
+                    <Text style={{...styles.fieldText}}>
+                        Full Name
+                    </Text>
+                    <Text style={{...styles.fieldText, fontWeight: 'normal', color: Colors.lightGray}}>
+                        {userData.full_name}
+                    </Text>
                 </View>
+                <FeatherIcon name="edit-2" size={15} style={styles.fieldIcon} />
+            </View>
 
-                <View style={styles.fieldView}>
-                    <View style={styles.textView}>
-                        <Text style={{...styles.fieldText}}>
-                            Phone Number
-                        </Text>
-                        <Text style={{...styles.fieldText, fontWeight: 'normal', color: Colors.lightGray}}>
-                            {userData.phone_no}
-                        </Text>
-                    </View>
-                    <FeatherIcon name="edit-2" size={15} style={styles.fieldIcon} />
+            <View style={styles.fieldView}>
+                <View style={styles.textView}>
+                    <Text style={{...styles.fieldText}}>
+                        Birthday
+                    </Text>
+                    <Text style={{...styles.fieldText, fontWeight: 'normal', color: Colors.lightGray}}>
+                        {formattedBirthday}
+                    </Text>
                 </View>
+                <FeatherIcon name="edit-2" size={15} style={styles.fieldIcon} />
+            </View>
 
-                <View style={styles.fieldView}>
-                    <View style={styles.textView}>
-                        <Text style={{...styles.fieldText}}>
-                            Email
-                        </Text>
-                        <Text style={{...styles.fieldText, fontWeight: 'normal', color: Colors.lightGray}}>
-                            {userData.email}
-                        </Text>
-                    </View>
-                    <FeatherIcon name="edit-2" size={15} style={styles.fieldIcon} />
+            <View style={styles.fieldView}>
+                <View style={styles.textView}>
+                    <Text style={{...styles.fieldText}}>
+                        Phone Number
+                    </Text>
+                    <Text style={{...styles.fieldText, fontWeight: 'normal', color: Colors.lightGray}}>
+                        {userData.phone_no}
+                    </Text>
                 </View>
+                <FeatherIcon name="edit-2" size={15} style={styles.fieldIcon} />
+            </View>
 
-                <View style={styles.fieldView}>
-                    <View style={styles.textView}>
-                        <Text style={{...styles.fieldText}}>
-                            Change Your Password
-                        </Text>
-                    </View>
-                    <MaterialIcon name="password" size={15} style={styles.fieldIcon} />
+            <View style={styles.fieldView}>
+                <View style={styles.textView}>
+                    <Text style={{...styles.fieldText}}>
+                        Email
+                    </Text>
+                    <Text style={{...styles.fieldText, fontWeight: 'normal', color: Colors.lightGray}}>
+                        {userData.email}
+                    </Text>
                 </View>
+                <FeatherIcon name="edit-2" size={15} style={styles.fieldIcon} />
+            </View>
+
+            <View style={styles.fieldView}>
+                <View style={styles.textView}>
+                    <Text style={{...styles.fieldText}}>
+                        Change Your Password
+                    </Text>
+                </View>
+                <MaterialIcon name="password" size={15} style={styles.fieldIcon} />
+            </View>
+
+            <Text style={styles.sectionTitle}>Profile Settings</Text>
 
             <Button 
                 title="LOG OUT" 
@@ -123,7 +126,6 @@ const Settings = ({ route, navigation }: any) => {
 const styles = StyleSheet.create({
     container: {
         alignContent: 'center',
-        flexDirection: 'column',
         textAlign: 'center',
         alignItems: 'center',
     },
@@ -158,6 +160,15 @@ const styles = StyleSheet.create({
         flex: 0.05,
         alignSelf: 'center',
         marginRight: 5,
+    },
+    pfpImage: {
+        width: 100,
+        height: 100,
+        borderRadius: 50,
+        borderWidth: 2,
+        borderColor: Colors.mediumOrange,
+        alignSelf: 'center',
+        marginBottom: 10,
     },
     logOutButton: {
         backgroundColor: Colors.mediumOrange
