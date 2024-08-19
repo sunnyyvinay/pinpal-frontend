@@ -4,10 +4,12 @@ import * as Colors from '../constants/colors';
 import { Image, StyleSheet } from 'react-native';
 import { Button, Input } from '@rneui/themed';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { loginUser } from '../services/user.service';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Login = ({navigation}: {navigation: any}) => {
-  const [username, setUsername] = useState<string | undefined>("");
-  const [password, setPassword] = useState<string | undefined>("");
+  const [username, setUsername] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
   
   return (
     <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 1}} colors={[Colors.darkOrange, Colors.darkYellow]} style={styles.gradientContainer}>
@@ -24,6 +26,7 @@ const Login = ({navigation}: {navigation: any}) => {
             placeholder="Enter username"
             onChangeText={setUsername}
             containerStyle={styles.inputContainer}
+            autoCapitalize='none'
         />
         <Input
             value={password}
@@ -31,6 +34,7 @@ const Login = ({navigation}: {navigation: any}) => {
             placeholder="Enter password"
             onChangeText={setPassword}
             containerStyle={styles.inputContainer}
+            autoCapitalize='none'
         />
         <Button 
             title="LOG IN" 
@@ -38,7 +42,21 @@ const Login = ({navigation}: {navigation: any}) => {
             titleStyle={{ color: Colors.black, fontWeight: '700', fontFamily: 'Sansation' }}
             buttonStyle={styles.button}
             containerStyle={styles.loginButtonContainer} 
-            onPress={() => {}} />
+            onPress={async () => {
+                const loginData = {
+                    username: username,
+                    pass: password
+                };
+
+                try {
+                  const loginResult = await loginUser(loginData);
+                  await AsyncStorage.setItem("user_id", loginResult.user.user_id);
+                  navigation.navigate("NavBar");
+                } catch (error) {
+                  console.log("LOGIN ERROR: ", error);
+                }
+            }} 
+        />
     </LinearGradient>
   )
 }

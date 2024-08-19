@@ -6,6 +6,7 @@ import AddPinModal from '../screens/AddPinScreen';
 import Icon from 'react-native-vector-icons/Ionicons';
 import * as Colors from '../constants/colors';
 import { Image, StyleSheet } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Tab = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = 'Map';
@@ -14,7 +15,9 @@ const AddPinComponent = () => {
   return null;
 };
 
-function NavBar(): React.JSX.Element {
+function NavBar({ route, navigation }: any): React.JSX.Element {
+  const user_id  = AsyncStorage.getItem("user_id");
+
   return (
     <Tab.Navigator
       initialRouteName={INITIAL_ROUTE_NAME}
@@ -28,7 +31,7 @@ function NavBar(): React.JSX.Element {
             ),
             headerLeft: () => <Image source={require('../../assets/images/add-friends-icon.png')} style={styles.addFriendsButton}/>,
             headerTitle: () => <Image source={require('../../assets/images/full-logo.png')} style={styles.headerTitle}/>,
-            headerRight: () => <Icon name="settings-outline" size={30} style={styles.settingsButton}/>
+            headerRight: () => <Icon name="settings-outline" size={30} style={styles.settingsButton} onPress={() => navigation.navigate("Settings")}/>
         }}
       />
       <Tab.Screen

@@ -6,7 +6,9 @@ import * as Colors from '../constants/colors';
 import { Image } from '@rneui/base';
 import Icon from 'react-native-vector-icons/Ionicons';
 import PhoneInput from "react-native-phone-number-input";
-import DatePicker from 'react-native-date-picker'
+import DatePicker from 'react-native-date-picker';
+import { loginUser, signupUser } from '../services/user.service';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Signup = ({navigation}: {navigation: any}) => {
     const [step, setStep] = useState<number>(1);
@@ -56,6 +58,7 @@ const Signup = ({navigation}: {navigation: any}) => {
                             placeholder="Enter full name"
                             onChangeText={setFullName}
                             containerStyle={styles.textInputContainer}
+                            autoCapitalize='none'
                         />
                     </View>
                 )
@@ -68,6 +71,7 @@ const Signup = ({navigation}: {navigation: any}) => {
                             placeholder="Enter username"
                             onChangeText={setUsername}
                             containerStyle={styles.textInputContainer}
+                            autoCapitalize='none'
                         />
                     </View>
                 )
@@ -81,6 +85,7 @@ const Signup = ({navigation}: {navigation: any}) => {
                             onChangeText={setPassword}
                             secureTextEntry={true}
                             containerStyle={styles.textInputContainer}
+                            autoCapitalize='none'
                         />
                     </View>
                 )
@@ -119,7 +124,31 @@ const Signup = ({navigation}: {navigation: any}) => {
                     color={Colors.black}
                     titleStyle={{ color: Colors.black, fontWeight: '700', fontFamily: 'Sansation' }}
                     buttonStyle={styles.nextButton}
-                    containerStyle={styles.buttonContainerStyle} />
+                    containerStyle={styles.buttonContainerStyle} 
+                    onPress={async () => {
+                        const signupData = {
+                            username: username,
+                            full_name: fullName,
+                            pass: password,
+                            birthday: birthday,
+                            email: email,
+                            phone_no: formattedPhoneNo                            
+                        };
+                        const loginData = {
+                            username: username,
+                            pass: password
+                        };
+
+                        try {
+                            const signupResult = await signupUser(signupData);
+                            const loginResult = await loginUser(loginData);
+                            await AsyncStorage.setItem("user_id", loginResult.user.user_id);
+                            navigation.navigate("NavBar");
+                        } catch (error) {
+                            console.log("SIGNUP ERROR: ", error);
+                        }
+                    }}
+                />
             }
         </LinearGradient>
   )
