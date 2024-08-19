@@ -10,7 +10,6 @@ function BackButton({ navigation }: any): React.JSX.Element {
             icon={<Icon name="arrow-back" size={20} color={Colors.black} />}
             color={Colors.black}
             buttonStyle={styles.button}
-            containerStyle={styles.backButtonContainer} 
             onPress={() => navigation.goBack()} />
     )
 };
@@ -19,9 +18,6 @@ const styles = StyleSheet.create({
     button: {
       backgroundColor: Colors.white
     },
-    backButtonContainer: {
-      
-    }
 });
 
 export default BackButton;
