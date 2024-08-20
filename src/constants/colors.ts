@@ -5,3 +5,4 @@ export const darkYellow = '#FCC500';
 export const white = '#FFFFFF';
 export const black = '#000000';
 export const lightGray = '#808080';
+export const errorRed = '#FF3333';

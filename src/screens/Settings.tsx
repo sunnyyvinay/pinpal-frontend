@@ -9,6 +9,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getUser, updateUser } from '../services/user.service';
 import DatePicker from 'react-native-date-picker';
 import PhoneInput from 'react-native-phone-number-input';
+import {ImagePickerResponse, launchImageLibrary, MediaType} from 'react-native-image-picker';
+const bcrypt = require("bcryptjs");
 
 const Settings = ({ route, navigation }: any) => {
     const [userData, setUserData] = useState<any>({});
@@ -16,6 +18,9 @@ const Settings = ({ route, navigation }: any) => {
     const [modal, setModal] = useState<number>(0);
     const [newUserData, setNewUserData] = useState<any>({});
     const [unformattedPhone, setUnformattedPhone] = useState<string>("");
+    const [oldPass, setOldPass] = useState<string>("");
+
+    const [oldPassError, setOldPassError] = useState<string>("");
 
     function formatBirthday(date: string) {
         return new Date(date).toLocaleDateString('en-US', {
@@ -25,6 +30,33 @@ const Settings = ({ route, navigation }: any) => {
         });
     }
 
+    const openImagePicker = () => {
+        const options = {
+          mediaType: 'photo' as MediaType,
+          includeBase64: true,
+          maxHeight: 2000,
+          maxWidth: 2000,
+        };
+    
+        launchImageLibrary(options, async (response: ImagePickerResponse) => {
+          if (response.didCancel) {
+            console.log('User cancelled image picker');
+          } else if (response.errorCode) {
+            console.log('Image picker error: ', response.errorMessage);
+          } else if (response.assets && response.assets.length > 0) {
+            const base64image = response.assets[0].base64;
+            setNewUserData({...newUserData, profile_pic: base64image});
+            const user_id = await AsyncStorage.getItem("user_id");
+            if (user_id) {
+                await updateUser(user_id, newUserData);
+                setUserData({...userData, profile_pic: base64image});
+            } else {
+                navigation.navigate("Welcome");
+            }
+          }
+        });
+    };
+
     useEffect(() => {
         const fetchUserData = async () => {
             try {
@@ -32,7 +64,7 @@ const Settings = ({ route, navigation }: any) => {
                 if (user_id) {
                     const userData = await getUser(user_id);
                     setUserData(userData.user);
-                    setNewUserData(userData.user);
+                    setNewUserData({...userData.user, pass: ""});
                     setUnformattedPhone(userData.user.phone_no);
                 } else {
                     navigation.navigate("Welcome");
@@ -46,9 +78,9 @@ const Settings = ({ route, navigation }: any) => {
 
     return (
         <ScrollView contentContainerStyle={styles.container}>
-            <Text style={styles.sectionTitle}>Account Information</Text>
-
-            <TouchableOpacity onPress={() => {}}>
+            <Text style={styles.sectionTitle}>Account Information</Text>          
+            
+            <TouchableOpacity onPress={openImagePicker}>
                 <Image source={userData.profile_pic ? {uri: userData.profile_pic} : require('../../assets/images/default-pfp.jpg')} style={styles.pfpImage} />
                 <MaterialIcon name="add-a-photo" size={20} style={styles.photoEditIcon} />
             </TouchableOpacity>
@@ -333,13 +365,64 @@ const Settings = ({ route, navigation }: any) => {
                                 const user_id = await AsyncStorage.getItem("user_id");
                                 if (user_id) {
                                     await updateUser(user_id, newUserData);
-                                    setUserData({...userData, full_name: newUserData.email});
+                                    setUserData({...userData, email: newUserData.email});
                                 } else {
                                     navigation.navigate("Welcome");
                                 }
                                 setModal(0);
                             } catch (error) {
                                 console.log("Error updating email: ", error);
+                            }
+                        }}
+                    />
+                </View>
+            </Modal>
+
+            <Modal 
+                isVisible={modal === 6 ? true : false}
+                style={{marginVertical: '40%', marginHorizontal: '10%'}}
+                onBackdropPress={() => setModal(0)}>
+                <View style={styles.modalView}>
+                    <Text style={styles.modalText}>Edit Password</Text>
+                    <Input
+                        value={oldPass}
+                        placeholder='Enter old password'
+                        errorMessage={oldPassError}
+                        errorStyle={styles.errorTextStyle}
+                        autoCapitalize='none'
+                        onChangeText={text => setOldPass(text)}
+                        style={styles.modalInput}
+                    />
+                    <Input
+                        value={newUserData.pass}
+                        placeholder='Enter new password'
+                        autoCapitalize='none'
+                        onChangeText={text => setNewUserData({...newUserData, pass: text})}
+                        style={styles.modalInput}
+                    />
+                    <Button 
+                        title="SAVE"
+                        color={Colors.white}
+                        buttonStyle={styles.logOutButton}
+                        titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'Sansation' }}
+                        containerStyle={styles.modalButton}
+                        onPress={async () => {
+                            try {
+                                const validPassword = await bcrypt.compare(oldPass, userData.password);
+                                if (!validPassword) {
+                                    setOldPassError("Incorrect old password");
+                                } else setOldPassError("");
+
+                                const user_id = await AsyncStorage.getItem("user_id");
+                                if (user_id) {
+                                    await updateUser(user_id, newUserData);
+                                    setUserData({...userData, pass: newUserData.pass});
+                                } else {
+                                    navigation.navigate("Welcome");
+                                }
+                                setModal(0);
+                            } catch (error) {
+                                console.log("Error updating password: ", error);
                             }
                         }}
                     />
@@ -430,6 +513,9 @@ const styles = StyleSheet.create({
         flex: 0.25,
         width: '50%',
         marginTop: 20,
+    },
+    errorTextStyle: {
+        color: Colors.errorRed
     }
 });
 

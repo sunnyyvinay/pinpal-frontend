@@ -9,7 +9,7 @@ interface UserSignup {
     birthday: Date;
     email: string | undefined;
     phone_no: string | undefined;
-    profile_pic: Buffer | null;
+    profile_pic: string | null;
 }
 
 interface UserLogin {
