@@ -1,19 +1,29 @@
 import React, { useEffect, useState } from 'react'
-import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { Button } from '@rneui/themed';
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Button, Input } from '@rneui/themed';
+import Modal from "react-native-modal";
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import * as Colors from '../constants/colors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { getUser } from '../services/user.service';
+import { getUser, updateUser } from '../services/user.service';
+import DatePicker from 'react-native-date-picker';
+import PhoneInput from 'react-native-phone-number-input';
 
 const Settings = ({ route, navigation }: any) => {
     const [userData, setUserData] = useState<any>({});
-    const formattedBirthday = new Date(userData.birthday).toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-    });;
+    
+    const [modal, setModal] = useState<number>(0);
+    const [newUserData, setNewUserData] = useState<any>({});
+    const [unformattedPhone, setUnformattedPhone] = useState<string>("");
+
+    function formatBirthday(date: string) {
+        return new Date(date).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+        });
+    }
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -22,6 +32,8 @@ const Settings = ({ route, navigation }: any) => {
                 if (user_id) {
                     const userData = await getUser(user_id);
                     setUserData(userData.user);
+                    setNewUserData(userData.user);
+                    setUnformattedPhone(userData.user.phone_no);
                 } else {
                     navigation.navigate("Welcome");
                 }
@@ -35,9 +47,17 @@ const Settings = ({ route, navigation }: any) => {
     return (
         <ScrollView contentContainerStyle={styles.container}>
             <Text style={styles.sectionTitle}>Account Information</Text>
-            <Image source={userData.profile_pic ? {uri: userData.profile_pic} : require('../../assets/images/default-pfp.jpg')} style={styles.pfpImage} />
 
-            <View style={styles.fieldView}>
+            <TouchableOpacity onPress={() => {}}>
+                <Image source={userData.profile_pic ? {uri: userData.profile_pic} : require('../../assets/images/default-pfp.jpg')} style={styles.pfpImage} />
+                <MaterialIcon name="add-a-photo" size={20} style={styles.photoEditIcon} />
+            </TouchableOpacity>
+            
+            <TouchableOpacity 
+                style={styles.fieldView} 
+                onPress={() => {
+                    setModal(1);
+                }}>
                 <View style={styles.textView}>
                     <Text style={{...styles.fieldText}}>
                         Username
@@ -47,9 +67,13 @@ const Settings = ({ route, navigation }: any) => {
                     </Text>
                 </View>
                 <FeatherIcon name="edit-2" size={15} style={styles.fieldIcon} />
-            </View>
+            </TouchableOpacity>
 
-            <View style={styles.fieldView}>
+            <TouchableOpacity 
+                style={styles.fieldView}
+                onPress={() => {
+                    setModal(2);
+                }}>
                 <View style={styles.textView}>
                     <Text style={{...styles.fieldText}}>
                         Full Name
@@ -59,21 +83,29 @@ const Settings = ({ route, navigation }: any) => {
                     </Text>
                 </View>
                 <FeatherIcon name="edit-2" size={15} style={styles.fieldIcon} />
-            </View>
+            </TouchableOpacity>
 
-            <View style={styles.fieldView}>
+            <TouchableOpacity 
+                style={styles.fieldView}
+                onPress={() => {
+                    setModal(3);
+                }}>
                 <View style={styles.textView}>
                     <Text style={{...styles.fieldText}}>
                         Birthday
                     </Text>
                     <Text style={{...styles.fieldText, fontWeight: 'normal', color: Colors.lightGray}}>
-                        {formattedBirthday}
+                        {formatBirthday(userData.birthday)}
                     </Text>
                 </View>
                 <FeatherIcon name="edit-2" size={15} style={styles.fieldIcon} />
-            </View>
+            </TouchableOpacity>
 
-            <View style={styles.fieldView}>
+            <TouchableOpacity 
+                style={styles.fieldView}
+                onPress={() => {
+                    setModal(4);
+                }}>
                 <View style={styles.textView}>
                     <Text style={{...styles.fieldText}}>
                         Phone Number
@@ -83,9 +115,13 @@ const Settings = ({ route, navigation }: any) => {
                     </Text>
                 </View>
                 <FeatherIcon name="edit-2" size={15} style={styles.fieldIcon} />
-            </View>
+            </TouchableOpacity>
 
-            <View style={styles.fieldView}>
+            <TouchableOpacity 
+                style={styles.fieldView}
+                onPress={() => {
+                    setModal(5);
+                }}>
                 <View style={styles.textView}>
                     <Text style={{...styles.fieldText}}>
                         Email
@@ -95,16 +131,20 @@ const Settings = ({ route, navigation }: any) => {
                     </Text>
                 </View>
                 <FeatherIcon name="edit-2" size={15} style={styles.fieldIcon} />
-            </View>
+            </TouchableOpacity>
 
-            <View style={styles.fieldView}>
+            <TouchableOpacity 
+                style={styles.fieldView}
+                onPress={() => {
+                    setModal(6);
+                }}>
                 <View style={styles.textView}>
                     <Text style={{...styles.fieldText}}>
                         Change Your Password
                     </Text>
                 </View>
                 <MaterialIcon name="password" size={15} style={styles.fieldIcon} />
-            </View>
+            </TouchableOpacity>
 
             <Text style={styles.sectionTitle}>Profile Settings</Text>
 
@@ -119,6 +159,192 @@ const Settings = ({ route, navigation }: any) => {
                     navigation.navigate("Welcome");
                 }}
             />
+
+            <Modal 
+                isVisible={modal === 1 ? true : false}
+                style={{marginVertical: '40%', marginHorizontal: '10%'}}
+                onBackdropPress={() => setModal(0)}>
+                <View style={styles.modalView}>
+                    <Text style={styles.modalText}>Edit Username</Text>
+                    <Input
+                        value={newUserData.username}
+                        placeholder='Enter new username'
+                        autoCapitalize='none'
+                        onChangeText={text => setNewUserData({...newUserData, username: text})}
+                        style={styles.modalInput}
+                    />
+                    <Button 
+                        title="SAVE"
+                        color={Colors.white}
+                        buttonStyle={styles.logOutButton}
+                        titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'Sansation' }}
+                        containerStyle={styles.modalButton}
+                        onPress={async () => {
+                            try {
+                                const user_id = await AsyncStorage.getItem("user_id");
+                                if (user_id) {
+                                    await updateUser(user_id, newUserData);
+                                    setUserData({...userData, username: newUserData.username});
+                                } else {
+                                    navigation.navigate("Welcome");
+                                }
+                                setModal(0);
+                            } catch (error) {
+                                console.log("Error updating username: ", error);
+                            }
+                        }}
+                    />
+                </View>
+            </Modal>
+
+            <Modal 
+                isVisible={modal === 2 ? true : false}
+                style={{marginVertical: '40%', marginHorizontal: '10%'}}
+                onBackdropPress={() => setModal(0)}>
+                <View style={styles.modalView}>
+                    <Text style={styles.modalText}>Edit Full Name</Text>
+                    <Input
+                        value={newUserData.full_name}
+                        placeholder='Enter new full name'
+                        autoCapitalize='none'
+                        onChangeText={text => setNewUserData({...newUserData, full_name: text})}
+                        style={styles.modalInput}
+                    />
+                    <Button 
+                        title="SAVE"
+                        color={Colors.white}
+                        buttonStyle={styles.logOutButton}
+                        titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'Sansation' }}
+                        containerStyle={styles.modalButton}
+                        onPress={async () => {
+                            try {
+                                const user_id = await AsyncStorage.getItem("user_id");
+                                if (user_id) {
+                                    await updateUser(user_id, newUserData);
+                                    setUserData({...userData, full_name: newUserData.full_name});
+                                } else {
+                                    navigation.navigate("Welcome");
+                                }
+                                setModal(0);
+                            } catch (error) {
+                                console.log("Error updating full name: ", error);
+                            }
+                        }}
+                    />
+                </View>
+            </Modal>
+
+            <Modal 
+                isVisible={modal === 3 ? true : false}
+                style={{marginVertical: '30%', marginHorizontal: '10%'}}
+                onBackdropPress={() => setModal(0)}>
+                <View style={styles.modalView}>
+                    <Text style={styles.modalText}>Edit Birthday</Text>
+                    <DatePicker 
+                            mode='date'
+                            date={new Date(newUserData.birthday)}
+                            onDateChange={date => setNewUserData({...newUserData, birthday: date})}
+                            maximumDate={new Date()}
+                            modal={false}
+                        />
+                    <Button 
+                        title="SAVE"
+                        color={Colors.white}
+                        buttonStyle={styles.logOutButton}
+                        titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'Sansation' }}
+                        containerStyle={styles.modalButton}
+                        onPress={async () => {
+                            try {
+                                const user_id = await AsyncStorage.getItem("user_id");
+                                if (user_id) {
+                                    await updateUser(user_id, newUserData);
+                                    setUserData({...userData, birthday: newUserData.birthday});
+                                } else {
+                                    navigation.navigate("Welcome");
+                                }
+                                setModal(0);
+                            } catch (error) {
+                                console.log("Error updating birthday: ", error);
+                            }
+                        }}
+                    />
+                </View>
+            </Modal>
+
+            <Modal 
+                isVisible={modal === 4 ? true : false}
+                style={{marginVertical: '40%', marginHorizontal: '10%'}}
+                onBackdropPress={() => setModal(0)}>
+                <View style={styles.modalView}>
+                    <Text style={styles.modalText}>Edit Phone Number</Text>
+                    <PhoneInput 
+                            layout="second" 
+                            defaultCode={'US'} 
+                            defaultValue={unformattedPhone} 
+                            onChangeText={setUnformattedPhone} 
+                            onChangeFormattedText={(text: string | undefined) => {newUserData.phone_no = text}}
+                            withShadow={true}
+                            autoFocus={true} />
+                    <Button 
+                        title="SAVE"
+                        color={Colors.white}
+                        buttonStyle={styles.logOutButton}
+                        titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'Sansation' }}
+                        containerStyle={styles.modalButton}
+                        onPress={async () => {
+                            try {
+                                const user_id = await AsyncStorage.getItem("user_id");
+                                if (user_id) {
+                                    await updateUser(user_id, newUserData);
+                                    setUserData({...userData, phone_no: newUserData.phone_no});
+                                } else {
+                                    navigation.navigate("Welcome");
+                                }
+                                setModal(0);
+                            } catch (error) {
+                                console.log("Error updating phone number: ", error);
+                            }
+                        }}
+                    />
+                </View>
+            </Modal>
+
+            <Modal 
+                isVisible={modal === 5 ? true : false}
+                style={{marginVertical: '40%', marginHorizontal: '10%'}}
+                onBackdropPress={() => setModal(0)}>
+                <View style={styles.modalView}>
+                    <Text style={styles.modalText}>Edit Email</Text>
+                    <Input
+                        value={newUserData.email}
+                        placeholder='Enter new email'
+                        autoCapitalize='none'
+                        onChangeText={text => setNewUserData({...newUserData, email: text})}
+                        style={styles.modalInput}
+                    />
+                    <Button 
+                        title="SAVE"
+                        color={Colors.white}
+                        buttonStyle={styles.logOutButton}
+                        titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'Sansation' }}
+                        containerStyle={styles.modalButton}
+                        onPress={async () => {
+                            try {
+                                const user_id = await AsyncStorage.getItem("user_id");
+                                if (user_id) {
+                                    await updateUser(user_id, newUserData);
+                                    setUserData({...userData, full_name: newUserData.email});
+                                } else {
+                                    navigation.navigate("Welcome");
+                                }
+                                setModal(0);
+                            } catch (error) {
+                                console.log("Error updating email: ", error);
+                            }
+                        }}
+                    />
+                </View>
+            </Modal>
         </ScrollView>
     )
 }
@@ -170,10 +396,38 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         marginBottom: 10,
     },
+    photoEditIcon: {
+        position: 'absolute',
+        bottom: '5%',
+        right: '-2%'
+    },
     logOutButton: {
         backgroundColor: Colors.mediumOrange
     },
     logOutButtonContainer: {
+        width: '50%',
+        marginTop: 20,
+    },
+    modalView: {
+        height: 50,
+        backgroundColor: 'white',
+        padding: 5,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 10,
+        flex: 1,
+        flexDirection: 'column',
+    },
+    modalText: {
+        fontSize: 20,
+        flex: 0.25,
+        fontFamily: 'Sansation',
+    },
+    modalInput: {
+        flex: 1
+    },
+    modalButton: {
+        flex: 0.25,
         width: '50%',
         marginTop: 20,
     }

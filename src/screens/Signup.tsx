@@ -132,7 +132,8 @@ const Signup = ({navigation}: {navigation: any}) => {
                             pass: password,
                             birthday: birthday,
                             email: email,
-                            phone_no: formattedPhoneNo                            
+                            phone_no: formattedPhoneNo,
+                            profile_pic: null                            
                         };
                         const loginData = {
                             username: username,
