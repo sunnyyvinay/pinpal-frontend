@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import Modal from "react-native-modal";
-import {StyleSheet, View, TouchableOpacity, Text, Button} from 'react-native';
+import { Button } from '@rneui/themed';
+import {StyleSheet, View, TouchableOpacity, Text } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import * as Colors from '../constants/colors';
 
@@ -19,17 +20,26 @@ function AddPinScreen(): React.JSX.Element {
       <View>
         <Modal
           isVisible={modalVisible}
-          style={styles.contentView}>
+          style={styles.contentView}
+          onBackdropPress={() => setModalVisible(false)}>
           <View style={styles.content}>
-            <Text style={styles.contentTitle}>Add pin through..</Text>
-            <Text>Map</Text>
-            <Text>Journal</Text>
-            <Button
-                title="Close"
-                onPress={() => {
-                setModalVisible(false);
-                }}>
-            </Button>
+            <Text style={styles.contentTitle}>Add pin at..</Text>
+            <Button 
+                title="Current location" 
+                color={Colors.white}
+                buttonStyle={styles.optionButton}
+                titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'Sansation' }}
+                containerStyle={styles.optionButtonContainer}
+                onPress= {() => {}}
+            />
+            <Button 
+                title="Dragged location" 
+                color={Colors.white}
+                buttonStyle={styles.optionButton}
+                titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'Sansation' }}
+                containerStyle={styles.optionButtonContainer}
+                onPress= {() => {}}
+            />
           </View>
         </Modal>
       </View>
@@ -39,19 +49,17 @@ function AddPinScreen(): React.JSX.Element {
 const styles = StyleSheet.create({
   content: {
     backgroundColor: 'white',
-    padding: 22,
+    padding: 20,
     justifyContent: 'center',
     alignItems: 'center',
-    borderTopRightRadius: 17,
-    borderTopLeftRadius: 17,
+    borderRadius: 10,
   },
   contentTitle: {
     fontSize: 20,
-    marginBottom: 12,
+    marginBottom: 5,
   },
   contentView: {
-    justifyContent: 'flex-end',
-    margin: 30,
+    justifyContent: 'center',
   },
   buttonStyle: {
     height: 80,
@@ -65,6 +73,13 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.6,
     paddingBottom: 20,
   },
+  optionButton: {
+    backgroundColor: Colors.mediumOrange
+  },
+  optionButtonContainer: {
+    width: '75%',
+    marginTop: 20,
+  }
 });
 
 export default AddPinScreen;
