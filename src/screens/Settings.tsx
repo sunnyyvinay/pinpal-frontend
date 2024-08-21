@@ -44,6 +44,9 @@ const Settings = ({ route, navigation }: any) => {
           } else if (response.errorCode) {
             console.log('Image picker error: ', response.errorMessage);
           } else if (response.assets && response.assets.length > 0) {
+            if (response.assets[0].fileSize && response.assets[0].fileSize > 7340032) { // 7 MB
+                console.log("File too large. Please upload a smaller file");
+            }
             const base64image = response.assets[0].base64;
             setNewUserData({...newUserData, profile_pic: base64image});
             const user_id = await AsyncStorage.getItem("user_id");
@@ -408,7 +411,7 @@ const Settings = ({ route, navigation }: any) => {
                         containerStyle={styles.modalButton}
                         onPress={async () => {
                             try {
-                                const validPassword = await bcrypt.compare(oldPass, userData.password);
+                                const validPassword = await bcrypt.compare(oldPass, userData.pass);
                                 if (!validPassword) {
                                     setOldPassError("Incorrect old password");
                                 } else setOldPassError("");
@@ -421,6 +424,8 @@ const Settings = ({ route, navigation }: any) => {
                                     navigation.navigate("Welcome");
                                 }
                                 setModal(0);
+                                setNewUserData({...newUserData, pass: ""});
+                                setOldPass("");
                             } catch (error) {
                                 console.log("Error updating password: ", error);
                             }
