@@ -6,3 +6,5 @@ export const white = '#FFFFFF';
 export const black = '#000000';
 export const lightGray = '#808080';
 export const errorRed = '#FF3333';
+export const darkGray = '#333333';
+export const whiteGray = '#DDDDDD';
