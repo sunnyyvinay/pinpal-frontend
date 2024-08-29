@@ -4,6 +4,7 @@ import Welcome from './screens/Welcome';
 import Signup from './screens/Signup';
 import Login from './screens/Login';
 import Settings from './screens/Settings';
+import AddPin from './screens/AddPin';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import BackButton from './components/BackButton';
@@ -19,7 +20,8 @@ function App(): React.JSX.Element {
         <Stack.Screen name="Signup" component={Signup} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="NavBar" component={NavBar} />
-        <Stack.Screen name="Settings" component={Settings} options={({navigation}) => ({headerShown: true, headerLeft: () => <BackButton navigation={navigation} />})}/>
+        <Stack.Screen name="Settings" component={Settings} options={({navigation}) => ({headerShown: true, headerLeft: () => <BackButton navigation={navigation} />})} />
+        <Stack.Screen name="Add Pin" component={AddPin} options={({navigation}) => ({headerShown: true, headerLeft: () => <BackButton navigation={navigation} />})} />
       </Stack.Navigator>
     </NavigationContainer>
   );

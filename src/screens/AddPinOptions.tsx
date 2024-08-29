@@ -5,7 +5,7 @@ import {StyleSheet, View, TouchableOpacity, Text } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import * as Colors from '../constants/colors';
 
-function AddPinScreen(): React.JSX.Element {
+function AddPinOptions({ route, navigation }: any): React.JSX.Element {
   const [modalVisible, setModalVisible] = useState(false);
   return (
     <>
@@ -30,7 +30,7 @@ function AddPinScreen(): React.JSX.Element {
                 buttonStyle={styles.optionButton}
                 titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'Sansation' }}
                 containerStyle={styles.optionButtonContainer}
-                onPress= {() => {}}
+                onPress= {() => {navigation.navigate("AddPin")}}
             />
             <Button 
                 title="Dragged location" 
@@ -82,4 +82,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default AddPinScreen;
+export default AddPinOptions;

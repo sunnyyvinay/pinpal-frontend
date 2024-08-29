@@ -35,7 +35,7 @@ function Journal({ route, navigation }: any): React.JSX.Element {
           <Text style={styles.usernameStyle}>@{userData.username}</Text>
         </View>
         <Button
-          title={"Edit Journal"}
+          title={"Edit"}
           buttonStyle={styles.editButton}
           containerStyle={styles.editButtonContainer}
           titleStyle={{ color: Colors.white, fontWeight: '500', fontFamily: 'Sansation', fontSize: 12 }} 
@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.mediumOrange,
   },
   editButtonContainer: {
-    flex: 0.5,
+    flex: 0.25,
     alignSelf: 'center',
   },
   statsContainer: {
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
   },
   statCard: {
-    backgroundColor: Colors.whiteGray,
+    backgroundColor: Colors.whiteOrange,
     flex: 1,
     marginHorizontal: 10,
     alignSelf: 'center',

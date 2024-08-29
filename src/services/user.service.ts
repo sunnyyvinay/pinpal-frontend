@@ -9,7 +9,7 @@ interface UserSignup {
     birthday: Date;
     email: string | undefined;
     phone_no: string | undefined;
-    profile_pic: string | null;
+    profile_pic: string | undefined;
 }
 
 interface UserLogin {
@@ -40,7 +40,7 @@ export const loginUser = async (user: UserLogin) => {
 // GET USER INFO
 export const getUser = async (id: string) => {
   try {
-      const response = await axios.get(`${apiUrl}/${id}`);
+      const response = await axios.get(`${apiUrl}/${id}/info`);
       return response.data;
   } catch (error) {
       return error;
@@ -50,9 +50,19 @@ export const getUser = async (id: string) => {
 // UPDATE USER INFO
 export const updateUser = async (id: string, user: UserSignup) => {
   try {
-      const response = await axios.put(`${apiUrl}/${id}`, user);
+      const response = await axios.put(`${apiUrl}/${id}/update`, user);
       return response.data;
   } catch (error) {
       return error;
   }
 }
+
+// GET USER PINS
+export const getPins = async (id: string) => {
+  try {
+      const response = await axios.get(`${apiUrl}/${id}/pins`);
+      return response.data;
+  } catch (error) {
+      return error;
+  }
+};

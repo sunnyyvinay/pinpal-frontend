@@ -2,7 +2,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import React from 'react';
 import Map from '../screens/Map';
 import Journal from '../screens/Journal';
-import AddPinModal from '../screens/AddPinScreen';
+import AddPinModal from '../screens/AddPinOptions';
 import Icon from 'react-native-vector-icons/Ionicons';
 import * as Colors from '../constants/colors';
 import { Image, StyleSheet } from 'react-native';
