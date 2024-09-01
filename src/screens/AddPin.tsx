@@ -1,6 +1,6 @@
 import { Button, Input } from '@rneui/themed';
 import React, { useEffect, useState } from 'react'
-import { Image, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import GetLocation, { isLocationError } from 'react-native-get-location';
 import Icon from 'react-native-vector-icons/Ionicons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
@@ -43,7 +43,8 @@ const AddPin = ({ route, navigation }: any) => {
           } else {
             console.warn(ex);
           }
-        })}, []);
+        })
+    }, []);
 
     const openImagePicker = () => {
         const options = {
@@ -74,6 +75,19 @@ const AddPin = ({ route, navigation }: any) => {
             }
         });
     };
+
+    const getVisibilityString = (visibilityNum: number) => {
+        switch(visibilityNum) {
+            case 0:
+                return "Private";
+            case 1:
+                return "Friends";
+            case 2:
+                return "Public";
+            default:
+                return "Friends";
+        }
+    }
         
     function renderStep(step: number) {
         switch (step) {
@@ -129,6 +143,11 @@ const AddPin = ({ route, navigation }: any) => {
                             containerStyle={styles.textInputContainer}
                             autoCapitalize='none'
                         />
+                        <TouchableOpacity onPress={openImagePicker} style={styles.inputView}>
+                            <Text style={styles.inputTitleText}>Visibility</Text>
+                            <Text style={styles.visibilityText}>{getVisibilityString(pinData.visibility)}</Text>
+                        </TouchableOpacity> 
+                             
                         <Button 
                             title="ADD PIN" 
                             icon={<MaterialIcon name="person-pin-circle" size={20} color={Colors.black} />}
@@ -192,8 +211,30 @@ const styles = StyleSheet.create({
         height: 200,
         borderWidth: 3,
         borderColor: Colors.darkOrange,
-        backgroundColor: Colors.whiteOrange,
+        backgroundColor: Colors.whiteGray,
         justifyContent: 'center',
         alignItems: 'center',
     },
+    inputView: {
+        width: '90%',
+        height: '20%',
+        borderRadius: 10,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginTop: 20,
+        backgroundColor: Colors.white,
+    },
+    inputTitleText: {
+        color: Colors.black,
+        fontFamily: 'Sansation',
+        fontWeight: '700',
+        marginLeft: 10
+    },
+    visibilityText: {
+        color: Colors.darkGray,
+        fontFamily: 'Sansation',
+        fontWeight: '700',
+        marginRight: 10
+    }
 })
