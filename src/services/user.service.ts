@@ -9,7 +9,7 @@ interface UserSignup {
     birthday: Date;
     email: string | undefined;
     phone_no: string | undefined;
-    profile_pic: string | undefined;
+    profile_pic: string | null;
 }
 
 interface UserLogin {
@@ -66,3 +66,45 @@ export const getPins = async (id: string) => {
       return error;
   }
 };
+
+interface Pin {
+  latitude: number,
+  longitude: number,
+  title: string,
+  caption: string | undefined,
+  create_date: Date | undefined,
+  edit_date: Date | undefined,
+  photos: string[] | undefined,
+  location_tags: string[] | undefined,
+  visibility: number
+}
+
+// ADD PIN
+export const addPin = async (id: string, pin: Pin) => {
+  try {
+    const response = await axios.post(`${apiUrl}/${id}/pin/add`, pin);
+    return response.data;
+  } catch (error) {
+    return error;
+  }
+};
+
+// UPDATE PIN INFO
+export const updatePin = async (userid: string, pinid: string, pin: Pin) => {
+try {
+    const response = await axios.put(`${apiUrl}/${userid}/pin/${pinid}/update`, pin);
+    return response.data;
+} catch (error) {
+    return error;
+}
+};
+
+// DELETE PIN
+export const deletePin = async (userid: string, pinid: string) => {
+try {
+    const response = await axios.delete(`${apiUrl}/${userid}/pin/${pinid}/delete`);
+    return response.data;
+} catch (error) {
+    return error;
+}
+}

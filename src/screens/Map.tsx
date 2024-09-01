@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import GetLocation, { isLocationError, Location } from 'react-native-get-location';
-import MapView from 'react-native-maps';
+import MapView, { Marker } from 'react-native-maps';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { getPins } from '../services/user.service';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-function Map(): React.JSX.Element {
+function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.Element {
   const [mapState, setMapState] = useState<any>({});
 
   useEffect(() => {
@@ -28,15 +30,35 @@ function Map(): React.JSX.Element {
       } else {
         console.warn(ex);
       }
-    })}, []);
+    })
+
+    const getPersonalPins = async () => {
+      const user_id = await AsyncStorage.getItem("user_id");
+      if (user_id) {
+        const personalPins = await getPins(user_id);
+        setMapState({personalPins: personalPins.pins});
+      } else {
+        navigation.navigate("Welcome");
+      }
+    }
+
+    getPersonalPins();
+  }, []);
 
   return (
     <SafeAreaView style={{width: '100%', height: '100%'}}>
       <MapView
         region={mapState.region}
-        onRegionChange={(region) => setMapState({ region })}
+        onRegionChange={(region) => setMapState({...mapState, region})}
         style={styles.mapContainer}
       >
+        {mapState.personalPins && mapState.personalPins.map((personalPin: any) => (
+          <Marker
+            key={personalPin.pin_id}  
+            coordinate={{latitude: personalPin.latitude, longitude: personalPin.longitude}}
+            image={require('../../assets/images/darkorange-pin.png')}
+            title={personalPin.title} />
+        ))}
       </MapView>
     </SafeAreaView> 
   )

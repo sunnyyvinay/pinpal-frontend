@@ -30,8 +30,10 @@ function AddPinOptions({ route, navigation }: any): React.JSX.Element {
                 buttonStyle={styles.optionButton}
                 titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'Sansation' }}
                 containerStyle={styles.optionButtonContainer}
-                onPress= {() => {navigation.navigate("AddPin")}}
-            />
+                onPress= {() => {
+                  setModalVisible(false); 
+                  navigation.navigate("New pin")
+                }} />
             <Button 
                 title="Dragged location" 
                 color={Colors.white}

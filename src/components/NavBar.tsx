@@ -38,7 +38,7 @@ function NavBar({ route, navigation }: any): React.JSX.Element {
         name="AddPin"
         component={AddPinComponent}
         options={{
-          tabBarButton: () => <AddPinModal />,
+          tabBarButton: () => <AddPinModal navigation={navigation} route={route}/>,
         }}
       />
       <Tab.Screen
