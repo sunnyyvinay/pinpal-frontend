@@ -4,9 +4,36 @@ import { Button } from '@rneui/themed';
 import {StyleSheet, View, TouchableOpacity, Text } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import * as Colors from '../constants/colors';
+import GetLocation, { isLocationError } from 'react-native-get-location';
+import { useAppContext } from '../AppContext';
 
 function AddPinOptions({ route, navigation }: any): React.JSX.Element {
   const [modalVisible, setModalVisible] = useState(false);
+  const { setDragMode } = useAppContext();
+
+  const getCurrLocation = async () => {
+    await GetLocation.getCurrentPosition({
+      enableHighAccuracy: true,
+      timeout: 30000,
+      rationale: {
+        title: 'Location permission',
+        message: 'PinPal needs the permission to request your location.',
+        buttonPositive: 'Ok',
+      },
+    })
+    .then(newLocation => {
+      return {latitude: newLocation.latitude, longitude: newLocation.longitude};
+    })
+    .catch(ex => {
+      if (isLocationError(ex)) {
+        const {code, message} = ex;
+        console.warn(code, message);
+      } else {
+        console.warn(ex);
+      }
+    })
+  }
+
   return (
     <>
       <TouchableOpacity
@@ -31,8 +58,8 @@ function AddPinOptions({ route, navigation }: any): React.JSX.Element {
                 titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'Sansation' }}
                 containerStyle={styles.optionButtonContainer}
                 onPress= {() => {
-                  setModalVisible(false); 
-                  navigation.navigate("New pin")
+                  setModalVisible(false);
+                  navigation.navigate("New pin", { params : getCurrLocation() });
                 }} />
             <Button 
                 title="Dragged location" 
@@ -40,8 +67,11 @@ function AddPinOptions({ route, navigation }: any): React.JSX.Element {
                 buttonStyle={styles.optionButton}
                 titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'Sansation' }}
                 containerStyle={styles.optionButtonContainer}
-                onPress= {() => {}}
-            />
+                onPress= {() => {
+                  setModalVisible(false);
+                  setDragMode(true);
+                  navigation.navigate("NavBar");
+                }} />
           </View>
         </Modal>
       </View>

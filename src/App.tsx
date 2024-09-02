@@ -10,6 +10,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import BackButton from './components/BackButton';
 import AddPinOptions from './screens/AddPinOptions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { ContextProvider } from './AppContext';
 
 const Stack = createNativeStackNavigator();
 function App(): React.JSX.Element {
@@ -34,6 +35,7 @@ function App(): React.JSX.Element {
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
 
   return (
+    <ContextProvider>
     <NavigationContainer>
       <Stack.Navigator initialRouteName={isLoggedIn ? "NavBar" : "Welcome"} screenOptions={{ headerShown: false }} >
         <Stack.Screen name="Welcome" component={Welcome} />
@@ -45,6 +47,7 @@ function App(): React.JSX.Element {
         <Stack.Screen name="AddPinOptions" component={AddPinOptions} />
       </Stack.Navigator>
     </NavigationContainer>
+    </ContextProvider>
   );
 }
 

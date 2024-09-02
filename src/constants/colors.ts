@@ -10,3 +10,4 @@ export const darkGray = '#333333';
 export const whiteGray = '#DDDDDD';
 export const whiteOrange = '#ffe5b4'
 export const darkBlue = '#0244FF';
+export const brightGreen = '#7CFC00';

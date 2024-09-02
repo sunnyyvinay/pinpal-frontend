@@ -24,27 +24,10 @@ const AddPin = ({ route, navigation }: any) => {
     });
 
     useEffect(() => {
-        GetLocation.getCurrentPosition({
-          enableHighAccuracy: true,
-          timeout: 30000,
-          rationale: {
-            title: 'Location permission',
-            message: 'PinPal needs the permission to request your location.',
-            buttonPositive: 'Ok',
-          },
-        })
-        .then(newLocation => {
-          setPinData({ ...pinData, latitude: Number(newLocation.latitude), longitude: Number(newLocation.longitude) });
-        })
-        .catch(ex => {
-          if (isLocationError(ex)) {
-            const {code, message} = ex;
-            console.warn(code, message);
-          } else {
-            console.warn(ex);
-          }
-        })
-    }, []);
+        if (route.params?.latitide && route.params?.longitude) {
+          setPinData({...pinData, latitude: route.params?.latitide, longitude: route.params?.longitude});
+        }
+      }, [route.params]);
 
     const openImagePicker = () => {
         const options = {
@@ -162,7 +145,7 @@ const AddPin = ({ route, navigation }: any) => {
                                     const user_id = await AsyncStorage.getItem("user_id");
                                     if (user_id) {
                                         await addPin(user_id, pinData);
-                                        navigation.navigate("NavBar");
+                                        navigation.navigate("NavBar", {params : { draggedPin: false }});
                                     } else {
                                         navigation.navigate("Welcome");
                                     }

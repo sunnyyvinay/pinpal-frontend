@@ -1,5 +1,5 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import React from 'react';
+import React, { useState } from 'react';
 import Map from '../screens/Map';
 import Journal from '../screens/Journal';
 import AddPinModal from '../screens/AddPinOptions';
@@ -7,6 +7,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import * as Colors from '../constants/colors';
 import { Image, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { ContextProvider } from '../AppContext';
 
 const Tab = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = 'Map';
@@ -19,6 +20,7 @@ function NavBar({ route, navigation }: any): React.JSX.Element {
   const user_id  = AsyncStorage.getItem("user_id");
 
   return (
+    <ContextProvider>
     <Tab.Navigator
       initialRouteName={INITIAL_ROUTE_NAME}
       screenOptions={{tabBarLabelStyle: {paddingBottom: 5}, tabBarActiveTintColor: Colors.darkOrange, tabBarInactiveTintColor: Colors.lightGray}}>
@@ -54,6 +56,7 @@ function NavBar({ route, navigation }: any): React.JSX.Element {
         }}
       />
     </Tab.Navigator>
+    </ContextProvider>
   );
 }
 
