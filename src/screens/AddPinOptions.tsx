@@ -9,6 +9,7 @@ import { useAppContext } from '../AppContext';
 
 function AddPinOptions({ route, navigation }: any): React.JSX.Element {
   const [modalVisible, setModalVisible] = useState(false);
+  var lat_long = {latitude : 0, longitude: 0};
   const { setDragMode } = useAppContext();
 
   const getCurrLocation = async () => {
@@ -22,7 +23,7 @@ function AddPinOptions({ route, navigation }: any): React.JSX.Element {
       },
     })
     .then(newLocation => {
-      return {latitude: newLocation.latitude, longitude: newLocation.longitude};
+      lat_long = {latitude: newLocation.latitude, longitude: newLocation.longitude};
     })
     .catch(ex => {
       if (isLocationError(ex)) {
@@ -57,9 +58,10 @@ function AddPinOptions({ route, navigation }: any): React.JSX.Element {
                 buttonStyle={styles.optionButton}
                 titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'Sansation' }}
                 containerStyle={styles.optionButtonContainer}
-                onPress= {() => {
+                onPress= {async () => {
                   setModalVisible(false);
-                  navigation.navigate("New pin", { params : getCurrLocation() });
+                  await getCurrLocation();
+                  navigation.navigate("New pin", { latitude: lat_long.latitude, longitude: lat_long.longitude} );
                 }} />
             <Button 
                 title="Dragged location" 
@@ -70,7 +72,7 @@ function AddPinOptions({ route, navigation }: any): React.JSX.Element {
                 onPress= {() => {
                   setModalVisible(false);
                   setDragMode(true);
-                  navigation.navigate("NavBar");
+                  navigation.navigate("NavBar", { screen: 'Map' });
                 }} />
           </View>
         </Modal>

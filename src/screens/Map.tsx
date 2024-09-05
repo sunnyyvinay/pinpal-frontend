@@ -17,7 +17,7 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
   const { dragMode, setDragMode } = useAppContext();
 
   const setInitialMapState = async () => {
-    var currLoc = {latitude: 0, longitude: 0, latitudeDelta: 0.05, longitudeDelta: 0.05}; 
+    var currLoc = {latitude: 34.0699, longitude: 118.4438, latitudeDelta: 0.05, longitudeDelta: 0.05}; 
 
     await GetLocation.getCurrentPosition({
       enableHighAccuracy: true,
@@ -56,53 +56,56 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
   useFocusEffect(
     useCallback(() => {
       setInitialMapState();
-      console.log("Inside useFocusEffect");
+      console.log("useFocusEffect drag mode: " + dragMode);
     }, [dragMode])
   );
 
   return (
-    <SafeAreaView style={{width: '100%', height: '100%'}}>
+    <View style={{width: '100%', height: '100%'}}>
       <MapView
         region={mapState.region}
         onRegionChange={(region) => setMapState({...mapState, region})}
         style={styles.mapContainer} >
         
-        {mapState.pinDragMode ? 
-        (<SafeAreaView style={styles.dragabbleContainerView}>
-          <Image source={require('../../assets/images/darkorange-pin.png')} style={styles.draggablePinImage} />
-          <SafeAreaView style={styles.draggableOptionsView}>
-            <TouchableOpacity onPress={() => navigation.navigate("New pin", { params : { latitide: mapState.region.latitude, longitude: mapState.region.longitude }})}>
-              <Icon name="checkmark-circle" size={30} color={Colors.brightGreen} style={styles.optionIcon}/>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => {setDragMode(false)}}>
-              <MaterialIcon name="cancel" size={30} color={Colors.errorRed} style={styles.optionIcon}/>
-            </TouchableOpacity>
-          </SafeAreaView>
-        </SafeAreaView>)
-        : 
+        {!mapState.pinDragMode ? 
         (mapState.personalPins && mapState.personalPins.map((personalPin: any) => (
           <Marker
             key={personalPin.pin_id}  
             coordinate={{latitude: personalPin.latitude, longitude: personalPin.longitude}}
             image={require('../../assets/images/darkorange-pin.png')}
             title={personalPin.title} />
-        )))
-        }
+        ))) 
+        : 
+        null}
+
+        
       </MapView>
-    </SafeAreaView> 
+      {mapState.pinDragMode ?
+      (<View style={styles.dragabbleContainerView}>
+          <Image source={require('../../assets/images/darkorange-pin.png')} style={styles.draggablePinImage} />
+          <View style={styles.draggableOptionsView}>
+            <TouchableOpacity onPress={() => navigation.navigate("New pin", { latitide: mapState.region.latitude, longitude: mapState.region.longitude })}>
+              <Icon name="checkmark-circle" size={30} color={Colors.brightGreen} style={styles.optionIcon}/>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => {setDragMode(false); setMapState({...mapState, pinDragMode: false})}}>
+              <MaterialIcon name="cancel" size={30} color={Colors.errorRed} style={styles.optionIcon}/>
+            </TouchableOpacity>
+          </View>
+        </View>) : null}
+    </View> 
   )
 }
 
 const styles = StyleSheet.create({
   mapContainer: {
-    ...StyleSheet.absoluteFillObject,
+    width: '100%',
+    height: '100%',
   },
   dragabbleContainerView: {
     position: 'absolute',
     alignItems: 'center',
     flexDirection: 'column',
     flex: 2,
-    justifyContent: 'center',
   },
   draggablePinImage: {
     width: 30,

@@ -11,9 +11,8 @@ import { addPin } from '../services/user.service';
 
 const AddPin = ({ route, navigation }: any) => {
     const [step, setStep] = useState<number>(1);
+    const lat_long = [route.params.latitude, route.params.longitude];
     const [pinData, setPinData] = useState<any>({
-        latitude: 0,
-        longitude: 0,
         title: "",
         caption: "",
         create_date: undefined,
@@ -23,11 +22,11 @@ const AddPin = ({ route, navigation }: any) => {
         visibility: 1
     });
 
-    useEffect(() => {
-        if (route.params?.latitide && route.params?.longitude) {
-          setPinData({...pinData, latitude: route.params?.latitide, longitude: route.params?.longitude});
-        }
-      }, [route.params]);
+    // useEffect(() => {
+    //     if (route.params?.latitide && route.params?.longitude) {
+    //       setPinData({...pinData, latitude: route.params?.latitide, longitude: route.params?.longitude});
+    //     }
+    // }, []);
 
     const openImagePicker = () => {
         const options = {
@@ -106,10 +105,10 @@ const AddPin = ({ route, navigation }: any) => {
                         <Button 
                             title="NEXT" 
                             icon={<Icon name="arrow-forward-circle-outline" size={20} color={Colors.black} />}
-                            color={Colors.black}
+                            color={Colors.white}
                             iconRight
                             iconContainerStyle={{ marginLeft: 10 }}
-                            titleStyle={{ color: Colors.black, fontWeight: '700', fontFamily: 'Sansation' }}
+                            titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'Sansation' }}
                             buttonStyle={styles.nextButton}
                             containerStyle={styles.buttonContainerStyle} 
                             onPress={() => setStep(step + 1)} /> 
@@ -134,18 +133,20 @@ const AddPin = ({ route, navigation }: any) => {
                         <Button 
                             title="ADD PIN" 
                             icon={<MaterialIcon name="person-pin-circle" size={20} color={Colors.black} />}
-                            color={Colors.black}
+                            color={Colors.white}
                             iconRight
                             iconContainerStyle={{ marginLeft: 10 }}
-                            titleStyle={{ color: Colors.black, fontWeight: '700', fontFamily: 'Sansation' }}
+                            titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'Sansation' }}
                             buttonStyle={styles.nextButton}
                             containerStyle={styles.buttonContainerStyle} 
                             onPress={
                                 async () => {
                                     const user_id = await AsyncStorage.getItem("user_id");
                                     if (user_id) {
-                                        await addPin(user_id, pinData);
-                                        navigation.navigate("NavBar", {params : { draggedPin: false }});
+                                        const pinInput = {...pinData, latitude: lat_long[0], longitude: lat_long[1]};
+                                        //console.log("Pin input: ", pinInput.latitude, pinInput.longitude);
+                                        await addPin(user_id, pinInput);
+                                        navigation.navigate("NavBar", { screen: 'Map' });
                                     } else {
                                         navigation.navigate("Welcome");
                                     }
