@@ -61,7 +61,7 @@ function AddPinOptions({ route, navigation }: any): React.JSX.Element {
                 onPress= {async () => {
                   setModalVisible(false);
                   await getCurrLocation();
-                  navigation.navigate("New pin", { latitude: lat_long.latitude, longitude: lat_long.longitude} );
+                  navigation.navigate("New pin", { latitude: lat_long.latitude, longitude: lat_long.longitude });
                 }} />
             <Button 
                 title="Dragged location" 

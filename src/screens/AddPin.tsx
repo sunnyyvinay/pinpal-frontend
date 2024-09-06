@@ -8,9 +8,11 @@ import * as Colors from '../constants/colors';
 import { ImagePickerResponse, launchImageLibrary, MediaType } from 'react-native-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { addPin } from '../services/user.service';
+import Modal from "react-native-modal";
 
 const AddPin = ({ route, navigation }: any) => {
     const [step, setStep] = useState<number>(1);
+    const [visibilityModal, setVisibilityModal] = useState<boolean>(false);
     const lat_long = [route.params.latitude, route.params.longitude];
     const [pinData, setPinData] = useState<any>({
         title: "",
@@ -21,12 +23,6 @@ const AddPin = ({ route, navigation }: any) => {
         location_tags: [],
         visibility: 1
     });
-
-    // useEffect(() => {
-    //     if (route.params?.latitide && route.params?.longitude) {
-    //       setPinData({...pinData, latitude: route.params?.latitide, longitude: route.params?.longitude});
-    //     }
-    // }, []);
 
     const openImagePicker = () => {
         const options = {
@@ -76,6 +72,24 @@ const AddPin = ({ route, navigation }: any) => {
             case 1:
                 return (
                     <View style={styles.inputViewContainer}>
+                        <TouchableOpacity onPress={openImagePicker} style={styles.pickPhotoContainer} >
+                            <MaterialIcon name="add-a-photo" size={50} />
+                        </TouchableOpacity>
+                        <Button 
+                            title="NEXT" 
+                            icon={<Icon name="arrow-forward-circle-outline" size={20} color={Colors.white} style={{ marginLeft: 5 }}/>}
+                            color={Colors.white}
+                            iconRight
+                            iconContainerStyle={{ marginLeft: 10 }}
+                            titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'Sansation' }}
+                            buttonStyle={styles.buttonStyle}
+                            containerStyle={styles.buttonContainerStyle} 
+                            onPress={() => setStep(step + 1)} /> 
+                    </View>
+                )
+            case 2:
+                return (
+                    <View style={styles.inputViewContainer}>
                         <Input
                             value={pinData.title}
                             label="Title"
@@ -84,39 +98,6 @@ const AddPin = ({ route, navigation }: any) => {
                             containerStyle={styles.textInputContainer}
                             autoCapitalize='none'
                         />
-                        <Button 
-                            title="NEXT" 
-                            icon={<Icon name="arrow-forward-circle-outline" size={20} color={Colors.white} />}
-                            color={Colors.white}
-                            iconRight
-                            iconContainerStyle={{ marginLeft: 10 }}
-                            titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'Sansation' }}
-                            buttonStyle={styles.nextButton}
-                            containerStyle={styles.buttonContainerStyle} 
-                            onPress={() => setStep(step + 1)} /> 
-                    </View>
-                )
-            case 2:
-                return (
-                    <View style={styles.inputViewContainer}>
-                        <TouchableOpacity onPress={openImagePicker} style={styles.pickPhotoContainer} >
-                            <MaterialIcon name="add-a-photo" size={50} />
-                        </TouchableOpacity>
-                        <Button 
-                            title="NEXT" 
-                            icon={<Icon name="arrow-forward-circle-outline" size={20} color={Colors.black} />}
-                            color={Colors.white}
-                            iconRight
-                            iconContainerStyle={{ marginLeft: 10 }}
-                            titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'Sansation' }}
-                            buttonStyle={styles.nextButton}
-                            containerStyle={styles.buttonContainerStyle} 
-                            onPress={() => setStep(step + 1)} /> 
-                    </View>
-                )
-            case 3:
-                return (
-                    <View style={styles.inputViewContainer}>
                         <Input
                             value={pinData.caption}
                             label="Caption"
@@ -125,26 +106,25 @@ const AddPin = ({ route, navigation }: any) => {
                             containerStyle={styles.textInputContainer}
                             autoCapitalize='none'
                         />
-                        <TouchableOpacity onPress={openImagePicker} style={styles.inputView}>
-                            <Text style={styles.inputTitleText}>Visibility</Text>
+                        <TouchableOpacity onPress={() => {setVisibilityModal(true)}} style={styles.visibilityInputView}>
+                            <Text style={styles.visibilityTitleText}>Visibility</Text>
                             <Text style={styles.visibilityText}>{getVisibilityString(pinData.visibility)}</Text>
                         </TouchableOpacity> 
                              
                         <Button 
                             title="ADD PIN" 
-                            icon={<MaterialIcon name="person-pin-circle" size={20} color={Colors.black} />}
+                            icon={<MaterialIcon name="person-pin-circle" size={20} color={Colors.white} style={{ marginLeft: 5 }} />}
                             color={Colors.white}
                             iconRight
                             iconContainerStyle={{ marginLeft: 10 }}
                             titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'Sansation' }}
-                            buttonStyle={styles.nextButton}
+                            buttonStyle={styles.buttonStyle}
                             containerStyle={styles.buttonContainerStyle} 
                             onPress={
                                 async () => {
                                     const user_id = await AsyncStorage.getItem("user_id");
                                     if (user_id) {
                                         const pinInput = {...pinData, latitude: lat_long[0], longitude: lat_long[1]};
-                                        //console.log("Pin input: ", pinInput.latitude, pinInput.longitude);
                                         await addPin(user_id, pinInput);
                                         navigation.navigate("NavBar", { screen: 'Map' });
                                     } else {
@@ -159,6 +139,14 @@ const AddPin = ({ route, navigation }: any) => {
     return (
         <ScrollView>
             {renderStep(step)}
+            <Modal 
+                isVisible={visibilityModal} 
+                onBackdropPress={() => setVisibilityModal(false)}
+                style={styles.visibilityModal}>
+                <View style={styles.visibilityModalView}>
+                    <Text style={styles.visibilityModalTitle}>Select visibility</Text>
+                </View>
+            </Modal>
         </ScrollView>
     )
 }
@@ -173,14 +161,14 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         flexDirection: 'column',
         flex: 1,
-        padding: 20,
+        padding: 10,
     },
     textInputContainer: {
         width: '90%',
         marginTop: 20,
     },
-    nextButton: {
-        backgroundColor: Colors.lightOrange,
+    buttonStyle: {
+        backgroundColor: Colors.mediumOrange,
         borderColor: 'transparent',
         borderWidth: 0,
         borderRadius: 30,
@@ -194,31 +182,45 @@ const styles = StyleSheet.create({
         width: 200,
         height: 200,
         borderWidth: 3,
-        borderColor: Colors.darkOrange,
+        borderColor: Colors.mediumOrange,
         backgroundColor: Colors.whiteGray,
         justifyContent: 'center',
         alignItems: 'center',
     },
-    inputView: {
+    visibilityInputView: {
         width: '90%',
-        height: '20%',
+        padding: 15,
         borderRadius: 10,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
         marginTop: 20,
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.whiteGray,
     },
-    inputTitleText: {
+    visibilityTitleText: {
         color: Colors.black,
         fontFamily: 'Sansation',
         fontWeight: '700',
-        marginLeft: 10
+        marginLeft: 5
     },
     visibilityText: {
         color: Colors.darkGray,
         fontFamily: 'Sansation',
         fontWeight: '700',
-        marginRight: 10
-    }
+        marginRight: 5
+    },
+    visibilityModal: {
+        backgroundColor: 'white',
+        padding: 20,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 10,
+    },
+    visibilityModalTitle: {
+        fontSize: 20,
+        marginBottom: 5,
+    },
+    visibilityModalView: {
+        justifyContent: 'center',
+    },
 })

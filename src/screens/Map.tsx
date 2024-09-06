@@ -48,15 +48,9 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
     })
   }
 
-  // useEffect(() => {
-  //   setInitialMapState();
-  //   console.log("Inside useEffect");
-  // }, []);
-
   useFocusEffect(
     useCallback(() => {
       setInitialMapState();
-      console.log("useFocusEffect drag mode: " + dragMode);
     }, [dragMode])
   );
 
@@ -76,22 +70,32 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
             title={personalPin.title} />
         ))) 
         : 
-        null}
-
-        
+        (<Marker 
+          key = {0}
+          coordinate={{latitude: mapState.region.latitude, longitude: mapState.region.longitude}} 
+          image={require('../../assets/images/darkorange-pin.png')}
+          opacity={0.7} />)}
       </MapView>
+
       {mapState.pinDragMode ?
-      (<View style={styles.dragabbleContainerView}>
-          <Image source={require('../../assets/images/darkorange-pin.png')} style={styles.draggablePinImage} />
-          <View style={styles.draggableOptionsView}>
-            <TouchableOpacity onPress={() => navigation.navigate("New pin", { latitide: mapState.region.latitude, longitude: mapState.region.longitude })}>
-              <Icon name="checkmark-circle" size={30} color={Colors.brightGreen} style={styles.optionIcon}/>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => {setDragMode(false); setMapState({...mapState, pinDragMode: false})}}>
-              <MaterialIcon name="cancel" size={30} color={Colors.errorRed} style={styles.optionIcon}/>
-            </TouchableOpacity>
-          </View>
-        </View>) : null}
+      (<SafeAreaView style={styles.draggableOptionsView}>
+        <TouchableOpacity 
+          onPress={() => {
+            setDragMode(false); 
+            setMapState({...mapState, pinDragMode: false})
+            navigation.navigate("New pin", { latitude: mapState.region.latitude, longitude: mapState.region.longitude })
+          }}>
+          <Icon name="checkmark-circle" size={40} color={Colors.brightGreen} style={styles.optionIcon} />
+        </TouchableOpacity>
+
+        <TouchableOpacity 
+          onPress={() => {
+            setDragMode(false); 
+            setMapState({...mapState, pinDragMode: false})
+          }}>
+          <MaterialIcon name="cancel" size={40} color={Colors.errorRed} style={styles.optionIcon}/>
+        </TouchableOpacity>
+      </SafeAreaView>) : null}
     </View> 
   )
 }
@@ -101,28 +105,18 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
-  dragabbleContainerView: {
-    position: 'absolute',
-    alignItems: 'center',
-    flexDirection: 'column',
-    flex: 2,
-  },
-  draggablePinImage: {
-    width: 30,
-    alignItems: 'center',
-    justifyContent: 'center',
-    resizeMode: 'contain',
-    opacity: 0.7,
-    flex: 1
-  },
   draggableOptionsView: {
+    position: 'absolute',
+    top: '55%',
+    alignItems: 'center',
+    alignSelf: 'center',
     flex: 1,
     flexDirection: 'row',
-    paddingTop: 30,
     justifyContent: 'space-between',
   },
   optionIcon: {
     flex: 0.5,
+    marginHorizontal: 10
   }
 });
 
