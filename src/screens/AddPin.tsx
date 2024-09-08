@@ -137,14 +137,41 @@ const AddPin = ({ route, navigation }: any) => {
         }
     }
     return (
-        <ScrollView>
+        <ScrollView contentContainerStyle={{flex: 1}}>
             {renderStep(step)}
             <Modal 
                 isVisible={visibilityModal} 
                 onBackdropPress={() => setVisibilityModal(false)}
-                style={styles.visibilityModal}>
+                style={styles.visibilityModal} >
                 <View style={styles.visibilityModalView}>
                     <Text style={styles.visibilityModalTitle}>Select visibility</Text>
+                    <View style={styles.visibilityModalList}>
+                        <View style={styles.visibilityModalListView}>
+                            <TouchableOpacity onPress={() => {setPinData({...pinData, visibility: 0}); setVisibilityModal(false)}} style={styles.visibilityModelOpacity}>
+                                <MaterialIcon name="lock" size={25} style={{ flex: 0.25}}/>
+                                <Text style={styles.visibilityModalText}>Private</Text>
+                                <Icon name="checkmark-sharp" size={25} color={Colors.mediumOrange} style={pinData.visibility === 0 ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
+                            </TouchableOpacity>
+                            <View style={styles.horizontalLine} />
+                        </View>
+                        
+                        <View style={styles.visibilityModalListView}>
+                            <TouchableOpacity onPress={() => {setPinData({...pinData, visibility: 1}); setVisibilityModal(false)}} style={styles.visibilityModelOpacity}>
+                                <MaterialIcon name="people-alt" size={25} style={{ flex: 0.25}}/>
+                                <Text style={styles.visibilityModalText}>Friends</Text>
+                                <Icon name="checkmark-sharp" size={25} color={Colors.mediumOrange} style={pinData.visibility === 1 ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
+                            </TouchableOpacity>
+                            <View style={styles.horizontalLine} />
+                        </View>
+                        
+                        <View style={styles.visibilityModalListView}>
+                        <TouchableOpacity onPress={() => {setPinData({...pinData, visibility: 2}); setVisibilityModal(false)}} style={styles.visibilityModelOpacity}>
+                            <MaterialIcon name="public" size={25} style={{ flex: 0.25}}/>
+                            <Text style={styles.visibilityModalText}>Public</Text>
+                            <Icon name="checkmark-sharp" size={25} color={Colors.mediumOrange} style={pinData.visibility === 2 ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
+                        </TouchableOpacity>
+                        </View>
+                    </View>
                 </View>
             </Modal>
         </ScrollView>
@@ -210,17 +237,44 @@ const styles = StyleSheet.create({
         marginRight: 5
     },
     visibilityModal: {
+        justifyContent: 'center',
+    },
+    visibilityModalView: {
         backgroundColor: 'white',
         padding: 20,
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 10,
+        flex: 0.5,
     },
     visibilityModalTitle: {
         fontSize: 20,
-        marginBottom: 5,
+        marginTop: 10,
+        marginBottom: 20,
     },
-    visibilityModalView: {
-        justifyContent: 'center',
+    visibilityModalList: {
+        
+    },
+    visibilityModalListView: {
+        height: 75,
+    },
+    visibilityModelOpacity: {
+        width: '100%',
+        flex: 1,
+        flexDirection: 'row',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginVertical: 20,
+    },
+    visibilityModalText: {
+        flex: 0.65,
+        fontSize: 18,
+    },
+    horizontalLine: {
+        borderBottomColor: 'black',
+        borderBottomWidth: StyleSheet.hairlineWidth,
+        alignSelf: 'center',
+        width: '100%',
     },
 })

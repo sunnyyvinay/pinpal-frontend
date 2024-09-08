@@ -48,9 +48,23 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
     })
   }
 
+  const setPinState = async () => {
+    const user_id = await AsyncStorage.getItem("user_id");
+      if (user_id) {
+        const personalPins = await getPins(user_id);
+        setMapState({...mapState, personalPins: personalPins.pins, pinDragMode: dragMode});
+      } else {
+        navigation.navigate("Welcome");
+      }
+  }
+
+  useEffect(() => {
+    setInitialMapState();
+  }, []);
+
   useFocusEffect(
     useCallback(() => {
-      setInitialMapState();
+      setPinState();
     }, [dragMode])
   );
 
@@ -71,7 +85,7 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
         ))) 
         : 
         (<Marker 
-          key = {0}
+          key={0}
           coordinate={{latitude: mapState.region.latitude, longitude: mapState.region.longitude}} 
           image={require('../../assets/images/darkorange-pin.png')}
           opacity={0.7} />)}
