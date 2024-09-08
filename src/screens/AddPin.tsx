@@ -4,6 +4,8 @@ import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'rea
 import GetLocation, { isLocationError } from 'react-native-get-location';
 import Icon from 'react-native-vector-icons/Ionicons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
+import Entypo from 'react-native-vector-icons/Entypo';
 import * as Colors from '../constants/colors';
 import { ImagePickerResponse, launchImageLibrary, MediaType } from 'react-native-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -13,6 +15,7 @@ import Modal from "react-native-modal";
 const AddPin = ({ route, navigation }: any) => {
     const [step, setStep] = useState<number>(1);
     const [visibilityModal, setVisibilityModal] = useState<boolean>(false);
+    const [locationTagsModal, setlocationTagsModal] = useState<boolean>(false);
     const lat_long = [route.params.latitude, route.params.longitude];
     const [pinData, setPinData] = useState<any>({
         title: "",
@@ -23,6 +26,7 @@ const AddPin = ({ route, navigation }: any) => {
         location_tags: [],
         visibility: 1
     });
+    const locationTags = ['Food', 'Viewpoint', 'Shopping', 'Beach', 'Club', 'Other'];
 
     const openImagePicker = () => {
         const options = {
@@ -64,6 +68,23 @@ const AddPin = ({ route, navigation }: any) => {
                 return "Public";
             default:
                 return "Friends";
+        }
+    }
+
+    const getLocationTagIcon = (locationTag: string) => {
+        switch (locationTag) {
+            case "Food":
+                return <Icon name="restaurant" size={20} color={Colors.black} />;
+            case "Viewpoint":
+                return <FontAwesome6 name="mountain-sun" size={20} color={Colors.black} />;
+            case "Shopping":
+                return <MaterialIcon name="shopping-bag" size={20} color={Colors.black} />;
+            case "Beach":
+                return <FontAwesome6 name="umbrella-beach" size={20} color={Colors.black} />;
+            case "Club":
+                return <Entypo name="drink" size={20} color={Colors.black} />;
+            default:
+                return <FontAwesome6 name="location-arrow" size={20} color={Colors.black} />;;
         }
     }
         
@@ -110,7 +131,20 @@ const AddPin = ({ route, navigation }: any) => {
                             <Text style={styles.visibilityTitleText}>Visibility</Text>
                             <Text style={styles.visibilityText}>{getVisibilityString(pinData.visibility)}</Text>
                         </TouchableOpacity> 
-                             
+
+                        <View style={styles.locationTagsView}>
+                            <Text style={styles.locationTagsText}>Location Tags</Text>
+                            <Button 
+                                title="Edit"
+                                icon={<MaterialIcon name="edit" size={15} color={Colors.black} style={{ marginRight: 2 }}/>}
+                                color={Colors.black}
+                                iconContainerStyle={{ marginRight: 2 }}
+                                titleStyle={{ color: Colors.black, fontWeight: '300', fontFamily: 'Sansation', fontSize: 15 }}
+                                buttonStyle={styles.locationTagsAddButton}
+                                containerStyle={styles.locationTagsAddButtonContainer} 
+                                onPress={() => setlocationTagsModal(true)}/>
+                        </View>
+                        
                         <Button 
                             title="ADD PIN" 
                             icon={<MaterialIcon name="person-pin-circle" size={20} color={Colors.white} style={{ marginLeft: 5 }} />}
@@ -174,6 +208,37 @@ const AddPin = ({ route, navigation }: any) => {
                     </View>
                 </View>
             </Modal>
+
+            <Modal 
+                isVisible={locationTagsModal} 
+                onBackdropPress={() => setlocationTagsModal(false)}
+                style={styles.visibilityModal} >
+                <View style={styles.locationTagsModalView}>
+                    <Text style={styles.visibilityModalTitle}>Select location tags</Text>
+                    <View style={styles.visibilityModalList}>
+                        {locationTags.map((tag, index) => {
+                            return (
+                                <View key={index} style={styles.visibilityModalListView}>
+                                    <TouchableOpacity 
+                                        style={styles.visibilityModelOpacity}
+                                        onPress={() => {
+                                            if (pinData.location_tags.includes(tag)) {
+                                                setPinData({...pinData, location_tags: pinData.location_tags.filter((item:string) => item !== tag)});
+                                            } else {
+                                                setPinData({...pinData, location_tags: [...pinData.location_tags, tag]});
+                                            }
+                                        }}>
+                                        {getLocationTagIcon(tag)}
+                                        <Text style={styles.visibilityModalText}>{tag}</Text>
+                                        <Icon name="checkmark-sharp" size={25} color={Colors.mediumOrange} style={pinData.location_tags.includes(tag) ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
+                                    </TouchableOpacity>
+                                    <View style={styles.horizontalLine} />
+                                </View>
+                            )
+                        })}
+                    </View>
+                </View>
+            </Modal>
         </ScrollView>
     )
 }
@@ -203,7 +268,7 @@ const styles = StyleSheet.create({
     buttonContainerStyle: {
         width: '75%',
         marginHorizontal: 50,
-        marginTop: '30%',
+        marginTop: 100,
     },
     pickPhotoContainer: {
         width: 200,
@@ -276,5 +341,34 @@ const styles = StyleSheet.create({
         borderBottomWidth: StyleSheet.hairlineWidth,
         alignSelf: 'center',
         width: '100%',
+    },
+    locationTagsView: {
+        marginTop: 20,
+        marginLeft: 20,
+        alignSelf: 'flex-start',
+    },
+    locationTagsText: {
+        fontSize: 15,
+        fontFamily: 'Sansation',
+        fontWeight: '700',
+        color: Colors.black,
+        marginBottom: 15,
+    },
+    locationTagsAddButton: {
+        backgroundColor: Colors.whiteGray,
+        borderColor: 'transparent',
+        borderWidth: 0,
+        borderRadius: 20,
+    },
+    locationTagsAddButtonContainer: {
+        width: 65,
+    },
+    locationTagsModalView: {
+        backgroundColor: 'white',
+        padding: 20,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 10,
+        flex: 1,
     },
 })
