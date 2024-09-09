@@ -74,17 +74,17 @@ const AddPin = ({ route, navigation }: any) => {
     const getLocationTagIcon = (locationTag: string) => {
         switch (locationTag) {
             case "Food":
-                return <Icon name="restaurant" size={20} color={Colors.black} />;
+                return <Icon name="restaurant" size={20} color={Colors.black} style={{ flex: 0.15}}/>;
             case "Viewpoint":
-                return <FontAwesome6 name="mountain-sun" size={20} color={Colors.black} />;
+                return <FontAwesome6 name="mountain-sun" size={20} color={Colors.black} style={{ flex: 0.15}}/>;
             case "Shopping":
-                return <MaterialIcon name="shopping-bag" size={20} color={Colors.black} />;
+                return <MaterialIcon name="shopping-bag" size={20} color={Colors.black} style={{ flex: 0.15}}/>;
             case "Beach":
-                return <FontAwesome6 name="umbrella-beach" size={20} color={Colors.black} />;
+                return <FontAwesome6 name="umbrella-beach" size={20} color={Colors.black} style={{ flex: 0.15}}/>;
             case "Club":
-                return <Entypo name="drink" size={20} color={Colors.black} />;
+                return <Entypo name="drink" size={20} color={Colors.black} style={{ flex: 0.15}}/>;
             default:
-                return <FontAwesome6 name="location-arrow" size={20} color={Colors.black} />;;
+                return <FontAwesome6 name="location-arrow" size={20} color={Colors.black} style={{ flex: 0.15}}/>;;
         }
     }
         
@@ -134,15 +134,26 @@ const AddPin = ({ route, navigation }: any) => {
 
                         <View style={styles.locationTagsView}>
                             <Text style={styles.locationTagsText}>Location Tags</Text>
-                            <Button 
-                                title="Edit"
-                                icon={<MaterialIcon name="edit" size={15} color={Colors.black} style={{ marginRight: 2 }}/>}
-                                color={Colors.black}
-                                iconContainerStyle={{ marginRight: 2 }}
-                                titleStyle={{ color: Colors.black, fontWeight: '300', fontFamily: 'Sansation', fontSize: 15 }}
-                                buttonStyle={styles.locationTagsAddButton}
-                                containerStyle={styles.locationTagsAddButtonContainer} 
-                                onPress={() => setlocationTagsModal(true)}/>
+                            <View style={styles.locationTagsButtonView}>
+                                <Button 
+                                    title="Edit"
+                                    icon={<MaterialIcon name="edit" size={15} color={Colors.black} style={{ marginRight: 2 }}/>}
+                                    color={Colors.black}
+                                    iconContainerStyle={{ marginRight: 2 }}
+                                    titleStyle={{ color: Colors.black, fontWeight: '300', fontFamily: 'Sansation', fontSize: 15 }}
+                                    buttonStyle={styles.locationTagsAddButton}
+                                    containerStyle={styles.locationTagsAddButtonContainer} 
+                                    onPress={() => setlocationTagsModal(true)}/>
+                                {pinData.location_tags.map((tag:string, index:number) => {
+                                    return (
+                                        <Button 
+                                            title={tag} 
+                                            key={index}
+                                            buttonStyle={styles.locationTagButton} 
+                                            titleStyle={{ color: Colors.lightGray, fontWeight: '300', fontFamily: 'Sansation', fontSize: 15 }}/>
+                                    )
+                                })}
+                            </View>
                         </View>
                         
                         <Button 
@@ -179,7 +190,7 @@ const AddPin = ({ route, navigation }: any) => {
                 style={styles.visibilityModal} >
                 <View style={styles.visibilityModalView}>
                     <Text style={styles.visibilityModalTitle}>Select visibility</Text>
-                    <View style={styles.visibilityModalList}>
+                    <View>
                         <View style={styles.visibilityModalListView}>
                             <TouchableOpacity onPress={() => {setPinData({...pinData, visibility: 0}); setVisibilityModal(false)}} style={styles.visibilityModelOpacity}>
                                 <MaterialIcon name="lock" size={25} style={{ flex: 0.25}}/>
@@ -212,15 +223,15 @@ const AddPin = ({ route, navigation }: any) => {
             <Modal 
                 isVisible={locationTagsModal} 
                 onBackdropPress={() => setlocationTagsModal(false)}
-                style={styles.visibilityModal} >
+                style={styles.locationTagsModal} >
                 <View style={styles.locationTagsModalView}>
-                    <Text style={styles.visibilityModalTitle}>Select location tags</Text>
-                    <View style={styles.visibilityModalList}>
+                    <Text style={styles.locationTagsModalTitle}>Select location tags</Text>
+                    <View>
                         {locationTags.map((tag, index) => {
                             return (
-                                <View key={index} style={styles.visibilityModalListView}>
+                                <View key={index} >
                                     <TouchableOpacity 
-                                        style={styles.visibilityModelOpacity}
+                                        style={styles.locationTagsModalOpacity}
                                         onPress={() => {
                                             if (pinData.location_tags.includes(tag)) {
                                                 setPinData({...pinData, location_tags: pinData.location_tags.filter((item:string) => item !== tag)});
@@ -229,7 +240,7 @@ const AddPin = ({ route, navigation }: any) => {
                                             }
                                         }}>
                                         {getLocationTagIcon(tag)}
-                                        <Text style={styles.visibilityModalText}>{tag}</Text>
+                                        <Text style={styles.locationTagsModalText}>{tag}</Text>
                                         <Icon name="checkmark-sharp" size={25} color={Colors.mediumOrange} style={pinData.location_tags.includes(tag) ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
                                     </TouchableOpacity>
                                     <View style={styles.horizontalLine} />
@@ -317,9 +328,6 @@ const styles = StyleSheet.create({
         marginTop: 10,
         marginBottom: 20,
     },
-    visibilityModalList: {
-        
-    },
     visibilityModalListView: {
         height: 75,
     },
@@ -363,12 +371,40 @@ const styles = StyleSheet.create({
     locationTagsAddButtonContainer: {
         width: 65,
     },
+    locationTagsButtonView: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        columnGap: 5,
+        rowGap: 5,
+    },
+    locationTagsModal: {
+        justifyContent: 'center',
+    },
     locationTagsModalView: {
         backgroundColor: 'white',
         padding: 20,
-        justifyContent: 'center',
+        justifyContent: 'space-evenly',
         alignItems: 'center',
         borderRadius: 10,
-        flex: 1,
+        flex: 0.75,
     },
+    locationTagsModalTitle: {
+        fontSize: 25,
+    },
+    locationTagsModalOpacity: {
+        width: '100%',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginVertical: 20,
+    },
+    locationTagsModalText: {
+        fontSize: 18,
+        flex: 0.65
+    },
+    locationTagButton: {
+        backgroundColor: Colors.whiteOrange,
+        borderWidth: 0,
+        borderRadius: 20,
+    }, 
 })
