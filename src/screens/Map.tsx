@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { StyleSheet, Touchable, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, Touchable, TouchableOpacity, View } from 'react-native';
 import GetLocation, { isLocationError, Location } from 'react-native-get-location';
-import MapView, { Marker } from 'react-native-maps';
+import MapView, { Callout, CalloutSubview, Marker } from 'react-native-maps';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { getPins } from '../services/user.service';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -11,10 +11,12 @@ import * as Colors from '../constants/colors';
 import Icon from 'react-native-vector-icons/Ionicons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import { useAppContext } from '../AppContext';
+import { Button } from '@rneui/themed';
 
 function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.Element {
   const [mapState, setMapState] = useState<any>({});
   const { dragMode, setDragMode } = useAppContext();
+  let user_id: string | null = "";
 
   const setInitialMapState = async () => {
     var currLoc = {latitude: 34.0699, longitude: 118.4438, latitudeDelta: 0.05, longitudeDelta: 0.05}; 
@@ -30,7 +32,7 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
     })
     .then(async newLocation => {
       currLoc = {latitude: newLocation.latitude, longitude: newLocation.longitude, latitudeDelta: 0.05, longitudeDelta: 0.05};
-      const user_id = await AsyncStorage.getItem("user_id");
+      user_id = await AsyncStorage.getItem("user_id");
       if (user_id) {
         const personalPins = await getPins(user_id);
         setMapState({personalPins: personalPins.pins, region: currLoc, pinDragMode: dragMode});
@@ -81,7 +83,23 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
             key={personalPin.pin_id}  
             coordinate={{latitude: personalPin.latitude, longitude: personalPin.longitude}}
             image={require('../../assets/images/darkorange-pin.png')}
-            title={personalPin.title} />
+            title={personalPin.title} >
+              <Callout style={styles.pinCalloutStyle}>
+                <CalloutSubview style={styles.pinCalloutView}>
+                  <Text style={styles.pinCalloutTitle}>{personalPin.title}</Text>
+                  <Text style={styles.pinCalloutPersonal}>Personal Pin</Text>
+                  {/* Image */}
+                </CalloutSubview>
+
+                <CalloutSubview onPress={() => {console.log("View Pin")}} style={{justifyContent: 'center', alignItems: 'center'}}>
+                  <Button 
+                    title="VIEW PIN" 
+                    buttonStyle={styles.pinCalloutViewButton}
+                    color={Colors.white}
+                    titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'Sansation', fontSize: 12}}/>
+                </CalloutSubview>
+              </Callout>
+          </Marker>
         ))) 
         : 
         (<Marker 
@@ -131,6 +149,34 @@ const styles = StyleSheet.create({
   optionIcon: {
     flex: 0.5,
     marginHorizontal: 10
+  },
+  pinCalloutStyle: {
+    height: 100,
+    width: 200
+  },
+  pinCalloutView: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  pinCalloutTitle: {
+    fontSize: 18,
+    fontFamily: 'Sansation',
+    fontWeight: 'bold',
+    marginBottom: 5
+  },
+  pinCalloutPersonal: {
+    fontSize: 16,
+    fontStyle: 'italic',
+    fontFamily: 'Sansation',
+    color: Colors.lightGray,
+    marginBottom: 10
+  },
+  pinCalloutViewButton: {
+    backgroundColor: Colors.darkOrange,
+    borderWidth: 0,
+    borderRadius: 20,
+    height: 30,
+    width: 100,
   }
 });
 
