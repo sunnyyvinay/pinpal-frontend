@@ -91,7 +91,7 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
                   {/* Image */}
                 </CalloutSubview>
 
-                <CalloutSubview onPress={() => {console.log("View Pin")}} style={{justifyContent: 'center', alignItems: 'center'}}>
+                <CalloutSubview onPress={() => { navigation.navigate("Pin detail", { pin_id: personalPin.pin_id, pin_user_id: personalPin.user_id })}} style={{justifyContent: 'center', alignItems: 'center'}}>
                   <Button 
                     title="VIEW PIN" 
                     buttonStyle={styles.pinCalloutViewButton}
@@ -117,7 +117,7 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
             setMapState({...mapState, pinDragMode: false})
             navigation.navigate("New pin", { latitude: mapState.region.latitude, longitude: mapState.region.longitude })
           }}>
-          <Icon name="checkmark-circle" size={40} color={Colors.brightGreen} style={styles.optionIcon} />
+          <Icon name="checkmark-circle" size={40} color={Colors.green} style={styles.optionIcon} />
         </TouchableOpacity>
 
         <TouchableOpacity 

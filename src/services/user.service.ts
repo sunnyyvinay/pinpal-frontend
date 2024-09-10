@@ -89,6 +89,16 @@ export const addPin = async (id: string, pin: Pin) => {
   }
 };
 
+// GET PIN
+export const getPin = async (user_id: string, pin_id: string) => {
+  try {
+      const response = await axios.get(`${apiUrl}/${user_id}/pin/${pin_id}/info`);
+      return response.data;
+  } catch (error) {
+      return error;
+  }
+};
+
 // UPDATE PIN INFO
 export const updatePin = async (userid: string, pinid: string, pin: Pin) => {
 try {
