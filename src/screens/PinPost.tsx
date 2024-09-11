@@ -3,9 +3,11 @@ import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { getPin, getUser } from '../services/user.service';
 import { useRoute } from '@react-navigation/native';
-import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import * as Colors from '../constants/colors';
 import { Button } from '@rneui/themed';
+import Icon from 'react-native-vector-icons/Ionicons';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
 const PinPost = (props:any) => {
     const { pin_id, pin_user_id } = props.route.params;  
@@ -25,6 +27,7 @@ const PinPost = (props:any) => {
       username: "",
       profile_pic: ""
     });
+    const [liked, setLiked] = useState<boolean>(false);
 
     useEffect(() => {
       const getInfo = async () => {
@@ -44,6 +47,18 @@ const PinPost = (props:any) => {
         getInfo();
     }, []);
 
+    function formatTimestamp(timestamp: string): string {
+      const date = new Date(timestamp);
+  
+      const options: Intl.DateTimeFormatOptions = {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+      };
+  
+      return date.toLocaleDateString('en-US', options);
+  }
+
   return (
     <ScrollView>
       <View style={styles.topView}>
@@ -52,13 +67,9 @@ const PinPost = (props:any) => {
           <Text style={styles.usernameText}>{pinUserData.username}</Text>
         </View>
         {personal ? 
-        <Button 
-          title="Edit"
-          buttonStyle={styles.editButton}
-          containerStyle={styles.editButtonContainer}
-          titleStyle={{ color: Colors.white, fontWeight: '500', fontFamily: 'Sansation', fontSize: 16 }} 
-          icon={{ name: 'edit', color: Colors.white, size: 16}}
-          onPress={() => props.navigation.navigate("Settings")} /> 
+        <TouchableOpacity>
+          <MaterialIcon name="more-vert" size={20} color={Colors.black} />
+        </TouchableOpacity>
         : null}
       </View>
 
@@ -66,12 +77,18 @@ const PinPost = (props:any) => {
 
       {/* TODO: Add photo carousel */}
 
+      <View style={styles.likesView}>
+        <TouchableOpacity onPress={() => setLiked(!liked)}>
+          {liked ? <Icon name="heart" size={30} color={Colors.likeRed} /> : <Icon name="heart-outline" size={30} color={Colors.black} />}
+        </TouchableOpacity>
+        <Text style={{...styles.likesText, color: liked ? Colors.likeRed : Colors.black}}>124</Text>
+      </View>
+
       <View style={styles.captionView}>
         <Text>
-          <Text>asdfasdf</Text>
-          <Text style={styles.captionText}>dsfadfasdfas</Text>
+          <Text style={styles.createDateText}>{formatTimestamp(pinData.create_date)}</Text>
+          <Text style={styles.captionText}>{pinData.caption ? " - \"" + pinData.caption + "\"" : null}</Text>
         </Text>
-        
       </View>
 
       <View style={styles.locationTagsButtonView}>
@@ -84,10 +101,6 @@ const PinPost = (props:any) => {
                 titleStyle={{ color: Colors.lightGray, fontWeight: '300', fontFamily: 'Sansation', fontSize: 15 }} />
             )
         })}
-      </View>
-
-      <View style={styles.likesView}>
-
       </View>
     </ScrollView>
   )
@@ -103,7 +116,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   userView: {
-    flex: 0.9,
+    flex: 0.99,
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -114,7 +127,6 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: Colors.mediumOrange,
     alignSelf: 'center',
-    marginBottom: 10,
   },
   usernameText: {
     textAlign: 'center',
@@ -122,13 +134,42 @@ const styles = StyleSheet.create({
     fontFamily: 'Sansation',
     marginLeft: 5,
   },
-  editButton: {
-    width: '100%',
-    backgroundColor: Colors.mediumOrange,
+  pinTitleText: {
+    textAlign: 'center',
+    fontSize: 22,
+    fontWeight: 'bold',
+    fontFamily: 'Sansation',
+    color: Colors.black,
+    marginVertical: 5,
   },
-  editButtonContainer: {
-    flex: 0.25,
-    alignSelf: 'center',
+  likesView: {
+    alignItems: 'center',
+    marginVertical: 5,
+  },
+  likesText: {
+    marginHorizontal: 5,
+    fontSize: 16,
+    fontFamily: 'Sansation',
+  },
+  captionView: {
+    backgroundColor: Colors.whiteOrange,
+    borderWidth: 0,
+    borderRadius: 20,
+    marginVertical: 5,
+    marginHorizontal: 15,
+    padding: 10,
+    textAlign: 'center',
+    justifyContent: 'center',
+  },
+  captionText: {
+    fontSize: 15,
+    fontFamily: 'Sansation',
+    color: Colors.black,
+  },
+  createDateText: {
+    color: Colors.lightGray,
+    fontSize: 15,
+    fontFamily: 'Sansation',
   },
   locationTagsButtonView: {
     flexDirection: 'row',
@@ -136,37 +177,13 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     columnGap: 5,
     rowGap: 5,
+    marginVertical: 5,
   },
   locationTagButton: {
     backgroundColor: Colors.whiteOrange,
     borderWidth: 0,
     borderRadius: 20,
   },
-  pinTitleText: {
-    textAlign: 'center',
-    fontSize: 22,
-    fontWeight: 'bold',
-    fontFamily: 'Sansation',
-    color: Colors.black,
-    marginVertical: 10,
-  },
-  captionView: {
-    backgroundColor: Colors.whiteOrange,
-    borderWidth: 0,
-    borderRadius: 20,
-  },
-  captionText: {
-    textAlign: 'center',
-    fontSize: 15,
-    fontFamily: 'Sansation',
-    color: Colors.black,
-  },
-  likesView: {
-    
-  },
-  likeIcon: {
-
-  }
 })
 
 export default PinPost;

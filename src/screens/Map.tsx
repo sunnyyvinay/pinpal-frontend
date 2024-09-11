@@ -96,7 +96,7 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
                     title="VIEW PIN" 
                     buttonStyle={styles.pinCalloutViewButton}
                     color={Colors.white}
-                    titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'Sansation', fontSize: 12}}/>
+                    titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'Sansation', fontSize: 12 }} />
                 </CalloutSubview>
               </Callout>
           </Marker>

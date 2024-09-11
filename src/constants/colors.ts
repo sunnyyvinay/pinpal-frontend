@@ -16,4 +16,6 @@ export const black = '#000000';
 
 
 export const errorRed = '#FF3333';
+export const likeRed = '#FF0000';
+
 export const green = '#4CBB17';
