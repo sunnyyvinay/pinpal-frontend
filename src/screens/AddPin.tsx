@@ -168,7 +168,7 @@ const AddPin = ({ route, navigation }: any) => {
         <ScrollView contentContainerStyle={{flex: 1}}>
             {renderStep(step)}
             <Modal 
-                isVisible={true} 
+                isVisible={visibilityModal} 
                 onBackdropPress={() => setVisibilityModal(false)}
                 style={styles.visibilityModal} >
                 <View style={styles.visibilityModalView}>

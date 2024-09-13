@@ -1,7 +1,10 @@
 import React, { createContext, useState, ReactNode, useContext } from 'react';
+import GetLocation, { isLocationError } from 'react-native-get-location';
 
 // Define the type for your context
 type ContextType = {
+  region: {latitude: number, longitude: number, latitudeDelta: number, longitudeDelta: number};
+  setRegion: (value: {latitude: number, longitude: number, latitudeDelta: number, longitudeDelta: number}) => void;
   dragMode: boolean;
   setDragMode: (value: boolean) => void;
   darkTheme: boolean;
@@ -15,9 +18,10 @@ const Context = createContext<ContextType | undefined>(undefined);
 export const ContextProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [dragMode, setDragMode] = useState<boolean>(false);
   const [darkTheme, setDarkTheme] = useState<boolean>(false);
+  const [region, setRegion] = useState<{latitude: number, longitude: number, latitudeDelta: number, longitudeDelta: number}>({latitude: 34.0699, longitude: 118.4438, latitudeDelta: 0.05, longitudeDelta: 0.05});
 
   return (
-    <Context.Provider value={{ dragMode, setDragMode, darkTheme, setDarkTheme }}>
+    <Context.Provider value={{ region, setRegion, dragMode, setDragMode, darkTheme, setDarkTheme }}>
       {children}
     </Context.Provider>
   );

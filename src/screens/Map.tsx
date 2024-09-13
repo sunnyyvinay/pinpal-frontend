@@ -14,19 +14,12 @@ import { useAppContext } from '../AppContext';
 import { Button } from '@rneui/themed';
 
 function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.Element {
-  type MapState = {
-    personalPins: any[];
-    region: {latitude: number, longitude: number, latitudeDelta: number, longitudeDelta: number};
-    pinDragMode: boolean
-  }
-  const [mapState, setMapState] = useState<any>({});
-  const { dragMode, setDragMode } = useAppContext();
-  let user_id: string | null = "";
+  const { region, setRegion, dragMode, setDragMode } = useAppContext();
+  const [changingRegion, setChangingRegion] = useState<any>({});
+  const [pins, setPins] = useState([]);
 
   useEffect(() => {
-    const setInitialMapState = async () => {
-      let currLoc = {latitude: 34.0699, longitude: 118.4438, latitudeDelta: 0.05, longitudeDelta: 0.05}; 
-  
+    const setInitialMapState = async () => {  
       await GetLocation.getCurrentPosition({
         enableHighAccuracy: true,
         timeout: 30000,
@@ -36,20 +29,16 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
           buttonPositive: 'Ok',
         },
       })
-      .then(async newLocation => {
-        currLoc = {latitude: newLocation.latitude, longitude: newLocation.longitude, latitudeDelta: 0.05, longitudeDelta: 0.05};
-        user_id = await AsyncStorage.getItem("user_id");
-        if (user_id) {
-          const personalPins = await getPins(user_id);
-          setMapState({personalPins: personalPins.pins, region: currLoc, pinDragMode: dragMode});
-        } else {
-          navigation.navigate("Welcome");
-        }
+      .then(newLocation => {
+        setRegion({latitude: newLocation.latitude, longitude: newLocation.longitude, latitudeDelta: 0.05, longitudeDelta: 0.05});
+        setChangingRegion({latitude: newLocation.latitude, longitude: newLocation.longitude, latitudeDelta: 0.05, longitudeDelta: 0.05});
       })
       .catch(ex => {
         if (isLocationError(ex)) {
           const {code, message} = ex;
           console.warn(code, message);
+          setRegion({latitude: 34.0699, longitude: 118.4438, latitudeDelta: 0.05, longitudeDelta: 0.05});
+          setChangingRegion({latitude: 34.0699, longitude: 118.4438, latitudeDelta: 0.05, longitudeDelta: 0.05});
         } else {
           console.warn(ex);
         }
@@ -57,35 +46,38 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
     }
 
     setInitialMapState();
-    console.log("useEffect map region: " + JSON.stringify(mapState.region));
   }, []);
 
   useFocusEffect(
     useCallback(() => {
-      console.log("useFocusEffect map region: " + JSON.stringify(mapState.region));
       const setPinState = async () => {
         const user_id = await AsyncStorage.getItem("user_id");
-          if (user_id) {
-            const personalPins = await getPins(user_id);
-            setMapState({...mapState, personalPins: personalPins.pins, pinDragMode: dragMode});
-          } else {
-            navigation.navigate("Welcome");
-          }
+        if (user_id) {
+          const personalPins = await getPins(user_id);
+          setPins(personalPins.pins);
+        } else {
+          navigation.navigate("Welcome");
+        }
       }
 
       setPinState();
-    }, [dragMode])
+    }, [])
   );
 
   return (
     <View style={{width: '100%', height: '100%'}}>
       <MapView
-        region={mapState.region}
-        onRegionChange={(newRegion) => {setMapState({...mapState, region: newRegion}); console.log("onRegionChange: " + JSON.stringify(mapState.region))}}
+        region={region}
+        onRegionChange={(newRegion) => {
+          setChangingRegion(newRegion);
+        }}
+        onRegionChangeComplete={(newRegion) => {
+          setRegion(newRegion);
+        }}
         style={styles.mapContainer} >
         
-        {!mapState.pinDragMode ? 
-        (mapState.personalPins && mapState.personalPins.map((personalPin: any) => (
+        {!dragMode ? 
+        (pins && pins.map((personalPin: any) => (
           <Marker
             key={personalPin.pin_id}  
             coordinate={{latitude: personalPin.latitude, longitude: personalPin.longitude}}
@@ -111,26 +103,24 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
         : 
         (<Marker 
           key={0}
-          coordinate={{latitude: mapState.region.latitude, longitude: mapState.region.longitude}} 
+          coordinate={{latitude: changingRegion.latitude, longitude: changingRegion.longitude}} 
           image={require('../../assets/images/darkorange-pin.png')}
           opacity={0.7} />)}
       </MapView>
 
-      {mapState.pinDragMode ?
+      {dragMode ?
       (<SafeAreaView style={styles.draggableOptionsView}>
         <TouchableOpacity 
           onPress={() => {
-            setDragMode(false); 
-            setMapState({...mapState, pinDragMode: false})
-            navigation.navigate("New pin", { latitude: mapState.region.latitude, longitude: mapState.region.longitude })
+            setDragMode(false);
+            navigation.navigate("New pin", { latitude: region.latitude, longitude: region.longitude })
           }}>
           <Icon name="checkmark-circle" size={40} color={Colors.green} style={styles.optionIcon} />
         </TouchableOpacity>
 
         <TouchableOpacity 
           onPress={() => {
-            setDragMode(false); 
-            setMapState({...mapState, pinDragMode: false})
+            setDragMode(false);
           }}>
           <MaterialIcon name="cancel" size={40} color={Colors.errorRed} style={styles.optionIcon}/>
         </TouchableOpacity>
