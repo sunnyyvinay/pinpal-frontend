@@ -14,62 +14,65 @@ import { useAppContext } from '../AppContext';
 import { Button } from '@rneui/themed';
 
 function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.Element {
-  const [mapState, setMapState] = useState<any>({
-    personalPins: [],
-    region: {},
-    pinDragMode: false
-  });
+  type MapState = {
+    personalPins: any[];
+    region: {latitude: number, longitude: number, latitudeDelta: number, longitudeDelta: number};
+    pinDragMode: boolean
+  }
+  const [mapState, setMapState] = useState<any>({});
   const { dragMode, setDragMode } = useAppContext();
   let user_id: string | null = "";
 
-  const setInitialMapState = async () => {
-    var currLoc = {latitude: 34.0699, longitude: 118.4438, latitudeDelta: 0.05, longitudeDelta: 0.05}; 
-
-    await GetLocation.getCurrentPosition({
-      enableHighAccuracy: true,
-      timeout: 30000,
-      rationale: {
-        title: 'Location permission',
-        message: 'PinPal needs the permission to request your location.',
-        buttonPositive: 'Ok',
-      },
-    })
-    .then(async newLocation => {
-      currLoc = {latitude: newLocation.latitude, longitude: newLocation.longitude, latitudeDelta: 0.05, longitudeDelta: 0.05};
-      user_id = await AsyncStorage.getItem("user_id");
-      if (user_id) {
-        const personalPins = await getPins(user_id);
-        setMapState({personalPins: personalPins.pins, region: currLoc, pinDragMode: dragMode});
-      } else {
-        navigation.navigate("Welcome");
-      }
-    })
-    .catch(ex => {
-      if (isLocationError(ex)) {
-        const {code, message} = ex;
-        console.warn(code, message);
-      } else {
-        console.warn(ex);
-      }
-    })
-  }
-
-  const setPinState = async () => {
-    const user_id = await AsyncStorage.getItem("user_id");
-      if (user_id) {
-        const personalPins = await getPins(user_id);
-        setMapState({...mapState, personalPins: personalPins.pins, pinDragMode: dragMode});
-      } else {
-        navigation.navigate("Welcome");
-      }
-  }
-
   useEffect(() => {
+    const setInitialMapState = async () => {
+      let currLoc = {latitude: 34.0699, longitude: 118.4438, latitudeDelta: 0.05, longitudeDelta: 0.05}; 
+  
+      await GetLocation.getCurrentPosition({
+        enableHighAccuracy: true,
+        timeout: 30000,
+        rationale: {
+          title: 'Location permission',
+          message: 'PinPal needs the permission to request your location.',
+          buttonPositive: 'Ok',
+        },
+      })
+      .then(async newLocation => {
+        currLoc = {latitude: newLocation.latitude, longitude: newLocation.longitude, latitudeDelta: 0.05, longitudeDelta: 0.05};
+        user_id = await AsyncStorage.getItem("user_id");
+        if (user_id) {
+          const personalPins = await getPins(user_id);
+          setMapState({personalPins: personalPins.pins, region: currLoc, pinDragMode: dragMode});
+        } else {
+          navigation.navigate("Welcome");
+        }
+      })
+      .catch(ex => {
+        if (isLocationError(ex)) {
+          const {code, message} = ex;
+          console.warn(code, message);
+        } else {
+          console.warn(ex);
+        }
+      })
+    }
+
     setInitialMapState();
+    console.log("useEffect map region: " + JSON.stringify(mapState.region));
   }, []);
 
   useFocusEffect(
     useCallback(() => {
+      console.log("useFocusEffect map region: " + JSON.stringify(mapState.region));
+      const setPinState = async () => {
+        const user_id = await AsyncStorage.getItem("user_id");
+          if (user_id) {
+            const personalPins = await getPins(user_id);
+            setMapState({...mapState, personalPins: personalPins.pins, pinDragMode: dragMode});
+          } else {
+            navigation.navigate("Welcome");
+          }
+      }
+
       setPinState();
     }, [dragMode])
   );
@@ -78,7 +81,7 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
     <View style={{width: '100%', height: '100%'}}>
       <MapView
         region={mapState.region}
-        onRegionChange={(region) => setMapState({...mapState, region})}
+        onRegionChange={(newRegion) => {setMapState({...mapState, region: newRegion}); console.log("onRegionChange: " + JSON.stringify(mapState.region))}}
         style={styles.mapContainer} >
         
         {!mapState.pinDragMode ? 

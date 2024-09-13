@@ -286,31 +286,18 @@ const PinPost = (props:any) => {
           </View>
         }
       
+        {editMode ? 
         <View style={styles.locationTagsButtonView}>
-          {editMode ? 
-          <View>
-            <Button 
-              title="Edit"
-              icon={<MaterialIcon name="edit" size={15} color={Colors.black} style={{ marginRight: 2 }}/>}
-              color={Colors.black}
-              iconContainerStyle={{ marginRight: 2 }}
-              titleStyle={{ color: Colors.black, fontWeight: '300', fontFamily: 'Sansation', fontSize: 15 }}
-              buttonStyle={styles.locationTagsAddButton}
-              containerStyle={styles.locationTagsAddButtonContainer} 
-              onPress={() => {setEditPinLocationTags(true)}} />  
-              {editedPinData.location_tags.map((tag:string, index:number) => {
-                return (
-                  <Button 
-                    title={tag} 
-                    key={index}
-                    buttonStyle={styles.locationTagButton}
-                    titleStyle={{ color: Colors.mediumGray, fontWeight: '300', fontFamily: 'Sansation', fontSize: 15 }} />
-                )
-            })}
-          </View>
-          : 
-          <View>
-          {pinData.location_tags.map((tag:string, index:number) => {
+          <Button 
+            title="Edit"
+            icon={<MaterialIcon name="edit" size={15} color={Colors.black} style={{ marginRight: 2 }}/>}
+            color={Colors.black}
+            iconContainerStyle={{ marginRight: 2 }}
+            titleStyle={{ color: Colors.black, fontWeight: '300', fontFamily: 'Sansation', fontSize: 15 }}
+            buttonStyle={styles.locationTagsAddButton}
+            containerStyle={styles.locationTagsAddButtonContainer} 
+            onPress={() => {setEditPinLocationTags(true)}} />  
+            {editedPinData.location_tags.map((tag:string, index:number) => {
               return (
                 <Button 
                   title={tag} 
@@ -319,9 +306,20 @@ const PinPost = (props:any) => {
                   titleStyle={{ color: Colors.mediumGray, fontWeight: '300', fontFamily: 'Sansation', fontSize: 15 }} />
               )
           })}
-          </View>
-          }
         </View>
+        : 
+        <View style={styles.locationTagsButtonView}>
+        {pinData.location_tags.map((tag:string, index:number) => {
+            return (
+              <Button 
+                title={tag} 
+                key={index}
+                buttonStyle={styles.locationTagButton}
+                titleStyle={{ color: Colors.mediumGray, fontWeight: '300', fontFamily: 'Sansation', fontSize: 15 }} />
+            )
+        })}
+        </View>
+          }
         
         {editMode ? null : 
         <View style={styles.likesView}>
@@ -562,33 +560,33 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   locationTagsAddButtonContainer: {
-      width: 65,
+    width: 65,
   },
   locationTagsModal: {
     justifyContent: 'center',
-},
-locationTagsModalView: {
-    backgroundColor: 'white',
-    padding: 20,
-    justifyContent: 'space-evenly',
-    alignItems: 'center',
-    borderRadius: 10,
-    flex: 0.75,
-},
-locationTagsModalTitle: {
-    fontSize: 25,
-},
-locationTagsModalOpacity: {
-    width: '100%',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginVertical: 20,
-},
-locationTagsModalText: {
-    fontSize: 18,
-    flex: 0.65
-},
+  },
+  locationTagsModalView: {
+      backgroundColor: 'white',
+      padding: 20,
+      justifyContent: 'space-evenly',
+      alignItems: 'center',
+      borderRadius: 10,
+      flex: 0.75,
+  },
+  locationTagsModalTitle: {
+      fontSize: 25,
+  },
+  locationTagsModalOpacity: {
+      width: '100%',
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      marginVertical: 20,
+  },
+  locationTagsModalText: {
+      fontSize: 18,
+      flex: 0.65
+  },
 })
 
 export default PinPost;
