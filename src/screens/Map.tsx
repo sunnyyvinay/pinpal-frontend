@@ -14,7 +14,11 @@ import { useAppContext } from '../AppContext';
 import { Button } from '@rneui/themed';
 
 function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.Element {
-  const [mapState, setMapState] = useState<any>({});
+  const [mapState, setMapState] = useState<any>({
+    personalPins: [],
+    region: {},
+    pinDragMode: false
+  });
   const { dragMode, setDragMode } = useAppContext();
   let user_id: string | null = "";
 

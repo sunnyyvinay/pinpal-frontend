@@ -8,7 +8,8 @@ export const darkYellow = '#FCC500';
 export const darkBlue = '#0244FF';
 
 export const darkGray = '#333333';
-export const lightGray = '#808080';
+export const mediumGray = '#808080';
+export const lightGray = '#C0C0C0';
 export const whiteGray = '#DDDDDD';
 
 export const white = '#FFFFFF';

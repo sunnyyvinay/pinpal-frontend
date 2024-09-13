@@ -11,6 +11,7 @@ import { ImagePickerResponse, launchImageLibrary, MediaType } from 'react-native
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { addPin } from '../services/user.service';
 import Modal from "react-native-modal";
+import { locationTags, getLocationTagIcon } from '../constants/locationtags';
 
 const AddPin = ({ route, navigation }: any) => {
     const [step, setStep] = useState<number>(1);
@@ -26,7 +27,6 @@ const AddPin = ({ route, navigation }: any) => {
         location_tags: [],
         visibility: 1
     });
-    const locationTags = ['Food', 'Viewpoint', 'Shopping', 'Beach', 'Club', 'Other'];
 
     const openImagePicker = () => {
         const options = {
@@ -68,23 +68,6 @@ const AddPin = ({ route, navigation }: any) => {
                 return "Public";
             default:
                 return "Friends";
-        }
-    }
-
-    const getLocationTagIcon = (locationTag: string) => {
-        switch (locationTag) {
-            case "Food":
-                return <Icon name="restaurant" size={20} color={Colors.black} style={{ flex: 0.15}}/>;
-            case "Viewpoint":
-                return <FontAwesome6 name="mountain-sun" size={20} color={Colors.black} style={{ flex: 0.15}}/>;
-            case "Shopping":
-                return <MaterialIcon name="shopping-bag" size={20} color={Colors.black} style={{ flex: 0.15}}/>;
-            case "Beach":
-                return <FontAwesome6 name="umbrella-beach" size={20} color={Colors.black} style={{ flex: 0.15}}/>;
-            case "Club":
-                return <Entypo name="drink" size={20} color={Colors.black} style={{ flex: 0.15}}/>;
-            default:
-                return <FontAwesome6 name="location-arrow" size={20} color={Colors.black} style={{ flex: 0.15}}/>;;
         }
     }
         
@@ -150,7 +133,7 @@ const AddPin = ({ route, navigation }: any) => {
                                             title={tag} 
                                             key={index}
                                             buttonStyle={styles.locationTagButton} 
-                                            titleStyle={{ color: Colors.lightGray, fontWeight: '300', fontFamily: 'Sansation', fontSize: 15 }}/>
+                                            titleStyle={{ color: Colors.mediumGray, fontWeight: '300', fontFamily: 'Sansation', fontSize: 15 }}/>
                                     )
                                 })}
                             </View>
@@ -185,37 +168,43 @@ const AddPin = ({ route, navigation }: any) => {
         <ScrollView contentContainerStyle={{flex: 1}}>
             {renderStep(step)}
             <Modal 
-                isVisible={visibilityModal} 
+                isVisible={true} 
                 onBackdropPress={() => setVisibilityModal(false)}
                 style={styles.visibilityModal} >
                 <View style={styles.visibilityModalView}>
                     <Text style={styles.visibilityModalTitle}>Select visibility</Text>
                     <View>
-                        <View style={styles.visibilityModalListView}>
-                            <TouchableOpacity onPress={() => {setPinData({...pinData, visibility: 0}); setVisibilityModal(false)}} style={styles.visibilityModelOpacity}>
-                                <MaterialIcon name="lock" size={25} style={{ flex: 0.25}}/>
-                                <Text style={styles.visibilityModalText}>Private</Text>
-                                <Icon name="checkmark-sharp" size={25} color={Colors.mediumOrange} style={pinData.visibility === 0 ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
-                            </TouchableOpacity>
-                            <View style={styles.horizontalLine} />
-                        </View>
+                        <TouchableOpacity style={styles.visibilityModalSubview} 
+                            onPress={() => {
+                                setPinData({ ...pinData, visibility: 0});
+                                setVisibilityModal(false);
+                            }}>
+                            <MaterialIcon name="lock" size={25} style={{ flex: 0.25}}/>
+                            <Text style={styles.visibilityModalSubviewText}>Private</Text>
+                            <Icon name="checkmark-sharp" size={25} color={Colors.mediumOrange} style={pinData.visibility === 0 ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
+                        </TouchableOpacity>
+                        <View style={styles.horizontalLine} />
                         
-                        <View style={styles.visibilityModalListView}>
-                            <TouchableOpacity onPress={() => {setPinData({...pinData, visibility: 1}); setVisibilityModal(false)}} style={styles.visibilityModelOpacity}>
-                                <MaterialIcon name="people-alt" size={25} style={{ flex: 0.25}}/>
-                                <Text style={styles.visibilityModalText}>Friends</Text>
-                                <Icon name="checkmark-sharp" size={25} color={Colors.mediumOrange} style={pinData.visibility === 1 ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
-                            </TouchableOpacity>
-                            <View style={styles.horizontalLine} />
-                        </View>
+                        <TouchableOpacity style={styles.visibilityModalSubview} 
+                            onPress={() => {
+                                setPinData({ ...pinData, visibility: 1});
+                                setVisibilityModal(false);
+                            }}>
+                            <MaterialIcon name="people-alt" size={25} style={{ flex: 0.25}}/>
+                            <Text style={styles.visibilityModalSubviewText}>Friends</Text>
+                            <Icon name="checkmark-sharp" size={25} color={Colors.mediumOrange} style={pinData.visibility === 1 ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
+                        </TouchableOpacity>
+                        <View style={styles.horizontalLine} />
                         
-                        <View style={styles.visibilityModalListView}>
-                        <TouchableOpacity onPress={() => {setPinData({...pinData, visibility: 2}); setVisibilityModal(false)}} style={styles.visibilityModelOpacity}>
+                        <TouchableOpacity style={styles.visibilityModalSubview} 
+                            onPress={() => {
+                                setPinData({ ...pinData, visibility: 2});
+                                setVisibilityModal(false);
+                            }}>
                             <MaterialIcon name="public" size={25} style={{ flex: 0.25}}/>
-                            <Text style={styles.visibilityModalText}>Public</Text>
+                            <Text style={styles.visibilityModalSubviewText}>Public</Text>
                             <Icon name="checkmark-sharp" size={25} color={Colors.mediumOrange} style={pinData.visibility === 2 ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
                         </TouchableOpacity>
-                        </View>
                     </View>
                 </View>
             </Modal>
@@ -328,21 +317,17 @@ const styles = StyleSheet.create({
         marginTop: 10,
         marginBottom: 20,
     },
-    visibilityModalListView: {
-        height: 75,
-    },
-    visibilityModelOpacity: {
-        width: '100%',
+    visibilityModalSubview: {
         flex: 1,
         flexDirection: 'row',
-        display: 'flex',
+        padding: 10,
         alignItems: 'center',
-        justifyContent: 'space-between',
-        marginVertical: 20,
     },
-    visibilityModalText: {
+    visibilityModalSubviewText: {
         flex: 0.65,
+        marginLeft: 10,
         fontSize: 18,
+        fontFamily: 'Sansation',
     },
     horizontalLine: {
         borderBottomColor: 'black',

@@ -99,22 +99,45 @@ export const getPin = async (user_id: string, pin_id: string) => {
   }
 };
 
-// UPDATE PIN INFO
-export const updatePin = async (userid: string, pinid: string, pin: Pin) => {
-try {
-    const response = await axios.put(`${apiUrl}/${userid}/pin/${pinid}/update`, pin);
-    return response.data;
-} catch (error) {
-    return error;
+interface PinUpdate {
+  title: string,
+  caption: string | undefined,
+  create_date: Date | undefined,
+  edit_date: Date | undefined,
+  photos: string[] | undefined,
+  location_tags: string[] | undefined,
+  visibility: number
 }
+// UPDATE PIN INFO
+export const updatePin = async (userid: string, pinid: string, pin: PinUpdate) => {
+  try {
+      const response = await axios.put(`${apiUrl}/${userid}/pin/${pinid}/update`, pin);
+      return response.data;
+  } catch (error) {
+      return error;
+  }
+};
+
+interface Location {
+  latitude: number,
+  longitude: number
+}
+// UPDATE PIN LOCATION
+export const updatePinLocation = async (userid: string, pinid: string, loc: Location) => {
+  try {
+      const response = await axios.patch(`${apiUrl}/${userid}/pin/${pinid}/update_loc`, loc);
+      return response.data;
+  } catch (error) {
+      return error;
+  }
 };
 
 // DELETE PIN
 export const deletePin = async (userid: string, pinid: string) => {
-try {
-    const response = await axios.delete(`${apiUrl}/${userid}/pin/${pinid}/delete`);
-    return response.data;
-} catch (error) {
-    return error;
-}
+  try {
+      const response = await axios.delete(`${apiUrl}/${userid}/pin/${pinid}/delete`);
+      return response.data;
+  } catch (error) {
+      return error;
+  }
 }
