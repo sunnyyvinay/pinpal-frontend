@@ -18,6 +18,8 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
   const [changingRegion, setChangingRegion] = useState<any>({});
   const [pins, setPins] = useState([]);
 
+  const tempImg = "https://images.unsplash.com/photo-1720802616209-c174c23f6565?q=80&w=2971&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+
   useEffect(() => {
     const setInitialMapState = async () => {  
       await GetLocation.getCurrentPosition({
@@ -74,7 +76,8 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
         onRegionChangeComplete={(newRegion) => {
           setRegion(newRegion);
         }}
-        style={styles.mapContainer} >
+        style={styles.mapContainer}
+        showsPointsOfInterest={true}>
         
         {!dragMode ? 
         (pins && pins.map((personalPin: any) => (
@@ -87,7 +90,7 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
                 <CalloutSubview style={styles.pinCalloutView}>
                   <Text style={styles.pinCalloutTitle}>{personalPin.title}</Text>
                   <Text style={styles.pinCalloutPersonal}>Personal Pin</Text>
-                  {/* Image */}
+                  <Image source={{uri: tempImg}} style={styles.pinCalloutImage}/>
                 </CalloutSubview>
 
                 <CalloutSubview onPress={() => { navigation.navigate("Pin detail", { pin_id: personalPin.pin_id, pin_user_id: personalPin.user_id })}} style={{justifyContent: 'center', alignItems: 'center'}}>
@@ -148,8 +151,9 @@ const styles = StyleSheet.create({
     marginHorizontal: 10
   },
   pinCalloutStyle: {
-    height: 100,
-    width: 200
+    height: 250,
+    width: 200,
+    padding: 10,
   },
   pinCalloutView: {
     alignItems: 'center',
@@ -165,7 +169,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontStyle: 'italic',
     fontFamily: 'Sansation',
-    color: Colors.lightGray,
+    color: Colors.mediumGray,
+    marginBottom: 5
+  },
+  pinCalloutImage: {
+    width: 150,
+    height: 150,
+    borderRadius: 10,
+    resizeMode: 'cover',
     marginBottom: 10
   },
   pinCalloutViewButton: {
@@ -174,6 +185,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     height: 30,
     width: 100,
+    marginBottom: 10
   }
 });
 
