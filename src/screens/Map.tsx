@@ -3,7 +3,7 @@ import { StyleSheet, Text, Touchable, TouchableOpacity, View } from 'react-nativ
 import GetLocation, { isLocationError, Location } from 'react-native-get-location';
 import MapView, { Callout, CalloutSubview, Marker } from 'react-native-maps';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { getPins } from '../services/user.service';
+import { getPins, updatePin, updatePinLocation } from '../services/user.service';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
 import { Image } from '@rneui/base';
@@ -16,7 +16,20 @@ import { Button } from '@rneui/themed';
 function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.Element {
   const { region, setRegion, dragMode, setDragMode } = useAppContext();
   const [changingRegion, setChangingRegion] = useState<any>({});
-  const [pins, setPins] = useState([]);
+  type Pin = {
+    user_id: string,
+    pin_id: string,
+    latitude: number,
+    longitude: number,
+    title: string,
+    caption: string | undefined,
+    create_date: Date | undefined,
+    edit_date: Date | undefined,
+    photos: string[] | undefined,
+    location_tags: string[] | undefined,
+    visibility: number
+  }
+  const [pins, setPins] = useState<Pin[]>([]);
 
   const tempImg = "https://images.unsplash.com/photo-1720802616209-c174c23f6565?q=80&w=2971&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
 
@@ -66,6 +79,118 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
     }, [])
   );
 
+  const handleDragMode = () => {
+    switch (dragMode.mode) {
+      case 0:
+        return (pins && pins.map((personalPin: any, index: number) => (
+          <Marker
+            key={personalPin.pin_id}  
+            coordinate={{latitude: personalPin.latitude, longitude: personalPin.longitude}}
+            image={require('../../assets/images/darkorange-pin.png')}
+            title={personalPin.title} >
+              <Callout style={styles.pinCalloutStyle}>
+                <CalloutSubview style={styles.pinCalloutView}>
+                  <Text style={styles.pinCalloutTitle}>{personalPin.title}</Text>
+                  <Text style={styles.pinCalloutPersonal}>Personal Pin</Text>
+                  <Image source={{uri: tempImg}} style={styles.pinCalloutImage}/>
+                </CalloutSubview>
+
+                <CalloutSubview style={{justifyContent: 'space-evenly', alignItems: 'center', flex: 1, flexDirection: 'row'}}>
+                  <CalloutSubview style={{flex: 0.5, justifyContent: 'center', alignItems: 'center'}}
+                      onPress={() => { 
+                        setChangingRegion({latitude: personalPin.latitude, longitude: personalPin.longitude, latitudeDelta: region.latitudeDelta, longitudeDelta: region.longitudeDelta});
+                        setRegion({latitude: personalPin.latitude, longitude: personalPin.longitude, latitudeDelta: region.latitudeDelta, longitudeDelta: region.longitudeDelta});
+                        setDragMode({mode: 2, location: {latitude: personalPin.latitude, longitude: personalPin.longitude}, pin_index: index});
+                      }}>
+                    <Button 
+                        title="Drag" 
+                        buttonStyle={styles.pinCalloutViewButton}
+                        color={Colors.white}
+                        titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'Sansation', fontSize: 12 }} />
+                  </CalloutSubview>
+                  
+                  <CalloutSubview style={{flex: 0.5, justifyContent: 'center', alignItems: 'center'}}
+                      onPress={() => { navigation.navigate("Pin detail", { pin_id: personalPin.pin_id, pin_user_id: personalPin.user_id })}}>
+                    <Button 
+                        title="View" 
+                        buttonStyle={styles.pinCalloutViewButton}
+                        color={Colors.white}
+                        titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'Sansation', fontSize: 12 }} />
+                  </CalloutSubview>
+                </CalloutSubview>
+              </Callout>
+          </Marker>
+        )));
+        
+      case 1:
+        return (
+          <Marker 
+            key={0}
+            coordinate={{latitude: changingRegion.latitude, longitude: changingRegion.longitude}} 
+            image={require('../../assets/images/darkorange-pin.png')}
+            opacity={0.7} />
+        );
+      
+      case 2:
+        return (
+          <Marker 
+            key={0}
+            coordinate={{latitude: changingRegion.latitude, longitude: changingRegion.longitude}} 
+            image={require('../../assets/images/darkorange-pin.png')}
+            opacity={0.7} />
+        );   
+    }
+  }
+
+  const handleDragOptions = () => {
+    switch (dragMode.mode) {
+      case 1:
+        return (
+        <SafeAreaView style={styles.draggableOptionsView}>
+          <TouchableOpacity 
+            onPress={() => {
+              setDragMode({mode: 0, location: {latitude: 0, longitude: 0}, pin_index: -1});
+              navigation.navigate("New pin", { latitude: region.latitude, longitude: region.longitude })
+            }}>
+            <Icon name="checkmark-circle" size={40} color={Colors.green} style={styles.optionIcon} />
+          </TouchableOpacity>
+  
+          <TouchableOpacity 
+            onPress={() => {
+              setDragMode({mode: 0, location: {latitude: 0, longitude: 0}, pin_index: -1});
+            }}>
+            <MaterialIcon name="cancel" size={40} color={Colors.errorRed} style={styles.optionIcon}/>
+          </TouchableOpacity>
+        </SafeAreaView>
+        );
+
+      case 2:
+        return (
+        <SafeAreaView style={styles.draggableOptionsView}>
+          <TouchableOpacity 
+            onPress={async () => {
+              setPins((prevArray) => {
+                const newArray = [...prevArray];
+                newArray[dragMode.pin_index] = {...newArray[dragMode.pin_index], latitude: changingRegion.latitude, longitude: changingRegion.longitude};
+                return newArray;
+              });
+              await updatePinLocation(pins[dragMode.pin_index].user_id, pins[dragMode.pin_index].pin_id, {latitude: changingRegion.latitude, longitude: changingRegion.longitude});
+              setDragMode({mode: 0, location: {latitude: 0, longitude: 0}, pin_index: -1});
+            }}>
+            <Icon name="checkmark-circle" size={40} color={Colors.green} style={styles.optionIcon} />
+          </TouchableOpacity>
+
+          <TouchableOpacity 
+            onPress={() => {
+              setDragMode({mode: 0, location: {latitude: 0, longitude: 0}, pin_index: -1});
+            }}>
+            <MaterialIcon name="cancel" size={40} color={Colors.errorRed} style={styles.optionIcon}/>
+          </TouchableOpacity>
+        </SafeAreaView>
+        );
+    }
+  }
+
   return (
     <View style={{width: '100%', height: '100%'}}>
       <MapView
@@ -79,55 +204,12 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
         style={styles.mapContainer}
         showsPointsOfInterest={true}>
         
-        {!dragMode ? 
-        (pins && pins.map((personalPin: any) => (
-          <Marker
-            key={personalPin.pin_id}  
-            coordinate={{latitude: personalPin.latitude, longitude: personalPin.longitude}}
-            image={require('../../assets/images/darkorange-pin.png')}
-            title={personalPin.title} >
-              <Callout style={styles.pinCalloutStyle}>
-                <CalloutSubview style={styles.pinCalloutView}>
-                  <Text style={styles.pinCalloutTitle}>{personalPin.title}</Text>
-                  <Text style={styles.pinCalloutPersonal}>Personal Pin</Text>
-                  <Image source={{uri: tempImg}} style={styles.pinCalloutImage}/>
-                </CalloutSubview>
+        {handleDragMode()}
 
-                <CalloutSubview onPress={() => { navigation.navigate("Pin detail", { pin_id: personalPin.pin_id, pin_user_id: personalPin.user_id })}} style={{justifyContent: 'center', alignItems: 'center'}}>
-                  <Button 
-                    title="VIEW PIN" 
-                    buttonStyle={styles.pinCalloutViewButton}
-                    color={Colors.white}
-                    titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'Sansation', fontSize: 12 }} />
-                </CalloutSubview>
-              </Callout>
-          </Marker>
-        ))) 
-        : 
-        (<Marker 
-          key={0}
-          coordinate={{latitude: changingRegion.latitude, longitude: changingRegion.longitude}} 
-          image={require('../../assets/images/darkorange-pin.png')}
-          opacity={0.7} />)}
       </MapView>
+      
+      {handleDragOptions()}
 
-      {dragMode ?
-      (<SafeAreaView style={styles.draggableOptionsView}>
-        <TouchableOpacity 
-          onPress={() => {
-            setDragMode(false);
-            navigation.navigate("New pin", { latitude: region.latitude, longitude: region.longitude })
-          }}>
-          <Icon name="checkmark-circle" size={40} color={Colors.green} style={styles.optionIcon} />
-        </TouchableOpacity>
-
-        <TouchableOpacity 
-          onPress={() => {
-            setDragMode(false);
-          }}>
-          <MaterialIcon name="cancel" size={40} color={Colors.errorRed} style={styles.optionIcon}/>
-        </TouchableOpacity>
-      </SafeAreaView>) : null}
     </View> 
   )
 }
@@ -151,7 +233,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 10
   },
   pinCalloutStyle: {
-    height: 250,
+    height: 260,
     width: 200,
     padding: 10,
   },
@@ -177,15 +259,14 @@ const styles = StyleSheet.create({
     height: 150,
     borderRadius: 10,
     resizeMode: 'cover',
-    marginBottom: 10
+    marginBottom: 5
   },
   pinCalloutViewButton: {
     backgroundColor: Colors.darkOrange,
     borderWidth: 0,
-    borderRadius: 20,
+    borderRadius: 10,
     height: 30,
-    width: 100,
-    marginBottom: 10
+    width: 80,
   }
 });
 

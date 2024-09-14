@@ -10,7 +10,7 @@ import { useAppContext } from '../AppContext';
 function AddPinOptions({ route, navigation }: any): React.JSX.Element {
   const [modalVisible, setModalVisible] = useState(false);
   var lat_long = {latitude : 0, longitude: 0};
-  const { setDragMode } = useAppContext();
+  const { dragMode, setDragMode } = useAppContext();
 
   const getCurrLocation = async () => {
     await GetLocation.getCurrentPosition({
@@ -39,7 +39,9 @@ function AddPinOptions({ route, navigation }: any): React.JSX.Element {
     <>
       <TouchableOpacity
         onPress={() => {
-          setModalVisible(true);
+          if (dragMode.mode === 0) {
+            setModalVisible(true);
+          }
         }}
         style={styles.buttonStyle}>
         <Icon name={'add'} size={40} color={Colors.white}/>
@@ -71,7 +73,7 @@ function AddPinOptions({ route, navigation }: any): React.JSX.Element {
                 containerStyle={styles.optionButtonContainer}
                 onPress= {() => {
                   setModalVisible(false);
-                  setDragMode(true);
+                  setDragMode({mode: 1, location: {latitude: 0, longitude: 0}, pin_index: -1});
                   navigation.navigate("NavBar", { screen: 'Map' });
                 }} />
           </View>
