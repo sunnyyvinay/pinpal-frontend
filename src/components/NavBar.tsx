@@ -5,7 +5,7 @@ import Journal from '../screens/Journal';
 import AddPinModal from '../screens/AddPinOptions';
 import Icon from 'react-native-vector-icons/Ionicons';
 import * as Colors from '../constants/colors';
-import { Image, StyleSheet } from 'react-native';
+import { Image, StyleSheet, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ContextProvider } from '../AppContext';
 
@@ -19,6 +19,14 @@ const AddPinComponent = () => {
 function NavBar({ route, navigation }: any): React.JSX.Element {
   const user_id  = AsyncStorage.getItem("user_id");
 
+  const addFriendsIcon = () => {
+    return (
+      <TouchableOpacity onPress={() => navigation.navigate("Add Friends")}> 
+        <Image source={require('../../assets/images/add-friends-icon.png')} style={styles.addFriendsButton}/> 
+      </TouchableOpacity>
+    )
+  }
+
   return (
     <ContextProvider>
     <Tab.Navigator
@@ -31,7 +39,7 @@ function NavBar({ route, navigation }: any): React.JSX.Element {
             tabBarIcon: ({ color, size }) => (
                 <Icon name="compass" color={color} size={size} />
             ),
-            headerLeft: () => <Image source={require('../../assets/images/add-friends-icon.png')} style={styles.addFriendsButton}/>,
+            headerLeft: () => (addFriendsIcon()),
             headerTitle: () => <Image source={require('../../assets/images/full-logo.png')} style={styles.headerTitle}/>,
             headerRight: () => <Icon name="settings-outline" size={30} style={styles.settingsButton} onPress={() => navigation.navigate("Settings")}/>
         }}

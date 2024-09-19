@@ -141,3 +141,23 @@ export const deletePin = async (userid: string, pinid: string) => {
       return error;
   }
 }
+
+// GET USER FRIEND REQUESTS
+export const getUserRequests = async (userid: string) => {
+  try {
+      const response = await axios.get(`${apiUrl}/${userid}/requests`);
+      return response.data;
+  } catch (error) {
+      return error;
+  }
+};
+
+// SEARCH USERS (based on query)
+export const getSearchUsers = async (query: string) => {
+  try {
+      const response = await axios.get(`${apiUrl}/search/${query}`);
+      return response.data;
+  } catch (error) {
+      return error;
+  }
+};
