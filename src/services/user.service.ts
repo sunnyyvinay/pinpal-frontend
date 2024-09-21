@@ -161,3 +161,33 @@ export const getSearchUsers = async (query: string) => {
       return error;
   }
 };
+
+// CREATE FRIEND REQUEST
+export const createFriendRequest = async (sourceid: string, targetid: string) => {
+  try {
+      const response = await axios.post(`${apiUrl}/${sourceid}/request/${targetid}/create`);
+      return response.data;
+  } catch (error) {
+      return error;
+  }
+};
+
+// ACCEPT FRIEND REQUEST
+export const acceptFriendRequest = async (sourceid: string, targetid: string) => {
+  try {
+      const response = await axios.post(`${apiUrl}/${sourceid}/request/${targetid}/accept`);
+      return response.data;
+  } catch (error) {
+      return error;
+  }
+};
+
+// DELETE FRIEND REQUEST
+export const deleteFriendRequest = async (sourceid: string, targetid: string) => {
+  try {
+      const response = await axios.post(`${apiUrl}/${sourceid}/request/${targetid}/delete`);
+      return response.data;
+  } catch (error) {
+      return error;
+  }
+};
