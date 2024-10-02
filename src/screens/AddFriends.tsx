@@ -4,10 +4,11 @@ import { Button, SearchBar } from '@rneui/themed';
 import { acceptFriendRequest, deleteFriendRequest, getSearchUsers, getUser, getUserRequests } from '../services/user.service';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Colors from '../constants/colors';
-import Icon from '@react-native-vector-icons/ionicons';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const AddFriends = ({ route, navigation }: any) => {
     let user_id: string | null = '';
+    let searchedUserCount: number = 0;
     type State = {
         search: string;
         friend_requests: any[];
@@ -34,8 +35,9 @@ const AddFriends = ({ route, navigation }: any) => {
     }, []);
 
     const userView = (user: any, request: boolean) => {
+        searchedUserCount--;
         return (
-            <TouchableOpacity onPress={() => navigation.navigate("Profile", {user_id: user.user_id})}>
+            <TouchableOpacity onPress={() => navigation.navigate("Profile", {user_id: user.user_id})} key={searchedUserCount}>
             <View style={styles.searchUserView}>
                 <Image source={user.profile_pic ? {uri: user.profile_pic} : require('../../assets/images/default-pfp.jpg')} style={styles.searchUserPfp} />
                 <View style={styles.searchUserTextView}>
@@ -79,6 +81,7 @@ const AddFriends = ({ route, navigation }: any) => {
             onChangeText={ async (text) => {
                 if (text.length > 0) {
                     const users = await getSearchUsers(text);
+                    searchedUserCount = users.users.length + 1;
                     setState({...state, search: text, queryUsers: users.users});
                 } else {
                     setState({...state, search: text, queryUsers: []});
