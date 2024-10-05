@@ -162,8 +162,18 @@ export const getSearchUsers = async (query: string) => {
   }
 };
 
+// GET FRIEND STATUS
+export const getFriendStatus = async (sourceid: string|null, targetid: string) => {
+  try {
+      const response = await axios.get(`${apiUrl}/${sourceid}/request/${targetid}/status`);
+      return response.data;
+  } catch (error) {
+      return error;
+  }
+};
+
 // CREATE FRIEND REQUEST
-export const createFriendRequest = async (sourceid: string, targetid: string) => {
+export const createFriendRequest = async (sourceid: string|null, targetid: string) => {
   try {
       const response = await axios.post(`${apiUrl}/${sourceid}/request/${targetid}/create`);
       return response.data;
@@ -173,9 +183,9 @@ export const createFriendRequest = async (sourceid: string, targetid: string) =>
 };
 
 // ACCEPT FRIEND REQUEST
-export const acceptFriendRequest = async (sourceid: string, targetid: string) => {
+export const acceptFriendRequest = async (sourceid: string|null, targetid: string|null) => {
   try {
-      const response = await axios.post(`${apiUrl}/${sourceid}/request/${targetid}/accept`);
+      const response = await axios.patch(`${apiUrl}/${sourceid}/request/${targetid}/accept`);
       return response.data;
   } catch (error) {
       return error;
@@ -183,9 +193,9 @@ export const acceptFriendRequest = async (sourceid: string, targetid: string) =>
 };
 
 // DELETE FRIEND REQUEST
-export const deleteFriendRequest = async (sourceid: string, targetid: string) => {
+export const deleteFriendRequest = async (sourceid: string|null, targetid: string) => {
   try {
-      const response = await axios.post(`${apiUrl}/${sourceid}/request/${targetid}/delete`);
+      const response = await axios.delete(`${apiUrl}/${sourceid}/request/${targetid}/delete`);
       return response.data;
   } catch (error) {
       return error;

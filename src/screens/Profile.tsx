@@ -1,21 +1,27 @@
 import React, { useEffect, useState } from 'react';
-import { getUser } from '../services/user.service';
+import { getFriendStatus, getUser, createFriendRequest, deleteFriendRequest, acceptFriendRequest} from '../services/user.service';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { Image } from '@rneui/base';
 import * as Colors from '../constants/colors';
 import { Button, Divider } from '@rneui/themed';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 function Profile(props: any): React.JSX.Element {
   const [userData, setUserData] = useState<any>({});
+  const [friendStatus, setFriendStatus] = useState<number>(-1); // -1 for not friends, 0 for pending, 1 for friends
   
   useEffect(() => {
     const fetchUserData = async () => {
         try {
             const user_id  = props.route.params.user_id;
+            const curr_user_id = await AsyncStorage.getItem("user_id");
             if (user_id) {
                 const userData = await getUser(user_id);
                 setUserData(userData.user);
+                const friendStatusData = await getFriendStatus(curr_user_id, user_id);
+                setFriendStatus(friendStatusData.status);
             } else {
                 props.navigation.navigate("Welcome");
             }
@@ -25,6 +31,61 @@ function Profile(props: any): React.JSX.Element {
     }
     fetchUserData();
 }, []);
+
+  function friendRequestView() {
+    switch(friendStatus) {
+      case -1:
+        return (
+          <TouchableOpacity 
+            style={{...styles.requestOpacity, backgroundColor: Colors.lightOrange}}
+            onPress={async() => {
+              const curr_user_id = await AsyncStorage.getItem("user_id");
+              createFriendRequest(curr_user_id, userData.user_id);
+              setFriendStatus(0);
+            }}>
+            <Icon name='person-add' size={15} color={Colors.white} />
+            <Text style={styles.requestText}>Add Friend</Text>
+          </TouchableOpacity>
+        );
+      case 0:
+        return (
+          <TouchableOpacity 
+            style={{...styles.requestOpacity, backgroundColor: Colors.mediumGray}}
+            onPress={ async () => {
+              const curr_user_id = await AsyncStorage.getItem("user_id");
+              deleteFriendRequest(curr_user_id, userData.user_id);
+              setFriendStatus(-1);
+            }}>
+            <Text style={styles.requestText}>Requested</Text>
+          </TouchableOpacity>
+        );
+      case 1:
+        return (
+          <TouchableOpacity 
+            style={{...styles.requestOpacity, backgroundColor: Colors.mediumOrange}}
+            onPress={ async () => {
+              const curr_user_id = await AsyncStorage.getItem("user_id");
+              deleteFriendRequest(curr_user_id, userData.user_id);
+              setFriendStatus(-1);
+            }}>
+            <Text style={styles.requestText}>Friends</Text>
+          </TouchableOpacity>
+        );
+      case -2:
+        return (
+          <TouchableOpacity 
+            style={{...styles.requestOpacity, backgroundColor: Colors.lightOrange}}
+            onPress={async() => {
+              const curr_user_id = await AsyncStorage.getItem("user_id");
+              acceptFriendRequest(curr_user_id, userData.user_id);
+              setFriendStatus(0);
+            }}>
+            <FontAwesome5 name='user-check' size={15} color={Colors.white} />
+            <Text style={styles.requestText}>Accept Friend Request</Text>
+          </TouchableOpacity>
+        );
+    }
+  }
 
   return (
     <ScrollView style={{width: '100%', height: '100%'}}>
@@ -51,9 +112,12 @@ function Profile(props: any): React.JSX.Element {
         </View>
       </View>
 
+      <View style={{width: '100%', height: '25%'}}>
+        {friendRequestView()}
+      </View>
+      
       <Divider style={styles.dividerStyle}/>
     </ScrollView>
-    
   );
 }
 
@@ -124,9 +188,29 @@ const styles = StyleSheet.create({
   dividerStyle: {
     margin: 10
   },
-  postsContainer: {
-    
-  }  
+  requestOpacity: {
+    borderRadius: 10,
+    marginVertical: 10,
+    marginHorizontal: 10,
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  requestView: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  requestText: {
+    color: Colors.white,
+    fontFamily: 'Sansation',
+    fontWeight: '500',
+    fontSize: 15,
+    marginLeft: 5
+  },
+  
 });
 
 export default Profile;

@@ -5,6 +5,7 @@ import { acceptFriendRequest, deleteFriendRequest, getSearchUsers, getUser, getU
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Colors from '../constants/colors';
 import Icon from 'react-native-vector-icons/Ionicons';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
 const AddFriends = ({ route, navigation }: any) => {
     let user_id: string | null = '';
@@ -25,7 +26,7 @@ const AddFriends = ({ route, navigation }: any) => {
             user_id = await AsyncStorage.getItem("user_id");
             if (user_id) {
                 const friendRequestData = await getUserRequests(user_id);
-                setState({...state, friend_requests: friendRequestData});
+                setState({...state, friend_requests: friendRequestData.friend_requests});
             } else {
                 navigation.navigate("Welcome");
             }
@@ -38,34 +39,46 @@ const AddFriends = ({ route, navigation }: any) => {
         searchedUserCount--;
         return (
             <TouchableOpacity onPress={() => navigation.navigate("Profile", {user_id: user.user_id})} key={searchedUserCount}>
-            <View style={styles.searchUserView}>
-                <Image source={user.profile_pic ? {uri: user.profile_pic} : require('../../assets/images/default-pfp.jpg')} style={styles.searchUserPfp} />
-                <View style={styles.searchUserTextView}>
-                    <Text style={styles.searchUserFullName}>{user.full_name}</Text>
-                    <Text style={styles.searchUserUsernameText}>{user.username}</Text>
-                </View>
-                { request && 
-                    <View>
+                { request ?
+                    <View style={styles.searchUserView}>
+                        <Image 
+                            source={user.profile_pic ? {uri: user.profile_pic} : require('../../assets/images/default-pfp.jpg')} 
+                            style={{...styles.searchUserPfp, flex: 0.1}} />
+                        <View style={{...styles.searchUserTextView, flex: 0.6}}>
+                            <Text style={styles.searchUserFullName}>{user.full_name}</Text>
+                            <Text style={styles.searchUserUsernameText}>{user.username}</Text>
+                        </View>
                         <Button 
                             title="Accept" 
                             color={Colors.white}
                             buttonStyle={styles.acceptButton}
-                            titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'Sansation' }}
+                            titleStyle={{ color: Colors.white, fontWeight: '500', fontFamily: 'Sansation', fontSize: 13 }}
                             containerStyle={styles.acceptButtonContainer}
-                            onPress={async () => { 
+                            onPress={async () => {
+                                user_id = await AsyncStorage.getItem("user_id");
                                 if (user_id) await acceptFriendRequest(user.user_id, user_id);
                                 setState({...state, friend_requests: state.friend_requests.filter((u: any) => u.user_id !== user.user_id)}) 
                             }}
                         />
-                        <TouchableOpacity onPress={async () => { 
+                        <TouchableOpacity style={{flex: 0.1, marginRight: 3}} onPress={async () => { 
+                            user_id = await AsyncStorage.getItem("user_id");
                             if (user_id) await deleteFriendRequest(user.user_id, user_id) 
                             setState({...state, friend_requests: state.friend_requests.filter((u: any) => u.user_id !== user.user_id)})
                         }}>
-                            <Icon name="remove-circle" size={20} color={Colors.errorRed} />
+                            <MaterialIcon name="cancel" size={25} color={Colors.errorRed} />
                         </TouchableOpacity>
+                    </View> 
+                    :
+                    <View style={styles.searchUserView}>
+                        <Image 
+                            source={user.profile_pic ? {uri: user.profile_pic} : require('../../assets/images/default-pfp.jpg')} 
+                            style={{...styles.searchUserPfp, flex: 0.1}} />
+                        <View style={{...styles.searchUserTextView, flex: 0.9}}>
+                            <Text style={styles.searchUserFullName}>{user.full_name}</Text>
+                            <Text style={styles.searchUserUsernameText}>{user.username}</Text>
+                        </View>
                     </View>
                 }
-            </View>
             </TouchableOpacity>
         )
     }
@@ -76,6 +89,7 @@ const AddFriends = ({ route, navigation }: any) => {
             placeholder='Search...'
             value={state.search}
             round={true}
+            autoCapitalize="none"
             lightTheme={true}
             containerStyle={styles.searchBarContainer}
             onChangeText={ async (text) => {
@@ -84,15 +98,15 @@ const AddFriends = ({ route, navigation }: any) => {
                     searchedUserCount = users.users.length + 1;
                     setState({...state, search: text, queryUsers: users.users});
                 } else {
-                    setState({...state, search: text, queryUsers: []});
+                    setState({...state, search: "", queryUsers: []});
                 }
-            }}/>
+        }}/>
         
         <ScrollView>
             { state.search.length === 0 ?
                 <View style={{flex: 1}}>
                     { state.friend_requests && state.friend_requests.length > 0 ? <Text style={styles.friendRequestTitleText}>Friend Requests</Text> : null }
-                    { state.friend_requests && state.queryUsers.length > 0 && state.queryUsers.map((user: any) => (
+                    { state.friend_requests && state.friend_requests.length > 0 && state.friend_requests.map((user: any) => (
                         userView(user, true)
                     ))}
                 </View> 
@@ -118,9 +132,11 @@ const styles = StyleSheet.create({
         marginBottom: 30
     },
     friendRequestTitleText: {
-        marginLeft: 5,
+        marginLeft: 10,
         fontSize: 18,
         fontFamily: 'Sansation',
+        marginBottom: 5,
+        marginTop: 15
     },
     searchUserView: {
         flex: 1,
@@ -137,7 +153,6 @@ const styles = StyleSheet.create({
     },
     searchUserTextView: {
         marginLeft: 5,
-        flex: 0.9,
         flexDirection: 'column'
     },
     searchUserFullName: {
@@ -155,8 +170,11 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.mediumOrange
     },
     acceptButtonContainer: {
-        width: '50%',
-        marginTop: 20,
+        width: '30%',
+        height: '90%',
+        flex: 0.2,
+        borderRadius: 30,
+        marginRight: 10
     },
 });
 
