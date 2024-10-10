@@ -1,13 +1,23 @@
 import React, { useEffect, useState } from 'react';
-import { getUser } from '../services/user.service';
+import { getUser, getUserFriends } from '../services/user.service';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Image } from '@rneui/base';
 import * as Colors from '../constants/colors';
 import { Button, Divider } from '@rneui/themed';
 
 function Journal({ route, navigation }: any): React.JSX.Element {
   const [userData, setUserData] = useState<any>({});
+  type JournalState = {
+    pins: any[];
+    friends: any[];
+    tagged_pins: any[];
+  }
+  const [journalData, setJournalData] = useState<JournalState>({
+    pins: [],
+    friends: [],
+    tagged_pins: []
+  });
   
   useEffect(() => {
     const fetchUserData = async () => {
@@ -16,6 +26,8 @@ function Journal({ route, navigation }: any): React.JSX.Element {
             if (user_id) {
                 const userData = await getUser(user_id);
                 setUserData(userData.user);
+                const friendData = await getUserFriends(user_id);
+                setJournalData({ ...journalData, friends: friendData.friends });
             } else {
                 navigation.navigate("Welcome");
             }
@@ -44,18 +56,19 @@ function Journal({ route, navigation }: any): React.JSX.Element {
       </View>
 
       <View style={styles.statsContainer}>
-        <View style={styles.statCard}>
-          <Text style={styles.statTextNum}>12</Text>
+        <TouchableOpacity style={styles.statCard}>
+          <Text style={styles.statTextNum}>-</Text>
           <Text style={styles.statTextLabel}>Pins</Text>
-        </View>
-        <View style={styles.statCard}>
-          <Text style={styles.statTextNum}>78</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.statCard}
+          onPress={() => navigation.navigate("Friends", {id: userData.user_id})}>
+          <Text style={styles.statTextNum}>{journalData.friends.length}</Text>
           <Text style={styles.statTextLabel}>Friends</Text>
-        </View>
-        <View style={styles.statCard}>
-          <Text style={styles.statTextNum}>5</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.statCard}>
+          <Text style={styles.statTextNum}>-</Text>
           <Text style={styles.statTextLabel}>Tagged Posts</Text>
-        </View>
+        </TouchableOpacity>
       </View>
 
       <Divider style={styles.dividerStyle}/>

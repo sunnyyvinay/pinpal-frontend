@@ -201,3 +201,13 @@ export const deleteFriendRequest = async (sourceid: string|null, targetid: strin
       return error;
   }
 };
+
+// GET USER FRIENDS
+export const getUserFriends = async (userid: string|null) => {
+  try {
+      const response = await axios.get(`${apiUrl}/${userid}/friends`);
+      return response.data;
+  } catch (error) {
+      return error;
+  }
+};

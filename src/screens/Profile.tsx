@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getFriendStatus, getUser, createFriendRequest, deleteFriendRequest, acceptFriendRequest} from '../services/user.service';
+import { getFriendStatus, getUser, createFriendRequest, deleteFriendRequest, acceptFriendRequest, getUserFriends} from '../services/user.service';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ScrollView, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { Image } from '@rneui/base';
@@ -11,6 +11,16 @@ import Icon from 'react-native-vector-icons/Ionicons';
 function Profile(props: any): React.JSX.Element {
   const [userData, setUserData] = useState<any>({});
   const [friendStatus, setFriendStatus] = useState<number>(-1); // -1 for not friends, 0 for pending, 1 for friends
+  type ProfileState = {
+    pins: any[];
+    friends: any[];
+    tagged_pins: any[];
+  }
+  const [profileData, setProfileData] = useState<ProfileState>({
+    pins: [],
+    friends: [],
+    tagged_pins: []
+  });
   
   useEffect(() => {
     const fetchUserData = async () => {
@@ -22,6 +32,8 @@ function Profile(props: any): React.JSX.Element {
                 setUserData(userData.user);
                 const friendStatusData = await getFriendStatus(curr_user_id, user_id);
                 setFriendStatus(friendStatusData.status);
+                const friendData = await getUserFriends(user_id);
+                setProfileData({ ...profileData, friends: friendData.friends });
             } else {
                 props.navigation.navigate("Welcome");
             }
@@ -78,7 +90,7 @@ function Profile(props: any): React.JSX.Element {
             onPress={async() => {
               const curr_user_id = await AsyncStorage.getItem("user_id");
               acceptFriendRequest(curr_user_id, userData.user_id);
-              setFriendStatus(0);
+              setFriendStatus(-1);
             }}>
             <FontAwesome5 name='user-check' size={15} color={Colors.white} />
             <Text style={styles.requestText}>Accept Friend Request</Text>
@@ -98,18 +110,19 @@ function Profile(props: any): React.JSX.Element {
       </View>
 
       <View style={styles.statsContainer}>
-        <View style={styles.statCard}>
-          <Text style={styles.statTextNum}>12</Text>
+        <TouchableOpacity style={styles.statCard}>
+          <Text style={styles.statTextNum}>-</Text>
           <Text style={styles.statTextLabel}>Pins</Text>
-        </View>
-        <View style={styles.statCard}>
-          <Text style={styles.statTextNum}>78</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.statCard}
+          onPress={() => props.navigation.navigate("Friends", {user_id: userData.user_id, navigation: props.navigation})}>
+          <Text style={styles.statTextNum}>{profileData.friends.length}</Text>
           <Text style={styles.statTextLabel}>Friends</Text>
-        </View>
-        <View style={styles.statCard}>
-          <Text style={styles.statTextNum}>5</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.statCard}>
+          <Text style={styles.statTextNum}>-</Text>
           <Text style={styles.statTextLabel}>Tagged Posts</Text>
-        </View>
+        </TouchableOpacity>
       </View>
 
       <View style={{width: '100%', height: '25%'}}>
