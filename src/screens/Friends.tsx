@@ -32,7 +32,7 @@ function Friends(props: any): React.JSX.Element {
         }
         fetchUserFriends();
         console.log(friends);
-    }, []);
+    }, [props.route.params.id]);
   return (
     <ScrollView style={{width: '100%', height: '100%'}}>
         {friends.map((friend: any, index: number) => (

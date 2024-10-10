@@ -42,7 +42,7 @@ function Profile(props: any): React.JSX.Element {
         } 
     }
     fetchUserData();
-}, []);
+}, [props.route.params.user_id]);
 
   function friendRequestView() {
     switch(friendStatus) {
@@ -115,7 +115,7 @@ function Profile(props: any): React.JSX.Element {
           <Text style={styles.statTextLabel}>Pins</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.statCard}
-          onPress={() => props.navigation.navigate("Friends", {user_id: userData.user_id, navigation: props.navigation})}>
+          onPress={() => props.navigation.navigate("Friends", {id: userData.user_id})}>
           <Text style={styles.statTextNum}>{profileData.friends.length}</Text>
           <Text style={styles.statTextLabel}>Friends</Text>
         </TouchableOpacity>
