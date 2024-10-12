@@ -3,7 +3,7 @@ import { StyleSheet, Text, Touchable, TouchableOpacity, View } from 'react-nativ
 import GetLocation, { isLocationError, Location } from 'react-native-get-location';
 import MapView, { Callout, CalloutSubview, Marker } from 'react-native-maps';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { getPins, updatePin, updatePinLocation } from '../services/user.service';
+import { getPins, getUser, getUserFriends, updatePin, updatePinLocation } from '../services/user.service';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
 import { Image } from '@rneui/base';
@@ -30,6 +30,22 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
     visibility: number
   }
   const [pins, setPins] = useState<Pin[]>([]);
+  type FriendPin = {
+    user: {
+      user_id: string,
+      username: string,
+      full_name: string,
+      pass: string,
+      birthday: Date,
+      email: string | undefined,
+      phone_no: string | undefined,
+      profile_pic: string | null
+    },
+    pins: Pin[]
+  }
+  
+  const [friendPins, setFriendPins] = useState<FriendPin[]>([]);
+  const [publicPins, setPublicPins] = useState([]);
 
   const tempImg = "https://images.unsplash.com/photo-1720802616209-c174c23f6565?q=80&w=2971&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
 
@@ -68,8 +84,27 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
       const setPinState = async () => {
         const user_id = await AsyncStorage.getItem("user_id");
         if (user_id) {
+          // PERSONAL PINS
           const personalPins = await getPins(user_id);
           setPins(personalPins.pins);
+          
+          // FRIEND PINS
+          var friendData = await getUserFriends(user_id);
+          for (let i = 0; i < friendData.friends.length; i++) {
+            var friend; var pin;
+            if (friendData.friends[i].source_id != user_id) {
+                pin = await getPins(friendData.friends[i].source_id);
+                friend = await getUser(friendData.friends[i].source_id);
+            } else {
+                pin = await getPins(friendData.friends[i].target_id);
+                friend = await getUser(friendData.friends[i].target_id);
+            }
+            friendData.friends[i] = {user: friend.user, pins: pin.pins};
+          }
+          setFriendPins([...friendData.friends]);
+
+        // PUBLIC PINS
+
         } else {
           navigation.navigate("Welcome");
         }
@@ -82,52 +117,85 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
   const handleDragMode = () => {
     switch (dragMode.mode) {
       case 0:
-        return (pins && pins.map((personalPin: any, index: number) => (
-          <Marker
-            key={personalPin.pin_id}  
-            coordinate={{latitude: personalPin.latitude, longitude: personalPin.longitude}}
-            image={require('../../assets/images/darkorange-pin.png')}
-            title={personalPin.title} >
-              <Callout style={styles.pinCalloutStyle}>
-                <CalloutSubview style={styles.pinCalloutView}>
-                  <Text style={styles.pinCalloutTitle}>{personalPin.title}</Text>
-                  <Text style={styles.pinCalloutPersonal}>Personal Pin</Text>
-                  <Image source={{uri: tempImg}} style={styles.pinCalloutImage}/>
-                </CalloutSubview>
+        return (
+          <React.Fragment>
+            {pins && pins.map((personalPin: any, index: number) => (
+            <Marker
+              key={personalPin.pin_id}  
+              coordinate={{latitude: personalPin.latitude, longitude: personalPin.longitude}}
+              image={require('../../assets/images/personal-pin.png')}
+              title={personalPin.title} >
+                <Callout style={styles.pinCalloutStyle}>
+                  <CalloutSubview style={styles.pinCalloutView}>
+                    <Text style={styles.pinCalloutTitle}>{personalPin.title}</Text>
+                    <Text style={styles.pinCalloutPersonal}>Personal Pin</Text>
+                    <Image source={{uri: tempImg}} style={styles.pinCalloutImage}/>
+                  </CalloutSubview>
 
-                <CalloutSubview style={{justifyContent: 'space-evenly', alignItems: 'center', flex: 1, flexDirection: 'row'}}>
-                  <CalloutSubview style={{flex: 0.5, justifyContent: 'center', alignItems: 'center'}}
-                      onPress={() => { 
-                        setChangingRegion({latitude: personalPin.latitude, longitude: personalPin.longitude, latitudeDelta: region.latitudeDelta, longitudeDelta: region.longitudeDelta});
-                        setRegion({latitude: personalPin.latitude, longitude: personalPin.longitude, latitudeDelta: region.latitudeDelta, longitudeDelta: region.longitudeDelta});
-                        setDragMode({mode: 2, location: {latitude: personalPin.latitude, longitude: personalPin.longitude}, pin_index: index});
-                      }}>
-                    <Button 
-                        title="Drag" 
-                        buttonStyle={styles.pinCalloutViewButton}
-                        color={Colors.white}
-                        titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'Sansation', fontSize: 12 }} />
+                  <CalloutSubview style={{justifyContent: 'space-evenly', alignItems: 'center', flex: 1, flexDirection: 'row'}}>
+                    <CalloutSubview style={{flex: 0.5, justifyContent: 'center', alignItems: 'center'}}
+                        onPress={() => { 
+                          setChangingRegion({latitude: personalPin.latitude, longitude: personalPin.longitude, latitudeDelta: region.latitudeDelta, longitudeDelta: region.longitudeDelta});
+                          setRegion({latitude: personalPin.latitude, longitude: personalPin.longitude, latitudeDelta: region.latitudeDelta, longitudeDelta: region.longitudeDelta});
+                          setDragMode({mode: 2, location: {latitude: personalPin.latitude, longitude: personalPin.longitude}, pin_index: index});
+                        }}>
+                      <Button 
+                          title="Drag" 
+                          buttonStyle={styles.pinCalloutViewButton}
+                          color={Colors.white}
+                          titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'Sansation', fontSize: 12 }} />
+                    </CalloutSubview>
+                    
+                    <CalloutSubview style={{flex: 0.5, justifyContent: 'center', alignItems: 'center'}}
+                        onPress={() => { navigation.navigate("Pin detail", { pin_id: personalPin.pin_id, pin_user_id: personalPin.user_id })}}>
+                      <Button 
+                          title="View" 
+                          buttonStyle={styles.pinCalloutViewButton}
+                          color={Colors.white}
+                          titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'Sansation', fontSize: 12 }} />
+                    </CalloutSubview>
                   </CalloutSubview>
-                  
-                  <CalloutSubview style={{flex: 0.5, justifyContent: 'center', alignItems: 'center'}}
-                      onPress={() => { navigation.navigate("Pin detail", { pin_id: personalPin.pin_id, pin_user_id: personalPin.user_id })}}>
-                    <Button 
-                        title="View" 
-                        buttonStyle={styles.pinCalloutViewButton}
-                        color={Colors.white}
-                        titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'Sansation', fontSize: 12 }} />
+                </Callout>
+            </Marker>
+          ))}
+          
+        {friendPins && friendPins.map((friend: any, index: number) => (
+          friend && friend.pins && friend.pins.map((friendPin: any, index: number) => (
+            friendPin.visibility > 0 &&
+            <Marker
+              key={friendPin.pin_id}  
+              coordinate={{latitude: friendPin.latitude, longitude: friendPin.longitude}}
+              image={require('../../assets/images/friend-pin.png')}
+              title={friendPin.title} >
+                <Callout style={styles.pinCalloutStyle}>
+                  <CalloutSubview style={styles.pinCalloutView}>
+                    <Text style={styles.pinCalloutTitle}>{friendPin.title}</Text>
+                    <Text style={styles.pinCalloutPersonal}>@{friend.user.username}</Text>
+                    <Image source={{uri: tempImg}} style={styles.pinCalloutImage}/>
                   </CalloutSubview>
-                </CalloutSubview>
-              </Callout>
-          </Marker>
-        )));
-        
+
+                  <CalloutSubview style={{justifyContent: 'space-evenly', alignItems: 'center', flex: 1, flexDirection: 'row'}}>
+                    <CalloutSubview style={{flex: 0.5, justifyContent: 'center', alignItems: 'center'}}
+                        onPress={() => { navigation.navigate("Pin detail", { pin_id: friendPin.pin_id, pin_user_id: friendPin.user_id })}}>
+                      <Button 
+                          title="View" 
+                          buttonStyle={styles.pinCalloutViewButton}
+                          color={Colors.white}
+                          titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'Sansation', fontSize: 12 }} />
+                    </CalloutSubview>
+                  </CalloutSubview>
+                </Callout>
+            </Marker>
+          ))))}
+          </React.Fragment>
+        );
+
       case 1:
         return (
           <Marker 
             key={0}
             coordinate={{latitude: changingRegion.latitude, longitude: changingRegion.longitude}} 
-            image={require('../../assets/images/darkorange-pin.png')}
+            image={require('../../assets/images/personal-pin.png')}
             opacity={0.7} />
         );
       
@@ -136,7 +204,7 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
           <Marker 
             key={0}
             coordinate={{latitude: changingRegion.latitude, longitude: changingRegion.longitude}} 
-            image={require('../../assets/images/darkorange-pin.png')}
+            image={require('../../assets/images/personal-pin.png')}
             opacity={0.7} />
         );   
     }

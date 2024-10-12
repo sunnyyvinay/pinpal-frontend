@@ -6,7 +6,7 @@ import { Button } from '@rneui/themed';
 
 const Welcome = ({navigation}: {navigation: any}) => {
   return (
-    <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 1}} colors={[Colors.darkOrange, Colors.darkYellow]} style={styles.gradientContainer}>
+    <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 1}} colors={[Colors.darkOrange, Colors.yellow]} style={styles.gradientContainer}>
         <Image source={require('../../assets/images/full-logo.png')} style={styles.logo} />
         <Button 
             title="LOG IN" 

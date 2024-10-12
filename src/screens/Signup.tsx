@@ -93,7 +93,7 @@ const Signup = ({navigation}: {navigation: any}) => {
     }
 
     return (
-        <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 1}} colors={[Colors.darkOrange, Colors.darkYellow]} style={styles.gradientContainer}>
+        <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 1}} colors={[Colors.darkOrange, Colors.yellow]} style={styles.gradientContainer}>
             <Button
                 icon={<Icon name="arrow-back" size={20} color={Colors.black} />}
                 color={Colors.black}
