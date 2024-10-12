@@ -9,6 +9,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { Image } from '@rneui/base';
 import * as Colors from '../constants/colors';
 import Icon from 'react-native-vector-icons/Ionicons';
+import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import { useAppContext } from '../AppContext';
 import { Button } from '@rneui/themed';
@@ -273,8 +274,15 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
         showsPointsOfInterest={true}>
         
         {handleDragMode()}
-
       </MapView>
+      <View style={styles.mapControlView}>
+        <TouchableOpacity style={styles.mapControlButton}>
+          <FontAwesome6 name="location-arrow" size={20} color={Colors.lightOrange} />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.mapControlButton}>
+          <FontAwesome6 name="location-pin" size={20} color={Colors.lightOrange} />
+        </TouchableOpacity>
+      </View>
       
       {handleDragOptions()}
 
@@ -335,7 +343,28 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     height: 30,
     width: 80,
-  }
+  },
+  mapControlView: {
+    flexDirection: 'column',
+    position: 'absolute',
+    padding: 10,
+    marginLeft: "80%"
+  },
+  mapControlButton: {
+    backgroundColor: 'white',
+    borderWidth: 0,
+    borderRadius: 30,
+    height: 50,
+    width: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: 'black',
+    shadowOffset: { width: 4, height: 4 },
+    shadowOpacity: 0.6,
+    shadowRadius: 4,
+    flex: 0.5,
+    marginVertical: 5
+  },
 });
 
 export default Map;
