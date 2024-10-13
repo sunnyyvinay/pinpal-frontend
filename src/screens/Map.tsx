@@ -13,6 +13,7 @@ import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import { useAppContext } from '../AppContext';
 import { Button } from '@rneui/themed';
+import Modal from "react-native-modal";
 
 function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.Element {
   const { region, setRegion, dragMode, setDragMode } = useAppContext();
@@ -44,9 +45,9 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
     },
     pins: Pin[]
   }
-  
   const [friendPins, setFriendPins] = useState<FriendPin[]>([]);
   const [publicPins, setPublicPins] = useState([]);
+  const [pinFilterModalVisibile, setPinFilterModalVisibile] = useState(false);
 
   const tempImg = "https://images.unsplash.com/photo-1720802616209-c174c23f6565?q=80&w=2971&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
 
@@ -260,6 +261,32 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
     }
   }
 
+  const setCurrentLocation = async () => {
+    await GetLocation.getCurrentPosition({
+      enableHighAccuracy: true,
+      timeout: 30000,
+      rationale: {
+        title: 'Location permission', message: 'PinPal needs the permission to request your location.', buttonPositive: 'Ok',
+      },
+    })
+    .then(newLocation => {
+      setRegion({latitude: newLocation.latitude, longitude: newLocation.longitude, latitudeDelta: 0.05, longitudeDelta: 0.05});
+      setChangingRegion({latitude: newLocation.latitude, longitude: newLocation.longitude, latitudeDelta: 0.05, longitudeDelta: 0.05});
+    })
+    .catch(ex => {
+      if (isLocationError(ex)) {
+        const {code, message} = ex;
+        console.warn(code, message);
+        setRegion({latitude: 34.0699, longitude: 118.4438, latitudeDelta: 0.05, longitudeDelta: 0.05});
+        setChangingRegion({latitude: 34.0699, longitude: 118.4438, latitudeDelta: 0.05, longitudeDelta: 0.05});
+      } else {
+        console.warn(ex);
+      }
+    })
+  }
+
+
+
   return (
     <View style={{width: '100%', height: '100%'}}>
       <MapView
@@ -272,19 +299,29 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
         }}
         style={styles.mapContainer}
         showsPointsOfInterest={true}>
-        
         {handleDragMode()}
       </MapView>
+
       <View style={styles.mapControlView}>
-        <TouchableOpacity style={styles.mapControlButton}>
-          <FontAwesome6 name="location-arrow" size={20} color={Colors.lightOrange} />
+        <TouchableOpacity style={styles.mapControlButton} onPress={setCurrentLocation}>
+          <FontAwesome6 name="location-arrow" size={25} color={Colors.lightOrange} />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.mapControlButton}>
-          <FontAwesome6 name="location-pin" size={20} color={Colors.lightOrange} />
+        <TouchableOpacity style={styles.mapControlButton} onPress={() => setPinFilterModalVisibile(true)}>
+          <MaterialIcon name="filter-list" size={30} color={Colors.lightOrange} />
         </TouchableOpacity>
       </View>
       
       {handleDragOptions()}
+
+      <Modal 
+        isVisible={pinFilterModalVisibile} 
+        onBackdropPress={() => setPinFilterModalVisibile(false)}
+        style={styles.pinFilterModal}>
+        <View style={styles.pinFilterModalView}>
+          <Text style={styles.pinFilterModalTitle}>Filter pins</Text>
+        </View>
+
+      </Modal>
 
     </View> 
   )
@@ -365,6 +402,22 @@ const styles = StyleSheet.create({
     flex: 0.5,
     marginVertical: 5
   },
+  pinFilterModal: {
+    justifyContent: 'center',
+  },
+  pinFilterModalView: {
+    backgroundColor: 'white',
+    padding: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 10,
+    flex: 0.5,
+  },
+  pinFilterModalTitle: {
+    fontSize: 20,
+    marginTop: 10,
+    marginBottom: 20,
+},
 });
 
 export default Map;
