@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getFriendStatus, getUser, createFriendRequest, deleteFriendRequest, acceptFriendRequest, getUserFriends} from '../services/user.service';
+import { getFriendStatus, getUser, createFriendRequest, deleteFriendRequest, acceptFriendRequest, getUserFriends, getPins} from '../services/user.service';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ScrollView, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { Image } from '@rneui/base';
@@ -9,6 +9,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 function Profile(props: any): React.JSX.Element {
+  let curr_user_id: string|null = "";
   const [userData, setUserData] = useState<any>({});
   const [friendStatus, setFriendStatus] = useState<number>(-1); // -1 for not friends, 0 for pending, 1 for friends
   type ProfileState = {
@@ -26,14 +27,15 @@ function Profile(props: any): React.JSX.Element {
     const fetchUserData = async () => {
         try {
             const user_id  = props.route.params.user_id;
-            const curr_user_id = await AsyncStorage.getItem("user_id");
+            curr_user_id = await AsyncStorage.getItem("user_id");
             if (user_id) {
                 const userData = await getUser(user_id);
                 setUserData(userData.user);
                 const friendStatusData = await getFriendStatus(curr_user_id, user_id);
                 setFriendStatus(friendStatusData.status);
+                const pinData = await getPins(user_id);
                 const friendData = await getUserFriends(user_id);
-                setProfileData({ ...profileData, friends: friendData.friends });
+                setProfileData({ ...profileData, friends: friendData.friends, pins: pinData.pins });
             } else {
                 props.navigation.navigate("Welcome");
             }
@@ -45,6 +47,9 @@ function Profile(props: any): React.JSX.Element {
 }, [props.route.params.user_id]);
 
   function friendRequestView() {
+    if (props.route.params.user_id == curr_user_id) {
+      return null;
+    }
     switch(friendStatus) {
       case -1:
         return (
@@ -111,7 +116,7 @@ function Profile(props: any): React.JSX.Element {
 
       <View style={styles.statsContainer}>
         <TouchableOpacity style={styles.statCard}>
-          <Text style={styles.statTextNum}>-</Text>
+          <Text style={styles.statTextNum}>{profileData.pins.length}</Text>
           <Text style={styles.statTextLabel}>Pins</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.statCard}

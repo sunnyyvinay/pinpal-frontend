@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getUser, getUserFriends } from '../services/user.service';
+import { getPins, getUser, getUserFriends } from '../services/user.service';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Image } from '@rneui/base';
@@ -26,8 +26,9 @@ function Journal({ route, navigation }: any): React.JSX.Element {
             if (user_id) {
                 const userData = await getUser(user_id);
                 setUserData(userData.user);
+                const pinData = await getPins(user_id);
                 const friendData = await getUserFriends(user_id);
-                setJournalData({ ...journalData, friends: friendData.friends });
+                setJournalData({ ...journalData, friends: friendData.friends, pins: pinData.pins });
             } else {
                 navigation.navigate("Welcome");
             }
@@ -57,7 +58,7 @@ function Journal({ route, navigation }: any): React.JSX.Element {
 
       <View style={styles.statsContainer}>
         <TouchableOpacity style={styles.statCard}>
-          <Text style={styles.statTextNum}>-</Text>
+          <Text style={styles.statTextNum}>{journalData.pins.length}</Text>
           <Text style={styles.statTextLabel}>Pins</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.statCard}

@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useEffect, useRef, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { getPin, getUser } from '../services/user.service';
+import { addPinLike, deletePinLike, getPin, getPinLikes, getUser } from '../services/user.service';
 import { useRoute } from '@react-navigation/native';
 import { Dimensions, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import * as Colors from '../constants/colors';
@@ -14,7 +14,8 @@ import { deletePin, updatePin } from '../services/user.service';
 import { locationTags, getLocationTagIcon } from '../constants/locationtags';
 
 const PinPost = (props:any) => {
-    const { pin_id, pin_user_id } = props.route.params;  
+    const { pin_id, pin_user_id } = props.route.params;
+    let user_id: string|null = "";  
     const [pinData, setPinData] = useState<any>({
       title: "",
       caption: "",
@@ -45,7 +46,10 @@ const PinPost = (props:any) => {
     const [editPinVisibility, setEditPinVisibility] = useState<boolean>(false);
     const [editPinLocationTags, setEditPinLocationTags] = useState<boolean>(false);
 
-    const [liked, setLiked] = useState<boolean>(false);
+    const [likes, setLikes] = useState<any>({
+      liked: false,
+      count: 0
+    });
 
     interface PhotoItem {
       url: string;
@@ -59,7 +63,7 @@ const PinPost = (props:any) => {
 
     useEffect(() => {
       const getInfo = async () => {
-        const user_id = await AsyncStorage.getItem("user_id");
+        user_id = await AsyncStorage.getItem("user_id");
         if (user_id) {
             setPersonal(user_id === pin_user_id);
         } else {
@@ -71,6 +75,18 @@ const PinPost = (props:any) => {
         setPinData(pin_data.pin);
         setEditedPinData(pin_data.pin);
         setPinUserData(userData.user);
+
+        const pinLikesData = await getPinLikes(pin_id);
+        var userLiked: boolean = false;
+        if (pinLikesData && pinLikesData.likes) {
+          for (let i = 0; i < pinLikesData.likes.length; i++) {
+            if (pinLikesData.likes[i].user_id === user_id) {
+              userLiked = true;
+              break;
+            }
+          }
+          setLikes({liked: userLiked, count: pinLikesData.likes.length});
+        }
       }
 
       getInfo();
@@ -233,10 +249,10 @@ const PinPost = (props:any) => {
   return (
     <ScrollView>
       <View style={styles.topView}>
-        <View style={styles.userView}>
+        <TouchableOpacity style={styles.userView} onPress={props.navigation.navigate('Profile', {user_id: pinUserData.user_id})}>
           <Image source={pinUserData.profile_pic ? {uri: pinUserData.profile_pic} : require('../../assets/images/default-pfp.jpg')} style={styles.pfpImage} />
           <Text style={styles.usernameText}>{pinUserData.username}</Text>
-        </View>
+        </TouchableOpacity>
 
         {personal && !editMode ? 
         <TouchableOpacity onPress={() => setPinActionModalVisible(true)}>
@@ -323,10 +339,18 @@ const PinPost = (props:any) => {
         
         {editMode ? null : 
         <View style={styles.likesView}>
-          <TouchableOpacity onPress={() => setLiked(!liked)}>
-            {liked ? <Icon name="heart" size={30} color={Colors.mediumOrange} /> : <Icon name="heart-outline" size={30} color={Colors.black} />}
+          <TouchableOpacity onPress={async () => {
+            if (likes.liked) {
+              setLikes({liked: false, count: likes.count - 1});
+              await deletePinLike(user_id, pin_id);
+            } else {
+              setLikes({liked: true, count: likes.count + 1});
+              await addPinLike(user_id, pin_id);
+            }
+          }}>
+            {likes.liked ? <Icon name="heart" size={30} color={Colors.mediumOrange} /> : <Icon name="heart-outline" size={30} color={Colors.black} />}
           </TouchableOpacity>
-          <Text style={{...styles.likesText, color: liked ? Colors.mediumOrange : Colors.black}}>124</Text>
+          <Text style={{...styles.likesText, color: likes.liked ? Colors.mediumOrange : Colors.black}}>{likes.count}</Text>
         </View>
         }
       </View>

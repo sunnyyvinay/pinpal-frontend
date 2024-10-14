@@ -211,3 +211,33 @@ export const getUserFriends = async (userid: string|null) => {
       return error;
   }
 };
+
+// GET PIN LIKES
+export const getPinLikes = async (pinid: string) => {
+  try {
+      const response = await axios.get(`${apiUrl}/${pinid}/likes`);
+      return response.data;
+  } catch (error) {
+      return error;
+  }
+};
+
+// ADD PIN LIKE
+export const addPinLike = async (userid: string|null, pinid: string) => {
+  try {
+      const response = await axios.post(`${apiUrl}/${pinid}/user/${userid}/like`);
+      return response.data;
+  } catch (error) {
+      return error;
+  }
+};
+
+// DELETE PIN LIKE
+export const deletePinLike = async (userid: string|null, pinid: string) => {
+  try {
+      const response = await axios.delete(`${apiUrl}/${pinid}/user/${userid}/unlike`);
+      return response.data;
+  } catch (error) {
+      return error;
+  }
+};
