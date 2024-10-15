@@ -4,7 +4,7 @@ export const lightOrange = '#FF9202';
 export const whiteOrange = '#ffe5b4';
 
 export const yellow = '#FCC500';
-export const darkYellow = '#FFD700';
+export const darkYellow = '#F2CA00';
 
 export const darkBlue = '#0244FF';
 

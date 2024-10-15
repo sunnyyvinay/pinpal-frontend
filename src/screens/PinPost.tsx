@@ -15,7 +15,6 @@ import { locationTags, getLocationTagIcon } from '../constants/locationtags';
 
 const PinPost = (props:any) => {
     const { pin_id, pin_user_id } = props.route.params;
-    let user_id: string|null = "";  
     const [pinData, setPinData] = useState<any>({
       title: "",
       caption: "",
@@ -63,7 +62,7 @@ const PinPost = (props:any) => {
 
     useEffect(() => {
       const getInfo = async () => {
-        user_id = await AsyncStorage.getItem("user_id");
+        const user_id = await AsyncStorage.getItem("user_id");
         if (user_id) {
             setPersonal(user_id === pin_user_id);
         } else {
@@ -249,7 +248,7 @@ const PinPost = (props:any) => {
   return (
     <ScrollView>
       <View style={styles.topView}>
-        <TouchableOpacity style={styles.userView} onPress={props.navigation.navigate('Profile', {user_id: pinUserData.user_id})}>
+        <TouchableOpacity style={styles.userView} onPress={() =>props.navigation.navigate('Profile', {user_id: pinUserData.user_id})}>
           <Image source={pinUserData.profile_pic ? {uri: pinUserData.profile_pic} : require('../../assets/images/default-pfp.jpg')} style={styles.pfpImage} />
           <Text style={styles.usernameText}>{pinUserData.username}</Text>
         </TouchableOpacity>
@@ -340,6 +339,7 @@ const PinPost = (props:any) => {
         {editMode ? null : 
         <View style={styles.likesView}>
           <TouchableOpacity onPress={async () => {
+            const user_id = await AsyncStorage.getItem("user_id");
             if (likes.liked) {
               setLikes({liked: false, count: likes.count - 1});
               await deletePinLike(user_id, pin_id);
@@ -350,7 +350,7 @@ const PinPost = (props:any) => {
           }}>
             {likes.liked ? <Icon name="heart" size={30} color={Colors.mediumOrange} /> : <Icon name="heart-outline" size={30} color={Colors.black} />}
           </TouchableOpacity>
-          <Text style={{...styles.likesText, color: likes.liked ? Colors.mediumOrange : Colors.black}}>{likes.count}</Text>
+          {likes.liked ? <Text style={{...styles.likesText, color: Colors.mediumOrange}}>{likes.count}</Text> : <Text style={{...styles.likesText, color: Colors.black}}>{likes.count === 0 ? "Like" : likes.count}</Text>}
         </View>
         }
       </View>
