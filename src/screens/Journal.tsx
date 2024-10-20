@@ -28,7 +28,7 @@ function Journal({ route, navigation }: any): React.JSX.Element {
                 setUserData(userData.user);
                 const pinData = await getPins(user_id);
                 const friendData = await getUserFriends(user_id);
-                setJournalData({ ...journalData, friends: friendData.friends, pins: pinData.pins });
+                setJournalData({ ...journalData, friends: friendData.friends ? friendData.friends : [], pins: pinData.pins ? pinData.pins : [] });
             } else {
                 navigation.navigate("Welcome");
             }

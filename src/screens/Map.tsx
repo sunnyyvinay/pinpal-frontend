@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { StyleSheet, Text, Touchable, TouchableOpacity, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, Touchable, TouchableOpacity, View } from 'react-native';
 import GetLocation, { isLocationError, Location } from 'react-native-get-location';
 import MapView, { Callout, CalloutSubview, Marker } from 'react-native-maps';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -14,6 +14,7 @@ import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import { useAppContext } from '../AppContext';
 import { Button } from '@rneui/themed';
 import Modal from "react-native-modal";
+import { locationTags } from '../constants/locationtags';
 
 function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.Element {
   const { region, setRegion, dragMode, setDragMode } = useAppContext();
@@ -48,6 +49,11 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
   const [friendPins, setFriendPins] = useState<FriendPin[]>([]);
   const [publicPins, setPublicPins] = useState([]);
   const [pinFilterModalVisibile, setPinFilterModalVisibile] = useState(false);
+  const [filterState, setFilterState] = useState({
+    visibility: 3,
+    location_tag: "",
+    friend: "",
+  });
 
   const tempImg = "https://images.unsplash.com/photo-1720802616209-c174c23f6565?q=80&w=2971&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
 
@@ -285,10 +291,38 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
     })
   }
 
-
-
   return (
     <View style={{width: '100%', height: '100%'}}>
+      <View style={styles.filterView}>
+        <TouchableOpacity style={styles.filterIcon} onPress={() => setPinFilterModalVisibile(true)}>
+          <Icon name="filter-circle" size={30} color={Colors.lightGray} />
+        </TouchableOpacity>
+        <View style={styles.verticalLine} />
+        {filterState.location_tag ? 
+          <Button 
+            title={filterState.location_tag}
+            buttonStyle={{...styles.locationTagOpacity, backgroundColor: Colors.whiteOrange}}
+            titleStyle={styles.locationTagText} 
+            onPress={() => {
+              setFilterState({...filterState, location_tag: ""});
+            }} /> :
+          <ScrollView style={styles.locationTagView} horizontal={true} showsHorizontalScrollIndicator={false}>
+            {locationTags.map((tag: string, index: number) => {
+              return (
+                <Button 
+                  title={tag}
+                  key={index}
+                  buttonStyle={styles.locationTagOpacity}
+                  titleStyle={styles.locationTagText} 
+                  onPress={() =>{
+                    setFilterState({...filterState, location_tag: tag});
+                  }}/>
+              )
+            })}
+          </ScrollView>
+        }
+      </View>
+
       <MapView
         region={region}
         onRegionChange={(newRegion) => {
@@ -306,9 +340,6 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
         <TouchableOpacity style={styles.mapControlButton} onPress={setCurrentLocation}>
           <FontAwesome6 name="location-arrow" size={25} color={Colors.lightOrange} />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.mapControlButton} onPress={() => setPinFilterModalVisibile(true)}>
-          <MaterialIcon name="filter-list" size={30} color={Colors.lightOrange} />
-        </TouchableOpacity>
       </View>
       
       {handleDragOptions()}
@@ -320,9 +351,7 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
         <View style={styles.pinFilterModalView}>
           <Text style={styles.pinFilterModalTitle}>Filter pins</Text>
         </View>
-
       </Modal>
-
     </View> 
   )
 }
@@ -385,7 +414,8 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     position: 'absolute',
     padding: 10,
-    marginLeft: "80%"
+    marginLeft: "80%",
+    marginTop: "125%"
   },
   mapControlButton: {
     backgroundColor: 'white',
@@ -417,7 +447,39 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginTop: 10,
     marginBottom: 20,
-},
+  },
+  filterView: {
+    height: 40,
+    width: '100%',
+    backgroundColor: 'white',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  filterIcon: {
+    marginLeft: 10,
+  },
+  verticalLine: {
+    height: '80%',
+    width: 1,
+    backgroundColor: Colors.lightGray,
+    marginHorizontal: 10,
+  },
+  locationTagView: {
+    flexDirection: 'row',
+    marginVertical: 5
+  },
+  locationTagOpacity: {
+    borderWidth: 0,
+    borderRadius: 20,
+    backgroundColor: Colors.whiteGray,
+    marginHorizontal: 5
+  },
+  locationTagText: {
+    fontSize: 11,
+    fontFamily: 'Sansation',
+    fontWeight: 100,
+    color: Colors.darkGray
+  }
 });
 
 export default Map;

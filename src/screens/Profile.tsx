@@ -35,7 +35,7 @@ function Profile(props: any): React.JSX.Element {
                 setFriendStatus(friendStatusData.status);
                 const pinData = await getPins(user_id);
                 const friendData = await getUserFriends(user_id);
-                setProfileData({ ...profileData, friends: friendData.friends, pins: pinData.pins });
+                setProfileData({ ...profileData, friends: friendData.friends ? friendData.friends : [], pins: pinData.pins ? pinData.pins : [] });
             } else {
                 props.navigation.navigate("Welcome");
             }
@@ -116,12 +116,12 @@ function Profile(props: any): React.JSX.Element {
 
       <View style={styles.statsContainer}>
         <TouchableOpacity style={styles.statCard}>
-          <Text style={styles.statTextNum}>{profileData.pins.length}</Text>
+          <Text style={styles.statTextNum}>{profileData.pins.length || 0}</Text>
           <Text style={styles.statTextLabel}>Pins</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.statCard}
           onPress={() => props.navigation.navigate("Friends", {id: userData.user_id})}>
-          <Text style={styles.statTextNum}>{profileData.friends.length}</Text>
+          <Text style={styles.statTextNum}>{profileData.friends.length || 0}</Text>
           <Text style={styles.statTextLabel}>Friends</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.statCard}>
