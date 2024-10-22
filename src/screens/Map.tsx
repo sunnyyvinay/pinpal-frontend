@@ -3,7 +3,7 @@ import { ScrollView, StyleSheet, Text, Touchable, TouchableOpacity, View } from 
 import GetLocation, { isLocationError, Location } from 'react-native-get-location';
 import MapView, { Callout, CalloutSubview, Marker } from 'react-native-maps';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { getPins, getUser, getUserFriends, updatePin, updatePinLocation } from '../services/user.service';
+import { getPins, getPublicPins, getUser, getUserFriends, updatePin, updatePinLocation } from '../services/user.service';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
 import { Image } from '@rneui/base';
@@ -112,7 +112,7 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
           // PERSONAL PINS
           if (filterState.private) {
             const personalPins = await getPins(user_id);
-            setPins(personalPins.pins.filter((pin: any) => filterState.location_tag == "" || pin.location_tags.includes(filterState.location_tag)));
+            if (personalPins.pins) setPins(personalPins.pins.filter((pin: any) => filterState.location_tag == "" || pin.location_tags.includes(filterState.location_tag)));
           } else setPins([]);
           
           // FRIEND PINS
@@ -135,7 +135,14 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
 
           // PUBLIC PINS
           if (filterState.public) {
+            var publicPins = await getPublicPins(user_id);
             
+            if (publicPins.pins) {
+              for (let i = 0; i < publicPins.pins.length; i++) {
+                publicPins.pins[i] = {...publicPins.pins[i], user: await getUser(publicPins.pins[i].user_id)}
+              }
+              setPublicPins(publicPins.pins.filter((pin: any) => filterState.location_tag == "" || pin.location_tags.includes(filterState.location_tag)));
+            }
           } else setPublicPins([]);
 
         } else {
@@ -220,6 +227,33 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
                 </Callout>
             </Marker>
           ))))}
+
+        {publicPins && publicPins.map((publicPin: any, index: number) => (
+            <Marker
+              key={publicPin.pin_id}  
+              coordinate={{latitude: publicPin.latitude, longitude: publicPin.longitude}}
+              image={require('../../assets/images/public-pin.png')}
+              title={publicPin.title} >
+                <Callout style={styles.pinCalloutStyle}>
+                  <CalloutSubview style={styles.pinCalloutView}>
+                    <Text style={styles.pinCalloutTitle}>{publicPin.title}</Text>
+                    <Text style={styles.pinCalloutPersonal}>@{publicPin.user.username}</Text>
+                    <Image source={{uri: tempImg}} style={styles.pinCalloutImage}/>
+                  </CalloutSubview>
+
+                  <CalloutSubview style={{justifyContent: 'space-evenly', alignItems: 'center', flex: 1, flexDirection: 'row'}}>
+                    <CalloutSubview style={{flex: 0.5, justifyContent: 'center', alignItems: 'center'}}
+                        onPress={() => { navigation.navigate("Pin detail", { pin_id: publicPin.pin_id, pin_user_id: publicPin.user_id })}}>
+                      <Button 
+                          title="View" 
+                          buttonStyle={styles.pinCalloutViewButton}
+                          color={Colors.white}
+                          titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'Sansation', fontSize: 12 }} />
+                    </CalloutSubview>
+                  </CalloutSubview>
+                </Callout>
+            </Marker>
+        ))}
           </React.Fragment>
         );
 
@@ -385,7 +419,7 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
                   }
               }}>
               <MaterialIcon name="lock" size={25} style={{ flex: 0.25}}/>
-              <Text style={{...styles.filterVisibilityText, flex: 0.65}}>Private</Text>
+              <Text style={{...styles.filterVisibilityText, flex: 0.65}}>Personal</Text>
               <Icon name="checkmark-sharp" size={25} color={Colors.mediumOrange} style={tempFilterState.private ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
             </TouchableOpacity>
             <View style={styles.horizontalLine} />

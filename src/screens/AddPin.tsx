@@ -173,39 +173,37 @@ const AddPin = ({ route, navigation }: any) => {
                 style={styles.visibilityModal} >
                 <View style={styles.visibilityModalView}>
                     <Text style={styles.visibilityModalTitle}>Select visibility</Text>
-                    <View>
-                        <TouchableOpacity style={styles.visibilityModalSubview} 
-                            onPress={() => {
-                                setPinData({ ...pinData, visibility: 0});
-                                setVisibilityModal(false);
-                            }}>
-                            <MaterialIcon name="lock" size={25} style={{ flex: 0.25}}/>
-                            <Text style={styles.visibilityModalSubviewText}>Private</Text>
-                            <Icon name="checkmark-sharp" size={25} color={Colors.mediumOrange} style={pinData.visibility === 0 ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
-                        </TouchableOpacity>
-                        <View style={styles.horizontalLine} />
-                        
-                        <TouchableOpacity style={styles.visibilityModalSubview} 
-                            onPress={() => {
-                                setPinData({ ...pinData, visibility: 1});
-                                setVisibilityModal(false);
-                            }}>
-                            <MaterialIcon name="people-alt" size={25} style={{ flex: 0.25}}/>
-                            <Text style={styles.visibilityModalSubviewText}>Friends</Text>
-                            <Icon name="checkmark-sharp" size={25} color={Colors.mediumOrange} style={pinData.visibility === 1 ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
-                        </TouchableOpacity>
-                        <View style={styles.horizontalLine} />
-                        
-                        <TouchableOpacity style={styles.visibilityModalSubview} 
-                            onPress={() => {
-                                setPinData({ ...pinData, visibility: 2});
-                                setVisibilityModal(false);
-                            }}>
-                            <MaterialIcon name="public" size={25} style={{ flex: 0.25}}/>
-                            <Text style={styles.visibilityModalSubviewText}>Public</Text>
-                            <Icon name="checkmark-sharp" size={25} color={Colors.mediumOrange} style={pinData.visibility === 2 ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
-                        </TouchableOpacity>
-                    </View>
+                    <TouchableOpacity style={styles.visibilityModalSubview} 
+                        onPress={() => {
+                            setPinData({ ...pinData, visibility: 0});
+                            setVisibilityModal(false);
+                        }}>
+                        <MaterialIcon name="lock" size={25} style={{ flex: 0.25}}/>
+                        <Text style={styles.visibilityModalSubviewText}>Private</Text>
+                        <Icon name="checkmark-sharp" size={25} color={Colors.mediumOrange} style={pinData.visibility === 0 ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
+                    </TouchableOpacity>
+                    <View style={styles.horizontalLine} />
+                    
+                    <TouchableOpacity style={styles.visibilityModalSubview} 
+                        onPress={() => {
+                            setPinData({ ...pinData, visibility: 1});
+                            setVisibilityModal(false);
+                        }}>
+                        <MaterialIcon name="people-alt" size={25} style={{ flex: 0.25}}/>
+                        <Text style={styles.visibilityModalSubviewText}>Friends</Text>
+                        <Icon name="checkmark-sharp" size={25} color={Colors.mediumOrange} style={pinData.visibility === 1 ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
+                    </TouchableOpacity>
+                    <View style={styles.horizontalLine} />
+                    
+                    <TouchableOpacity style={styles.visibilityModalSubview} 
+                        onPress={() => {
+                            setPinData({ ...pinData, visibility: 2});
+                            setVisibilityModal(false);
+                        }}>
+                        <MaterialIcon name="public" size={25} style={{ flex: 0.25}}/>
+                        <Text style={styles.visibilityModalSubviewText}>Public</Text>
+                        <Icon name="checkmark-sharp" size={25} color={Colors.mediumOrange} style={pinData.visibility === 2 ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
+                    </TouchableOpacity>
                 </View>
             </Modal>
 

@@ -241,3 +241,13 @@ export const deletePinLike = async (userid: string|null, pinid: string) => {
       return error;
   }
 };
+
+// GET PUBLIC PINS (randomly chosen for user)
+export const getPublicPins = async (userid: string|null) => {
+  try {
+      const response = await axios.get(`${apiUrl}/${userid}/pins/public`);
+      return response.data;
+  } catch (error) {
+      return error;
+  }
+};
