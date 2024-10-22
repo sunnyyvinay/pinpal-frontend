@@ -48,9 +48,26 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
   }
   const [friendPins, setFriendPins] = useState<FriendPin[]>([]);
   const [publicPins, setPublicPins] = useState([]);
+
   const [pinFilterModalVisibile, setPinFilterModalVisibile] = useState(false);
+  type FilterState = {
+    private: boolean,
+    friends: boolean,
+    public: boolean,
+    location_tag: string,
+    friend: string,
+  }
+  var tempFilterState: FilterState = {
+    private: true,
+    friends: true,
+    public: true,
+    location_tag: "",
+    friend: "",
+  }
   const [filterState, setFilterState] = useState({
-    visibility: 3,
+    private: true,
+    friends: true,
+    public: true,
     location_tag: "",
     friend: "",
   });
@@ -94,7 +111,7 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
         if (user_id) {
           // PERSONAL PINS
           const personalPins = await getPins(user_id);
-          setPins(personalPins.pins);
+          setPins(personalPins.pins.filter((pin: any) => filterState.location_tag == "" || pin.location_tags.includes(filterState.location_tag)));
           
           // FRIEND PINS
           var friendData = await getUserFriends(user_id);
@@ -107,7 +124,8 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
                 pin = await getPins(friendData.friends[i].target_id);
                 friend = await getUser(friendData.friends[i].target_id);
             }
-            friendData.friends[i] = {user: friend.user, pins: pin.pins};
+            pin = pin.pins.filter((pin: any) => pin.visibility > 0 && (filterState.location_tag == "" || pin.location_tags.includes(filterState.location_tag)));
+            friendData.friends[i] = {user: friend.user, pins: pin};
           }
           setFriendPins([...friendData.friends]);
 
@@ -119,7 +137,7 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
       }
 
       setPinState();
-    }, [])
+    }, [filterState])
   );
 
   const handleDragMode = () => {
@@ -294,14 +312,14 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
   return (
     <View style={{width: '100%', height: '100%'}}>
       <View style={styles.filterView}>
-        <TouchableOpacity style={styles.filterIcon} onPress={() => setPinFilterModalVisibile(true)}>
-          <Icon name="filter-circle" size={30} color={Colors.lightGray} />
+        <TouchableOpacity style={styles.filterIcon} onPress={() => {tempFilterState = filterState; setPinFilterModalVisibile(true);}}>
+          <Icon name="filter-circle" size={30} color={Colors.lightOrange} />
         </TouchableOpacity>
         <View style={styles.verticalLine} />
         {filterState.location_tag ? 
           <Button 
             title={filterState.location_tag}
-            buttonStyle={{...styles.locationTagOpacity, backgroundColor: Colors.whiteOrange}}
+            buttonStyle={{...styles.locationTagOpacity, backgroundColor: Colors.lightOrange}}
             titleStyle={styles.locationTagText} 
             onPress={() => {
               setFilterState({...filterState, location_tag: ""});
@@ -346,11 +364,56 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
 
       <Modal 
         isVisible={pinFilterModalVisibile} 
-        onBackdropPress={() => setPinFilterModalVisibile(false)}
+        onBackdropPress={() => {setFilterState(tempFilterState); setPinFilterModalVisibile(false)}}
         style={styles.pinFilterModal}>
         <View style={styles.pinFilterModalView}>
           <Text style={styles.pinFilterModalTitle}>Filter pins</Text>
-        </View>
+          
+            <TouchableOpacity 
+              style={styles.filterVisibilityOpacity}
+              onPress={() => {
+                  if (tempFilterState.private) {
+                    tempFilterState.private = false;
+                  } else {
+                    tempFilterState.private = true;
+                  }
+              }}>
+              <MaterialIcon name="lock" size={25} style={{ flex: 0.25}}/>
+              <Text style={{...styles.filterVisibilityText, flex: 0.65}}>Private</Text>
+              <Icon name="checkmark-sharp" size={25} color={Colors.mediumOrange} style={filterState.private ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
+            </TouchableOpacity>
+            <View style={styles.horizontalLine} />
+
+            <TouchableOpacity 
+              style={styles.filterVisibilityOpacity}
+              onPress={() => {
+                  if (tempFilterState.friends) {
+                    tempFilterState.friends = false;
+                  } else {
+                    tempFilterState.friends = true;
+                  }
+              }}>
+              <MaterialIcon name="people-alt" size={25} style={{ flex: 0.25}}/>
+              <Text style={{...styles.filterVisibilityText, flex: 0.65}}>Friends</Text>
+              <Icon name="checkmark-sharp" size={25} color={Colors.mediumOrange} style={filterState.friends ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
+            </TouchableOpacity>
+            <View style={styles.horizontalLine} />
+
+            <TouchableOpacity 
+              style={styles.filterVisibilityOpacity}
+              onPress={() => {
+                  if (tempFilterState.public) {
+                    tempFilterState.public = false;
+                  } else {
+                    tempFilterState.public = true;
+                  }
+              }}>
+              <MaterialIcon name="public" size={25} style={{ flex: 0.25}}/>
+              <Text style={{...styles.filterVisibilityText, flex: 0.65}}>Public</Text>
+              <Icon name="checkmark-sharp" size={25} color={Colors.mediumOrange} style={filterState.public ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
+            </TouchableOpacity>
+          </View>
+        
       </Modal>
     </View> 
   )
@@ -432,22 +495,6 @@ const styles = StyleSheet.create({
     flex: 0.5,
     marginVertical: 5
   },
-  pinFilterModal: {
-    justifyContent: 'center',
-  },
-  pinFilterModalView: {
-    backgroundColor: 'white',
-    padding: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 10,
-    flex: 0.5,
-  },
-  pinFilterModalTitle: {
-    fontSize: 20,
-    marginTop: 10,
-    marginBottom: 20,
-  },
   filterView: {
     height: 40,
     width: '100%',
@@ -471,7 +518,7 @@ const styles = StyleSheet.create({
   locationTagOpacity: {
     borderWidth: 0,
     borderRadius: 20,
-    backgroundColor: Colors.whiteGray,
+    backgroundColor: Colors.whiteOrange,
     marginHorizontal: 5
   },
   locationTagText: {
@@ -479,7 +526,41 @@ const styles = StyleSheet.create({
     fontFamily: 'Sansation',
     fontWeight: 100,
     color: Colors.darkGray
-  }
+  },
+  horizontalLine: {
+    borderBottomColor: 'black',
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    alignSelf: 'center',
+    width: '100%',
+  },
+  pinFilterModal: {
+    justifyContent: 'center',
+  },
+  pinFilterModalView: {
+    backgroundColor: 'white',
+    padding: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 10,
+    flex: 0.8,
+  },
+  pinFilterModalTitle: {
+    fontSize: 20,
+    marginTop: 20,
+    marginBottom: 20,
+  },
+  filterVisibilityOpacity: {
+    flex: 1,
+    flexDirection: 'row',
+    padding: 10,
+    alignItems: 'center',
+  },
+  filterVisibilityText: {
+    flex: 0.99,
+    marginLeft: 10,
+    fontSize: 18,
+    fontFamily: 'Sansation',
+  },
 });
 
 export default Map;
