@@ -57,14 +57,14 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
     location_tag: string,
     friend: string,
   }
-  var tempFilterState: FilterState = {
+  const [tempFilterState, setTempFilterState] = useState<FilterState>({
     private: true,
     friends: true,
     public: true,
     location_tag: "",
     friend: "",
-  }
-  const [filterState, setFilterState] = useState({
+  });
+  const [filterState, setFilterState] = useState<FilterState>({
     private: true,
     friends: true,
     public: true,
@@ -110,26 +110,33 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
         const user_id = await AsyncStorage.getItem("user_id");
         if (user_id) {
           // PERSONAL PINS
-          const personalPins = await getPins(user_id);
-          setPins(personalPins.pins.filter((pin: any) => filterState.location_tag == "" || pin.location_tags.includes(filterState.location_tag)));
+          if (filterState.private) {
+            const personalPins = await getPins(user_id);
+            setPins(personalPins.pins.filter((pin: any) => filterState.location_tag == "" || pin.location_tags.includes(filterState.location_tag)));
+          } else setPins([]);
           
           // FRIEND PINS
-          var friendData = await getUserFriends(user_id);
-          for (let i = 0; i < friendData.friends.length; i++) {
-            var friend; var pin;
-            if (friendData.friends[i].source_id != user_id) {
-                pin = await getPins(friendData.friends[i].source_id);
-                friend = await getUser(friendData.friends[i].source_id);
-            } else {
-                pin = await getPins(friendData.friends[i].target_id);
-                friend = await getUser(friendData.friends[i].target_id);
+          if (filterState.friends) {
+            var friendData = await getUserFriends(user_id);
+            for (let i = 0; i < friendData.friends.length; i++) {
+              var friend; var pin;
+              if (friendData.friends[i].source_id != user_id) {
+                  pin = await getPins(friendData.friends[i].source_id);
+                  friend = await getUser(friendData.friends[i].source_id);
+              } else {
+                  pin = await getPins(friendData.friends[i].target_id);
+                  friend = await getUser(friendData.friends[i].target_id);
+              }
+              pin = pin.pins.filter((pin: any) => pin.visibility > 0 && (filterState.location_tag == "" || pin.location_tags.includes(filterState.location_tag)));
+              friendData.friends[i] = {user: friend.user, pins: pin};
             }
-            pin = pin.pins.filter((pin: any) => pin.visibility > 0 && (filterState.location_tag == "" || pin.location_tags.includes(filterState.location_tag)));
-            friendData.friends[i] = {user: friend.user, pins: pin};
-          }
-          setFriendPins([...friendData.friends]);
+            setFriendPins([...friendData.friends]);
+          } else setFriendPins([]);
 
-        // PUBLIC PINS
+          // PUBLIC PINS
+          if (filterState.public) {
+            
+          } else setPublicPins([]);
 
         } else {
           navigation.navigate("Welcome");
@@ -312,7 +319,7 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
   return (
     <View style={{width: '100%', height: '100%'}}>
       <View style={styles.filterView}>
-        <TouchableOpacity style={styles.filterIcon} onPress={() => {tempFilterState = filterState; setPinFilterModalVisibile(true);}}>
+        <TouchableOpacity style={styles.filterIcon} onPress={() => {setTempFilterState({...filterState}); setPinFilterModalVisibile(true);}}>
           <Icon name="filter-circle" size={30} color={Colors.lightOrange} />
         </TouchableOpacity>
         <View style={styles.verticalLine} />
@@ -368,19 +375,18 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
         style={styles.pinFilterModal}>
         <View style={styles.pinFilterModalView}>
           <Text style={styles.pinFilterModalTitle}>Filter pins</Text>
-          
             <TouchableOpacity 
               style={styles.filterVisibilityOpacity}
               onPress={() => {
                   if (tempFilterState.private) {
-                    tempFilterState.private = false;
+                    setTempFilterState({...tempFilterState, private: false});
                   } else {
-                    tempFilterState.private = true;
+                    setTempFilterState({...tempFilterState, private: true});
                   }
               }}>
               <MaterialIcon name="lock" size={25} style={{ flex: 0.25}}/>
               <Text style={{...styles.filterVisibilityText, flex: 0.65}}>Private</Text>
-              <Icon name="checkmark-sharp" size={25} color={Colors.mediumOrange} style={filterState.private ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
+              <Icon name="checkmark-sharp" size={25} color={Colors.mediumOrange} style={tempFilterState.private ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
             </TouchableOpacity>
             <View style={styles.horizontalLine} />
 
@@ -388,14 +394,14 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
               style={styles.filterVisibilityOpacity}
               onPress={() => {
                   if (tempFilterState.friends) {
-                    tempFilterState.friends = false;
+                    setTempFilterState({...tempFilterState, friends: false});
                   } else {
-                    tempFilterState.friends = true;
+                    setTempFilterState({...tempFilterState, friends: true});
                   }
               }}>
               <MaterialIcon name="people-alt" size={25} style={{ flex: 0.25}}/>
               <Text style={{...styles.filterVisibilityText, flex: 0.65}}>Friends</Text>
-              <Icon name="checkmark-sharp" size={25} color={Colors.mediumOrange} style={filterState.friends ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
+              <Icon name="checkmark-sharp" size={25} color={Colors.mediumOrange} style={tempFilterState.friends ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
             </TouchableOpacity>
             <View style={styles.horizontalLine} />
 
@@ -403,14 +409,14 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
               style={styles.filterVisibilityOpacity}
               onPress={() => {
                   if (tempFilterState.public) {
-                    tempFilterState.public = false;
+                    setTempFilterState({...tempFilterState, public: false});
                   } else {
-                    tempFilterState.public = true;
+                    setTempFilterState({...tempFilterState, public: true});
                   }
               }}>
               <MaterialIcon name="public" size={25} style={{ flex: 0.25}}/>
               <Text style={{...styles.filterVisibilityText, flex: 0.65}}>Public</Text>
-              <Icon name="checkmark-sharp" size={25} color={Colors.mediumOrange} style={filterState.public ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
+              <Icon name="checkmark-sharp" size={25} color={Colors.mediumOrange} style={tempFilterState.public ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
             </TouchableOpacity>
           </View>
         
