@@ -16,7 +16,7 @@ const userSearchStyles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'space-evenly',
         marginVertical: 10,
         marginLeft: 10
     },
@@ -26,7 +26,7 @@ const userSearchStyles = StyleSheet.create({
         borderRadius: 20,
     },
     searchUserTextView: {
-        marginLeft: 5,
+        marginLeft: 10,
         flexDirection: 'column'
     },
     searchUserFullName: {

@@ -38,7 +38,6 @@ const AddFriends = ({ route, navigation }: any) => {
 
     useEffect(() => {
         const fetchData = async () => {
-          if (state.search.length > 0) {
             try {
               const users = await getSearchUsers(state.search);
               searchedUserCount = users.users.length + 1;
@@ -46,17 +45,18 @@ const AddFriends = ({ route, navigation }: any) => {
             } catch (error) {
               console.error(error);
             }
-          } else {
-            setState({...state, search: "", queryUsers: []});
-          }
         };
+
+        if (state.search.length > 0) {
+            // Debounce the API call to avoid too many requests
+            const timeoutId = setTimeout(() => {
+                fetchData();
+            }, 300);
+            return () => clearTimeout(timeoutId);
+        } else {
+            setState({...state, search: "", queryUsers: []});
+        }
     
-        // Debounce the API call to avoid too many requests
-        const timeoutId = setTimeout(() => {
-          fetchData();
-        }, 300);
-    
-        return () => clearTimeout(timeoutId);
       }, [state.search]);
 
     const userView = (user: any, request: boolean) => {

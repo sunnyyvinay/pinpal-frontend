@@ -46,34 +46,33 @@ const AddPin = ({ route, navigation }: any) => {
     // USE EFFECT: SEARCH USERS
     useEffect(() => {
         const fetchData = async () => {
-          if (userTagState.search.length > 0) {
             try {
-              const users = await getSearchUsers(userTagState.search);
-              searchedUserCount = users.users.length + 1;
-              setUserTagState({...userTagState, queryUsers: users.users});
+                const users = await getSearchUsers(userTagState.search);
+                searchedUserCount = users.users.length + 1;
+                setUserTagState({...userTagState, queryUsers: users.users});
             } catch (error) {
-              console.error(error);
+                console.error(error);
             }
-          } else {
-            setUserTagState({...userTagState, search: "", queryUsers: []});
-          }
         };
-    
-        // Debounce the API call to avoid too many requests
-        const timeoutId = setTimeout(() => {
-          fetchData();
-        }, 300);
-    
-        return () => clearTimeout(timeoutId);
+
+        if (userTagState.search.length > 0) {
+            // Debounce the API call to avoid too many requests
+            const timeoutId = setTimeout(() => {
+                fetchData();
+            }, 300);
+            
+            return () => clearTimeout(timeoutId);
+        } else {
+            setUserTagState({...userTagState, queryUsers: []});
+        }
       }, [userTagState.search]);
 
       // USE EFFECT: LOAD TAGGED USERS
       useEffect(() => {
         const fetchData = async () => {
-          if (pinData.user_tags.length > 0) {
             try {
               var tagged_users = [];
-              for (let i = 0; i < pinData.user_tags.length; i++) {
+              for (var i = 0; i < pinData.user_tags.length; i++) {
                 const user = await getUser(pinData.user_tags[i]);
                 tagged_users.push(user.user);
               }
@@ -81,11 +80,10 @@ const AddPin = ({ route, navigation }: any) => {
             } catch (error) {
               console.error(error);
             }
-          }
         };
 
         fetchData();
-      }, [pinData.user_tags]);
+      }, [JSON.stringify(pinData.user_tags)]);
 
     const openImagePicker = () => {
         const options = {
@@ -145,7 +143,7 @@ const AddPin = ({ route, navigation }: any) => {
             <TouchableOpacity key={searchedUserCount} onPress={() => {
                 setUserTagState({...userTagState, search: ""})
                 if (!pinData.user_tags.includes(user.user_id)) 
-                    setPinData({...pinData, user_tags: [...pinData.user_tags, user.user_id]});
+                    setPinData((prevData: any) => ({...prevData, user_tags: [...prevData.user_tags, user.user_id]}));
             }}>
                 <View style={userSearchStyles.searchUserView}>
                     <Image 
@@ -268,7 +266,10 @@ const AddPin = ({ route, navigation }: any) => {
                 onBackdropPress={() => setUserTagState({...userTagState, modalVisible: false})}
                 style={styles.userTagsModal} >
                 <View style={styles.userTagsModalView}>
-                    <Text style={styles.userTagsModalTitle}>Tag Users</Text>
+                    <View style={styles.userTagsModalHeader}>
+                        <Text style={styles.userTagsModalTitle}>Tag Users</Text>
+                        <Entypo name="cross" size={25} color={Colors.mediumGray} onPress={() => setUserTagState({...userTagState, modalVisible: false})} style={{position: 'absolute', left: '55%'}}/>
+                    </View>
                     <SearchBar 
                         placeholder='Search...'
                         value={userTagState.search}
@@ -292,14 +293,15 @@ const AddPin = ({ route, navigation }: any) => {
                                     <Image 
                                         source={user.profile_pic ? {uri: user.profile_pic} : require('../../assets/images/default-pfp.jpg')} 
                                         style={{...userSearchStyles.searchUserPfp, flex: 0.1}} />
-                                    <View style={{...userSearchStyles.searchUserTextView, flex: 0.6}}>
+                                    <View style={{...userSearchStyles.searchUserTextView, flex: 0.8}}>
                                         <Text style={userSearchStyles.searchUserFullName}>{user.full_name}</Text>
                                         <Text style={userSearchStyles.searchUserUsernameText}>{user.username}</Text>
                                     </View>
                                     <TouchableOpacity style={{flex: 0.1, marginRight: 3}} onPress={() => {
-                                        setPinData({...pinData, user_tags: pinData.user_tags.filter((tag_id: any, index: number) => {
+                                        setPinData((prevData: any) => ({...prevData, user_tags: prevData.user_tags.filter((tag_id: string) => 
                                             tag_id !== user.user_id
-                                        })})
+                                        )}))
+                                        console.log("in delete: " + pinData.user_tags);
                                     }}>
                                         <Entypo name="cross" size={25} color={Colors.mediumGray} />
                                     </TouchableOpacity>
@@ -567,10 +569,14 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         flex: 0.9,
     },
+    userTagsModalHeader: {
+        flexDirection: 'row',
+        marginTop: 10,
+        marginBottom: 10
+    },
     userTagsModalTitle: {
         fontSize: 20,
-        marginTop: 10,
-        marginBottom: 10,
+        textAlign: 'center',
     },
     userTagsModalText: {
         marginLeft: 10,
