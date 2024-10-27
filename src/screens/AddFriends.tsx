@@ -36,6 +36,29 @@ const AddFriends = ({ route, navigation }: any) => {
         getFriendsState();
     }, []);
 
+    useEffect(() => {
+        const fetchData = async () => {
+          if (state.search.length > 0) {
+            try {
+              const users = await getSearchUsers(state.search);
+              searchedUserCount = users.users.length + 1;
+              setState({...state, queryUsers: users.users});
+            } catch (error) {
+              console.error(error);
+            }
+          } else {
+            setState({...state, search: "", queryUsers: []});
+          }
+        };
+    
+        // Debounce the API call to avoid too many requests
+        const timeoutId = setTimeout(() => {
+          fetchData();
+        }, 300);
+    
+        return () => clearTimeout(timeoutId);
+      }, [state.search]);
+
     const userView = (user: any, request: boolean) => {
         searchedUserCount--;
         return (
@@ -93,15 +116,7 @@ const AddFriends = ({ route, navigation }: any) => {
             autoCapitalize="none"
             lightTheme={true}
             containerStyle={userSearchStyles.searchBarContainer}
-            onChangeText={ async (text) => {
-                if (text.length > 0) {
-                    const users = await getSearchUsers(text);
-                    searchedUserCount = users.users.length + 1;
-                    setState({...state, search: text, queryUsers: users.users});
-                } else {
-                    setState({...state, search: "", queryUsers: []});
-                }
-        }}/>
+            onChangeText={(text) => setState({...state, search: text})}/>
         
         <ScrollView>
             { state.search.length === 0 ?

@@ -7,15 +7,10 @@ const userSearchStyles = StyleSheet.create({
         marginTop: 10,
         alignSelf: 'center',
         backgroundColor: 'transparent',
-        height: 15,
-        marginBottom: 30
-    },
-    friendRequestTitleText: {
-        marginLeft: 10,
-        fontSize: 18,
-        fontFamily: 'Sansation',
-        marginBottom: 5,
-        marginTop: 15
+        height: 20,
+        marginBottom: 40,
+        borderBottomColor: 'transparent',
+        borderTopColor: 'transparent'
     },
     searchUserView: {
         flex: 1,

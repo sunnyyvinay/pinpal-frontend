@@ -40,6 +40,28 @@ const AddPin = ({ route, navigation }: any) => {
         queryUsers: []
     });
     let searchedUserCount: number = 0;
+    useEffect(() => {
+        const fetchData = async () => {
+          if (userTagState.search.length > 0) {
+            try {
+              const users = await getSearchUsers(userTagState.search);
+              searchedUserCount = users.users.length + 1;
+              setUserTagState({...userTagState, queryUsers: users.users});
+            } catch (error) {
+              console.error(error);
+            }
+          } else {
+            setUserTagState({...userTagState, search: "", queryUsers: []});
+          }
+        };
+    
+        // Debounce the API call to avoid too many requests
+        const timeoutId = setTimeout(() => {
+          fetchData();
+        }, 300);
+    
+        return () => clearTimeout(timeoutId);
+      }, [userTagState.search]);
 
     const openImagePicker = () => {
         const options = {
@@ -245,25 +267,17 @@ const AddPin = ({ route, navigation }: any) => {
                         autoCapitalize="none"
                         lightTheme={true}
                         containerStyle={userSearchStyles.searchBarContainer}
-                        onChangeText={ async (text) => {
-                            if (text.length > 0) {
-                                const users = await getSearchUsers(text);
-                                searchedUserCount = users.users.length + 1;
-                                setUserTagState({...userTagState, search: text, queryUsers: users.users});
-                            } else {
-                                setUserTagState({...userTagState, search: "", queryUsers: []});
-                            }
-                    }}/>
+                        onChangeText={(text) => setUserTagState({...userTagState, search: text})}/>
                     {userTagState.search.length === 0 && pinData.user_tags.length > 0 && <Text style={styles.userTagsModalText}>Tagged</Text>}
                     <ScrollView>
                         { userTagState.search.length > 0 ?
-                            <View style={{flex: 1}}>
+                            <View style={{flex: 0.5}}>
                                 { userTagState.queryUsers && userTagState.queryUsers.length > 0 && userTagState.queryUsers.map((user: any) => (
                                     userView(user, false)
                                 ))}
                             </View> 
                             : 
-                            <View style={{flex: 1}}>
+                            <View style={{flex: 0.5}}>
                                 { pinData.user_tags.length > 0 && pinData.user_tags.map((user: any) => (
                                     userView(user, true)
                                 ))}
