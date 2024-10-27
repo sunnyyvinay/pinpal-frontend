@@ -33,13 +33,17 @@ const AddPin = ({ route, navigation }: any) => {
         modalVisible: boolean;
         search: string;
         queryUsers: any[];
+        taggedUsers: any[];
     }
     const [userTagState, setUserTagState] = useState<UserTag>({
         modalVisible: false,
         search: "",
-        queryUsers: []
+        queryUsers: [],
+        taggedUsers: [],
     });
     let searchedUserCount: number = 0;
+   
+    // USE EFFECT: SEARCH USERS
     useEffect(() => {
         const fetchData = async () => {
           if (userTagState.search.length > 0) {
@@ -62,6 +66,26 @@ const AddPin = ({ route, navigation }: any) => {
     
         return () => clearTimeout(timeoutId);
       }, [userTagState.search]);
+
+      // USE EFFECT: LOAD TAGGED USERS
+      useEffect(() => {
+        const fetchData = async () => {
+          if (pinData.user_tags.length > 0) {
+            try {
+              var tagged_users = [];
+              for (let i = 0; i < pinData.user_tags.length; i++) {
+                const user = await getUser(pinData.user_tags[i]);
+                tagged_users.push(user.user);
+              }
+              setUserTagState({...userTagState, taggedUsers: tagged_users});
+            } catch (error) {
+              console.error(error);
+            }
+          }
+        };
+
+        fetchData();
+      }, [pinData.user_tags]);
 
     const openImagePicker = () => {
         const options = {
@@ -116,28 +140,13 @@ const AddPin = ({ route, navigation }: any) => {
     }
     const userView = (user: any, tag: boolean) => {
         searchedUserCount--;
-        if (tag) {
+        if (!tag) {
             return (
-            <View style={userSearchStyles.searchUserView} key={searchedUserCount}>
-                <Image 
-                    source={user.profile_pic ? {uri: user.profile_pic} : require('../../assets/images/default-pfp.jpg')} 
-                    style={{...userSearchStyles.searchUserPfp, flex: 0.1}} />
-                <View style={{...userSearchStyles.searchUserTextView, flex: 0.6}}>
-                    <Text style={userSearchStyles.searchUserFullName}>{user.full_name}</Text>
-                    <Text style={userSearchStyles.searchUserUsernameText}>{user.username}</Text>
-                </View>
-                <TouchableOpacity style={{flex: 0.1, marginRight: 3}} onPress={async () => { 
-                    setPinData({...pinData, user_tags: pinData.user_tags.filter((tag_id: any) => tag_id !== user.user_id)})
-                }}>
-                    <MaterialIcon name="cancel" size={25} color={Colors.errorRed} />
-                </TouchableOpacity>
-            </View> 
-            )
-        } else {
-            return (
-            <TouchableOpacity key={searchedUserCount} onPress={() => 
-                pinData.user_tags.push(user.user_id)
-            }>
+            <TouchableOpacity key={searchedUserCount} onPress={() => {
+                setUserTagState({...userTagState, search: ""})
+                if (!pinData.user_tags.includes(user.user_id)) 
+                    setPinData({...pinData, user_tags: [...pinData.user_tags, user.user_id]});
+            }}>
                 <View style={userSearchStyles.searchUserView}>
                     <Image 
                         source={user.profile_pic ? {uri: user.profile_pic} : require('../../assets/images/default-pfp.jpg')} 
@@ -197,7 +206,7 @@ const AddPin = ({ route, navigation }: any) => {
                             <Text style={styles.visibilityText}>{getVisibilityString(pinData.visibility)}</Text>
                         </TouchableOpacity>
 
-                        <TouchableOpacity onPress={() => {setUserTagState({modalVisible: true, search: "", queryUsers: []})}} style={styles.userTagsInputView}>
+                        <TouchableOpacity onPress={() => {setUserTagState({...userTagState,modalVisible: true, search: "", queryUsers: []})}} style={styles.userTagsInputView}>
                             <Text style={styles.userTagsTitleText}>Tagged Users</Text>
                             <Text style={styles.userTagsText}>{userTagDisplayText()}</Text>
                         </TouchableOpacity>  
@@ -269,19 +278,34 @@ const AddPin = ({ route, navigation }: any) => {
                         containerStyle={userSearchStyles.searchBarContainer}
                         onChangeText={(text) => setUserTagState({...userTagState, search: text})}/>
                     {userTagState.search.length === 0 && pinData.user_tags.length > 0 && <Text style={styles.userTagsModalText}>Tagged</Text>}
-                    <ScrollView>
+                    <ScrollView style={{width: '100%', flex: 1}}>
                         { userTagState.search.length > 0 ?
-                            <View style={{flex: 0.5}}>
+                            <View style={{flex: 0.8}}>
                                 { userTagState.queryUsers && userTagState.queryUsers.length > 0 && userTagState.queryUsers.map((user: any) => (
                                     userView(user, false)
                                 ))}
                             </View> 
                             : 
-                            <View style={{flex: 0.5}}>
-                                { pinData.user_tags.length > 0 && pinData.user_tags.map((user: any) => (
-                                    userView(user, true)
+                            <View style={{flex: 0.8}}>
+                                {userTagState.taggedUsers && userTagState.taggedUsers.length > 0 && userTagState.taggedUsers.map((user: any, index: number) => (
+                                <View style={userSearchStyles.searchUserView} key={index}>
+                                    <Image 
+                                        source={user.profile_pic ? {uri: user.profile_pic} : require('../../assets/images/default-pfp.jpg')} 
+                                        style={{...userSearchStyles.searchUserPfp, flex: 0.1}} />
+                                    <View style={{...userSearchStyles.searchUserTextView, flex: 0.6}}>
+                                        <Text style={userSearchStyles.searchUserFullName}>{user.full_name}</Text>
+                                        <Text style={userSearchStyles.searchUserUsernameText}>{user.username}</Text>
+                                    </View>
+                                    <TouchableOpacity style={{flex: 0.1, marginRight: 3}} onPress={() => {
+                                        setPinData({...pinData, user_tags: pinData.user_tags.filter((tag_id: any, index: number) => {
+                                            tag_id !== user.user_id
+                                        })})
+                                    }}>
+                                        <Entypo name="cross" size={25} color={Colors.mediumGray} />
+                                    </TouchableOpacity>
+                                </View> 
                                 ))}
-                            </View> 
+                            </View>
                         }
                     </ScrollView>
                 </View>
@@ -550,9 +574,9 @@ const styles = StyleSheet.create({
     },
     userTagsModalText: {
         marginLeft: 10,
-        fontSize: 18,
+        fontSize: 14,
         fontFamily: 'Sansation',
         marginBottom: 5,
-        marginTop: 15
+        marginTop: 15,
     },
 })
