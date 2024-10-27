@@ -6,6 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Colors from '../constants/colors';
 import Icon from 'react-native-vector-icons/Ionicons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import userSearchStyles from '../styles/usersearch';
 
 const AddFriends = ({ route, navigation }: any) => {
     let user_id: string | null = '';
@@ -40,13 +41,13 @@ const AddFriends = ({ route, navigation }: any) => {
         return (
             <TouchableOpacity onPress={() => navigation.navigate("Profile", {user_id: user.user_id})} key={searchedUserCount}>
                 { request ?
-                    <View style={styles.searchUserView}>
+                    <View style={userSearchStyles.searchUserView}>
                         <Image 
                             source={user.profile_pic ? {uri: user.profile_pic} : require('../../assets/images/default-pfp.jpg')} 
-                            style={{...styles.searchUserPfp, flex: 0.1}} />
-                        <View style={{...styles.searchUserTextView, flex: 0.6}}>
-                            <Text style={styles.searchUserFullName}>{user.full_name}</Text>
-                            <Text style={styles.searchUserUsernameText}>{user.username}</Text>
+                            style={{...userSearchStyles.searchUserPfp, flex: 0.1}} />
+                        <View style={{...userSearchStyles.searchUserTextView, flex: 0.6}}>
+                            <Text style={userSearchStyles.searchUserFullName}>{user.full_name}</Text>
+                            <Text style={userSearchStyles.searchUserUsernameText}>{user.username}</Text>
                         </View>
                         <Button 
                             title="Accept" 
@@ -69,13 +70,13 @@ const AddFriends = ({ route, navigation }: any) => {
                         </TouchableOpacity>
                     </View> 
                     :
-                    <View style={styles.searchUserView}>
+                    <View style={userSearchStyles.searchUserView}>
                         <Image 
                             source={user.profile_pic ? {uri: user.profile_pic} : require('../../assets/images/default-pfp.jpg')} 
-                            style={{...styles.searchUserPfp, flex: 0.1}} />
-                        <View style={{...styles.searchUserTextView, flex: 0.9}}>
-                            <Text style={styles.searchUserFullName}>{user.full_name}</Text>
-                            <Text style={styles.searchUserUsernameText}>{user.username}</Text>
+                            style={{...userSearchStyles.searchUserPfp, flex: 0.1}} />
+                        <View style={{...userSearchStyles.searchUserTextView, flex: 0.9}}>
+                            <Text style={userSearchStyles.searchUserFullName}>{user.full_name}</Text>
+                            <Text style={userSearchStyles.searchUserUsernameText}>{user.username}</Text>
                         </View>
                     </View>
                 }
@@ -91,7 +92,7 @@ const AddFriends = ({ route, navigation }: any) => {
             round={true}
             autoCapitalize="none"
             lightTheme={true}
-            containerStyle={styles.searchBarContainer}
+            containerStyle={userSearchStyles.searchBarContainer}
             onChangeText={ async (text) => {
                 if (text.length > 0) {
                     const users = await getSearchUsers(text);
@@ -123,48 +124,12 @@ const AddFriends = ({ route, navigation }: any) => {
 }
 
 const styles = StyleSheet.create({
-    searchBarContainer: {
-        width: '90%',
-        marginTop: 10,
-        alignSelf: 'center',
-        backgroundColor: 'transparent',
-        height: 15,
-        marginBottom: 30
-    },
     friendRequestTitleText: {
         marginLeft: 10,
         fontSize: 18,
         fontFamily: 'Sansation',
         marginBottom: 5,
         marginTop: 15
-    },
-    searchUserView: {
-        flex: 1,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginVertical: 10,
-        marginLeft: 10
-    },
-    searchUserPfp: {
-        width: 35,
-        height: 35,
-        borderRadius: 20,
-    },
-    searchUserTextView: {
-        marginLeft: 5,
-        flexDirection: 'column'
-    },
-    searchUserFullName: {
-        fontSize: 16,
-        fontFamily: 'Sansation',
-        flex: 0.45,
-    },
-    searchUserUsernameText: {
-        fontSize: 14,
-        fontFamily: 'Sansation',
-        color: Colors.lightGray,
-        flex: 0.45
     },
     acceptButton: {
         backgroundColor: Colors.mediumOrange

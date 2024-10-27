@@ -76,7 +76,8 @@ interface Pin {
   edit_date: Date | undefined,
   photos: string[] | undefined,
   location_tags: string[] | undefined,
-  visibility: number
+  visibility: number,
+  user_tags: string[] | undefined,
 }
 
 // ADD PIN
@@ -106,7 +107,8 @@ interface PinUpdate {
   edit_date: Date | undefined,
   photos: string[] | undefined,
   location_tags: string[] | undefined,
-  visibility: number
+  visibility: number,
+  user_tags: string[] | undefined,
 }
 // UPDATE PIN INFO
 export const updatePin = async (userid: string, pinid: string, pin: PinUpdate) => {

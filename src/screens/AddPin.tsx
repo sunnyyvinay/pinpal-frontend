@@ -1,4 +1,4 @@
-import { Button, Input } from '@rneui/themed';
+import { Button, Input, SearchBar } from '@rneui/themed';
 import React, { useEffect, useState } from 'react'
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import GetLocation, { isLocationError } from 'react-native-get-location';
@@ -9,14 +9,13 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import * as Colors from '../constants/colors';
 import { ImagePickerResponse, launchImageLibrary, MediaType } from 'react-native-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { addPin } from '../services/user.service';
+import { addPin, getSearchUsers, getUser } from '../services/user.service';
 import Modal from "react-native-modal";
 import { locationTags, getLocationTagIcon } from '../constants/locationtags';
+import userSearchStyles from '../styles/usersearch';
 
 const AddPin = ({ route, navigation }: any) => {
     const [step, setStep] = useState<number>(1);
-    const [visibilityModal, setVisibilityModal] = useState<boolean>(false);
-    const [locationTagsModal, setlocationTagsModal] = useState<boolean>(false);
     const lat_long = [route.params.latitude, route.params.longitude];
     const [pinData, setPinData] = useState<any>({
         title: "",
@@ -25,8 +24,22 @@ const AddPin = ({ route, navigation }: any) => {
         edit_date: undefined,
         photos: [],
         location_tags: [],
-        visibility: 1
+        visibility: 1,
+        user_tags: []
     });
+    const [visibilityModal, setVisibilityModal] = useState<boolean>(false);
+    const [locationTagsModal, setlocationTagsModal] = useState<boolean>(false);
+    type UserTag = {
+        modalVisible: boolean;
+        search: string;
+        queryUsers: any[];
+    }
+    const [userTagState, setUserTagState] = useState<UserTag>({
+        modalVisible: false,
+        search: "",
+        queryUsers: []
+    });
+    let searchedUserCount: number = 0;
 
     const openImagePicker = () => {
         const options = {
@@ -70,6 +83,52 @@ const AddPin = ({ route, navigation }: any) => {
                 return "Friends";
         }
     }
+
+    const userTagDisplayText = () => {
+        if (pinData.user_tags.length == 0) {
+            return "None";
+        } else if (pinData.user_tags.length > 0) {
+            return `${pinData.user_tags.length} Users`;
+        }
+        return "None";
+    }
+    const userView = (user: any, tag: boolean) => {
+        searchedUserCount--;
+        if (tag) {
+            return (
+            <View style={userSearchStyles.searchUserView} key={searchedUserCount}>
+                <Image 
+                    source={user.profile_pic ? {uri: user.profile_pic} : require('../../assets/images/default-pfp.jpg')} 
+                    style={{...userSearchStyles.searchUserPfp, flex: 0.1}} />
+                <View style={{...userSearchStyles.searchUserTextView, flex: 0.6}}>
+                    <Text style={userSearchStyles.searchUserFullName}>{user.full_name}</Text>
+                    <Text style={userSearchStyles.searchUserUsernameText}>{user.username}</Text>
+                </View>
+                <TouchableOpacity style={{flex: 0.1, marginRight: 3}} onPress={async () => { 
+                    setPinData({...pinData, user_tags: pinData.user_tags.filter((tag_id: any) => tag_id !== user.user_id)})
+                }}>
+                    <MaterialIcon name="cancel" size={25} color={Colors.errorRed} />
+                </TouchableOpacity>
+            </View> 
+            )
+        } else {
+            return (
+            <TouchableOpacity key={searchedUserCount} onPress={() => 
+                pinData.user_tags.push(user.user_id)
+            }>
+                <View style={userSearchStyles.searchUserView}>
+                    <Image 
+                        source={user.profile_pic ? {uri: user.profile_pic} : require('../../assets/images/default-pfp.jpg')} 
+                        style={{...userSearchStyles.searchUserPfp, flex: 0.1}} />
+                    <View style={{...userSearchStyles.searchUserTextView, flex: 0.9}}>
+                        <Text style={userSearchStyles.searchUserFullName}>{user.full_name}</Text>
+                        <Text style={userSearchStyles.searchUserUsernameText}>{user.username}</Text>
+                    </View>
+                </View>
+            </TouchableOpacity>
+            )
+        }
+    }
         
     function renderStep(step: number) {
         switch (step) {
@@ -110,10 +169,16 @@ const AddPin = ({ route, navigation }: any) => {
                             containerStyle={styles.textInputContainer}
                             autoCapitalize='none'
                         />
+
                         <TouchableOpacity onPress={() => {setVisibilityModal(true)}} style={styles.visibilityInputView}>
                             <Text style={styles.visibilityTitleText}>Visibility</Text>
                             <Text style={styles.visibilityText}>{getVisibilityString(pinData.visibility)}</Text>
-                        </TouchableOpacity> 
+                        </TouchableOpacity>
+
+                        <TouchableOpacity onPress={() => {setUserTagState({modalVisible: true, search: "", queryUsers: []})}} style={styles.userTagsInputView}>
+                            <Text style={styles.userTagsTitleText}>Tagged Users</Text>
+                            <Text style={styles.userTagsText}>{userTagDisplayText()}</Text>
+                        </TouchableOpacity>  
 
                         <View style={styles.locationTagsView}>
                             <Text style={styles.locationTagsText}>Location Tags</Text>
@@ -167,6 +232,47 @@ const AddPin = ({ route, navigation }: any) => {
     return (
         <ScrollView contentContainerStyle={{flex: 1}}>
             {renderStep(step)}
+            <Modal 
+                isVisible={userTagState.modalVisible} 
+                onBackdropPress={() => setUserTagState({...userTagState, modalVisible: false})}
+                style={styles.userTagsModal} >
+                <View style={styles.userTagsModalView}>
+                    <Text style={styles.userTagsModalTitle}>Tag Users</Text>
+                    <SearchBar 
+                        placeholder='Search...'
+                        value={userTagState.search}
+                        round={true}
+                        autoCapitalize="none"
+                        lightTheme={true}
+                        containerStyle={userSearchStyles.searchBarContainer}
+                        onChangeText={ async (text) => {
+                            if (text.length > 0) {
+                                const users = await getSearchUsers(text);
+                                searchedUserCount = users.users.length + 1;
+                                setUserTagState({...userTagState, search: text, queryUsers: users.users});
+                            } else {
+                                setUserTagState({...userTagState, search: "", queryUsers: []});
+                            }
+                    }}/>
+                    {userTagState.search.length === 0 && pinData.user_tags.length > 0 && <Text style={styles.userTagsModalText}>Tagged</Text>}
+                    <ScrollView>
+                        { userTagState.search.length > 0 ?
+                            <View style={{flex: 1}}>
+                                { userTagState.queryUsers && userTagState.queryUsers.length > 0 && userTagState.queryUsers.map((user: any) => (
+                                    userView(user, false)
+                                ))}
+                            </View> 
+                            : 
+                            <View style={{flex: 1}}>
+                                { pinData.user_tags.length > 0 && pinData.user_tags.map((user: any) => (
+                                    userView(user, true)
+                                ))}
+                            </View> 
+                        }
+                    </ScrollView>
+                </View>
+            </Modal>
+
             <Modal 
                 isVisible={visibilityModal} 
                 onBackdropPress={() => setVisibilityModal(false)}
@@ -390,4 +496,49 @@ const styles = StyleSheet.create({
         borderWidth: 0,
         borderRadius: 20,
     }, 
+    userTagsInputView: {
+        width: '90%',
+        padding: 15,
+        borderRadius: 10,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginTop: 20,
+        backgroundColor: Colors.whiteGray,
+    },
+    userTagsTitleText: {
+        color: Colors.black,
+        fontFamily: 'Sansation',
+        fontWeight: '700',
+        marginLeft: 5
+    },
+    userTagsText: {
+        color: Colors.darkGray,
+        fontFamily: 'Sansation',
+        fontWeight: '700',
+        marginRight: 5
+    },
+    userTagsModal: {
+        justifyContent: 'center',
+    },
+    userTagsModalView: {
+        backgroundColor: 'white',
+        padding: 10,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 10,
+        flex: 0.9,
+    },
+    userTagsModalTitle: {
+        fontSize: 20,
+        marginTop: 10,
+        marginBottom: 10,
+    },
+    userTagsModalText: {
+        marginLeft: 10,
+        fontSize: 18,
+        fontFamily: 'Sansation',
+        marginBottom: 5,
+        marginTop: 15
+    },
 })

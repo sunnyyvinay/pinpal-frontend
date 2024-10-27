@@ -127,8 +127,10 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
                   pin = await getPins(friendData.friends[i].target_id);
                   friend = await getUser(friendData.friends[i].target_id);
               }
-              pin = pin.pins.filter((pin: any) => pin.visibility > 0 && (filterState.location_tag == "" || pin.location_tags.includes(filterState.location_tag)));
-              friendData.friends[i] = {user: friend.user, pins: pin};
+              if (pin.pins) {
+                pin = pin.pins.filter((pin: any) => pin.visibility > 0 && (filterState.location_tag == "" || pin.location_tags.includes(filterState.location_tag)));
+                friendData.friends[i] = {user: friend.user, pins: pin};
+              }
             }
             setFriendPins([...friendData.friends]);
           } else setFriendPins([]);
