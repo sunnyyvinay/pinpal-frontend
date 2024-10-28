@@ -1,17 +1,20 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useEffect, useRef, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { addPinLike, deletePinLike, getPin, getPinLikes, getUser } from '../services/user.service';
+import { addPinLike, deletePinLike, getPin, getPinLikes, getSearchUsers, getUser } from '../services/user.service';
 import { useRoute } from '@react-navigation/native';
 import { Dimensions, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import * as Colors from '../constants/colors';
-import { Button, Input } from '@rneui/themed';
+import { Button, Input, SearchBar } from '@rneui/themed';
 import Icon from 'react-native-vector-icons/Ionicons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import Carousel from 'react-native-reanimated-carousel';
 import Modal from "react-native-modal";
 import { deletePin, updatePin } from '../services/user.service';
 import { locationTags, getLocationTagIcon } from '../constants/locationtags';
+import userSearchStyles from '../styles/usersearch';
+import Entypo from 'react-native-vector-icons/Entypo';
+import userTagsStyles from '../styles/usertags';
 
 const PinPost = (props:any) => {
     const { pin_id, pin_user_id } = props.route.params;
@@ -22,7 +25,8 @@ const PinPost = (props:any) => {
       edit_date: undefined,
       photos: [],
       location_tags: [],
-      visibility: 1
+      visibility: 1,
+      user_tags: []
     });
     const [pinUserData, setPinUserData] = useState<any>({
       username: "",
@@ -39,11 +43,27 @@ const PinPost = (props:any) => {
       edit_date: undefined,
       photos: [],
       location_tags: [],
-      visibility: 1
+      visibility: 1,
+      user_tags: []
     });
 
     const [editPinVisibility, setEditPinVisibility] = useState<boolean>(false);
     const [editPinLocationTags, setEditPinLocationTags] = useState<boolean>(false);
+    type UserTag = {
+      modalVisible: boolean;
+      search: string;
+      queryUsers: any[];
+      taggedUsers: any[];
+      editedTaggedUsers: any[];
+    }
+    const [userTagState, setUserTagState] = useState<UserTag>({
+      modalVisible: false,
+      search: "",
+      queryUsers: [],
+      taggedUsers: [],
+      editedTaggedUsers: []
+    });
+    let searchedUserCount: number = 0;
 
     const [likes, setLikes] = useState<any>({
       liked: false,
@@ -91,6 +111,53 @@ const PinPost = (props:any) => {
       getInfo();
     }, []);
 
+    // USE EFFECT: SEARCH USERS
+    useEffect(() => {
+      const fetchData = async () => {
+          try {
+              const users = await getSearchUsers(userTagState.search);
+              searchedUserCount = users.users.length + 1;
+              setUserTagState({...userTagState, queryUsers: users.users});
+          } catch (error) {
+              console.error(error);
+          }
+      };
+
+      if (userTagState.search.length > 0) {
+          // Debounce the API call to avoid too many requests
+          const timeoutId = setTimeout(() => {
+              fetchData();
+          }, 300);
+          
+          return () => clearTimeout(timeoutId);
+      } else {
+          setUserTagState({...userTagState, queryUsers: []});
+      }
+    }, [userTagState.search]);
+
+    useEffect(() => {
+      const fetchTaggedUsers = async () => {
+        try {
+          var tagged_users = [];
+          for (var i = 0; i < pinData.user_tags.length; i++) {
+            const user = await getUser(pinData.user_tags[i]);
+            tagged_users.push(user.user);
+          }
+          var edited_tagged_users = [];
+          for (var i = 0; i < editedPinData.user_tags.length; i++) {
+            const user = await getUser(editedPinData.user_tags[i]);
+            edited_tagged_users.push(user.user);
+          }
+          setUserTagState({...userTagState, taggedUsers: tagged_users, editedTaggedUsers: edited_tagged_users});
+        } catch (error) {
+          console.error(error);
+        }
+        
+      }
+      fetchTaggedUsers();
+      
+    }, [JSON.stringify(pinData.user_tags), JSON.stringify(editedPinData.user_tags)]);
+
     const renderItem = ({ item }: { item: PhotoItem }) => {
       return (
         <View style={styles.slide}>
@@ -98,7 +165,6 @@ const PinPost = (props:any) => {
         </View>
       );
     };
-
     const renderPagination = () => {
       return (
         <View style={styles.paginationContainer}>
@@ -245,6 +311,83 @@ const PinPost = (props:any) => {
     )
   }
 
+  const userView = (user: any, tag: boolean) => {
+    searchedUserCount--;
+    if (!tag) {
+        return (
+        <TouchableOpacity key={searchedUserCount} onPress={() => {
+            setUserTagState({...userTagState, search: ""})
+            if (!editedPinData.user_tags.includes(user.user_id)) 
+                setEditedPinData((prevData: any) => ({...prevData, user_tags: [...prevData.user_tags, user.user_id]}));
+        }}>
+            <View style={userSearchStyles.searchUserView}>
+                <Image 
+                    source={user.profile_pic ? {uri: user.profile_pic} : require('../../assets/images/default-pfp.jpg')} 
+                    style={{...userSearchStyles.searchUserPfp, flex: 0.1}} />
+                <View style={{...userSearchStyles.searchUserTextView, flex: 0.9}}>
+                    <Text style={userSearchStyles.searchUserFullName}>{user.full_name}</Text>
+                    <Text style={userSearchStyles.searchUserUsernameText}>{user.username}</Text>
+                </View>
+            </View>
+        </TouchableOpacity>
+        )
+    }
+  }
+
+  const editUserTagsModal = () => {
+    return (
+      <Modal 
+        isVisible={userTagState.modalVisible} 
+        onBackdropPress={() => setUserTagState({...userTagState, modalVisible: false})}
+        style={userTagsStyles.userTagsModal} >
+        <View style={userTagsStyles.userTagsModalView}>
+            <View style={userTagsStyles.userTagsModalHeader}>
+                <Text style={userTagsStyles.userTagsModalTitle}>Tag Users</Text>
+                <Entypo name="cross" size={25} color={Colors.mediumGray} onPress={() => setUserTagState({...userTagState, modalVisible: false})} style={{position: 'absolute', left: '55%'}}/>
+            </View>
+            <SearchBar 
+                placeholder='Search...'
+                value={userTagState.search}
+                round={true}
+                autoCapitalize="none"
+                lightTheme={true}
+                containerStyle={userSearchStyles.searchBarContainer}
+                onChangeText={(text) => setUserTagState({...userTagState, search: text})}/>
+            {userTagState.search.length === 0 && editedPinData.user_tags.length > 0 && <Text style={userTagsStyles.userTagsModalText}>Tagged</Text>}
+            <ScrollView style={{width: '100%', flex: 1}}>
+                { userTagState.search.length > 0 ?
+                    <View style={{flex: 0.8}}>
+                        { userTagState.queryUsers && userTagState.queryUsers.length > 0 && userTagState.queryUsers.map((user: any) => (
+                            userView(user, false)
+                        ))}
+                    </View> 
+                    : 
+                    <View style={{flex: 0.8}}>
+                        {userTagState.editedTaggedUsers && userTagState.editedTaggedUsers.length > 0 && userTagState.editedTaggedUsers.map((user: any, index: number) => (
+                        <View style={userSearchStyles.searchUserView} key={index}>
+                            <Image 
+                                source={user.profile_pic ? {uri: user.profile_pic} : require('../../assets/images/default-pfp.jpg')} 
+                                style={{...userSearchStyles.searchUserPfp, flex: 0.1}} />
+                            <View style={{...userSearchStyles.searchUserTextView, flex: 0.8}}>
+                                <Text style={userSearchStyles.searchUserFullName}>{user.full_name}</Text>
+                                <Text style={userSearchStyles.searchUserUsernameText}>{user.username}</Text>
+                            </View>
+                            <TouchableOpacity style={{flex: 0.1, marginRight: 3}} onPress={() => {
+                                setEditedPinData((prevData: any) => 
+                                  ({...prevData, user_tags: prevData.user_tags.filter((tag_id: string) => tag_id !== user.user_id)}))
+                            }}>
+                                <Entypo name="cross" size={25} color={Colors.mediumGray} />
+                            </TouchableOpacity>
+                        </View> 
+                        ))}
+                    </View>
+                }
+            </ScrollView>
+        </View>
+    </Modal>
+    )
+  }
+
   return (
     <ScrollView>
       <View style={styles.topView}>
@@ -300,7 +443,45 @@ const PinPost = (props:any) => {
             </Text>
           </View>
         }
+
+        {/* User Tags */}
+        {editMode ? 
+        <View style={styles.locationTagsButtonView}>
+          <Button 
+            title="Edit"
+            icon={<MaterialIcon name="edit" size={15} color={Colors.black} style={{ marginRight: 2 }}/>}
+            color={Colors.black}
+            iconContainerStyle={{ marginRight: 2 }}
+            titleStyle={{ color: Colors.black, fontWeight: '300', fontFamily: 'Sansation', fontSize: 15 }}
+            buttonStyle={styles.locationTagsAddButton}
+            containerStyle={styles.locationTagsAddButtonContainer} 
+            onPress={() => {setUserTagState({...userTagState, modalVisible: true})}} />  
+            {userTagState.editedTaggedUsers && userTagState.editedTaggedUsers.length > 0 && userTagState.editedTaggedUsers.map((user:any, index:number) => {
+              return (
+                <Button 
+                  title={'@' + user.username} 
+                  key={index}
+                  buttonStyle={styles.userTagButton}
+                  titleStyle={{ color: Colors.mediumGray, fontWeight: '300', fontFamily: 'Sansation', fontSize: 15 }} />
+              )
+          })}
+        </View>
+        : 
+        <View style={styles.locationTagsButtonView}>
+        {userTagState.taggedUsers && userTagState.taggedUsers.length > 0 && userTagState.taggedUsers.map((user:any, index:number) => {
+            return (
+              <Button 
+                title={'@' + user.username} 
+                key={index}
+                buttonStyle={styles.userTagButton}
+                titleStyle={{ color: Colors.darkGray, fontWeight: '300', fontFamily: 'Sansation', fontSize: 15 }} 
+                onPress={() => props.navigation.navigate('Profile', {user_id: user.user_id})}/>
+            )
+        })}
+        </View>
+        }
       
+        {/* Location Tags */}
         {editMode ? 
         <View style={styles.locationTagsButtonView}>
           <Button 
@@ -386,6 +567,7 @@ const PinPost = (props:any) => {
 
       {pinActionModal()}
       {editLocationTagsModal()}
+      {editUserTagsModal()}
     </ScrollView>
   )
 }
@@ -494,12 +676,15 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     columnGap: 5,
     rowGap: 5,
-    marginVertical: 5,
+    marginVertical: 10,
   },
   locationTagButton: {
     backgroundColor: Colors.whiteOrange,
     borderWidth: 0,
     borderRadius: 20,
+  },
+  userTagButton: {
+    backgroundColor: Colors.lightGray,
   },
   pinActionModalStyle: {
     justifyContent: 'flex-end',

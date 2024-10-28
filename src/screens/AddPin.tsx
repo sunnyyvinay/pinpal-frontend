@@ -13,6 +13,7 @@ import { addPin, getSearchUsers, getUser } from '../services/user.service';
 import Modal from "react-native-modal";
 import { locationTags, getLocationTagIcon } from '../constants/locationtags';
 import userSearchStyles from '../styles/usersearch';
+import userTagsStyles from '../styles/usertags';
 
 const AddPin = ({ route, navigation }: any) => {
     const [step, setStep] = useState<number>(1);
@@ -264,10 +265,10 @@ const AddPin = ({ route, navigation }: any) => {
             <Modal 
                 isVisible={userTagState.modalVisible} 
                 onBackdropPress={() => setUserTagState({...userTagState, modalVisible: false})}
-                style={styles.userTagsModal} >
-                <View style={styles.userTagsModalView}>
-                    <View style={styles.userTagsModalHeader}>
-                        <Text style={styles.userTagsModalTitle}>Tag Users</Text>
+                style={userTagsStyles.userTagsModal} >
+                <View style={userTagsStyles.userTagsModalView}>
+                    <View style={userTagsStyles.userTagsModalHeader}>
+                        <Text style={userTagsStyles.userTagsModalTitle}>Tag Users</Text>
                         <Entypo name="cross" size={25} color={Colors.mediumGray} onPress={() => setUserTagState({...userTagState, modalVisible: false})} style={{position: 'absolute', left: '55%'}}/>
                     </View>
                     <SearchBar 
@@ -278,7 +279,7 @@ const AddPin = ({ route, navigation }: any) => {
                         lightTheme={true}
                         containerStyle={userSearchStyles.searchBarContainer}
                         onChangeText={(text) => setUserTagState({...userTagState, search: text})}/>
-                    {userTagState.search.length === 0 && pinData.user_tags.length > 0 && <Text style={styles.userTagsModalText}>Tagged</Text>}
+                    {userTagState.search.length === 0 && pinData.user_tags.length > 0 && <Text style={userTagsStyles.userTagsModalText}>Tagged</Text>}
                     <ScrollView style={{width: '100%', flex: 1}}>
                         { userTagState.search.length > 0 ?
                             <View style={{flex: 0.8}}>
@@ -301,7 +302,6 @@ const AddPin = ({ route, navigation }: any) => {
                                         setPinData((prevData: any) => ({...prevData, user_tags: prevData.user_tags.filter((tag_id: string) => 
                                             tag_id !== user.user_id
                                         )}))
-                                        console.log("in delete: " + pinData.user_tags);
                                     }}>
                                         <Entypo name="cross" size={25} color={Colors.mediumGray} />
                                     </TouchableOpacity>
@@ -557,32 +557,5 @@ const styles = StyleSheet.create({
         fontFamily: 'Sansation',
         fontWeight: '700',
         marginRight: 5
-    },
-    userTagsModal: {
-        justifyContent: 'center',
-    },
-    userTagsModalView: {
-        backgroundColor: 'white',
-        padding: 10,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 10,
-        flex: 0.9,
-    },
-    userTagsModalHeader: {
-        flexDirection: 'row',
-        marginTop: 10,
-        marginBottom: 10
-    },
-    userTagsModalTitle: {
-        fontSize: 20,
-        textAlign: 'center',
-    },
-    userTagsModalText: {
-        marginLeft: 10,
-        fontSize: 14,
-        fontFamily: 'Sansation',
-        marginBottom: 5,
-        marginTop: 15,
-    },
+    }
 })

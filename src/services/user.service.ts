@@ -77,7 +77,7 @@ interface Pin {
   photos: string[] | undefined,
   location_tags: string[] | undefined,
   visibility: number,
-  user_tags: string[] | undefined,
+  user_tags: string[],
 }
 
 // ADD PIN

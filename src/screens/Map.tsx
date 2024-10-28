@@ -584,7 +584,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 10,
-    flex: 0.8,
+    flex: 0.4,
   },
   pinFilterModalTitle: {
     fontSize: 20,
