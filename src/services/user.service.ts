@@ -48,7 +48,7 @@ export const getUser = async (id: string) => {
 };
 
 // UPDATE USER INFO
-export const updateUser = async (id: string, user: UserSignup) => {
+export const updateUser = async (id: string, user: any) => {
   try {
       const response = await axios.put(`${apiUrl}/${id}/update`, user);
       return response.data;

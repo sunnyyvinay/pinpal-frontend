@@ -39,25 +39,34 @@ const Settings = ({ route, navigation }: any) => {
         };
     
         launchImageLibrary(options, async (response: ImagePickerResponse) => {
-          if (response.didCancel) {
-            console.log('User cancelled image picker');
-          } else if (response.errorCode) {
+          const user_id = await AsyncStorage.getItem("user_id");
+          if (response.errorCode) {
             console.log('Image picker error: ', response.errorMessage);
           } else if (response.assets && response.assets.length > 0) {
             if (response.assets[0].fileSize && response.assets[0].fileSize > 7340032) { // 7 MB
                 console.log("File too large. Please upload a smaller file");
-            }
-            const base64image = response.assets[0].base64;
-            setNewUserData({...newUserData, profile_pic: base64image});
-            const user_id = await AsyncStorage.getItem("user_id");
-            if (user_id) {
-                await updateUser(user_id, newUserData);
-                setUserData({...userData, profile_pic: base64image});
-            } else {
-                navigation.navigate("Welcome");
-            }
+            } else if (user_id && response.assets) {
+                const imageUri = response.assets[0].uri;
+                const formData = new FormData();
+                formData.append('profile_pic', {
+                    uri: imageUri,
+                    type: 'image/jpeg',
+                    name: user_id + '.jpg',
+                });
+                formData.append('username', userData.username);
+                formData.append('full_name', userData.full_name);
+                formData.append('birthday', userData.birthday);
+                formData.append('email', userData.email);
+                formData.append('phone_no', userData.phone_no);
+                formData.append('pass', userData.pass);
+                await updateUser(user_id, formData);
+                setUserData({...userData, profile_pic: imageUri});
+                } else {
+                    navigation.navigate("Welcome");
+                }
+            } 
           }
-        });
+        );
     };
 
     useEffect(() => {
@@ -78,6 +87,10 @@ const Settings = ({ route, navigation }: any) => {
         }
         fetchUserData();
     }, []);
+
+    // useEffect(() => {
+    //     setNewUserData({...userData, phone_no: unformattedPhone});
+    // }, [unformattedPhone]);
 
     return (
         <ScrollView contentContainerStyle={styles.container}>

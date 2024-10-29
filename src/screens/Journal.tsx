@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getPins, getUser, getUserFriends } from '../services/user.service';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { Image } from '@rneui/base';
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import * as Colors from '../constants/colors';
 import { Button, Divider } from '@rneui/themed';
 
@@ -91,7 +90,6 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     borderWidth: 2,
     borderColor: Colors.mediumOrange,
-    flex: 1
   },  
   nameContainer: {
     flex: 1, 
