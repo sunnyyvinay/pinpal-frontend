@@ -10,6 +10,7 @@ import { getUser, updateUser } from '../services/user.service';
 import DatePicker from 'react-native-date-picker';
 import PhoneInput from 'react-native-phone-number-input';
 import {ImagePickerResponse, launchImageLibrary, MediaType} from 'react-native-image-picker';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 const bcrypt = require("bcryptjs");
 
 const Settings = ({ route, navigation }: any) => {
@@ -97,9 +98,19 @@ const Settings = ({ route, navigation }: any) => {
             <Text style={styles.sectionTitle}>Account Information</Text>          
             
             <TouchableOpacity onPress={openImagePicker}>
-                <Image source={userData.profile_pic ? {uri: userData.profile_pic} : require('../../assets/images/default-pfp.jpg')} style={styles.pfpImage} />
-                <MaterialIcon name="add-a-photo" size={20} style={styles.photoEditIcon} />
+                <Image source={userData.profile_pic && userData.profile_pic != "" ? {uri: userData.profile_pic} : require('../../assets/images/default-pfp.jpg')} style={styles.pfpImage} />
             </TouchableOpacity>
+            <View style={styles.pfpOptionsView}>
+                <TouchableOpacity style={styles.pfpEditIcon} onPress={openImagePicker}>
+                        <MaterialIcon name="add-a-photo" size={20} />
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.pfpDeleteIcon} onPress={async () => {
+                    setUserData({...userData, profile_pic: null});
+                    await updateUser(userData.user_id, userData);
+                }}>
+                    <Ionicons name="trash" size={20} color={Colors.lightRed} />
+                </TouchableOpacity>
+            </View>
             
             <TouchableOpacity 
                 style={styles.fieldView} 
@@ -497,10 +508,30 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         marginBottom: 10,
     },
-    photoEditIcon: {
-        position: 'absolute',
-        bottom: '5%',
-        right: '-2%'
+    pfpOptionsView: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+        alignItems: 'center',
+        marginBottom: 10,
+    },
+    pfpEditIcon: {
+        width: 50,
+        height: 50,
+        borderRadius: 25,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: Colors.lightGray,
+        marginRight: 10
+    },
+    pfpDeleteIcon: {
+        width: 50,
+        height: 50,
+        borderRadius: 25,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: Colors.darkRed,
+        marginLeft: 10
     },
     logOutButton: {
         backgroundColor: Colors.mediumOrange

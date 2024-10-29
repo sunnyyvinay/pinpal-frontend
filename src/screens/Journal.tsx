@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { getPins, getUser, getUserFriends } from '../services/user.service';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import * as Colors from '../constants/colors';
 import { Button, Divider } from '@rneui/themed';
+import { useFocusEffect } from '@react-navigation/native';
 
 function Journal({ route, navigation }: any): React.JSX.Element {
   const [userData, setUserData] = useState<any>({});
@@ -18,8 +19,9 @@ function Journal({ route, navigation }: any): React.JSX.Element {
     tagged_pins: []
   });
   
-  useEffect(() => {
-    const fetchUserData = async () => {
+  useFocusEffect(
+    useCallback(() => {
+      const fetchUserData = async () => {
         try {
             const user_id  = await AsyncStorage.getItem("user_id");
             if (user_id) {
@@ -36,12 +38,13 @@ function Journal({ route, navigation }: any): React.JSX.Element {
         } 
     }
     fetchUserData();
-}, []);
+    }, [])
+  );
 
   return (
     <ScrollView style={{width: '100%', height: '100%'}}>
       <View style={styles.profileContainer}>
-        <Image source={userData.profile_pic ? {uri: userData.profile_pic} : require('../../assets/images/default-pfp.jpg')} style={styles.pfpImage} />
+        <Image source={userData.profile_pic && userData.profile_pic != "" ? {uri: userData.profile_pic} : require('../../assets/images/default-pfp.jpg')} style={styles.pfpImage} />
         <View style={styles.nameContainer}>
           <Text style={styles.fullNameStyle}>{userData.full_name}</Text>
           <Text style={styles.usernameStyle}>@{userData.username}</Text>
