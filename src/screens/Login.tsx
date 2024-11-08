@@ -3,18 +3,21 @@ import LinearGradient from 'react-native-linear-gradient'
 import * as Colors from '../constants/colors';
 import { Image, StyleSheet } from 'react-native';
 import { Button, Input } from '@rneui/themed';
-import Icon from 'react-native-vector-icons/Ionicons';
+import Ionicon from 'react-native-vector-icons/Ionicons';
 import { loginUser } from '../services/user.service';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const Login = ({navigation}: {navigation: any}) => {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+
+  const [hiddenPass, setHiddenPass] = useState<boolean>(true);
   
   return (
     <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 1}} colors={[Colors.darkOrange, Colors.darkYellow]} style={styles.gradientContainer}>
         <Button
-            icon={<Icon name="arrow-back" size={20} color={Colors.black} />}
+            icon={<Ionicon name="arrow-back" size={20} color={Colors.black} />}
             color={Colors.black}
             buttonStyle={styles.button}
             containerStyle={styles.backButtonContainer} 
@@ -35,6 +38,10 @@ const Login = ({navigation}: {navigation: any}) => {
             onChangeText={setPassword}
             containerStyle={styles.inputContainer}
             autoCapitalize='none'
+            secureTextEntry={hiddenPass}
+            rightIcon={ 
+                hiddenPass ? <Ionicon name="eye-off-outline" size={20} color={Colors.mediumGray} onPress={() => setHiddenPass(!hiddenPass)} /> : <Ionicon name="eye-outline" size={20} color={Colors.black} onPress={() => setHiddenPass(!hiddenPass)}/>
+            }
         />
         <Button 
             title="LOG IN" 
@@ -87,7 +94,7 @@ const styles = StyleSheet.create({
     marginLeft: 15,
     marginTop: 30,
     alignSelf: 'flex-start',
-},
+  },
   loginButtonContainer: {
       width: '75%',
   },

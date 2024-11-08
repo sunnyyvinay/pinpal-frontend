@@ -264,7 +264,7 @@ const PinPost = (props:any) => {
                 onPress={() => {
                   deletePin(pin_user_id, pin_id); 
                   setPinActionModalVisible(false); 
-                  props.navigation.goBack(); 
+                  props.navigation.navigate("NavBar", { screen: "Map" }); 
                 }}>
                   <MaterialIcon name="delete-outline" size={20} color={Colors.errorRed} />
                   <Text style={{...styles.pinActionModelSubviewText, color: Colors.errorRed}}>Delete pin</Text>

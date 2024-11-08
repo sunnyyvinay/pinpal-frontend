@@ -1,6 +1,6 @@
 import { Button, Input, SearchBar } from '@rneui/themed';
 import React, { useEffect, useState } from 'react'
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import GetLocation, { isLocationError } from 'react-native-get-location';
 import Icon from 'react-native-vector-icons/Ionicons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
@@ -23,7 +23,7 @@ const AddPin = ({ route, navigation }: any) => {
         caption: "",
         create_date: undefined,
         edit_date: undefined,
-        photos: [],
+        photo: null,
         location_tags: [],
         visibility: 1,
         user_tags: []
@@ -95,24 +95,18 @@ const AddPin = ({ route, navigation }: any) => {
         };
     
         launchImageLibrary(options, async (response: ImagePickerResponse) => {
-            if (response.didCancel) {
-            console.log('User cancelled image picker');
-            } else if (response.errorCode) {
-            console.log('Image picker error: ', response.errorMessage);
+            const user_id = await AsyncStorage.getItem("user_id");
+            if (response.errorCode) {
+              console.log('Image picker error: ', response.errorMessage);
             } else if (response.assets && response.assets.length > 0) {
-            if (response.assets[0].fileSize && response.assets[0].fileSize > 7340032) { // 7 MB
-                console.log("File too large. Please upload a smaller file");
-            }
-            // const base64image = response.assets[0].base64;
-            // setNewUserData({...newUserData, profile_pic: base64image});
-            // const user_id = await AsyncStorage.getItem("user_id");
-            // if (user_id) {
-            //     await updateUser(user_id, newUserData);
-            //     setUserData({...userData, profile_pic: base64image});
-            // } else {
-            //     navigation.navigate("Welcome");
-            // }
-            }
+              if (response.assets[0].fileSize && response.assets[0].fileSize > 7340032) { // 7 MB
+                  console.log("File too large. Please upload a smaller file");
+              } else if (user_id && response.assets) {
+                  setPinData({...pinData, photo: response.assets[0].uri});
+                  } else {
+                      navigation.navigate("Welcome");
+                  }
+              } 
         });
     };
 
@@ -165,9 +159,15 @@ const AddPin = ({ route, navigation }: any) => {
             case 1:
                 return (
                     <View style={styles.inputViewContainer}>
+                        {pinData.photo ? 
+                        <TouchableOpacity onPress={openImagePicker} style={{width: '100%', height: '50%'}}>
+                            <Image source={{ uri: pinData.photo }} style={styles.pickPhoto} /> 
+                        </TouchableOpacity>
+                        : 
                         <TouchableOpacity onPress={openImagePicker} style={styles.pickPhotoContainer} >
                             <MaterialIcon name="add-a-photo" size={50} />
                         </TouchableOpacity>
+                        }
                         <Button 
                             title="NEXT" 
                             icon={<Icon name="arrow-forward-circle-outline" size={20} color={Colors.white} style={{ marginLeft: 5 }}/>}
@@ -177,7 +177,8 @@ const AddPin = ({ route, navigation }: any) => {
                             titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'Sansation' }}
                             buttonStyle={styles.buttonStyle}
                             containerStyle={styles.buttonContainerStyle} 
-                            onPress={() => setStep(step + 1)} /> 
+                            onPress={() => setStep(step + 1)} 
+                            disabled={!pinData.photo}/> 
                     </View>
                 )
             case 2:
@@ -248,7 +249,21 @@ const AddPin = ({ route, navigation }: any) => {
                                     const user_id = await AsyncStorage.getItem("user_id");
                                     if (user_id) {
                                         const pinInput = {...pinData, latitude: lat_long[0], longitude: lat_long[1]};
-                                        await addPin(user_id, pinInput);
+                                        const formData = new FormData();
+                                        formData.append('photo', {
+                                            uri: pinData.photo,
+                                            type: 'image/jpeg',
+                                            name: user_id + '.jpg',
+                                        });
+                                        // formData.append('latitude', lat_long[0]);
+                                        // formData.append('longitude', lat_long[1]);
+                                        // formData.append('title', pinData.title);
+                                        // formData.append('caption', pinData.email);
+                                        // formData.append('create_date', pinData.create_date);
+                                        // formData.append('location_tags', pinData.location_tags);
+                                        // formData.append('visibility', pinData.visibility);
+                                        // formData.append('user_tags', pinData.user_tags);
+                                        await addPin(user_id, pinInput, formData);
                                         navigation.navigate("NavBar", { screen: 'Map' });
                                     } else {
                                         navigation.navigate("Welcome");
@@ -412,14 +427,23 @@ const styles = StyleSheet.create({
     buttonContainerStyle: {
         width: '75%',
         marginHorizontal: 50,
-        marginTop: 100,
+        marginTop: 20,
     },
     pickPhotoContainer: {
-        width: 200,
-        height: 200,
-        borderWidth: 3,
+        width: 300,
+        height: 300,
+        borderWidth: 2,
         borderColor: Colors.mediumOrange,
         backgroundColor: Colors.whiteGray,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 30,
+        marginTop: 30,
+    },
+    pickPhoto: {
+        width: '100%',
+        height: '100%',
+        resizeMode: 'contain',
         justifyContent: 'center',
         alignItems: 'center',
     },

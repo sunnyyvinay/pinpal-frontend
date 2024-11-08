@@ -1,12 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Text, Touchable, TouchableOpacity, View } from 'react-native';
+import { Image, ScrollView, StyleSheet, Text, Touchable, TouchableOpacity, View } from 'react-native';
 import GetLocation, { isLocationError, Location } from 'react-native-get-location';
 import MapView, { Callout, CalloutSubview, Marker } from 'react-native-maps';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { getPins, getPublicPins, getUser, getUserFriends, updatePin, updatePinLocation } from '../services/user.service';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
-import { Image } from '@rneui/base';
 import * as Colors from '../constants/colors';
 import Icon from 'react-native-vector-icons/Ionicons';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
@@ -171,7 +170,7 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
                   <CalloutSubview style={styles.pinCalloutView}>
                     <Text style={styles.pinCalloutTitle}>{personalPin.title}</Text>
                     <Text style={styles.pinCalloutPersonal}>Personal Pin</Text>
-                    <Image source={{uri: tempImg}} style={styles.pinCalloutImage}/>
+                    <Image source={{uri: personalPin.photo}} style={styles.pinCalloutImage}/>
                   </CalloutSubview>
 
                   <CalloutSubview style={{justifyContent: 'space-evenly', alignItems: 'center', flex: 1, flexDirection: 'row'}}>
@@ -213,7 +212,7 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
                   <CalloutSubview style={styles.pinCalloutView}>
                     <Text style={styles.pinCalloutTitle}>{friendPin.title}</Text>
                     <Text style={styles.pinCalloutPersonal}>@{friend.user.username}</Text>
-                    <Image source={{uri: tempImg}} style={styles.pinCalloutImage}/>
+                    <Image source={{uri: friendPin.photo}} style={styles.pinCalloutImage}/>
                   </CalloutSubview>
 
                   <CalloutSubview style={{justifyContent: 'space-evenly', alignItems: 'center', flex: 1, flexDirection: 'row'}}>
@@ -240,7 +239,7 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
                   <CalloutSubview style={styles.pinCalloutView}>
                     <Text style={styles.pinCalloutTitle}>{publicPin.title}</Text>
                     <Text style={styles.pinCalloutPersonal}>@{publicPin.user.username}</Text>
-                    <Image source={{uri: tempImg}} style={styles.pinCalloutImage}/>
+                    <Image source={{uri: publicPin.photo}} style={styles.pinCalloutImage}/>
                   </CalloutSubview>
 
                   <CalloutSubview style={{justifyContent: 'space-evenly', alignItems: 'center', flex: 1, flexDirection: 'row'}}>
@@ -502,10 +501,10 @@ const styles = StyleSheet.create({
     marginBottom: 5
   },
   pinCalloutImage: {
-    width: 150,
+    width: 200,
     height: 150,
     borderRadius: 10,
-    resizeMode: 'cover',
+    resizeMode: 'contain',
     marginBottom: 5
   },
   pinCalloutViewButton: {
