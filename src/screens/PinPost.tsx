@@ -15,6 +15,7 @@ import { locationTags, getLocationTagIcon } from '../constants/locationtags';
 import userSearchStyles from '../styles/usersearch';
 import Entypo from 'react-native-vector-icons/Entypo';
 import userTagsStyles from '../styles/usertags';
+import { ImagePickerResponse, launchImageLibrary, MediaType } from 'react-native-image-picker';
 
 const PinPost = (props:any) => {
     const { pin_id, pin_user_id } = props.route.params;
@@ -23,7 +24,7 @@ const PinPost = (props:any) => {
       caption: "",
       create_date: undefined,
       edit_date: undefined,
-      photos: [],
+      photo: "",
       location_tags: [],
       visibility: 1,
       user_tags: []
@@ -41,7 +42,7 @@ const PinPost = (props:any) => {
       caption: "",
       create_date: undefined,
       edit_date: undefined,
-      photos: [],
+      photo: "",
       location_tags: [],
       visibility: 1,
       user_tags: []
@@ -181,6 +182,30 @@ const PinPost = (props:any) => {
       );
     };
 
+    const openImagePicker = () => {
+      const options = {
+          mediaType: 'photo' as MediaType,
+          includeBase64: true,
+          maxHeight: 2000,
+          maxWidth: 2000,
+      };
+  
+      launchImageLibrary(options, async (response: ImagePickerResponse) => {
+          const user_id = await AsyncStorage.getItem("user_id");
+          if (response.errorCode) {
+            console.log('Image picker error: ', response.errorMessage);
+          } else if (response.assets && response.assets.length > 0) {
+            if (response.assets[0].fileSize && response.assets[0].fileSize > 7340032) { // 7 MB
+                console.log("File too large. Please upload a smaller file");
+            } else if (user_id && response.assets) {
+                setEditedPinData({...editedPinData, photo: response.assets[0].uri});
+                } else {
+                  props.navigation.navigate("Welcome");
+                }
+            } 
+      });
+  };
+
     function formatTimestamp(timestamp: string): string {
       const date = new Date(timestamp);
   
@@ -204,7 +229,7 @@ const PinPost = (props:any) => {
               <TouchableOpacity style={styles.pinActionModelSubview}
                 onPress={async () => {
                   setPinData({...pinData, visibility: 0});
-                  await updatePin(pin_user_id, pin_id, {...pinData, visibility: 0});
+                  await updatePin(pin_user_id, pin_id, {...pinData, visibility: 0}, null);
                   setEditPinVisibility(false);
                   setPinActionModalVisible(false);
                 }}>
@@ -217,7 +242,7 @@ const PinPost = (props:any) => {
               <TouchableOpacity style={styles.pinActionModelSubview}
                 onPress={async () => {
                   setPinData({...pinData, visibility: 1});
-                  await updatePin(pin_user_id, pin_id, {...pinData, visibility: 1});
+                  await updatePin(pin_user_id, pin_id, {...pinData, visibility: 1}, null);
                   setEditPinVisibility(false);
                   setPinActionModalVisible(false);
                 }}>
@@ -230,7 +255,7 @@ const PinPost = (props:any) => {
               <TouchableOpacity style={styles.pinActionModelSubview}
                 onPress={async () => {
                   setPinData({...pinData, visibility: 2});
-                  await updatePin(pin_user_id, pin_id, {...pinData, visibility: 2});
+                  await updatePin(pin_user_id, pin_id, {...pinData, visibility: 2}, null);
                   setEditPinVisibility(false);
                   setPinActionModalVisible(false);
                 }}>
@@ -261,10 +286,10 @@ const PinPost = (props:any) => {
               <View style={styles.horizontalLine} />
 
               <TouchableOpacity style={styles.pinActionModelSubview} 
-                onPress={() => {
-                  deletePin(pin_user_id, pin_id); 
+                onPress={async () => {
+                  await deletePin(pin_user_id, pin_id); 
                   setPinActionModalVisible(false); 
-                  props.navigation.navigate("NavBar", { screen: "Map" }); 
+                  props.navigation.navigate("NavBar", { screen: 'Map' }); 
                 }}>
                   <MaterialIcon name="delete-outline" size={20} color={Colors.errorRed} />
                   <Text style={{...styles.pinActionModelSubviewText, color: Colors.errorRed}}>Delete pin</Text>
@@ -417,14 +442,23 @@ const PinPost = (props:any) => {
         }
 
         <View style={styles.photosView}>
-            <Carousel
+          {editMode ?
+            <TouchableOpacity onPress={openImagePicker}>
+              <Image source={editedPinData.photo && {uri: editedPinData.photo}} style={{width: screenWidth, height: 200}}/>
+            </TouchableOpacity>
+            :
+            <Image source={pinData.photo && {uri: pinData.photo}} style={{width: screenWidth, height: 200}}/>
+          }
+
+            {/* <Carousel
               width={screenWidth}
               height={200}
               data={tempPhotos}
               onSnapToItem={(index) => setActivePhotoSlide(index)}
               renderItem={renderItem}
             />
-            {renderPagination()}
+            {renderPagination()} */}
+
         </View>
         
         {editMode ?
@@ -448,13 +482,13 @@ const PinPost = (props:any) => {
         {editMode ? 
         <View style={styles.locationTagsButtonView}>
           <Button 
-            title="Edit"
+            title={editedPinData.user_tags.length > 0 ? "Edit user tags" : "Add user tags"}
             icon={<MaterialIcon name="edit" size={15} color={Colors.black} style={{ marginRight: 2 }}/>}
             color={Colors.black}
             iconContainerStyle={{ marginRight: 2 }}
             titleStyle={{ color: Colors.black, fontWeight: '300', fontFamily: 'Sansation', fontSize: 15 }}
             buttonStyle={styles.locationTagsAddButton}
-            containerStyle={styles.locationTagsAddButtonContainer} 
+            containerStyle={{...styles.locationTagsAddButtonContainer}} 
             onPress={() => {setUserTagState({...userTagState, modalVisible: true})}} />  
             {userTagState.editedTaggedUsers && userTagState.editedTaggedUsers.length > 0 && userTagState.editedTaggedUsers.map((user:any, index:number) => {
               return (
@@ -467,6 +501,8 @@ const PinPost = (props:any) => {
           })}
         </View>
         : 
+        <View>
+          {userTagState.taggedUsers && userTagState.taggedUsers.length > 0 &&
         <View style={styles.locationTagsButtonView}>
         {userTagState.taggedUsers && userTagState.taggedUsers.length > 0 && userTagState.taggedUsers.map((user:any, index:number) => {
             return (
@@ -480,12 +516,15 @@ const PinPost = (props:any) => {
         })}
         </View>
         }
+        </View>
+        }
       
+        
         {/* Location Tags */}
         {editMode ? 
         <View style={styles.locationTagsButtonView}>
           <Button 
-            title="Edit"
+            title={editedPinData.location_tags.length > 0 ? "Edit location tags" : "Add location tags"}
             icon={<MaterialIcon name="edit" size={15} color={Colors.black} style={{ marginRight: 2 }}/>}
             color={Colors.black}
             iconContainerStyle={{ marginRight: 2 }}
@@ -503,9 +542,11 @@ const PinPost = (props:any) => {
               )
           })}
         </View>
-        : 
+        :
+        <View>
+        {pinData.location_tags.length > 0 &&
         <View style={styles.locationTagsButtonView}>
-        {pinData.location_tags.map((tag:string, index:number) => {
+        {pinData.location_tags.length > 0 && pinData.location_tags.map((tag:string, index:number) => {
             return (
               <Button 
                 title={tag} 
@@ -515,7 +556,9 @@ const PinPost = (props:any) => {
             )
         })}
         </View>
-          }
+        }
+        </View>
+        }
         
         {editMode ? null : 
         <View style={styles.likesView}>
@@ -556,7 +599,14 @@ const PinPost = (props:any) => {
           containerStyle={styles.saveEditButtonContainer} 
           onPress={
               async () => {
-                  await updatePin(pin_user_id, pin_id, editedPinData);
+                  const user_id = await AsyncStorage.getItem("user_id");
+                  const formData = new FormData();
+                  formData.append('photo', {
+                      uri: editedPinData.photo,
+                      type: 'image/jpeg',
+                      name: user_id + '.jpg',
+                  });
+                  await updatePin(pin_user_id, pin_id, editedPinData, formData);
                   setPinData(editedPinData);
                   setEditMode(false);
               }
@@ -769,7 +819,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   locationTagsAddButtonContainer: {
-    width: 65,
+    width: 175,
   },
   locationTagsModal: {
     justifyContent: 'center',

@@ -82,7 +82,7 @@ interface Pin {
 // ADD PIN
 export const addPin = async (id: string, pin: Pin, photo: any) => {
   try {
-    const response = await axios.post(`${apiUrl}/${id}/pin/add`, photo,{
+    const response = await axios.post(`${apiUrl}/${id}/pin/add`, photo, {
       headers: {
         'Content-Type': 'multipart/form-data',
         'latitude': pin.latitude,
@@ -114,16 +114,26 @@ export const getPin = async (user_id: string, pin_id: string) => {
 interface PinUpdate {
   title: string,
   caption: string | undefined,
-  create_date: Date | undefined,
+  create_date: string | undefined,
   photo: string | null,
   location_tags: string[],
   visibility: number,
   user_tags: string[],
 }
 // UPDATE PIN INFO
-export const updatePin = async (userid: string, pinid: string, pin: PinUpdate) => {
+export const updatePin = async (userid: string, pinid: string, pin: PinUpdate, photo: any) => {
   try {
-      const response = await axios.put(`${apiUrl}/${userid}/pin/${pinid}/update`, pin);
+      const response = await axios.put(`${apiUrl}/${userid}/pin/${pinid}/update`, photo, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'title': pin.title,
+          'caption': pin.caption,
+          'create_date': pin.create_date,
+          'user_tags': JSON.stringify(pin.user_tags),
+          'visibility': pin.visibility,
+          'location_tags': JSON.stringify(pin.location_tags)
+        },
+      });
       return response.data;
   } catch (error) {
       return error;
