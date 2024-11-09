@@ -130,11 +130,22 @@ function Profile(props: any): React.JSX.Element {
         </TouchableOpacity>
       </View>
 
-      <View style={{width: '100%', height: '25%'}}>
+      <View style={{width: '100%', height: 50}}>
         {friendRequestView()}
       </View>
       
       <Divider style={styles.dividerStyle}/>
+
+      <View style={styles.journalPinView}>
+        {profileData.pins.length != 0 && profileData.pins.map((pin: any) => {
+          return (
+            <TouchableOpacity key={pin.pin_id} onPress={() => props.navigation.navigate("Pin detail", {pin_id: pin.pin_id, pin_user_id: pin.user_id})}>
+              <Image source={{uri: pin.photo}} style={styles.journalPinImage} />
+            </TouchableOpacity>
+              
+          )
+        }).reverse()}
+      </View>
     </ScrollView>
   );
 }
@@ -228,7 +239,21 @@ const styles = StyleSheet.create({
     fontSize: 15,
     marginLeft: 5
   },
-  
+  journalPinView: {
+    width: '100%',
+    display: 'flex',
+    height: '100%',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-evenly',
+    alignContent: 'flex-start',
+  },
+  journalPinImage: {
+    width: 150,
+    height: 150,
+    borderRadius: 10,
+    marginVertical: 5
+  }
 });
 
 export default Profile;

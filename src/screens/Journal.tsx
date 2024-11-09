@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { getPins, getUser, getUserFriends } from '../services/user.service';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, Image, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import * as Colors from '../constants/colors';
 import { Button, Divider } from '@rneui/themed';
 import { useFocusEffect } from '@react-navigation/native';
@@ -75,6 +75,16 @@ function Journal({ route, navigation }: any): React.JSX.Element {
       </View>
 
       <Divider style={styles.dividerStyle}/>
+
+      <View style={styles.journalPinView}>
+        {journalData.pins.length != 0 && journalData.pins.map((pin: any) => {
+          return (
+            <TouchableOpacity key={pin.pin_id} onPress={() => navigation.navigate("Pin detail", {pin_id: pin.pin_id, pin_user_id: pin.user_id})}>
+              <Image source={{uri: pin.photo}} style={styles.journalPinImage} />
+            </TouchableOpacity>
+          )
+        }).reverse()}
+      </View>
     </ScrollView>
     
   );
@@ -146,9 +156,21 @@ const styles = StyleSheet.create({
   dividerStyle: {
     margin: 10
   },
-  postsContainer: {
-    
-  }  
+  journalPinView: {
+    width: '100%',
+    display: 'flex',
+    height: '100%',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-evenly',
+    alignContent: 'flex-start',
+  },
+  journalPinImage: {
+    width: 150,
+    height: 150,
+    borderRadius: 10,
+    marginVertical: 5
+  }
 });
 
 export default Journal;
