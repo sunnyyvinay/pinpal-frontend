@@ -167,13 +167,13 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
               image={require('../../assets/images/personal-pin.png')}
               title={personalPin.title} >
                 <Callout style={styles.pinCalloutStyle}>
-                  <CalloutSubview style={styles.pinCalloutView}>
+                  <View style={styles.pinCalloutView}>
                     <Text style={styles.pinCalloutTitle}>{personalPin.title}</Text>
                     <Text style={styles.pinCalloutPersonal}>Personal Pin</Text>
                     <Image source={{uri: personalPin.photo}} style={styles.pinCalloutImage}/>
-                  </CalloutSubview>
+                  </View>
 
-                  <CalloutSubview style={{justifyContent: 'space-evenly', alignItems: 'center', flex: 1, flexDirection: 'row'}}>
+                  <View style={{justifyContent: 'space-evenly', alignItems: 'center', flex: 1, flexDirection: 'row'}}>
                     <CalloutSubview style={{flex: 0.5, justifyContent: 'center', alignItems: 'center'}}
                         onPress={() => { 
                           setChangingRegion({latitude: personalPin.latitude, longitude: personalPin.longitude, latitudeDelta: region.latitudeDelta, longitudeDelta: region.longitudeDelta});
@@ -195,7 +195,7 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
                           color={Colors.white}
                           titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'Sansation', fontSize: 12 }} />
                     </CalloutSubview>
-                  </CalloutSubview>
+                  </View>
                 </Callout>
             </Marker>
           ))}
@@ -209,13 +209,13 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
               image={require('../../assets/images/friend-pin.png')}
               title={friendPin.title} >
                 <Callout style={styles.pinCalloutStyle}>
-                  <CalloutSubview style={styles.pinCalloutView}>
+                  <View style={styles.pinCalloutView}>
                     <Text style={styles.pinCalloutTitle}>{friendPin.title}</Text>
                     <Text style={styles.pinCalloutPersonal}>@{friend.user.username}</Text>
                     <Image source={{uri: friendPin.photo}} style={styles.pinCalloutImage}/>
-                  </CalloutSubview>
+                  </View>
 
-                  <CalloutSubview style={{justifyContent: 'space-evenly', alignItems: 'center', flex: 1, flexDirection: 'row'}}>
+                  <View style={{justifyContent: 'space-evenly', alignItems: 'center', flex: 1, flexDirection: 'row'}}>
                     <CalloutSubview style={{flex: 0.5, justifyContent: 'center', alignItems: 'center'}}
                         onPress={() => { navigation.navigate("Pin detail", { pin_id: friendPin.pin_id, pin_user_id: friendPin.user_id })}}>
                       <Button 
@@ -224,7 +224,7 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
                           color={Colors.white}
                           titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'Sansation', fontSize: 12 }} />
                     </CalloutSubview>
-                  </CalloutSubview>
+                  </View>
                 </Callout>
             </Marker>
           ))))}
@@ -236,13 +236,13 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
               image={require('../../assets/images/public-pin.png')}
               title={publicPin.title} >
                 <Callout style={styles.pinCalloutStyle}>
-                  <CalloutSubview style={styles.pinCalloutView}>
+                  <View style={styles.pinCalloutView}>
                     <Text style={styles.pinCalloutTitle}>{publicPin.title}</Text>
                     <Text style={styles.pinCalloutPersonal}>@{publicPin.user.username}</Text>
                     <Image source={{uri: publicPin.photo}} style={styles.pinCalloutImage}/>
-                  </CalloutSubview>
+                  </View>
 
-                  <CalloutSubview style={{justifyContent: 'space-evenly', alignItems: 'center', flex: 1, flexDirection: 'row'}}>
+                  <View style={{justifyContent: 'space-evenly', alignItems: 'center', flex: 1, flexDirection: 'row'}}>
                     <CalloutSubview style={{flex: 0.5, justifyContent: 'center', alignItems: 'center'}}
                         onPress={() => { navigation.navigate("Pin detail", { pin_id: publicPin.pin_id, pin_user_id: publicPin.user_id })}}>
                       <Button 
@@ -251,7 +251,7 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
                           color={Colors.white}
                           titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'Sansation', fontSize: 12 }} />
                     </CalloutSubview>
-                  </CalloutSubview>
+                  </View>
                 </Callout>
             </Marker>
         ))}
