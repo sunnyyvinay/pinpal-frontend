@@ -123,8 +123,9 @@ interface PinUpdate {
 // UPDATE PIN INFO
 export const updatePin = async (userid: string, pinid: string, pin: PinUpdate, photo: any) => {
   try {
-      const response = await axios.put(`${apiUrl}/${userid}/pin/${pinid}/update`, photo, {
-        headers: {
+      let headers = {};
+      if (photo) {
+        headers = {
           'Content-Type': 'multipart/form-data',
           'title': pin.title,
           'caption': pin.caption,
@@ -132,8 +133,19 @@ export const updatePin = async (userid: string, pinid: string, pin: PinUpdate, p
           'user_tags': JSON.stringify(pin.user_tags),
           'visibility': pin.visibility,
           'location_tags': JSON.stringify(pin.location_tags)
-        },
-      });
+        }
+      } else {
+        headers = {
+          'title': pin.title,
+          'caption': pin.caption,
+          'create_date': pin.create_date,
+          'user_tags': JSON.stringify(pin.user_tags),
+          'visibility': pin.visibility,
+          'location_tags': JSON.stringify(pin.location_tags)
+        }
+      }
+      
+      const response = await axios.put(`${apiUrl}/${userid}/pin/${pinid}/update`, photo, { headers});
       return response.data;
   } catch (error) {
       return error;

@@ -163,14 +163,15 @@ const styles = StyleSheet.create({
     height: '100%',
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'space-evenly',
+    justifyContent: 'flex-start',
     alignContent: 'flex-start',
   },
   journalPinImage: {
     width: 100,
     height: 100,
     borderRadius: 10,
-    marginVertical: 5
+    marginVertical: 5,
+    marginHorizontal: 10
   }
 });
 
