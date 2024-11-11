@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { getPins, getUser, getUserFriends } from '../services/user.service';
+import { getPins, getTaggedPins, getUser, getUserFriends } from '../services/user.service';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { FlatList, Image, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import * as Colors from '../constants/colors';
@@ -29,7 +29,8 @@ function Journal({ route, navigation }: any): React.JSX.Element {
                 setUserData(userData.user);
                 const pinData = await getPins(user_id);
                 const friendData = await getUserFriends(user_id);
-                setJournalData({ ...journalData, friends: friendData.friends ? friendData.friends : [], pins: pinData.pins ? pinData.pins : [] });
+                const taggedPinData = await getTaggedPins(user_id);
+                setJournalData({ ...journalData, friends: friendData.friends ? friendData.friends : [], pins: pinData.pins ? pinData.pins : [], tagged_pins: taggedPinData.pins ? taggedPinData.pins : [] });
             } else {
                 navigation.navigate("Welcome");
             }
@@ -69,7 +70,7 @@ function Journal({ route, navigation }: any): React.JSX.Element {
           <Text style={styles.statTextLabel}>Friends</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.statCard}>
-          <Text style={styles.statTextNum}>-</Text>
+          <Text style={styles.statTextNum}>{journalData.tagged_pins.length}</Text>
           <Text style={styles.statTextLabel}>Tagged Posts</Text>
         </TouchableOpacity>
       </View>
@@ -166,8 +167,8 @@ const styles = StyleSheet.create({
     alignContent: 'flex-start',
   },
   journalPinImage: {
-    width: 150,
-    height: 150,
+    width: 100,
+    height: 100,
     borderRadius: 10,
     marginVertical: 5
   }

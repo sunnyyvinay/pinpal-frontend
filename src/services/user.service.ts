@@ -273,3 +273,13 @@ export const getPublicPins = async (userid: string|null) => {
       return error;
   }
 };
+
+// GET ALL TAGGED PINS
+export const getTaggedPins = async (id: string) => {
+  try {
+      const response = await axios.get(`${apiUrl}/${id}/pins/tagged`);
+      return response.data;
+  } catch (error) {
+      return error;
+  }
+};
