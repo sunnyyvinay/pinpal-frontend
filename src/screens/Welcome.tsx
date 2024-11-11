@@ -6,7 +6,7 @@ import { Button } from '@rneui/themed';
 
 const Welcome = ({navigation}: {navigation: any}) => {
   return (
-    <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 1}} colors={[Colors.darkOrange, Colors.yellow]} style={styles.gradientContainer}>
+    <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 1}} colors={[Colors.yellow, Colors.darkOrange]} style={styles.gradientContainer}>
         <Image source={require('../../assets/images/full-logo.png')} style={styles.logo} />
         <Button 
             title="LOG IN" 
@@ -42,14 +42,14 @@ const styles = StyleSheet.create({
     marginTop: '10%',
   },
   button: {
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.yellow,
     borderColor: 'transparent',
     borderWidth: 0,
     borderRadius: 30,
   },
   loginButtonContainer: {
-      width: '75%',
-      marginTop: '90%',
+    width: '75%',
+    marginTop: '90%',
   },
   signupButtonContainer: {
     width: '75%',

@@ -1,45 +1,53 @@
 import React, { useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, TextInput } from 'react-native';
 import { Button, Input , Text } from '@rneui/themed';
 import LinearGradient from 'react-native-linear-gradient';
 import * as Colors from '../constants/colors';
 import { Image } from '@rneui/base';
 import Icon from 'react-native-vector-icons/Ionicons';
-import PhoneInput from "react-native-phone-number-input";
+import PhoneInput, { ICountry } from 'react-native-international-phone-number';
 import DatePicker from 'react-native-date-picker';
 import { loginUser, signupUser } from '../services/user.service';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Ionicon from 'react-native-vector-icons/Ionicons';
 
 const Signup = ({navigation}: {navigation: any}) => {
     const [step, setStep] = useState<number>(1);
 
-    const [phoneNo, setPhoneNo] = useState<string | undefined>("");
-    const [formattedPhoneNo, setFormattedPhoneNo] = useState<string | undefined>("");
-    const [email, setEmail] = useState<string | undefined>("");
+    const [phoneNo, setPhoneNo] = useState<{number: string, country: ICountry | undefined}>({
+        number: '',
+        country: {
+            name: {en: 'United States', ru: 'United States', pl: 'United States', ua: 'United States', cz: 'United States', by: 'United States', pt: 'United States', es: 'United States', ro: 'United States', bg: 'United States', de: 'United States', fr: 'United States', nl: 'United States', it: 'United States', cn: 'United States', ee: 'United States', jp: 'United States', he: 'United States', ar: 'United States'},
+            cca2: 'US',
+            callingCode: '+1',
+            flag: '🇺🇸'
+        }
+    });
     const [birthday, setBirthday] = useState(new Date());
     const [fullName, setFullName] = useState<string>("");
     const [username, setUsername] = useState<string>("");
     const [password, setPassword] = useState<string>("");
+    
+    const [hiddenPass, setHiddenPass] = useState<boolean>(true);
 
     function renderStep(step: number) {
         switch (step) {
             case 1:
                 return (
                     <View style={styles.inputViewContainer}>
-                        <PhoneInput 
-                            layout="second" 
-                            defaultCode={'US'} 
-                            defaultValue={phoneNo} 
-                            onChangeText={(text: string | undefined) => {setPhoneNo(text)}} 
-                            onChangeFormattedText={(text: string | undefined) => {setFormattedPhoneNo(text)}}
-                            withShadow={true}
-                            autoFocus={true} />
+                        <PhoneInput
+                            placeholder='Enter phone number'
+                            value={phoneNo.number} 
+                            onChangePhoneNumber={(text: string) => {setPhoneNo({number: text, country: phoneNo.country})}} 
+                            selectedCountry={phoneNo.country}
+                            onChangeSelectedCountry={(country: ICountry | undefined) => {setPhoneNo({number: phoneNo.number, country: country})}}
+                            defaultCountry='US'
+                            popularCountries={['US']} />                    
                     </View>
                 )
             case 2:
                 return (
                     <View style={styles.inputViewContainer}>
-                        <Text style={{fontSize: 20, textAlign: 'center', fontWeight: 'bold'}}>{birthday.toDateString()}</Text>
                         <DatePicker 
                             mode='date'
                             date={birthday}
@@ -51,41 +59,41 @@ const Signup = ({navigation}: {navigation: any}) => {
                 )
             case 3:
                 return (
-                    <View style={styles.inputViewContainer}>
-                        <Input
+                    <View style={styles.inputContainer}>
+                        <TextInput
                             value={fullName}
-                            label="Full Name"
+                            style={styles.input}
                             placeholder="Enter full name"
-                            onChangeText={setFullName}
-                            containerStyle={styles.textInputContainer}
-                            autoCapitalize='none'
-                        />
+                            onChangeText={(text: string) => setFullName(text)} 
+                            autoCapitalize='none' />
                     </View>
                 )
             case 4:
                 return (
-                    <View style={styles.inputViewContainer}>
-                        <Input
+                    <View style={styles.inputContainer}>
+                        <TextInput
                             value={username}
-                            label="Username"
+                            style={styles.input}
                             placeholder="Enter username"
-                            onChangeText={setUsername}
-                            containerStyle={styles.textInputContainer}
-                            autoCapitalize='none'
-                        />
+                            onChangeText={(text: string) => setUsername(text)} 
+                            autoCapitalize='none' />
                     </View>
                 )
             case 5:
                 return (
-                    <View style={styles.inputViewContainer}>
-                        <Input
+                    <View style={styles.inputContainer}>
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Enter your password"
+                            secureTextEntry={hiddenPass}
+                            onChangeText={(text: string) => setPassword(text)}
                             value={password}
-                            label="Password"
-                            placeholder="Enter password"
-                            onChangeText={setPassword}
-                            secureTextEntry={true}
-                            containerStyle={styles.textInputContainer}
-                            autoCapitalize='none'
+                        />
+                        <Ionicon
+                            name={hiddenPass ? 'eye-outline' : 'eye-off-outline'}
+                            size={24}
+                            color="gray"
+                            onPress={() => setHiddenPass(!hiddenPass)}
                         />
                     </View>
                 )
@@ -93,11 +101,11 @@ const Signup = ({navigation}: {navigation: any}) => {
     }
 
     return (
-        <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 1}} colors={[Colors.darkOrange, Colors.yellow]} style={styles.gradientContainer}>
+        <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 1}} colors={[Colors.yellow, Colors.darkOrange]} style={styles.gradientContainer}>
             <Button
                 icon={<Icon name="arrow-back" size={20} color={Colors.black} />}
                 color={Colors.black}
-                buttonStyle={styles.nextButton}
+                buttonStyle={styles.backButton}
                 containerStyle={styles.backButtonContainer} 
                 onPress={() => {
                     step == 1 ? navigation.navigate("Welcome") : setStep(step - 1)
@@ -110,10 +118,9 @@ const Signup = ({navigation}: {navigation: any}) => {
                 step < 5 ? 
                 <Button 
                     title="NEXT" 
-                    icon={<Icon name="arrow-forward-circle-outline" size={20} color={Colors.black} />}
+                    icon={<Icon name="arrow-forward-circle-outline" size={20} color={Colors.black} style={{ paddingLeft: 5 }}/>}
                     color={Colors.black}
                     iconRight
-                    iconContainerStyle={{ marginLeft: 10 }}
                     titleStyle={{ color: Colors.black, fontWeight: '700', fontFamily: 'Sansation' }}
                     buttonStyle={styles.nextButton}
                     containerStyle={styles.buttonContainerStyle} 
@@ -131,8 +138,8 @@ const Signup = ({navigation}: {navigation: any}) => {
                             full_name: fullName,
                             pass: password,
                             birthday: birthday,
-                            email: email,
-                            phone_no: formattedPhoneNo,
+                            email: undefined,
+                            phone_no: phoneNo.country?.callingCode + phoneNo.number,
                             profile_pic: null                            
                         };
                         const loginData = {
@@ -171,7 +178,7 @@ const styles = StyleSheet.create({
         marginTop: '10%',
     },
     nextButton: {
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.yellow,
         borderColor: 'transparent',
         borderWidth: 0,
         borderRadius: 30,
@@ -187,13 +194,36 @@ const styles = StyleSheet.create({
         marginTop: 30,
         alignSelf: 'flex-start',
     },
+    backButton: {
+        backgroundColor: Colors.white,
+        borderColor: 'transparent',
+        borderWidth: 0,
+        borderRadius: 30,
+    },
     inputViewContainer: {
-        width: '100%',
+        width: '90%',
         alignItems: 'center',
     },
     textInputContainer: {
         width: '90%',
-    }
+    },
+    inputContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: 'gray',
+        borderRadius: 4,
+        paddingHorizontal: 8,
+        marginVertical: 10,
+        width: '90%',
+        backgroundColor: Colors.white,
+        height: 50
+      },
+      input: {
+        flex: 1,
+        height: 40,
+        paddingHorizontal: 8,
+      },
 });
 
 export default Signup;

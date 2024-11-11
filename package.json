@@ -27,6 +27,7 @@
     "react-native-gesture-handler": "^2.19.0",
     "react-native-get-location": "^5.0.0",
     "react-native-image-picker": "^7.1.2",
+    "react-native-international-phone-number": "^0.8.0",
     "react-native-linear-gradient": "^2.8.3",
     "react-native-maps": "^1.18.0",
     "react-native-modal": "^13.0.1",

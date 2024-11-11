@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import LinearGradient from 'react-native-linear-gradient'
 import * as Colors from '../constants/colors';
-import { Image, StyleSheet } from 'react-native';
+import { Image, StyleSheet, TextInput, View } from 'react-native';
 import { Button, Input } from '@rneui/themed';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import { loginUser } from '../services/user.service';
@@ -15,34 +15,41 @@ const Login = ({navigation}: {navigation: any}) => {
   const [hiddenPass, setHiddenPass] = useState<boolean>(true);
   
   return (
-    <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 1}} colors={[Colors.darkOrange, Colors.darkYellow]} style={styles.gradientContainer}>
+    <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 1}} colors={[Colors.yellow, Colors.darkOrange]} style={styles.gradientContainer}>
         <Button
             icon={<Ionicon name="arrow-back" size={20} color={Colors.black} />}
             color={Colors.black}
-            buttonStyle={styles.button}
+            buttonStyle={styles.backButton}
             containerStyle={styles.backButtonContainer} 
             onPress={() => navigation.navigate("Welcome")} />
         <Image source={require('../../assets/images/full-logo.png')} style={styles.logo} />
-        <Input
-            value={username}
-            label="Username"
+
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.input}
             placeholder="Enter username"
-            onChangeText={setUsername}
-            containerStyle={styles.inputContainer}
-            autoCapitalize='none'
-        />
-        <Input
-            value={password}
-            label="Password"
-            placeholder="Enter password"
-            onChangeText={setPassword}
-            containerStyle={styles.inputContainer}
-            autoCapitalize='none'
+            onChangeText={(text: string) => setUsername(text)}
+            value={username}
+            autoCapitalize="none"
+          />
+        </View>
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.input}
+            placeholder="Enter your password"
             secureTextEntry={hiddenPass}
-            rightIcon={ 
-                hiddenPass ? <Ionicon name="eye-off-outline" size={20} color={Colors.mediumGray} onPress={() => setHiddenPass(!hiddenPass)} /> : <Ionicon name="eye-outline" size={20} color={Colors.black} onPress={() => setHiddenPass(!hiddenPass)}/>
-            }
-        />
+            onChangeText={(text: string) => setPassword(text)}
+            value={password}
+            autoCapitalize="none"
+          />
+          <Ionicon
+            name={hiddenPass ? 'eye-outline' : 'eye-off-outline'}
+            size={24}
+            color="gray"
+            onPress={() => setHiddenPass(!hiddenPass)}
+          />
+        </View>
+
         <Button 
             title="LOG IN" 
             color={Colors.black}
@@ -84,10 +91,18 @@ const styles = StyleSheet.create({
     marginTop: '10%',
   },
   button: {
+    backgroundColor: Colors.yellow,
+    borderColor: 'transparent',
+    borderWidth: 0,
+    borderRadius: 30,
+    marginTop: 20
+  },
+  backButton: {
     backgroundColor: Colors.white,
     borderColor: 'transparent',
     borderWidth: 0,
     borderRadius: 30,
+    marginTop: 20
   },
   backButtonContainer: {
     position: 'absolute',
@@ -99,9 +114,24 @@ const styles = StyleSheet.create({
       width: '75%',
   },
   inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: 'gray',
+    borderRadius: 4,
+    paddingHorizontal: 8,
+    marginVertical: 10,
     width: '90%',
-    tintColor: Colors.black
-  }
+    backgroundColor: Colors.white,
+  },
+  input: {
+    flex: 1,
+    height: 40,
+    paddingHorizontal: 8,
+  },
+  icon: {
+    padding: 4,
+  },
 });
 
 export default Login;
