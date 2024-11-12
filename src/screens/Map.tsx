@@ -425,11 +425,11 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
       <View style={styles.mapControlView}>
         {userFilterState.on ?
           <TouchableOpacity style={styles.mapControlButton} onPress={() => {setUserFilterState({modalVisible: false, search: "", queryUsers: [], on: false, user: ""})}}>
-          <MaterialIcon name="search-off" size={25} color={Colors.lightOrange} />
+            <MaterialIcon name="search-off" size={25} color={Colors.lightOrange} />
           </TouchableOpacity>
         :
           <TouchableOpacity style={styles.mapControlButton} onPress={() => setUserFilterState({...userFilterState, modalVisible: true})}>
-            <Icon name="search" size={25} color={Colors.lightOrange} />
+            <MaterialIcon name="person-search" size={25} color={Colors.lightOrange} />
           </TouchableOpacity>
         }
         <TouchableOpacity style={styles.mapControlButton} onPress={setCurrentLocation}>
