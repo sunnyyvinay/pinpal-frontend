@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { addPinLike, deletePinLike, getPin, getPinLikes, getSearchUsers, getUser } from '../services/user.service';
 import { useRoute } from '@react-navigation/native';
-import { Dimensions, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Dimensions, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import * as Colors from '../constants/colors';
 import { Button, Input, SearchBar } from '@rneui/themed';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -462,13 +462,22 @@ const PinPost = (props:any) => {
         </View>
         
         {editMode ?
-          <Input
-            value={editedPinData.caption}
-            placeholder='Enter new pin caption'
-            autoCapitalize='none'
-            onChangeText={text => setEditedPinData({...editedPinData, caption: text})}
-            style={styles.editCaptionInput}
-          />
+          // <Input
+          //   value={editedPinData.caption}
+          //   placeholder='Enter new pin caption'
+          //   autoCapitalize='none'
+          //   onChangeText={text => setEditedPinData({...editedPinData, caption: text})}
+          //   style={styles.editCaptionInput}
+          // />
+            <TextInput
+                value={editedPinData.caption}
+                placeholder="Write a caption..."
+                style={styles.editCaptionInput}
+                onChangeText={text => setEditedPinData({...editedPinData, caption: text})}
+                autoCapitalize="none"
+                multiline={true}
+                textAlignVertical="top"
+            />
         :
           <View style={styles.captionView}>
             <Text style={{textAlign: 'center'}}>
@@ -803,14 +812,19 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   editCaptionInput: {
-    flex: 1,
-    textAlign: 'center',
-    alignSelf: 'center',
-    fontSize: 15,
-    fontFamily: 'Sansation',
-    color: Colors.black,
-    marginVertical: 5,
-    marginTop: 20,
+      height: 70,
+      borderColor: Colors.lightGray,
+      borderWidth: 1,
+      borderRadius: 4,
+      paddingHorizontal: 8,
+      textAlign: 'center',
+      alignSelf: 'center',
+      fontSize: 15,
+      fontFamily: 'Sansation',
+      color: Colors.black,
+      width: '90%',
+      marginTop: 10,
+      marginBottom: 5,
   },
   locationTagsAddButton: {
     backgroundColor: Colors.whiteGray,
