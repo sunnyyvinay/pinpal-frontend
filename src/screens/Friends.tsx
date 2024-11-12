@@ -34,7 +34,7 @@ function Friends(props: any): React.JSX.Element {
         console.log(friends);
     }, [props.route.params.id]);
   return (
-    <ScrollView style={{width: '100%', height: '100%'}}>
+    <ScrollView style={{width: '100%', height: '100%', backgroundColor: Colors.white}}>
         {friends.map((friend: any, index: number) => (
             <TouchableOpacity onPress={() => props.navigation.navigate("Profile", {user_id: friend.friend.user.user_id})} key={index}>
                 <View style={styles.friendView}>

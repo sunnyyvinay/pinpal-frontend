@@ -106,7 +106,7 @@ function Profile(props: any): React.JSX.Element {
   }
 
   return (
-    <ScrollView style={{width: '100%', height: '100%'}}>
+    <ScrollView style={{width: '100%', height: '100%', backgroundColor: Colors.white}}>
       <View style={styles.profileContainer}>
         <Image source={userData.profile_pic ? {uri: userData.profile_pic} : require('../../assets/images/default-pfp.jpg')} style={styles.pfpImage} />
         <View style={styles.nameContainer}>

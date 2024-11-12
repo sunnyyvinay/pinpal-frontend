@@ -281,7 +281,7 @@ const AddPin = ({ route, navigation }: any) => {
         }
     }
     return (
-        <ScrollView contentContainerStyle={{flex: 1}}>
+        <ScrollView contentContainerStyle={{flex: 1, backgroundColor: Colors.white}}>
             {renderStep(step)}
             <Modal 
                 isVisible={userTagState.modalVisible} 

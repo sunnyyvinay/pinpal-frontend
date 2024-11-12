@@ -121,7 +121,7 @@ const Settings = ({ route, navigation }: any) => {
                     <Text style={{...styles.fieldText}}>
                         Username
                     </Text>
-                    <Text style={{...styles.fieldText, fontWeight: 'normal', color: Colors.lightGray}}>
+                    <Text style={{...styles.fieldText, fontWeight: 'normal', color: Colors.mediumGray}}>
                         {userData.username}
                     </Text>
                 </View>
@@ -137,7 +137,7 @@ const Settings = ({ route, navigation }: any) => {
                     <Text style={{...styles.fieldText}}>
                         Full Name
                     </Text>
-                    <Text style={{...styles.fieldText, fontWeight: 'normal', color: Colors.lightGray}}>
+                    <Text style={{...styles.fieldText, fontWeight: 'normal', color: Colors.mediumGray}}>
                         {userData.full_name}
                     </Text>
                 </View>
@@ -153,7 +153,7 @@ const Settings = ({ route, navigation }: any) => {
                     <Text style={{...styles.fieldText}}>
                         Birthday
                     </Text>
-                    <Text style={{...styles.fieldText, fontWeight: 'normal', color: Colors.lightGray}}>
+                    <Text style={{...styles.fieldText, fontWeight: 'normal', color: Colors.mediumGray}}>
                         {formatBirthday(userData.birthday)}
                     </Text>
                 </View>
@@ -169,7 +169,7 @@ const Settings = ({ route, navigation }: any) => {
                     <Text style={{...styles.fieldText}}>
                         Phone Number
                     </Text>
-                    <Text style={{...styles.fieldText, fontWeight: 'normal', color: Colors.lightGray}}>
+                    <Text style={{...styles.fieldText, fontWeight: 'normal', color: Colors.mediumGray}}>
                         {userData.phone_no}
                     </Text>
                 </View>
@@ -185,7 +185,7 @@ const Settings = ({ route, navigation }: any) => {
                     <Text style={{...styles.fieldText}}>
                         Email
                     </Text>
-                    <Text style={{...styles.fieldText, fontWeight: 'normal', color: Colors.lightGray}}>
+                    <Text style={{...styles.fieldText, fontWeight: 'normal', color: Colors.mediumGray}}>
                         {userData.email}
                     </Text>
                 </View>
@@ -204,8 +204,6 @@ const Settings = ({ route, navigation }: any) => {
                 </View>
                 <MaterialIcon name="password" size={15} style={styles.fieldIcon} />
             </TouchableOpacity>
-
-            <Text style={styles.sectionTitle}>Profile Settings</Text>
 
             <Button 
                 title="LOG OUT" 
@@ -466,6 +464,7 @@ const styles = StyleSheet.create({
         alignContent: 'center',
         textAlign: 'center',
         alignItems: 'center',
+        backgroundColor: Colors.white
     },
     sectionTitle: {
         alignSelf: 'flex-start',
@@ -477,7 +476,7 @@ const styles = StyleSheet.create({
     },
     fieldView: {
         width: '90%',
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.whiteGray,
         flex: 1,
         flexDirection: 'row',
         borderRadius: 10,
@@ -534,11 +533,11 @@ const styles = StyleSheet.create({
         marginLeft: 10
     },
     logOutButton: {
-        backgroundColor: Colors.mediumOrange
+        backgroundColor: Colors.darkOrange
     },
     logOutButtonContainer: {
         width: '50%',
-        marginTop: 20,
+        marginVertical: 20,
     },
     modalView: {
         height: 50,

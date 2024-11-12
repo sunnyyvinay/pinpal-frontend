@@ -53,7 +53,7 @@ const Login = ({navigation}: {navigation: any}) => {
         <Button 
             title="LOG IN" 
             color={Colors.black}
-            titleStyle={{ color: Colors.black, fontWeight: '700', fontFamily: 'Sansation' }}
+            titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'Sansation' }}
             buttonStyle={styles.button}
             containerStyle={styles.loginButtonContainer} 
             onPress={async () => {
@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
     marginTop: '10%',
   },
   button: {
-    backgroundColor: Colors.yellow,
+    backgroundColor: Colors.darkOrange,
     borderColor: 'transparent',
     borderWidth: 0,
     borderRadius: 30,

@@ -108,7 +108,7 @@ const AddFriends = ({ route, navigation }: any) => {
     }
 
   return (
-    <View style={{width: "100%", height: "100%"}}>
+    <View style={{width: "100%", height: "100%", backgroundColor: Colors.white}}>
         <SearchBar 
             placeholder='Search...'
             value={state.search}
