@@ -169,7 +169,6 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
                 <Callout style={styles.pinCalloutStyle}>
                   <View style={styles.pinCalloutView}>
                     <Text style={styles.pinCalloutTitle}>{personalPin.title}</Text>
-                    <Text style={styles.pinCalloutPersonal}>Personal Pin</Text>
                     <Image source={{uri: personalPin.photo}} style={styles.pinCalloutImage}/>
                   </View>
 
@@ -479,7 +478,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 10
   },
   pinCalloutStyle: {
-    height: 260,
+    height: 250,
     width: 200,
     padding: 10,
   },
@@ -505,7 +504,6 @@ const styles = StyleSheet.create({
     height: 150,
     borderRadius: 10,
     resizeMode: 'contain',
-    marginBottom: 5
   },
   pinCalloutViewButton: {
     backgroundColor: Colors.darkOrange,
