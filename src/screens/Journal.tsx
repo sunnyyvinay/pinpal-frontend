@@ -5,6 +5,7 @@ import { FlatList, Image, SafeAreaView, ScrollView, StyleSheet, Text, TouchableO
 import * as Colors from '../constants/colors';
 import { Button, Divider } from '@rneui/themed';
 import { useFocusEffect } from '@react-navigation/native';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 function Journal({ route, navigation }: any): React.JSX.Element {
   const [userData, setUserData] = useState<any>({});
@@ -50,13 +51,6 @@ function Journal({ route, navigation }: any): React.JSX.Element {
           <Text style={styles.fullNameStyle}>{userData.full_name}</Text>
           <Text style={styles.usernameStyle}>@{userData.username}</Text>
         </View>
-        <Button
-          title={"Edit"}
-          buttonStyle={styles.editButton}
-          containerStyle={styles.editButtonContainer}
-          titleStyle={{ color: Colors.white, fontWeight: '500', fontFamily: 'GentiumBookPlus', fontSize: 12 }} 
-          icon={{ name: 'edit', color: Colors.white, size: 12}}
-          onPress={() => navigation.navigate("Settings")}/>
       </View>
 
       <View style={styles.statsContainer}>
@@ -72,6 +66,15 @@ function Journal({ route, navigation }: any): React.JSX.Element {
         <TouchableOpacity style={styles.statCard}>
           <Text style={styles.statTextNum}>{journalData.tagged_pins.length}</Text>
           <Text style={styles.statTextLabel}>Tagged Pins</Text>
+        </TouchableOpacity>
+      </View>
+
+      <View style={{width: '100%', height: 50}}>
+        <TouchableOpacity 
+            style={styles.editButtonContainer}
+            onPress={() => navigation.navigate("Settings")}>
+            <MaterialIcons name='edit' size={15} color={Colors.white} style={{marginRight: 5}}/>
+            <Text style={styles.editButtonText}>Edit Profile</Text>
         </TouchableOpacity>
       </View>
 
@@ -120,13 +123,24 @@ const styles = StyleSheet.create({
     fontFamily: 'GentiumBookPlus',
     color: Colors.mediumGray
   },
-  editButton: {
-    width: '100%',
-    backgroundColor: Colors.darkOrange,
-  },
   editButtonContainer: {
-    flex: 0.25,
-    alignSelf: 'center',
+    width: '90%',
+    flex: 1,
+    flexDirection: 'row',
+    backgroundColor: Colors.lightOrange,
+    borderRadius: 10,
+    marginVertical: 10,
+    marginHorizontal: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'center'
+  },
+  editButtonText: {
+    color: Colors.white, 
+    fontWeight: '500', 
+    fontFamily: 'GentiumBookPlus', 
+    fontSize: 15,
+    marginLeft: 5
   },
   statsContainer: {
     margin: 5,

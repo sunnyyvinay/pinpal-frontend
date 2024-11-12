@@ -7,9 +7,10 @@ import * as Colors from '../constants/colors';
 import { Button, Divider } from '@rneui/themed';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Icon from 'react-native-vector-icons/Ionicons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 function Profile(props: any): React.JSX.Element {
-  let curr_user_id: string|null = "";
+  const [currUser, setCurrUser] = useState<string|null>("");
   const [userData, setUserData] = useState<any>({});
   const [friendStatus, setFriendStatus] = useState<number>(-1); // -1 for not friends, 0 for pending, 1 for friends
   type ProfileState = {
@@ -27,7 +28,8 @@ function Profile(props: any): React.JSX.Element {
     const fetchUserData = async () => {
         try {
             const user_id  = props.route.params.user_id;
-            curr_user_id = await AsyncStorage.getItem("user_id");
+            const curr_user_id = await AsyncStorage.getItem("user_id");
+            setCurrUser(curr_user_id);
             if (user_id) {
                 const userData = await getUser(user_id);
                 setUserData(userData.user);
@@ -47,18 +49,25 @@ function Profile(props: any): React.JSX.Element {
     fetchUserData();
 }, [props.route.params.user_id]);
 
-  function friendRequestView() {
-    if (props.route.params.user_id == curr_user_id) {
-      return null;
+  const friendRequestView = () => {
+    if (props.route.params.user_id == currUser) {
+      return (
+        <TouchableOpacity 
+            style={{...styles.requestOpacity, backgroundColor: Colors.lightOrange}}
+            onPress={() => props.navigation.navigate("Settings")}>
+            <MaterialIcons name='edit' size={15} color={Colors.white} />
+            <Text style={styles.requestText}>Edit Profile</Text>
+        </TouchableOpacity>
+      );
     }
+
     switch(friendStatus) {
       case -1:
         return (
           <TouchableOpacity 
             style={{...styles.requestOpacity, backgroundColor: Colors.lightOrange}}
-            onPress={async() => {
-              const curr_user_id = await AsyncStorage.getItem("user_id");
-              createFriendRequest(curr_user_id, userData.user_id);
+            onPress={ async () => {
+              createFriendRequest(currUser, userData.user_id);
               setFriendStatus(0);
             }}>
             <Icon name='person-add' size={15} color={Colors.white} />
@@ -70,8 +79,7 @@ function Profile(props: any): React.JSX.Element {
           <TouchableOpacity 
             style={{...styles.requestOpacity, backgroundColor: Colors.mediumGray}}
             onPress={ async () => {
-              const curr_user_id = await AsyncStorage.getItem("user_id");
-              deleteFriendRequest(curr_user_id, userData.user_id);
+              deleteFriendRequest(currUser, userData.user_id);
               setFriendStatus(-1);
             }}>
             <Text style={styles.requestText}>Requested</Text>
@@ -82,8 +90,7 @@ function Profile(props: any): React.JSX.Element {
           <TouchableOpacity 
             style={{...styles.requestOpacity, backgroundColor: Colors.mediumOrange}}
             onPress={ async () => {
-              const curr_user_id = await AsyncStorage.getItem("user_id");
-              deleteFriendRequest(curr_user_id, userData.user_id);
+              deleteFriendRequest(currUser, userData.user_id);
               setFriendStatus(-1);
             }}>
             <Text style={styles.requestText}>Friends</Text>
@@ -94,8 +101,7 @@ function Profile(props: any): React.JSX.Element {
           <TouchableOpacity 
             style={{...styles.requestOpacity, backgroundColor: Colors.lightOrange}}
             onPress={async() => {
-              const curr_user_id = await AsyncStorage.getItem("user_id");
-              acceptFriendRequest(curr_user_id, userData.user_id);
+              acceptFriendRequest(currUser, userData.user_id);
               setFriendStatus(-1);
             }}>
             <FontAwesome5 name='user-check' size={15} color={Colors.white} />
@@ -181,14 +187,6 @@ const styles = StyleSheet.create({
     fontFamily: 'GentiumBookPlus',
     color: Colors.mediumGray
   },
-  editButton: {
-    width: '100%',
-    backgroundColor: Colors.darkOrange,
-  },
-  editButtonContainer: {
-    flex: 0.25,
-    alignSelf: 'center',
-  },
   statsContainer: {
     margin: 5,
     display: 'flex',
@@ -219,6 +217,8 @@ const styles = StyleSheet.create({
     margin: 10
   },
   requestOpacity: {
+    width: '90%',
+    alignSelf: 'center',
     borderRadius: 10,
     marginVertical: 10,
     marginHorizontal: 10,
@@ -226,12 +226,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  requestView: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: Colors.lightOrange
   },
   requestText: {
     color: Colors.white,
