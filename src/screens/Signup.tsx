@@ -138,7 +138,7 @@ const Signup = ({navigation}: {navigation: any}) => {
                             full_name: fullName,
                             pass: password,
                             birthday: birthday,
-                            email: undefined,
+                            email: "",
                             phone_no: phoneNo.country?.callingCode + phoneNo.number,
                             profile_pic: null                            
                         };

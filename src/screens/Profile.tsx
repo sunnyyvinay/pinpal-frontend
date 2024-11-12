@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getFriendStatus, getUser, createFriendRequest, deleteFriendRequest, acceptFriendRequest, getUserFriends, getPins} from '../services/user.service';
+import { getFriendStatus, getUser, createFriendRequest, deleteFriendRequest, acceptFriendRequest, getUserFriends, getPins, getTaggedPins} from '../services/user.service';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ScrollView, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { Image } from '@rneui/base';
@@ -35,7 +35,8 @@ function Profile(props: any): React.JSX.Element {
                 setFriendStatus(friendStatusData.status);
                 const pinData = await getPins(user_id);
                 const friendData = await getUserFriends(user_id);
-                setProfileData({ ...profileData, friends: friendData.friends ? friendData.friends : [], pins: pinData.pins ? pinData.pins : [] });
+                const taggedData = await getTaggedPins(user_id);
+                setProfileData({ ...profileData, friends: friendData.friends ? friendData.friends : [], pins: pinData.pins ? pinData.pins : [], tagged_pins: taggedData.tagged_pins ? taggedData.tagged_pins : []});
             } else {
                 props.navigation.navigate("Welcome");
             }
@@ -125,7 +126,7 @@ function Profile(props: any): React.JSX.Element {
           <Text style={styles.statTextLabel}>Friends</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.statCard}>
-          <Text style={styles.statTextNum}>-</Text>
+          <Text style={styles.statTextNum}>{profileData.tagged_pins.length || 0}</Text>
           <Text style={styles.statTextLabel}>Tagged Posts</Text>
         </TouchableOpacity>
       </View>
@@ -245,14 +246,15 @@ const styles = StyleSheet.create({
     height: '100%',
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'space-evenly',
+    justifyContent: 'flex-start',
     alignContent: 'flex-start',
   },
   journalPinImage: {
-    width: 150,
-    height: 150,
+    width: 100,
+    height: 100,
     borderRadius: 10,
-    marginVertical: 5
+    marginVertical: 5,
+    marginHorizontal: 10
   }
 });
 

@@ -414,7 +414,7 @@ const PinPost = (props:any) => {
   }
 
   return (
-    <ScrollView>
+    <ScrollView style={{backgroundColor: Colors.white}}>
       <View style={styles.topView}>
         <TouchableOpacity style={styles.userView} onPress={() =>props.navigation.navigate('Profile', {user_id: pinUserData.user_id})}>
           <Image source={pinUserData.profile_pic ? {uri: pinUserData.profile_pic} : require('../../assets/images/default-pfp.jpg')} style={styles.pfpImage} />

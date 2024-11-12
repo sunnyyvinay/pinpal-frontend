@@ -3,7 +3,7 @@ import { Image, ScrollView, StyleSheet, Text, Touchable, TouchableOpacity, View 
 import GetLocation, { isLocationError, Location } from 'react-native-get-location';
 import MapView, { Callout, CalloutSubview, Marker } from 'react-native-maps';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { getPins, getPublicPins, getUser, getUserFriends, updatePin, updatePinLocation } from '../services/user.service';
+import { getPins, getPublicPins, getSearchUsers, getUser, getUserFriends, updatePin, updatePinLocation } from '../services/user.service';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
 import * as Colors from '../constants/colors';
@@ -11,9 +11,12 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import { useAppContext } from '../AppContext';
-import { Button } from '@rneui/themed';
+import { Button, SearchBar } from '@rneui/themed';
 import Modal from "react-native-modal";
 import { locationTags } from '../constants/locationtags';
+import userTagsStyles from '../styles/usertags';
+import Entypo from 'react-native-vector-icons/Entypo';
+import userSearchStyles from '../styles/usersearch';
 
 function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.Element {
   const { region, setRegion, dragMode, setDragMode } = useAppContext();
@@ -49,27 +52,32 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
   const [friendPins, setFriendPins] = useState<FriendPin[]>([]);
   const [publicPins, setPublicPins] = useState([]);
 
-  const [pinFilterModalVisibile, setPinFilterModalVisibile] = useState(false);
+  const [pinFilterModalVisible, setPinFilterModalVisible] = useState(false);
+  const [userFilterState, setUserFilterState] = useState({
+    modalVisible: false,
+    search: "",
+    queryUsers: [],
+    on: false,
+    user: ""
+  });
+  let searchedUserCount: number = 0;
   type FilterState = {
     private: boolean,
     friends: boolean,
     public: boolean,
     location_tag: string,
-    friend: string,
   }
   const [tempFilterState, setTempFilterState] = useState<FilterState>({
     private: true,
     friends: true,
     public: true,
     location_tag: "",
-    friend: "",
   });
   const [filterState, setFilterState] = useState<FilterState>({
     private: true,
     friends: true,
     public: true,
     location_tag: "",
-    friend: "",
   });
 
   const tempImg = "https://images.unsplash.com/photo-1720802616209-c174c23f6565?q=80&w=2971&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
@@ -154,12 +162,55 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
     }, [filterState])
   );
 
+  // USE EFFECT: SEARCH USERS
+  useEffect(() => {
+    const fetchData = async () => {
+        try {
+            const users = await getSearchUsers(userFilterState.search);
+            searchedUserCount = users.users.length + 1;
+            setUserFilterState({...userFilterState, queryUsers: users.users});
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    if (userFilterState.search.length > 0) {
+        // Debounce the API call to avoid too many requests
+        const timeoutId = setTimeout(() => {
+            fetchData();
+        }, 300);
+        
+        return () => clearTimeout(timeoutId);
+    } else {
+        setUserFilterState({...userFilterState, queryUsers: []});
+    }
+  }, [userFilterState.search]);
+
+  const userView = (user: any) => {
+    searchedUserCount--;
+        return (
+        <TouchableOpacity key={searchedUserCount} onPress={() => {
+            setUserFilterState({modalVisible: false, search: "", on: true, queryUsers: [], user: user.user_id})
+          }}>
+            <View style={userSearchStyles.searchUserView}>
+                <Image 
+                    source={user.profile_pic ? {uri: user.profile_pic} : require('../../assets/images/default-pfp.jpg')} 
+                    style={{...userSearchStyles.searchUserPfp, flex: 0.1}} />
+                <View style={{...userSearchStyles.searchUserTextView, flex: 0.9}}>
+                    <Text style={userSearchStyles.searchUserFullName}>{user.full_name}</Text>
+                    <Text style={userSearchStyles.searchUserUsernameText}>{user.username}</Text>
+                </View>
+            </View>
+        </TouchableOpacity>
+        )
+  }
+
   const handleDragMode = () => {
     switch (dragMode.mode) {
       case 0:
         return (
           <React.Fragment>
-            {pins && pins.map((personalPin: any, index: number) => (
+            {pins && !userFilterState.on && pins.map((personalPin: any, index: number) => (
             <Marker
               key={personalPin.pin_id}  
               coordinate={{latitude: personalPin.latitude, longitude: personalPin.longitude}}
@@ -200,7 +251,7 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
           
         {friendPins && friendPins.map((friend: any, index: number) => (
           friend && friend.pins && friend.pins.map((friendPin: any, index: number) => (
-            friendPin.visibility > 0 &&
+            friendPin.visibility > 0 && (!userFilterState.on || (userFilterState.on && friendPin.user_id == userFilterState.user)) &&
             <Marker
               key={friendPin.pin_id}  
               coordinate={{latitude: friendPin.latitude, longitude: friendPin.longitude}}
@@ -228,6 +279,7 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
           ))))}
 
         {publicPins && publicPins.map((publicPin: any, index: number) => (
+          (!userFilterState.on || (userFilterState.on && publicPin.user_id == userFilterState.user)) &&
             <Marker
               key={publicPin.pin_id}  
               coordinate={{latitude: publicPin.latitude, longitude: publicPin.longitude}}
@@ -328,7 +380,7 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
   return (
     <View style={{width: '100%', height: '100%'}}>
       <View style={styles.filterView}>
-        <TouchableOpacity style={styles.filterIcon} onPress={() => {setTempFilterState({...filterState}); setPinFilterModalVisibile(true);}}>
+        <TouchableOpacity style={styles.filterIcon} onPress={() => {setTempFilterState({...filterState}); setPinFilterModalVisible(true);}}>
           <Icon name="filter-circle" size={30} color={Colors.lightOrange} />
         </TouchableOpacity>
         <View style={styles.verticalLine} />
@@ -371,6 +423,15 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
       </MapView>
 
       <View style={styles.mapControlView}>
+        {userFilterState.on ?
+          <TouchableOpacity style={styles.mapControlButton} onPress={() => {setUserFilterState({modalVisible: false, search: "", queryUsers: [], on: false, user: ""})}}>
+          <MaterialIcon name="search-off" size={25} color={Colors.lightOrange} />
+          </TouchableOpacity>
+        :
+          <TouchableOpacity style={styles.mapControlButton} onPress={() => setUserFilterState({...userFilterState, modalVisible: true})}>
+            <Icon name="search" size={25} color={Colors.lightOrange} />
+          </TouchableOpacity>
+        }
         <TouchableOpacity style={styles.mapControlButton} onPress={setCurrentLocation}>
           <FontAwesome6 name="location-arrow" size={25} color={Colors.lightOrange} />
         </TouchableOpacity>
@@ -379,8 +440,8 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
       {handleDragOptions()}
 
       <Modal 
-        isVisible={pinFilterModalVisibile} 
-        onBackdropPress={() => {setFilterState(tempFilterState); setPinFilterModalVisibile(false)}}
+        isVisible={pinFilterModalVisible} 
+        onBackdropPress={() => {setFilterState(tempFilterState); setPinFilterModalVisible(false)}}
         style={styles.pinFilterModal}>
         <View style={styles.pinFilterModalView}>
           <Text style={styles.pinFilterModalTitle}>Filter pins</Text>
@@ -428,8 +489,35 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
               <Icon name="checkmark-sharp" size={25} color={Colors.mediumOrange} style={tempFilterState.public ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
             </TouchableOpacity>
           </View>
-        
       </Modal>
+
+      <Modal 
+        isVisible={userFilterState.modalVisible} 
+        onBackdropPress={() => setUserFilterState({...userFilterState, modalVisible: false})}
+        style={userTagsStyles.userTagsModal}>
+        <View style={userTagsStyles.userTagsModalView}>
+            <View style={userTagsStyles.userTagsModalHeader}>
+                <Text style={userTagsStyles.userTagsModalTitle}>Filter by user</Text>
+                <Entypo name="cross" size={25} color={Colors.mediumGray} onPress={() => setUserFilterState({...userFilterState, modalVisible: false})} style={{position: 'absolute', left: '55%'}}/>
+            </View>
+            <SearchBar 
+                placeholder='Search...'
+                value={userFilterState.search}
+                round={true}
+                autoCapitalize="none"
+                lightTheme={true}
+                containerStyle={userSearchStyles.searchBarContainer}
+                onChangeText={(text) => setUserFilterState({...userFilterState, search: text})}/>
+            <ScrollView style={{width: '100%', flex: 1}}>
+              <View style={{flex: 0.8}}>
+                  { userFilterState.queryUsers && userFilterState.queryUsers.length > 0 && userFilterState.queryUsers.map((user: any) => (
+                      userView(user)
+                  ))}
+              </View>
+            </ScrollView>
+        </View>
+    </Modal>
+
     </View> 
   )
 }
@@ -492,7 +580,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     padding: 10,
     marginLeft: "80%",
-    marginTop: "125%"
+    marginTop: "110%"
   },
   mapControlButton: {
     backgroundColor: 'white',
