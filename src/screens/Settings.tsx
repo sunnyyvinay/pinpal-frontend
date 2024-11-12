@@ -492,6 +492,7 @@ const styles = StyleSheet.create({
     fieldText: {
         fontFamily: 'GentiumBookPlus',
         flex: 0.5,
+        color: Colors.darkGray
     },
     fieldIcon: {
         flex: 0.05,
@@ -520,7 +521,7 @@ const styles = StyleSheet.create({
         borderRadius: 25,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: Colors.lightGray,
+        backgroundColor: Colors.mediumGray,
         marginRight: 10
     },
     pfpDeleteIcon: {

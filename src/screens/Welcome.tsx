@@ -18,7 +18,7 @@ const Welcome = ({navigation}: {navigation: any}) => {
         <Button 
             title="SIGN UP" 
             color={Colors.black}
-            titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'GentiumBookPlus' }}
+            titleStyle={{ color: Colors.white, fontWeight: '900', fontFamily: 'GentiumBookPlus' }}
             buttonStyle={styles.button}
             containerStyle={styles.signupButtonContainer} 
             onPress={() => navigation.navigate("Signup")} />
@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     marginTop: '10%',
   },
   button: {
-    backgroundColor: Colors.lightOrange,
+    backgroundColor: '#ffa938',
     borderColor: 'transparent',
     borderWidth: 0,
     borderRadius: 30,

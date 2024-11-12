@@ -37,7 +37,7 @@ const userSearchStyles = StyleSheet.create({
     searchUserUsernameText: {
         fontSize: 14,
         fontFamily: 'Sansation',
-        color: Colors.lightGray,
+        color: Colors.mediumGray,
         flex: 0.45
     },
 });

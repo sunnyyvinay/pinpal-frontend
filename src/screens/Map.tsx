@@ -392,7 +392,7 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
           <ScrollView style={styles.locationTagView} horizontal={true} showsHorizontalScrollIndicator={false}>
             {locationTags.map((tag: string, index: number) => {
               return (
-                  <TouchableOpacity style={styles.locationTagOpacity} onPress={() =>{
+                  <TouchableOpacity key={index} style={styles.locationTagOpacity} onPress={() =>{
                     setFilterState({...filterState, location_tag: tag});
                   }}>
                     <Text style={styles.locationTagText}>{tag}</Text>

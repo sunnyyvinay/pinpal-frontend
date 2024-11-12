@@ -31,7 +31,7 @@ function NavBar({ route, navigation }: any): React.JSX.Element {
     <ContextProvider>
     <Tab.Navigator
       initialRouteName={INITIAL_ROUTE_NAME}
-      screenOptions={{tabBarLabelStyle: {paddingBottom: 5}, tabBarActiveTintColor: Colors.darkOrange, tabBarInactiveTintColor: Colors.lightGray}}>
+      screenOptions={{tabBarLabelStyle: {paddingBottom: 5}, tabBarActiveTintColor: Colors.darkOrange, tabBarInactiveTintColor: Colors.mediumGray}}>
       <Tab.Screen
         name="Map"
         component={Map}

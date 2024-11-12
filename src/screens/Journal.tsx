@@ -71,7 +71,7 @@ function Journal({ route, navigation }: any): React.JSX.Element {
         </TouchableOpacity>
         <TouchableOpacity style={styles.statCard}>
           <Text style={styles.statTextNum}>{journalData.tagged_pins.length}</Text>
-          <Text style={styles.statTextLabel}>Tagged Posts</Text>
+          <Text style={styles.statTextLabel}>Tagged Pins</Text>
         </TouchableOpacity>
       </View>
 
@@ -118,18 +118,18 @@ const styles = StyleSheet.create({
   usernameStyle: {
     fontSize: 13,
     fontFamily: 'GentiumBookPlus',
-    color: Colors.lightGray
+    color: Colors.mediumGray
   },
   editButton: {
     width: '100%',
-    backgroundColor: Colors.mediumOrange,
+    backgroundColor: Colors.darkOrange,
   },
   editButtonContainer: {
     flex: 0.25,
     alignSelf: 'center',
   },
   statsContainer: {
-    margin: 10,
+    margin: 5,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-around',
@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     alignSelf: 'center',
     borderRadius: 10,
-    padding: 10
+    paddingVertical: 5
   },
   statTextNum: {
     color: Colors.black,
