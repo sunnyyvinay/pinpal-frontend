@@ -385,24 +385,18 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
         </TouchableOpacity>
         <View style={styles.verticalLine} />
         {filterState.location_tag ? 
-          <Button 
-            title={filterState.location_tag}
-            buttonStyle={{...styles.locationTagOpacity, backgroundColor: Colors.lightOrange}}
-            titleStyle={styles.locationTagText} 
-            onPress={() => {
-              setFilterState({...filterState, location_tag: ""});
-            }} /> :
+          <TouchableOpacity style={styles.locationTagOpacity} onPress={() => { setFilterState({...filterState, location_tag: ""}); }}>
+            <Text style={styles.locationTagText}>{filterState.location_tag}</Text>
+          </TouchableOpacity>
+          :
           <ScrollView style={styles.locationTagView} horizontal={true} showsHorizontalScrollIndicator={false}>
             {locationTags.map((tag: string, index: number) => {
               return (
-                <Button 
-                  title={tag}
-                  key={index}
-                  buttonStyle={styles.locationTagOpacity}
-                  titleStyle={styles.locationTagText} 
-                  onPress={() =>{
+                  <TouchableOpacity style={styles.locationTagOpacity} onPress={() =>{
                     setFilterState({...filterState, location_tag: tag});
-                  }}/>
+                  }}>
+                    <Text style={styles.locationTagText}>{tag}</Text>
+                  </TouchableOpacity>
               )
             })}
           </ScrollView>
@@ -621,13 +615,16 @@ const styles = StyleSheet.create({
     borderWidth: 0,
     borderRadius: 20,
     backgroundColor: Colors.whiteOrange,
-    marginHorizontal: 5
+    marginHorizontal: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 7,
   },
   locationTagText: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: 'GentiumBookPlus',
-    fontWeight: 100,
-    color: Colors.darkGray
+    color: Colors.darkGray,
+    textAlign: "center",
   },
   horizontalLine: {
     borderBottomColor: 'black',
