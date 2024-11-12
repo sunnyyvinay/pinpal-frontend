@@ -74,12 +74,12 @@ const styles = StyleSheet.create({
     },
     friendFullName: {
         fontSize: 16,
-        fontFamily: 'Sansation',
+        fontFamily: 'GentiumBookPlus',
         flex: 0.45,
     },
     friendUsernameText: {
         fontSize: 14,
-        fontFamily: 'Sansation',
+        fontFamily: 'GentiumBookPlus',
         color: Colors.lightGray,
         flex: 0.45
     }

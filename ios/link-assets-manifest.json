@@ -2,6 +2,22 @@
   "migIndex": 1,
   "data": [
     {
+      "path": "assets/fonts/GentiumBookPlus-BoldItalic.ttf",
+      "sha1": "c4f2457391ca6720b80ab0b3e128de294f898c62"
+    },
+    {
+      "path": "assets/fonts/GentiumBookPlus-Regular.ttf",
+      "sha1": "656eab8c4fa36934d8ace73b2c08b393e4ee4b19"
+    },
+    {
+      "path": "assets/fonts/GentiumBookPlusBold.ttf",
+      "sha1": "98d4c6ec6221b0d88459cfabde1814676b3ce490"
+    },
+    {
+      "path": "assets/fonts/GentiumBookPlusItalic.ttf",
+      "sha1": "91c4833df89fda22283a3622b91a0065f940bd48"
+    },
+    {
       "path": "assets/fonts/Sansation_Bold.ttf",
       "sha1": "cb34aa6e1b227aea85452ec2170723d702529d45"
     },

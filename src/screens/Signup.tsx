@@ -121,7 +121,7 @@ const Signup = ({navigation}: {navigation: any}) => {
                     icon={<Icon name="arrow-forward-circle-outline" size={20} color={Colors.white} style={{ paddingLeft: 5 }}/>}
                     color={Colors.black}
                     iconRight
-                    titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'Sansation' }}
+                    titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'GentiumBookPlus' }}
                     buttonStyle={styles.nextButton}
                     containerStyle={styles.buttonContainerStyle} 
                     onPress={() => setStep(step + 1)}/> 
@@ -129,7 +129,7 @@ const Signup = ({navigation}: {navigation: any}) => {
                 <Button 
                     title="SIGN UP"
                     color={Colors.black}
-                    titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'Sansation' }}
+                    titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'GentiumBookPlus' }}
                     buttonStyle={styles.nextButton}
                     containerStyle={styles.buttonContainerStyle} 
                     onPress={async () => {

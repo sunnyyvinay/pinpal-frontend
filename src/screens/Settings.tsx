@@ -209,7 +209,7 @@ const Settings = ({ route, navigation }: any) => {
                 title="LOG OUT" 
                 color={Colors.white}
                 buttonStyle={styles.logOutButton}
-                titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'Sansation' }}
+                titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'GentiumBookPlus' }}
                 containerStyle={styles.logOutButtonContainer}
                 onPress={async () => {
                     await AsyncStorage.removeItem("user_id");
@@ -234,7 +234,7 @@ const Settings = ({ route, navigation }: any) => {
                         title="SAVE"
                         color={Colors.white}
                         buttonStyle={styles.logOutButton}
-                        titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'Sansation' }}
+                        titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'GentiumBookPlus' }}
                         containerStyle={styles.modalButton}
                         onPress={async () => {
                             try {
@@ -271,7 +271,7 @@ const Settings = ({ route, navigation }: any) => {
                         title="SAVE"
                         color={Colors.white}
                         buttonStyle={styles.logOutButton}
-                        titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'Sansation' }}
+                        titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'GentiumBookPlus' }}
                         containerStyle={styles.modalButton}
                         onPress={async () => {
                             try {
@@ -308,7 +308,7 @@ const Settings = ({ route, navigation }: any) => {
                         title="SAVE"
                         color={Colors.white}
                         buttonStyle={styles.logOutButton}
-                        titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'Sansation' }}
+                        titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'GentiumBookPlus' }}
                         containerStyle={styles.modalButton}
                         onPress={async () => {
                             try {
@@ -346,7 +346,7 @@ const Settings = ({ route, navigation }: any) => {
                         title="SAVE"
                         color={Colors.white}
                         buttonStyle={styles.logOutButton}
-                        titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'Sansation' }}
+                        titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'GentiumBookPlus' }}
                         containerStyle={styles.modalButton}
                         onPress={async () => {
                             try {
@@ -383,7 +383,7 @@ const Settings = ({ route, navigation }: any) => {
                         title="SAVE"
                         color={Colors.white}
                         buttonStyle={styles.logOutButton}
-                        titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'Sansation' }}
+                        titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'GentiumBookPlus' }}
                         containerStyle={styles.modalButton}
                         onPress={async () => {
                             try {
@@ -429,7 +429,7 @@ const Settings = ({ route, navigation }: any) => {
                         title="SAVE"
                         color={Colors.white}
                         buttonStyle={styles.logOutButton}
-                        titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'Sansation' }}
+                        titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'GentiumBookPlus' }}
                         containerStyle={styles.modalButton}
                         onPress={async () => {
                             try {
@@ -469,7 +469,7 @@ const styles = StyleSheet.create({
     sectionTitle: {
         alignSelf: 'flex-start',
         marginLeft: 15,
-        fontFamily: 'Sansation',
+        fontFamily: 'GentiumBookPlus',
         fontWeight: 'bold',
         marginBottom: 10,
         marginTop: 10,
@@ -490,7 +490,7 @@ const styles = StyleSheet.create({
         marginLeft: 10,
     },
     fieldText: {
-        fontFamily: 'Sansation',
+        fontFamily: 'GentiumBookPlus',
         flex: 0.5,
     },
     fieldIcon: {
@@ -552,7 +552,7 @@ const styles = StyleSheet.create({
     modalText: {
         fontSize: 20,
         flex: 0.25,
-        fontFamily: 'Sansation',
+        fontFamily: 'GentiumBookPlus',
     },
     modalInput: {
         flex: 1

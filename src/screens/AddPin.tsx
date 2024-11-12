@@ -174,7 +174,7 @@ const AddPin = ({ route, navigation }: any) => {
                             color={Colors.white}
                             iconRight
                             iconContainerStyle={{ marginLeft: 10 }}
-                            titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'Sansation' }}
+                            titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'GentiumBookPlus' }}
                             buttonStyle={styles.buttonStyle}
                             containerStyle={styles.buttonContainerStyle} 
                             onPress={() => setStep(step + 1)} 
@@ -225,7 +225,7 @@ const AddPin = ({ route, navigation }: any) => {
                                     icon={<MaterialIcon name="edit" size={15} color={Colors.black} style={{ marginRight: 2 }}/>}
                                     color={Colors.black}
                                     iconContainerStyle={{ marginRight: 2 }}
-                                    titleStyle={{ color: Colors.black, fontWeight: '300', fontFamily: 'Sansation', fontSize: 15 }}
+                                    titleStyle={{ color: Colors.black, fontWeight: '300', fontFamily: 'GentiumBookPlus', fontSize: 15 }}
                                     buttonStyle={styles.locationTagsAddButton}
                                     containerStyle={styles.locationTagsAddButtonContainer} 
                                     onPress={() => setlocationTagsModal(true)}/>
@@ -235,7 +235,7 @@ const AddPin = ({ route, navigation }: any) => {
                                             title={tag} 
                                             key={index}
                                             buttonStyle={styles.locationTagButton} 
-                                            titleStyle={{ color: Colors.mediumGray, fontWeight: '300', fontFamily: 'Sansation', fontSize: 15 }}/>
+                                            titleStyle={{ color: Colors.mediumGray, fontWeight: '300', fontFamily: 'GentiumBookPlus', fontSize: 15 }}/>
                                     )
                                 })}
                             </View>
@@ -247,7 +247,7 @@ const AddPin = ({ route, navigation }: any) => {
                             color={Colors.white}
                             iconRight
                             iconContainerStyle={{ marginLeft: 10 }}
-                            titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'Sansation' }}
+                            titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'GentiumBookPlus' }}
                             buttonStyle={styles.buttonStyle}
                             containerStyle={styles.buttonContainerStyle} 
                             onPress={
@@ -426,7 +426,7 @@ const styles = StyleSheet.create({
     },
     label: {
         color: Colors.black,
-        fontFamily: 'Sansation',
+        fontFamily: 'GentiumBookPlus',
         fontSize: 15,
         fontWeight: '700',
         marginBottom: 4,
@@ -479,13 +479,13 @@ const styles = StyleSheet.create({
     },
     visibilityTitleText: {
         color: Colors.black,
-        fontFamily: 'Sansation',
+        fontFamily: 'GentiumBookPlus',
         fontWeight: '700',
         marginLeft: 5
     },
     visibilityText: {
         color: Colors.darkGray,
-        fontFamily: 'Sansation',
+        fontFamily: 'GentiumBookPlus',
         fontWeight: '700',
         marginRight: 5
     },
@@ -504,7 +504,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         marginTop: 10,
         marginBottom: 20,
-        fontFamily: 'Sansation',
+        fontFamily: 'GentiumBookPlus',
     },
     visibilityModalSubview: {
         flex: 1,
@@ -516,7 +516,7 @@ const styles = StyleSheet.create({
         flex: 0.65,
         marginLeft: 10,
         fontSize: 18,
-        fontFamily: 'Sansation',
+        fontFamily: 'GentiumBookPlus',
     },
     horizontalLine: {
         borderBottomColor: 'black',
@@ -531,7 +531,7 @@ const styles = StyleSheet.create({
     },
     locationTagsText: {
         fontSize: 15,
-        fontFamily: 'Sansation',
+        fontFamily: 'GentiumBookPlus',
         fontWeight: '700',
         color: Colors.black,
         marginBottom: 15,
@@ -564,7 +564,7 @@ const styles = StyleSheet.create({
     },
     locationTagsModalTitle: {
         fontSize: 20,
-        fontFamily: 'Sansation'
+        fontFamily: 'GentiumBookPlus'
     },
     locationTagsModalOpacity: {
         width: '100%',
@@ -594,13 +594,13 @@ const styles = StyleSheet.create({
     },
     userTagsTitleText: {
         color: Colors.black,
-        fontFamily: 'Sansation',
+        fontFamily: 'GentiumBookPlus',
         fontWeight: '700',
         marginLeft: 5
     },
     userTagsText: {
         color: Colors.darkGray,
-        fontFamily: 'Sansation',
+        fontFamily: 'GentiumBookPlus',
         fontWeight: '700',
         marginRight: 5
     }

@@ -53,7 +53,7 @@ const Login = ({navigation}: {navigation: any}) => {
         <Button 
             title="LOG IN" 
             color={Colors.black}
-            titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'Sansation' }}
+            titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'GentiumBookPlus' }}
             buttonStyle={styles.button}
             containerStyle={styles.loginButtonContainer} 
             onPress={async () => {

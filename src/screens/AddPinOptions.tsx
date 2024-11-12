@@ -58,7 +58,7 @@ function AddPinOptions({ route, navigation }: any): React.JSX.Element {
                 title="Current location" 
                 color={Colors.white}
                 buttonStyle={styles.optionButton}
-                titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'Sansation' }}
+                titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'GentiumBookPlus' }}
                 containerStyle={styles.optionButtonContainer}
                 onPress= {async () => {
                   setModalVisible(false);
@@ -69,7 +69,7 @@ function AddPinOptions({ route, navigation }: any): React.JSX.Element {
                 title="Dragged location" 
                 color={Colors.white}
                 buttonStyle={styles.optionButton}
-                titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'Sansation' }}
+                titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'GentiumBookPlus' }}
                 containerStyle={styles.optionButtonContainer}
                 onPress= {() => {
                   setModalVisible(false);

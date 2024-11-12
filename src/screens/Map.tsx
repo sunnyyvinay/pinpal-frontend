@@ -233,7 +233,7 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
                           title="Drag" 
                           buttonStyle={styles.pinCalloutViewButton}
                           color={Colors.white}
-                          titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'Sansation', fontSize: 12 }} />
+                          titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'GentiumBookPlus', fontSize: 12 }} />
                     </CalloutSubview>
                     
                     <CalloutSubview style={{flex: 0.5, justifyContent: 'center', alignItems: 'center'}}
@@ -242,7 +242,7 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
                           title="View" 
                           buttonStyle={styles.pinCalloutViewButton}
                           color={Colors.white}
-                          titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'Sansation', fontSize: 12 }} />
+                          titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'GentiumBookPlus', fontSize: 12 }} />
                     </CalloutSubview>
                   </View>
                 </Callout>
@@ -271,7 +271,7 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
                           title="View" 
                           buttonStyle={styles.pinCalloutViewButton}
                           color={Colors.white}
-                          titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'Sansation', fontSize: 12 }} />
+                          titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'GentiumBookPlus', fontSize: 12 }} />
                     </CalloutSubview>
                   </View>
                 </Callout>
@@ -299,7 +299,7 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
                           title="View" 
                           buttonStyle={styles.pinCalloutViewButton}
                           color={Colors.white}
-                          titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'Sansation', fontSize: 12 }} />
+                          titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'GentiumBookPlus', fontSize: 12 }} />
                     </CalloutSubview>
                   </View>
                 </Callout>
@@ -551,14 +551,14 @@ const styles = StyleSheet.create({
   },
   pinCalloutTitle: {
     fontSize: 18,
-    fontFamily: 'Sansation',
+    fontFamily: 'GentiumBookPlus',
     fontWeight: 'bold',
     marginBottom: 5
   },
   pinCalloutPersonal: {
     fontSize: 16,
     fontStyle: 'italic',
-    fontFamily: 'Sansation',
+    fontFamily: 'GentiumBookPlus',
     color: Colors.mediumGray,
     marginBottom: 5
   },
@@ -625,7 +625,7 @@ const styles = StyleSheet.create({
   },
   locationTagText: {
     fontSize: 11,
-    fontFamily: 'Sansation',
+    fontFamily: 'GentiumBookPlus',
     fontWeight: 100,
     color: Colors.darkGray
   },
@@ -661,7 +661,7 @@ const styles = StyleSheet.create({
     flex: 0.99,
     marginLeft: 10,
     fontSize: 18,
-    fontFamily: 'Sansation',
+    fontFamily: 'GentiumBookPlus',
   },
 });
 

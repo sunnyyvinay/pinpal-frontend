@@ -173,12 +173,12 @@ const styles = StyleSheet.create({
   },
   fullNameStyle: {
     fontSize: 15,
-    fontFamily: 'Sansation',
+    fontFamily: 'GentiumBookPlus',
     color: Colors.black
   },
   usernameStyle: {
     fontSize: 13,
-    fontFamily: 'Sansation',
+    fontFamily: 'GentiumBookPlus',
     color: Colors.lightGray
   },
   editButton: {
@@ -205,13 +205,13 @@ const styles = StyleSheet.create({
   },
   statTextNum: {
     color: Colors.black,
-    fontFamily: 'Sansation',
+    fontFamily: 'GentiumBookPlus',
     fontSize: 15,
     alignSelf: 'center',
   },
   statTextLabel: {
     color: Colors.darkGray,
-    fontFamily: 'Sansation',
+    fontFamily: 'GentiumBookPlus',
     fontSize: 12,
     alignSelf: 'center',
   },
@@ -235,7 +235,7 @@ const styles = StyleSheet.create({
   },
   requestText: {
     color: Colors.white,
-    fontFamily: 'Sansation',
+    fontFamily: 'GentiumBookPlus',
     fontWeight: '500',
     fontSize: 15,
     marginLeft: 5

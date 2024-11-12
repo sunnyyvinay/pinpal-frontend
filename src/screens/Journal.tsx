@@ -54,7 +54,7 @@ function Journal({ route, navigation }: any): React.JSX.Element {
           title={"Edit"}
           buttonStyle={styles.editButton}
           containerStyle={styles.editButtonContainer}
-          titleStyle={{ color: Colors.white, fontWeight: '500', fontFamily: 'Sansation', fontSize: 12 }} 
+          titleStyle={{ color: Colors.white, fontWeight: '500', fontFamily: 'GentiumBookPlus', fontSize: 12 }} 
           icon={{ name: 'edit', color: Colors.white, size: 12}}
           onPress={() => navigation.navigate("Settings")}/>
       </View>
@@ -112,12 +112,12 @@ const styles = StyleSheet.create({
   },
   fullNameStyle: {
     fontSize: 15,
-    fontFamily: 'Sansation',
+    fontFamily: 'GentiumBookPlus',
     color: Colors.black
   },
   usernameStyle: {
     fontSize: 13,
-    fontFamily: 'Sansation',
+    fontFamily: 'GentiumBookPlus',
     color: Colors.lightGray
   },
   editButton: {
@@ -144,13 +144,13 @@ const styles = StyleSheet.create({
   },
   statTextNum: {
     color: Colors.black,
-    fontFamily: 'Sansation',
+    fontFamily: 'GentiumBookPlus',
     fontSize: 15,
     alignSelf: 'center',
   },
   statTextLabel: {
     color: Colors.darkGray,
-    fontFamily: 'Sansation',
+    fontFamily: 'GentiumBookPlus',
     fontSize: 12,
     alignSelf: 'center',
   },

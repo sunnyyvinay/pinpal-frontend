@@ -76,7 +76,7 @@ const AddFriends = ({ route, navigation }: any) => {
                             title="Accept" 
                             color={Colors.white}
                             buttonStyle={styles.acceptButton}
-                            titleStyle={{ color: Colors.white, fontWeight: '500', fontFamily: 'Sansation', fontSize: 13 }}
+                            titleStyle={{ color: Colors.white, fontWeight: '500', fontFamily: 'GentiumBookPlus', fontSize: 13 }}
                             containerStyle={styles.acceptButtonContainer}
                             onPress={async () => {
                                 user_id = await AsyncStorage.getItem("user_id");
@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
     friendRequestTitleText: {
         marginLeft: 10,
         fontSize: 18,
-        fontFamily: 'Sansation',
+        fontFamily: 'GentiumBookPlus',
         marginBottom: 5,
         marginTop: 15
     },
