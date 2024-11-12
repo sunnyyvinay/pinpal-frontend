@@ -21,6 +21,7 @@ const userTagsStyles = StyleSheet.create({
     userTagsModalTitle: {
         fontSize: 20,
         textAlign: 'center',
+        fontFamily: 'Sansation',
     },
     userTagsModalText: {
         marginLeft: 10,

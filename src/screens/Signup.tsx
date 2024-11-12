@@ -211,19 +211,19 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         borderWidth: 1,
-        borderColor: 'gray',
+        borderColor: Colors.lightGray,
         borderRadius: 4,
         paddingHorizontal: 8,
         marginVertical: 10,
         width: '90%',
         backgroundColor: Colors.white,
         height: 50
-      },
-      input: {
+    },
+    input: {
         flex: 1,
         height: 40,
         paddingHorizontal: 8,
-      },
+    },
 });
 
 export default Signup;

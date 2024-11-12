@@ -1,6 +1,6 @@
 import { Button, Input, SearchBar } from '@rneui/themed';
 import React, { useEffect, useState } from 'react'
-import { Image, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import GetLocation, { isLocationError } from 'react-native-get-location';
 import Icon from 'react-native-vector-icons/Ionicons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
@@ -184,22 +184,28 @@ const AddPin = ({ route, navigation }: any) => {
             case 2:
                 return (
                     <View style={styles.inputViewContainer}>
-                        <Input
-                            value={pinData.title}
-                            label="Title"
-                            placeholder="Enter pin title"
-                            onChangeText={(text) => setPinData({ ...pinData, title: text })}
-                            containerStyle={styles.textInputContainer}
-                            autoCapitalize='none'
-                        />
-                        <Input
-                            value={pinData.caption}
-                            label="Caption"
-                            placeholder="Enter pin caption"
-                            onChangeText={(text) => setPinData({ ...pinData, caption: text })}
-                            containerStyle={styles.textInputContainer}
-                            autoCapitalize='none'
-                        />
+                        <View style={styles.inputContainer}>
+                            <Text style={styles.label}>Title</Text>
+                            <TextInput
+                                value={pinData.title}
+                                placeholder="Give a pin title"
+                                style={styles.input}
+                                onChangeText={(text: string) => setPinData({ ...pinData, title: text })}
+                                autoCapitalize="none"
+                            />
+                        </View>
+                        <View style={styles.inputContainer}>
+                            <Text style={styles.label}>Caption</Text>
+                            <TextInput
+                                value={pinData.caption}
+                                placeholder="Write a caption..."
+                                style={{...styles.input, height: 100}}
+                                onChangeText={(text: string) => setPinData({ ...pinData, caption: text })}
+                                autoCapitalize="none"
+                                multiline={true}
+                                textAlignVertical="top"
+                            />
+                        </View>
 
                         <TouchableOpacity onPress={() => {setVisibilityModal(true)}} style={styles.visibilityInputView}>
                             <Text style={styles.visibilityTitleText}>Visibility</Text>
@@ -414,12 +420,26 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 10,
     },
-    textInputContainer: {
+    inputContainer: {
+        marginVertical: 10,
         width: '90%',
-        marginTop: 20,
+    },
+    label: {
+        color: Colors.black,
+        fontFamily: 'Sansation',
+        fontSize: 15,
+        fontWeight: '700',
+        marginBottom: 4,
+    },
+    input: {
+        height: 40,
+        borderColor: Colors.lightGray,
+        borderWidth: 1,
+        borderRadius: 4,
+        paddingHorizontal: 8,
     },
     buttonStyle: {
-        backgroundColor: Colors.mediumOrange,
+        backgroundColor: Colors.darkOrange,
         borderColor: 'transparent',
         borderWidth: 0,
         borderRadius: 30,
@@ -484,6 +504,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         marginTop: 10,
         marginBottom: 20,
+        fontFamily: 'Sansation',
     },
     visibilityModalSubview: {
         flex: 1,
@@ -542,7 +563,8 @@ const styles = StyleSheet.create({
         flex: 0.75,
     },
     locationTagsModalTitle: {
-        fontSize: 25,
+        fontSize: 20,
+        fontFamily: 'Sansation'
     },
     locationTagsModalOpacity: {
         width: '100%',
@@ -552,7 +574,7 @@ const styles = StyleSheet.create({
         marginVertical: 20,
     },
     locationTagsModalText: {
-        fontSize: 18,
+        fontSize: 20,
         flex: 0.65
     },
     locationTagButton: {
