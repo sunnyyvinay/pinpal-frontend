@@ -17,7 +17,8 @@ import { locationTags } from '../constants/locationtags';
 
 function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.Element {
   const { region, setRegion, dragMode, setDragMode } = useAppContext();
-  const [changingRegion, setChangingRegion] = useState<any>({});
+  type Region = {latitude: number, longitude: number, latitudeDelta: number, longitudeDelta: number};
+  const [changingRegion, setChangingRegion] = useState<Region>({latitude: 34.0699, longitude: 118.4438, latitudeDelta: 0.05, longitudeDelta: 0.05});
   type Pin = {
     user_id: string,
     pin_id: string,
@@ -73,34 +74,32 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
 
   const tempImg = "https://images.unsplash.com/photo-1720802616209-c174c23f6565?q=80&w=2971&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
 
-  useEffect(() => {
-    const setInitialMapState = async () => {  
-      await GetLocation.getCurrentPosition({
-        enableHighAccuracy: true,
-        timeout: 30000,
-        rationale: {
-          title: 'Location permission',
-          message: 'PinPal needs the permission to request your location.',
-          buttonPositive: 'Ok',
-        },
-      })
-      .then(newLocation => {
-        setRegion({latitude: newLocation.latitude, longitude: newLocation.longitude, latitudeDelta: 0.05, longitudeDelta: 0.05});
-        setChangingRegion({latitude: newLocation.latitude, longitude: newLocation.longitude, latitudeDelta: 0.05, longitudeDelta: 0.05});
-      })
-      .catch(ex => {
-        if (isLocationError(ex)) {
-          const {code, message} = ex;
-          console.warn(code, message);
-          setRegion({latitude: 34.0699, longitude: 118.4438, latitudeDelta: 0.05, longitudeDelta: 0.05});
-          setChangingRegion({latitude: 34.0699, longitude: 118.4438, latitudeDelta: 0.05, longitudeDelta: 0.05});
-        } else {
-          console.warn(ex);
-        }
-      })
-    }
+  const setCurrentLocation = async () => {
+    await GetLocation.getCurrentPosition({
+      enableHighAccuracy: true,
+      timeout: 30000,
+      rationale: {
+        title: 'Location permission', message: 'PinPal needs the permission to request your location.', buttonPositive: 'Ok',
+      },
+    })
+    .then(newLocation => {
+      //setRegion({latitude: newLocation.latitude, longitude: newLocation.longitude, latitudeDelta: 0.05, longitudeDelta: 0.05});
+      setChangingRegion({latitude: newLocation.latitude, longitude: newLocation.longitude, latitudeDelta: 0.05, longitudeDelta: 0.05});
+    })
+    .catch(ex => {
+      if (isLocationError(ex)) {
+        const {code, message} = ex;
+        console.warn(code, message);
+        //setRegion({latitude: 34.0699, longitude: 118.4438, latitudeDelta: 0.05, longitudeDelta: 0.05});
+        setChangingRegion({latitude: 34.0699, longitude: 118.4438, latitudeDelta: 0.05, longitudeDelta: 0.05});
+      } else {
+        console.warn(ex);
+      }
+    })
+  }
 
-    setInitialMapState();
+  useEffect(() => {
+    setCurrentLocation();
   }, []);
 
   useFocusEffect(
@@ -175,8 +174,8 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
                   <View style={{justifyContent: 'space-evenly', alignItems: 'center', flex: 1, flexDirection: 'row'}}>
                     <CalloutSubview style={{flex: 0.5, justifyContent: 'center', alignItems: 'center'}}
                         onPress={() => { 
-                          setChangingRegion({latitude: personalPin.latitude, longitude: personalPin.longitude, latitudeDelta: region.latitudeDelta, longitudeDelta: region.longitudeDelta});
-                          setRegion({latitude: personalPin.latitude, longitude: personalPin.longitude, latitudeDelta: region.latitudeDelta, longitudeDelta: region.longitudeDelta});
+                          setChangingRegion({latitude: personalPin.latitude, longitude: personalPin.longitude, latitudeDelta: changingRegion.latitudeDelta, longitudeDelta: changingRegion.longitudeDelta});
+                          //setRegion({latitude: personalPin.latitude, longitude: personalPin.longitude, latitudeDelta: changingRegion.latitudeDelta, longitudeDelta: changingRegion.longitudeDelta});
                           setDragMode({mode: 2, location: {latitude: personalPin.latitude, longitude: personalPin.longitude}, pin_index: index});
                         }}>
                       <Button 
@@ -285,7 +284,7 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
           <TouchableOpacity 
             onPress={() => {
               setDragMode({mode: 0, location: {latitude: 0, longitude: 0}, pin_index: -1});
-              navigation.navigate("New pin", { latitude: region.latitude, longitude: region.longitude })
+              navigation.navigate("New pin", { latitude: changingRegion.latitude, longitude: changingRegion.longitude })
             }}>
             <Icon name="checkmark-circle" size={40} color={Colors.green} style={styles.optionIcon} />
           </TouchableOpacity>
@@ -326,30 +325,6 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
     }
   }
 
-  const setCurrentLocation = async () => {
-    await GetLocation.getCurrentPosition({
-      enableHighAccuracy: true,
-      timeout: 30000,
-      rationale: {
-        title: 'Location permission', message: 'PinPal needs the permission to request your location.', buttonPositive: 'Ok',
-      },
-    })
-    .then(newLocation => {
-      setRegion({latitude: newLocation.latitude, longitude: newLocation.longitude, latitudeDelta: 0.05, longitudeDelta: 0.05});
-      setChangingRegion({latitude: newLocation.latitude, longitude: newLocation.longitude, latitudeDelta: 0.05, longitudeDelta: 0.05});
-    })
-    .catch(ex => {
-      if (isLocationError(ex)) {
-        const {code, message} = ex;
-        console.warn(code, message);
-        setRegion({latitude: 34.0699, longitude: 118.4438, latitudeDelta: 0.05, longitudeDelta: 0.05});
-        setChangingRegion({latitude: 34.0699, longitude: 118.4438, latitudeDelta: 0.05, longitudeDelta: 0.05});
-      } else {
-        console.warn(ex);
-      }
-    })
-  }
-
   return (
     <View style={{width: '100%', height: '100%'}}>
       <View style={styles.filterView}>
@@ -383,12 +358,12 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
       </View>
 
       <MapView
-        region={region}
-        onRegionChange={(newRegion) => {
-          setChangingRegion(newRegion);
-        }}
+        region={changingRegion}
+        // onRegionChange={(newRegion) => {
+        //   setChangingRegion(newRegion);
+        // }}
         onRegionChangeComplete={(newRegion) => {
-          setRegion(newRegion);
+          setChangingRegion(newRegion);
         }}
         style={styles.mapContainer}
         showsPointsOfInterest={true}>
