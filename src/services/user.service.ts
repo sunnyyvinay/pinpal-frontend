@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 const apiUrl = "http://localhost:3000/api/user";
+//const apiUrl = "http://172.23.200.37:3000/api/user";
 
 interface UserSignup {
     username: string;
