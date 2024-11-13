@@ -72,18 +72,13 @@ const AddFriends = ({ route, navigation }: any) => {
                             <Text style={userSearchStyles.searchUserFullName}>{user.full_name}</Text>
                             <Text style={userSearchStyles.searchUserUsernameText}>{user.username}</Text>
                         </View>
-                        <Button 
-                            title="Accept" 
-                            color={Colors.white}
-                            buttonStyle={styles.acceptButton}
-                            titleStyle={{ color: Colors.white, fontWeight: '500', fontFamily: 'GentiumBookPlus', fontSize: 13 }}
-                            containerStyle={styles.acceptButtonContainer}
-                            onPress={async () => {
+                        <TouchableOpacity style={styles.acceptView} onPress={async () => {
                                 user_id = await AsyncStorage.getItem("user_id");
                                 if (user_id) await acceptFriendRequest(user.user_id, user_id);
                                 setState({...state, friend_requests: state.friend_requests.filter((u: any) => u.user_id !== user.user_id)}) 
-                            }}
-                        />
+                            }}>
+                            <Text style={styles.acceptViewText}>Accept</Text>
+                        </TouchableOpacity>
                         <TouchableOpacity style={{flex: 0.1, marginRight: 3}} onPress={async () => { 
                             user_id = await AsyncStorage.getItem("user_id");
                             if (user_id) await deleteFriendRequest(user.user_id, user_id) 
@@ -149,12 +144,21 @@ const styles = StyleSheet.create({
     acceptButton: {
         backgroundColor: Colors.mediumOrange
     },
-    acceptButtonContainer: {
-        width: '30%',
-        height: '90%',
+    acceptView: {
         flex: 0.2,
         borderRadius: 30,
-        marginRight: 10
+        marginRight: 10,
+        backgroundColor: Colors.mediumOrange,
+        padding: 3,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    acceptViewText: {
+        color: Colors.white,
+        fontWeight: '500',
+        fontFamily: 'GentiumBookPlus',
+        fontSize: 14,
+        textAlign: 'center'
     },
 });
 

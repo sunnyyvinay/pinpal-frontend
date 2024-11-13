@@ -63,7 +63,7 @@ const Signup = ({navigation}: {navigation: any}) => {
                         <TextInput
                             value={fullName}
                             style={styles.input}
-                            placeholder="Enter full name"
+                            placeholder="Enter your full name"
                             onChangeText={(text: string) => setFullName(text)} 
                             autoCapitalize='none' />
                     </View>
@@ -74,7 +74,7 @@ const Signup = ({navigation}: {navigation: any}) => {
                         <TextInput
                             value={username}
                             style={styles.input}
-                            placeholder="Enter username"
+                            placeholder="Make a username"
                             onChangeText={(text: string) => setUsername(text)} 
                             autoCapitalize='none' />
                     </View>
@@ -84,7 +84,7 @@ const Signup = ({navigation}: {navigation: any}) => {
                     <View style={styles.inputContainer}>
                         <TextInput
                             style={styles.input}
-                            placeholder="Enter your password"
+                            placeholder="Make a password"
                             secureTextEntry={hiddenPass}
                             onChangeText={(text: string) => setPassword(text)}
                             value={password}

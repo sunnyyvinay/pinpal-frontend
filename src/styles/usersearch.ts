@@ -21,9 +21,10 @@ const userSearchStyles = StyleSheet.create({
         marginLeft: 30
     },
     searchUserPfp: {
-        width: 35,
-        height: 35,
+        width: 50,
+        height: 50,
         borderRadius: 20,
+        resizeMode: 'contain'
     },
     searchUserTextView: {
         marginLeft: 10,

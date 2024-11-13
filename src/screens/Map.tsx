@@ -147,7 +147,8 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
             
             if (publicPins.pins) {
               for (let i = 0; i < publicPins.pins.length; i++) {
-                publicPins.pins[i] = {...publicPins.pins[i], user: await getUser(publicPins.pins[i].user_id)}
+                const user = await getUser(publicPins.pins[i].user_id);
+                publicPins.pins[i] = {...publicPins.pins[i], user: user.user};
               }
               setPublicPins(publicPins.pins.filter((pin: any) => filterState.location_tag == "" || pin.location_tags.includes(filterState.location_tag)));
             }

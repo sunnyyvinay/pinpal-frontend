@@ -235,7 +235,7 @@ const AddPin = ({ route, navigation }: any) => {
                                             title={tag} 
                                             key={index}
                                             buttonStyle={styles.locationTagButton} 
-                                            titleStyle={{ color: Colors.mediumGray, fontWeight: '300', fontFamily: 'GentiumBookPlus', fontSize: 15 }}/>
+                                            titleStyle={{ color: Colors.darkGray, fontWeight: '300', fontFamily: 'GentiumBookPlus', fontSize: 15 }}/>
                                     )
                                 })}
                             </View>
