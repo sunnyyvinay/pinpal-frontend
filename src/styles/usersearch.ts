@@ -18,7 +18,7 @@ const userSearchStyles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-evenly',
         marginVertical: 10,
-        marginLeft: 10
+        marginLeft: 30
     },
     searchUserPfp: {
         width: 35,
@@ -31,12 +31,12 @@ const userSearchStyles = StyleSheet.create({
     },
     searchUserFullName: {
         fontSize: 16,
-        fontFamily: 'Sansation',
+        fontFamily: 'GentiumBookPlus',
         flex: 0.45,
     },
     searchUserUsernameText: {
         fontSize: 14,
-        fontFamily: 'Sansation',
+        fontFamily: 'GentiumBookPlus',
         color: Colors.mediumGray,
         flex: 0.45
     },

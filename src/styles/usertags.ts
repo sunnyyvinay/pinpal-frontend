@@ -21,12 +21,12 @@ const userTagsStyles = StyleSheet.create({
     userTagsModalTitle: {
         fontSize: 20,
         textAlign: 'center',
-        fontFamily: 'Sansation',
+        fontFamily: 'GentiumBookPlus',
     },
     userTagsModalText: {
         marginLeft: 10,
         fontSize: 14,
-        fontFamily: 'Sansation',
+        fontFamily: 'GentiumBookPlus',
         marginBottom: 5,
         marginTop: 15,
     },
