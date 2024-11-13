@@ -5,7 +5,7 @@ import { addPinLike, deletePinLike, getPin, getPinLikes, getSearchUsers, getUser
 import { useRoute } from '@react-navigation/native';
 import { Dimensions, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import * as Colors from '../constants/colors';
-import { Button, Input, SearchBar } from '@rneui/themed';
+import { Button, Divider, Input, SearchBar } from '@rneui/themed';
 import Icon from 'react-native-vector-icons/Ionicons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import Carousel from 'react-native-reanimated-carousel';
@@ -428,6 +428,8 @@ const PinPost = (props:any) => {
         : null}
       </View>
 
+      {/* <Divider color={Colors.mediumGray} style={{width: '95%', alignSelf: 'center'}} /> */}
+
       <View style={styles.postView}>
         {editMode ? 
            <Input
@@ -519,7 +521,7 @@ const PinPost = (props:any) => {
                 title={'@' + user.username} 
                 key={index}
                 buttonStyle={styles.userTagButton}
-                titleStyle={{ color: Colors.darkGray, fontWeight: '300', fontFamily: 'GentiumBookPlus', fontSize: 15 }} 
+                titleStyle={{ color: Colors.white, fontWeight: '900', fontFamily: 'GentiumBookPlus', fontSize: 15 }} 
                 onPress={() => props.navigation.navigate('Profile', {user_id: user.user_id})}/>
             )
         })}
@@ -561,7 +563,7 @@ const PinPost = (props:any) => {
                 title={tag} 
                 key={index}
                 buttonStyle={styles.locationTagButton}
-                titleStyle={{ color: Colors.mediumGray, fontWeight: '300', fontFamily: 'GentiumBookPlus', fontSize: 15 }} />
+                titleStyle={{ color: Colors.darkGray, fontWeight: '300', fontFamily: 'GentiumBookPlus', fontSize: 15 }} />
             )
         })}
         </View>
@@ -664,12 +666,11 @@ const styles = StyleSheet.create({
   },
   pinTitleText: {
     textAlign: 'center',
-    fontSize: 22,
+    fontSize: 28,
     fontWeight: 'bold',
     fontFamily: 'GentiumBookPlus',
-    color: Colors.black,
-    marginVertical: 5,
-    marginTop: 20,
+    color: Colors.mediumOrange,
+    marginBottom: 5,
   },
   likesView: {
     alignItems: 'center',
@@ -720,13 +721,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   captionText: {
-    fontSize: 15,
+    fontSize: 18,
     fontFamily: 'GentiumBookPlus',
     color: Colors.black,
   },
   createDateText: {
-    color: Colors.mediumGray,
-    fontSize: 15,
+    color: Colors.darkGray,
+    fontSize: 18,
     fontFamily: 'GentiumBookPlus',
   },
   locationTagsButtonView: {
@@ -743,7 +744,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   userTagButton: {
-    backgroundColor: Colors.lightGray,
+    backgroundColor: Colors.mediumOrange,
   },
   pinActionModalStyle: {
     justifyContent: 'flex-end',

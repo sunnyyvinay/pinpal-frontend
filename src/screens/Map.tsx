@@ -216,7 +216,7 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
               coordinate={{latitude: personalPin.latitude, longitude: personalPin.longitude}}
               image={require('../../assets/images/personal-pin.png')}
               title={personalPin.title} >
-                <Callout style={styles.pinCalloutStyle}>
+                <Callout style={{...styles.pinCalloutStyle, height: 200}}>
                   <View style={styles.pinCalloutView}>
                     <Text style={styles.pinCalloutTitle}>{personalPin.title}</Text>
                     <Image source={{uri: personalPin.photo}} style={styles.pinCalloutImage}/>
@@ -229,20 +229,16 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
                           //setRegion({latitude: personalPin.latitude, longitude: personalPin.longitude, latitudeDelta: changingRegion.latitudeDelta, longitudeDelta: changingRegion.longitudeDelta});
                           setDragMode({mode: 2, location: {latitude: personalPin.latitude, longitude: personalPin.longitude}, pin_index: index});
                         }}>
-                      <Button 
-                          title="Drag" 
-                          buttonStyle={styles.pinCalloutViewButton}
-                          color={Colors.white}
-                          titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'GentiumBookPlus', fontSize: 12 }} />
+                      <View style={styles.pinCalloutViewButton}>
+                        <Text style={styles.pinCalloutViewButtonText}>Drag</Text>
+                      </View>
                     </CalloutSubview>
                     
                     <CalloutSubview style={{flex: 0.5, justifyContent: 'center', alignItems: 'center'}}
                         onPress={() => { navigation.navigate("Pin detail", { pin_id: personalPin.pin_id, pin_user_id: personalPin.user_id })}}>
-                      <Button 
-                          title="View" 
-                          buttonStyle={styles.pinCalloutViewButton}
-                          color={Colors.white}
-                          titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'GentiumBookPlus', fontSize: 12 }} />
+                      <View style={styles.pinCalloutViewButton}>
+                        <Text style={styles.pinCalloutViewButtonText}>View</Text>
+                      </View>
                     </CalloutSubview>
                   </View>
                 </Callout>
@@ -260,18 +256,16 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
                 <Callout style={styles.pinCalloutStyle}>
                   <View style={styles.pinCalloutView}>
                     <Text style={styles.pinCalloutTitle}>{friendPin.title}</Text>
-                    <Text style={styles.pinCalloutPersonal}>@{friend.user.username}</Text>
+                    <Text style={styles.pinCalloutUsername}>@{friend.user.username}</Text>
                     <Image source={{uri: friendPin.photo}} style={styles.pinCalloutImage}/>
                   </View>
 
-                  <View style={{justifyContent: 'space-evenly', alignItems: 'center', flex: 1, flexDirection: 'row'}}>
-                    <CalloutSubview style={{flex: 0.5, justifyContent: 'center', alignItems: 'center'}}
+                  <View style={{justifyContent: 'center', alignItems: 'center', flex: 1}}>
+                    <CalloutSubview style={{justifyContent: 'center', alignItems: 'center'}}
                         onPress={() => { navigation.navigate("Pin detail", { pin_id: friendPin.pin_id, pin_user_id: friendPin.user_id })}}>
-                      <Button 
-                          title="View" 
-                          buttonStyle={styles.pinCalloutViewButton}
-                          color={Colors.white}
-                          titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'GentiumBookPlus', fontSize: 12 }} />
+                      <View style={styles.pinCalloutViewButton}>
+                        <Text style={styles.pinCalloutViewButtonText}>View</Text>
+                      </View>
                     </CalloutSubview>
                   </View>
                 </Callout>
@@ -288,18 +282,16 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
                 <Callout style={styles.pinCalloutStyle}>
                   <View style={styles.pinCalloutView}>
                     <Text style={styles.pinCalloutTitle}>{publicPin.title}</Text>
-                    <Text style={styles.pinCalloutPersonal}>@{publicPin.user.username}</Text>
+                    <Text style={styles.pinCalloutUsername}>@{publicPin.user.username}</Text>
                     <Image source={{uri: publicPin.photo}} style={styles.pinCalloutImage}/>
                   </View>
 
                   <View style={{justifyContent: 'space-evenly', alignItems: 'center', flex: 1, flexDirection: 'row'}}>
                     <CalloutSubview style={{flex: 0.5, justifyContent: 'center', alignItems: 'center'}}
                         onPress={() => { navigation.navigate("Pin detail", { pin_id: publicPin.pin_id, pin_user_id: publicPin.user_id })}}>
-                      <Button 
-                          title="View" 
-                          buttonStyle={styles.pinCalloutViewButton}
-                          color={Colors.white}
-                          titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'GentiumBookPlus', fontSize: 12 }} />
+                      <View style={styles.pinCalloutViewButton}>
+                        <Text style={styles.pinCalloutViewButtonText}>View</Text>
+                      </View>
                     </CalloutSubview>
                   </View>
                 </Callout>
@@ -535,7 +527,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 10
   },
   pinCalloutStyle: {
-    height: 250,
+    height: 225,
     width: 200,
     padding: 10,
   },
@@ -549,25 +541,34 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 5
   },
-  pinCalloutPersonal: {
+  pinCalloutUsername: {
     fontSize: 16,
     fontStyle: 'italic',
     fontFamily: 'GentiumBookPlus',
-    color: Colors.mediumGray,
+    color: Colors.darkGray,
     marginBottom: 5
   },
   pinCalloutImage: {
     width: 200,
-    height: 150,
+    height: 100,
     borderRadius: 10,
-    resizeMode: 'contain',
+    resizeMode: 'center',
   },
   pinCalloutViewButton: {
     backgroundColor: Colors.darkOrange,
     borderWidth: 0,
     borderRadius: 10,
     height: 30,
-    width: 80,
+    width: 70,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  pinCalloutViewButtonText: {
+    color: Colors.white, 
+    fontWeight: '700', 
+    fontFamily: 'GentiumBookPlus', 
+    fontSize: 12,
+    textAlign: 'center'
   },
   mapControlView: {
     flexDirection: 'column',
@@ -604,7 +605,7 @@ const styles = StyleSheet.create({
   verticalLine: {
     height: '80%',
     width: 1,
-    backgroundColor: Colors.lightGray,
+    backgroundColor: Colors.mediumGray,
     marginHorizontal: 10,
   },
   locationTagView: {
