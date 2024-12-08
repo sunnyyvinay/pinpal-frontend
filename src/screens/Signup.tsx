@@ -10,6 +10,8 @@ import DatePicker from 'react-native-date-picker';
 import { loginUser, signupUser } from '../services/user.service';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Ionicon from 'react-native-vector-icons/Ionicons';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import FontAwesome6Icon from 'react-native-vector-icons/FontAwesome6';
 
 const Signup = ({navigation}: {navigation: any}) => {
     const [step, setStep] = useState<number>(1);
@@ -29,6 +31,7 @@ const Signup = ({navigation}: {navigation: any}) => {
     const [password, setPassword] = useState<string>("");
     
     const [hiddenPass, setHiddenPass] = useState<boolean>(true);
+    const [error, setError] = useState<string>(""); // phone, birthday, full_name, username, password
 
     function renderStep(step: number) {
         switch (step) {
@@ -42,12 +45,14 @@ const Signup = ({navigation}: {navigation: any}) => {
                             selectedCountry={phoneNo.country}
                             onChangeSelectedCountry={(country: ICountry | undefined) => {setPhoneNo({number: phoneNo.number, country: country})}}
                             defaultCountry='US'
-                            popularCountries={['US']} />                    
+                            popularCountries={['US']} />  
+                        {error === "phone" && <Text style={styles.errorText}>Please enter a valid phone number</Text>}                  
                     </View>
                 )
             case 2:
                 return (
                     <View style={styles.inputViewContainer}>
+                        <Text style={styles.birthdayInputText}>Enter your birthday</Text>
                         <DatePicker 
                             mode='date'
                             date={birthday}
@@ -55,10 +60,12 @@ const Signup = ({navigation}: {navigation: any}) => {
                             maximumDate={new Date()}
                             modal={false}
                         />
+                        {error === "birthday" && <Text style={styles.errorText}>You must be 13 years or older</Text>}                  
                     </View>
                 )
             case 3:
                 return (
+                    <>
                     <View style={styles.inputContainer}>
                         <TextInput
                             value={fullName}
@@ -67,9 +74,12 @@ const Signup = ({navigation}: {navigation: any}) => {
                             onChangeText={(text: string) => setFullName(text)} 
                             autoCapitalize='none' />
                     </View>
+                    {error === "full_name" && <Text style={styles.errorText}>Please enter a full name</Text>}
+                    </>
                 )
             case 4:
                 return (
+                    <>
                     <View style={styles.inputContainer}>
                         <TextInput
                             value={username}
@@ -78,9 +88,13 @@ const Signup = ({navigation}: {navigation: any}) => {
                             onChangeText={(text: string) => setUsername(text)} 
                             autoCapitalize='none' />
                     </View>
+                    {error === "username" && <Text style={styles.errorText}>Please enter a username</Text>}
+                    </>
+                    
                 )
             case 5:
                 return (
+                    <>
                     <View style={styles.inputContainer}>
                         <TextInput
                             style={styles.input}
@@ -96,6 +110,8 @@ const Signup = ({navigation}: {navigation: any}) => {
                             onPress={() => setHiddenPass(!hiddenPass)}
                         />
                     </View>
+                    {error === "password" && <Text style={styles.errorText}>Please enter a valid password</Text>}
+                    </>
                 )
         }
     }
@@ -118,13 +134,53 @@ const Signup = ({navigation}: {navigation: any}) => {
                 step < 5 ? 
                 <Button 
                     title="NEXT" 
-                    icon={<Icon name="arrow-forward-circle-outline" size={20} color={Colors.white} style={{ paddingLeft: 5 }}/>}
+                    icon={<FontAwesome6Icon name="arrow-right-long" size={20} color={Colors.white} style={{ paddingLeft: 5, textAlign: 'center' }}/>}
                     color={Colors.black}
                     iconRight
                     titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'GentiumBookPlus' }}
                     buttonStyle={styles.nextButton}
                     containerStyle={styles.buttonContainerStyle} 
-                    onPress={() => setStep(step + 1)}/> 
+                    onPress={() => {
+                        if (step === 1) {
+                            if (!phoneNo.number) {
+                                setError("phone");
+                            } else {
+                                setError("");
+                                setStep(step + 1);
+                            }
+                        } else if (step === 2) {
+                            const now = new Date();
+                            const thirteenYearsAgo = new Date();
+                            thirteenYearsAgo.setFullYear(now.getFullYear() - 13);
+                            if (birthday > thirteenYearsAgo) {
+                                setError("birthday");
+                            } else {
+                                setError("");
+                                setStep(step + 1);
+                            }
+                        } else if (step === 3) {
+                            if (!fullName) {
+                                setError("full_name");
+                            } else {
+                                setError("");
+                                setStep(step + 1);
+                            }
+                        } else if (step === 4) {
+                            if (!username) {
+                                setError("username");
+                            } else {
+                                setError("");
+                                setStep(step + 1);
+                            }
+                        } else if (step === 5) {
+                            if (!password) {
+                                setError("password");
+                            } else {
+                                setError("");
+                                setStep(step + 1);
+                            }
+                        }
+                    }} /> 
                 :
                 <Button 
                     title="SIGN UP"
@@ -133,27 +189,31 @@ const Signup = ({navigation}: {navigation: any}) => {
                     buttonStyle={styles.nextButton}
                     containerStyle={styles.buttonContainerStyle} 
                     onPress={async () => {
-                        const signupData = {
-                            username: username,
-                            full_name: fullName,
-                            pass: password,
-                            birthday: birthday,
-                            email: "",
-                            phone_no: phoneNo.country?.callingCode + phoneNo.number,
-                            profile_pic: null                            
-                        };
-                        const loginData = {
-                            username: username,
-                            pass: password
-                        };
-
-                        try {
-                            const signupResult = await signupUser(signupData);
-                            const loginResult = await loginUser(loginData);
-                            await AsyncStorage.setItem("user_id", loginResult.user.user_id);
-                            navigation.navigate("NavBar");
-                        } catch (error) {
-                            console.log("SIGNUP ERROR: ", error);
+                        if (!password) {
+                            setError("password");
+                        } else {
+                            const signupData = {
+                                username: username,
+                                full_name: fullName,
+                                pass: password,
+                                birthday: birthday,
+                                email: "",
+                                phone_no: phoneNo.country?.callingCode + phoneNo.number,
+                                profile_pic: null                            
+                            };
+                            const loginData = {
+                                username: username,
+                                pass: password
+                            };
+    
+                            try {
+                                const signupResult = await signupUser(signupData);
+                                const loginResult = await loginUser(loginData);
+                                await AsyncStorage.setItem("user_id", loginResult.user.user_id);
+                                navigation.navigate("NavBar");
+                            } catch (error) {
+                                console.log("SIGNUP ERROR: ", error);
+                            }
                         }
                     }}
                 />
@@ -172,57 +232,67 @@ const styles = StyleSheet.create({
     },
     logo: {
         tintColor: Colors.white,
-        width: 200,
-        height: 150,
+        width: wp('50%'),
+        height: hp('25%'),
         resizeMode: 'contain',
-        marginTop: '10%',
+        marginTop: hp('5%'),
     },
     nextButton: {
         backgroundColor: Colors.darkOrange,
         borderColor: 'transparent',
         borderWidth: 0,
-        borderRadius: 30,
+        borderRadius: wp('10%'),
     },
     buttonContainerStyle: {
-        width: '75%',
-        marginHorizontal: 50,
-        marginTop: '30%',
+        width: wp('90%'),
+        marginHorizontal: wp('12%'),
+        marginTop: hp('10%'),
     },
     backButtonContainer: {
         position: 'absolute',
-        marginLeft: 15,
-        marginTop: 30,
+        marginLeft: wp('5%'),
+        marginTop: hp('5%'),
         alignSelf: 'flex-start',
     },
     backButton: {
         backgroundColor: Colors.white,
         borderColor: 'transparent',
         borderWidth: 0,
-        borderRadius: 30,
+        borderRadius: wp('10%'),
     },
     inputViewContainer: {
-        width: '90%',
+        width: wp('90%'),
         alignItems: 'center',
     },
     textInputContainer: {
-        width: '90%',
+        width: wp('75%'),
     },
     inputContainer: {
         flexDirection: 'row',
         alignItems: 'center',
         borderWidth: 1,
-        borderColor: Colors.lightGray,
+        borderColor: "gray",
         borderRadius: 4,
-        paddingHorizontal: 8,
-        marginVertical: 10,
-        width: '90%',
+        paddingHorizontal: hp('1%'),
+        marginVertical: hp('1%'),
+        width: wp('90%'),
         backgroundColor: Colors.white,
-        height: 50
+        height: hp('6%'),
     },
     input: {
         flex: 1,
-        height: 40,
-        paddingHorizontal: 8,
+        height: hp('6%'),
+        paddingHorizontal: wp('2%'),
+    },
+    birthdayInputText: {
+        color: Colors.black,
+        fontFamily: 'GentiumBookPlus',
+        fontSize: hp('3%'),
+        marginBottom: hp('1%'),
+    },
+    errorText: {
+        color: Colors.errorRed,
+        marginTop: hp('1%'),
     },
 });
 

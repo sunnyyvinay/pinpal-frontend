@@ -7,6 +7,7 @@ import Ionicon from 'react-native-vector-icons/Ionicons';
 import { loginUser } from '../services/user.service';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 const Login = ({navigation}: {navigation: any}) => {
   const [username, setUsername] = useState<string>("");
@@ -94,33 +95,33 @@ const styles = StyleSheet.create({
   },
   logo: {
     tintColor: Colors.white,
-    width: 200,
-    height: 150,
+    width: wp('50%'),
+    height: hp('25%'),
     resizeMode: 'contain',
-    marginTop: '10%',
+    marginTop: hp('5%'),
   },
   button: {
     backgroundColor: Colors.darkOrange,
     borderColor: 'transparent',
     borderWidth: 0,
-    borderRadius: 30,
-    marginTop: 20
+    borderRadius: wp('10%'),
+    marginTop: hp('3%'),
   },
   backButton: {
     backgroundColor: Colors.white,
     borderColor: 'transparent',
     borderWidth: 0,
-    borderRadius: 30,
-    marginTop: 20
+    borderRadius: wp('10%'),
+    marginTop: hp('3%'),
   },
   backButtonContainer: {
     position: 'absolute',
-    marginLeft: 15,
-    marginTop: 30,
+    marginLeft: wp('5%'),
+    marginTop: hp('3%'),
     alignSelf: 'flex-start',
   },
   loginButtonContainer: {
-      width: '75%',
+    width: wp('75%'),
   },
   inputContainer: {
     flexDirection: 'row',
@@ -128,25 +129,25 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'gray',
     borderRadius: 4,
-    paddingHorizontal: 8,
-    marginVertical: 10,
-    width: '90%',
+    paddingHorizontal: wp('2%'),
+    marginVertical: hp('2%'),
+    width: wp('90%'),
     backgroundColor: Colors.white,
   },
   errorContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginVertical: 5,
-    width: '90%',
+    marginVertical: hp('0.5%'),
+    width: wp('90%'),
   },
   errorText: {
     color: Colors.errorRed,
-    marginLeft: 10,
+    marginLeft: wp('2%'),
   },
   input: {
     flex: 1,
-    height: 40,
-    paddingHorizontal: 8,
+    height: hp('6%'),
+    paddingHorizontal: wp('2%'),
   },
   icon: {
     padding: 4,

@@ -3,6 +3,7 @@ import LinearGradient from 'react-native-linear-gradient'
 import * as Colors from '../constants/colors';
 import { Image, StyleSheet } from 'react-native';
 import { Button } from '@rneui/themed';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 const Welcome = ({navigation}: {navigation: any}) => {
   return (
@@ -36,24 +37,24 @@ const styles = StyleSheet.create({
   },
   logo: {
     tintColor: Colors.white,
-    width: 200,
-    height: 150,
+    width: wp('50%'),
+    height: hp('25%'),
     resizeMode: 'contain',
-    marginTop: '10%',
+    marginTop: hp('5%'),
   },
   button: {
     backgroundColor: '#ffa938',
     borderColor: 'transparent',
     borderWidth: 0,
-    borderRadius: 30,
+    borderRadius: wp('10%'),
   },
   loginButtonContainer: {
-    width: '75%',
-    marginTop: '90%',
+    width: wp('75%'),
+    marginTop: hp('45%'),
   },
   signupButtonContainer: {
-    width: '75%',
-    marginTop: 20,
+    width: wp('75%'),
+    marginTop: hp('3%'),
 },
 });
 
