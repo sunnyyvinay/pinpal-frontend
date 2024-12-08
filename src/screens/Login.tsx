@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import LinearGradient from 'react-native-linear-gradient'
 import * as Colors from '../constants/colors';
-import { Image, StyleSheet, TextInput, View } from 'react-native';
+import { Image, StyleSheet, Text, TextInput, View } from 'react-native';
 import { Button, Input } from '@rneui/themed';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import { loginUser } from '../services/user.service';
@@ -13,6 +13,7 @@ const Login = ({navigation}: {navigation: any}) => {
   const [password, setPassword] = useState<string>("");
 
   const [hiddenPass, setHiddenPass] = useState<boolean>(true);
+  const [loginError, setLoginError] = useState<boolean>(false);
   
   return (
     <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 1}} colors={[Colors.yellow, Colors.darkOrange]} style={styles.gradientContainer}>
@@ -26,19 +27,19 @@ const Login = ({navigation}: {navigation: any}) => {
 
         <View style={styles.inputContainer}>
           <TextInput
-            style={styles.input}
+            style={{...styles.input, borderColor: loginError ? Colors.errorRed : "gray"}}
             placeholder="Enter username"
-            onChangeText={(text: string) => setUsername(text)}
+            onChangeText={(text: string) => {setUsername(text); setLoginError(false)}}
             value={username}
             autoCapitalize="none"
           />
         </View>
         <View style={styles.inputContainer}>
           <TextInput
-            style={styles.input}
+            style={{...styles.input, borderColor: loginError ? Colors.errorRed : "gray"}}
             placeholder="Enter your password"
             secureTextEntry={hiddenPass}
-            onChangeText={(text: string) => setPassword(text)}
+            onChangeText={(text: string) => {setPassword(text); setLoginError(false)}}
             value={password}
             autoCapitalize="none"
           />
@@ -49,6 +50,13 @@ const Login = ({navigation}: {navigation: any}) => {
             onPress={() => setHiddenPass(!hiddenPass)}
           />
         </View>
+
+        {loginError && (
+            <View style={styles.errorContainer}>
+                <Ionicon name="alert-circle-outline" size={24} color={Colors.errorRed} />
+                <Text style={styles.errorText}>Invalid username or password</Text>
+            </View>
+        )}
 
         <Button 
             title="LOG IN" 
@@ -67,6 +75,7 @@ const Login = ({navigation}: {navigation: any}) => {
                   await AsyncStorage.setItem("user_id", loginResult.user.user_id);
                   navigation.navigate("NavBar");
                 } catch (error) {
+                  setLoginError(true);
                   console.log("LOGIN ERROR: ", error);
                 }
             }} 
@@ -123,6 +132,16 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     width: '90%',
     backgroundColor: Colors.white,
+  },
+  errorContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 5,
+    width: '90%',
+  },
+  errorText: {
+    color: Colors.errorRed,
+    marginLeft: 10,
   },
   input: {
     flex: 1,

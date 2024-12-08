@@ -18,7 +18,7 @@ export const whiteGray = '#e8e6e6';
 export const white = '#FFFFFF';
 export const black = '#000000';
 
-export const errorRed = '#FF3333';
+export const errorRed = '#ff1c1c';
 export const lightRed = '#ff6666';
 export const darkRed = '#B52525';
 export const pink = '#ff0066';
