@@ -264,7 +264,7 @@ const AddPin = ({ route, navigation }: any) => {
                                         // formData.append('latitude', lat_long[0]);
                                         // formData.append('longitude', lat_long[1]);
                                         // formData.append('title', pinData.title);
-                                        // formData.append('caption', pinData.email);
+                                        // formData.append('caption', pinData.caption);
                                         // formData.append('create_date', pinData.create_date);
                                         // formData.append('location_tags', pinData.location_tags);
                                         // formData.append('visibility', pinData.visibility);

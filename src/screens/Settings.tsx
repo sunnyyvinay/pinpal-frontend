@@ -57,7 +57,6 @@ const Settings = ({ route, navigation }: any) => {
                 formData.append('username', userData.username);
                 formData.append('full_name', userData.full_name);
                 formData.append('birthday', userData.birthday);
-                formData.append('email', userData.email);
                 formData.append('phone_no', userData.phone_no);
                 formData.append('pass', userData.pass);
                 await updateUser(user_id, formData);
@@ -171,22 +170,6 @@ const Settings = ({ route, navigation }: any) => {
                     </Text>
                     <Text style={{...styles.fieldText, fontWeight: 'normal', color: Colors.mediumGray}}>
                         {userData.phone_no}
-                    </Text>
-                </View>
-                <FeatherIcon name="edit-2" size={15} style={styles.fieldIcon} />
-            </TouchableOpacity>
-
-            <TouchableOpacity 
-                style={styles.fieldView}
-                onPress={() => {
-                    setModal(5);
-                }}>
-                <View style={styles.textView}>
-                    <Text style={{...styles.fieldText}}>
-                        Email
-                    </Text>
-                    <Text style={{...styles.fieldText, fontWeight: 'normal', color: Colors.mediumGray}}>
-                        {userData.email}
                     </Text>
                 </View>
                 <FeatherIcon name="edit-2" size={15} style={styles.fieldIcon} />
@@ -360,43 +343,6 @@ const Settings = ({ route, navigation }: any) => {
                                 setModal(0);
                             } catch (error) {
                                 console.log("Error updating phone number: ", error);
-                            }
-                        }}
-                    />
-                </View>
-            </Modal>
-
-            <Modal 
-                isVisible={modal === 5 ? true : false}
-                style={{marginVertical: '40%', marginHorizontal: '10%'}}
-                onBackdropPress={() => setModal(0)}>
-                <View style={styles.modalView}>
-                    <Text style={styles.modalText}>Edit Email</Text>
-                    <Input
-                        value={newUserData.email}
-                        placeholder='Enter new email'
-                        autoCapitalize='none'
-                        onChangeText={text => setNewUserData({...newUserData, email: text})}
-                        style={styles.modalInput}
-                    />
-                    <Button 
-                        title="SAVE"
-                        color={Colors.white}
-                        buttonStyle={styles.logOutButton}
-                        titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'GentiumBookPlus' }}
-                        containerStyle={styles.modalButton}
-                        onPress={async () => {
-                            try {
-                                const user_id = await AsyncStorage.getItem("user_id");
-                                if (user_id) {
-                                    await updateUser(user_id, newUserData);
-                                    setUserData({...userData, email: newUserData.email});
-                                } else {
-                                    navigation.navigate("Welcome");
-                                }
-                                setModal(0);
-                            } catch (error) {
-                                console.log("Error updating email: ", error);
                             }
                         }}
                     />

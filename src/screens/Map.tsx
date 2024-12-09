@@ -43,7 +43,6 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
       full_name: string,
       pass: string,
       birthday: Date,
-      email: string | undefined,
       phone_no: string | undefined,
       profile_pic: string | null
     },
