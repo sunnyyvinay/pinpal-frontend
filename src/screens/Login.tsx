@@ -26,18 +26,18 @@ const Login = ({navigation}: {navigation: any}) => {
             onPress={() => navigation.navigate("Welcome")} />
         <Image source={require('../../assets/images/full-logo.png')} style={styles.logo} />
 
-        <View style={styles.inputContainer}>
+        <View style={{...styles.inputContainer, borderColor: loginError ? Colors.errorRed : "gray"}}>
           <TextInput
-            style={{...styles.input, borderColor: loginError ? Colors.errorRed : "gray"}}
+            style={styles.input}
             placeholder="Enter username"
             onChangeText={(text: string) => {setUsername(text); setLoginError(false)}}
             value={username}
             autoCapitalize="none"
           />
         </View>
-        <View style={styles.inputContainer}>
+        <View style={{...styles.inputContainer, borderColor: loginError ? Colors.errorRed : "gray"}}>
           <TextInput
-            style={{...styles.input, borderColor: loginError ? Colors.errorRed : "gray"}}
+            style={styles.input}
             placeholder="Enter your password"
             secureTextEntry={hiddenPass}
             onChangeText={(text: string) => {setPassword(text); setLoginError(false)}}
@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    borderWidth: 1,
+    borderWidth: 2,
     borderColor: 'gray',
     borderRadius: 4,
     paddingHorizontal: wp('2%'),
@@ -139,6 +139,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginVertical: hp('0.5%'),
     width: wp('90%'),
+    justifyContent: 'center',
   },
   errorText: {
     color: Colors.errorRed,

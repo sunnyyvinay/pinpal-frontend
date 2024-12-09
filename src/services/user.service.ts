@@ -38,6 +38,16 @@ export const loginUser = async (user: UserLogin) => {
     }
 };
 
+// CHECK IF USERNAME EXISTS
+export const checkUsername = async (username: string) => {
+  try {
+      const response = await axios.get(`${apiUrl}/username_exists/${username}`);
+      return response.data;
+  } catch (error) {
+      return error;
+  }
+}
+
 // GET USER INFO
 export const getUser = async (id: string) => {
   try {

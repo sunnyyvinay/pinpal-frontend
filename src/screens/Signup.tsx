@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, TextInput } from 'react-native';
-import { Button, Input , Text } from '@rneui/themed';
+import { Button, Text } from '@rneui/themed';
 import LinearGradient from 'react-native-linear-gradient';
 import * as Colors from '../constants/colors';
 import { Image } from '@rneui/base';
 import Icon from 'react-native-vector-icons/Ionicons';
 import PhoneInput, { ICountry } from 'react-native-international-phone-number';
 import DatePicker from 'react-native-date-picker';
-import { loginUser, signupUser } from '../services/user.service';
+import { checkUsername, loginUser, signupUser } from '../services/user.service';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
@@ -29,9 +29,21 @@ const Signup = ({navigation}: {navigation: any}) => {
     const [fullName, setFullName] = useState<string>("");
     const [username, setUsername] = useState<string>("");
     const [password, setPassword] = useState<string>("");
+    const [confirmPassword, setConfirmPassword] = useState<string>("");
     
     const [hiddenPass, setHiddenPass] = useState<boolean>(true);
-    const [error, setError] = useState<string>(""); // phone, birthday, full_name, username, password
+    const [hiddenConfirmPass, setHiddenConfirmPass] = useState<boolean>(true);
+    const [error, setError] = useState<string>("");
+
+    function isValidFullName(fullName: string) {
+        return /^[a-zA-Z\s]*$/.test(fullName);
+    }
+    function isValidUsername(username: string) {
+        return /^[a-zA-Z0-9._]*$/.test(username);
+    }
+    function isValidPass(pass: string) {
+        return pass.length >= 7;
+    }
 
     function renderStep(step: number) {
         switch (step) {
@@ -41,9 +53,9 @@ const Signup = ({navigation}: {navigation: any}) => {
                         <PhoneInput
                             placeholder='Enter phone number'
                             value={phoneNo.number} 
-                            onChangePhoneNumber={(text: string) => {setPhoneNo({number: text, country: phoneNo.country})}} 
+                            onChangePhoneNumber={(text: string) => {setPhoneNo({number: text, country: phoneNo.country}); setError("")}} 
                             selectedCountry={phoneNo.country}
-                            onChangeSelectedCountry={(country: ICountry | undefined) => {setPhoneNo({number: phoneNo.number, country: country})}}
+                            onChangeSelectedCountry={(country: ICountry | undefined) => {setPhoneNo({number: phoneNo.number, country: country}); setError("")}}
                             defaultCountry='US'
                             popularCountries={['US']} />  
                         {error === "phone" && <Text style={styles.errorText}>Please enter a valid phone number</Text>}                  
@@ -56,7 +68,7 @@ const Signup = ({navigation}: {navigation: any}) => {
                         <DatePicker 
                             mode='date'
                             date={birthday}
-                            onDateChange={setBirthday}
+                            onDateChange={(date: Date) => {setBirthday(date); setError("")}}
                             maximumDate={new Date()}
                             modal={false}
                         />
@@ -66,41 +78,45 @@ const Signup = ({navigation}: {navigation: any}) => {
             case 3:
                 return (
                     <>
-                    <View style={styles.inputContainer}>
+                    <View style={{...styles.inputContainer, borderColor: error !== "" ? Colors.errorRed : "gray"}}>
                         <TextInput
                             value={fullName}
                             style={styles.input}
                             placeholder="Enter your full name"
-                            onChangeText={(text: string) => setFullName(text)} 
+                            onChangeText={(text: string) => {setFullName(text); setError("")}} 
                             autoCapitalize='none' />
                     </View>
                     {error === "full_name" && <Text style={styles.errorText}>Please enter a full name</Text>}
+                    {error === "full_name_long" && <Text style={styles.errorText}>Make sure your full name is less than 50 characters</Text>}
+                    {error === "full_name_nonalpha" && <Text style={styles.errorText}>Make sure your full name only contains letters and whitespace</Text>}
                     </>
                 )
             case 4:
                 return (
                     <>
-                    <View style={styles.inputContainer}>
+                    <View style={{...styles.inputContainer, borderColor: error !== "" ? Colors.errorRed : "gray"}}>
                         <TextInput
                             value={username}
                             style={styles.input}
                             placeholder="Make a username"
-                            onChangeText={(text: string) => setUsername(text)} 
+                            onChangeText={(text: string) => {setUsername(text); setError("")}} 
                             autoCapitalize='none' />
                     </View>
                     {error === "username" && <Text style={styles.errorText}>Please enter a username</Text>}
+                    {error === "username_long" && <Text style={styles.errorText}>Make sure your username is less than 25 characters</Text>}
+                    {error === "username_badchar" && <Text style={styles.errorText}>Please enter a username</Text>}
+                    {error === "username_exists" && <Text style={styles.errorText}>This username already exists</Text>}
                     </>
-                    
                 )
             case 5:
                 return (
                     <>
-                    <View style={styles.inputContainer}>
+                    <View style={{...styles.inputContainer, borderColor: error !== "" ? Colors.errorRed : "gray"}}>
                         <TextInput
                             style={styles.input}
                             placeholder="Make a password"
                             secureTextEntry={hiddenPass}
-                            onChangeText={(text: string) => setPassword(text)}
+                            onChangeText={(text: string) => {setPassword(text); setError("")}}
                             value={password}
                         />
                         <Ionicon
@@ -110,7 +126,23 @@ const Signup = ({navigation}: {navigation: any}) => {
                             onPress={() => setHiddenPass(!hiddenPass)}
                         />
                     </View>
-                    {error === "password" && <Text style={styles.errorText}>Please enter a valid password</Text>}
+                    <View style={{...styles.inputContainer, borderColor: error !== "" ? Colors.errorRed : "gray"}}>
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Confirm your password"
+                            secureTextEntry={hiddenConfirmPass}
+                            onChangeText={(text: string) => {setConfirmPassword(text); setError("")}}
+                            value={confirmPassword}
+                        />
+                        <Ionicon
+                            name={hiddenConfirmPass ? 'eye-outline' : 'eye-off-outline'}
+                            size={24}
+                            color="gray"
+                            onPress={() => setHiddenConfirmPass(!hiddenConfirmPass)}
+                        />
+                    </View>
+                    {error === "password" && <Text style={styles.errorText}>Please enter a password with 7+ characters</Text>}
+                    {error === "confirm_password" && <Text style={styles.errorText}>Make sure your passwords match</Text>}
                     </>
                 )
         }
@@ -140,7 +172,7 @@ const Signup = ({navigation}: {navigation: any}) => {
                     titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'GentiumBookPlus' }}
                     buttonStyle={styles.nextButton}
                     containerStyle={styles.buttonContainerStyle} 
-                    onPress={() => {
+                    onPress={ async () => {
                         if (step === 1) {
                             if (!phoneNo.number) {
                                 setError("phone");
@@ -161,20 +193,25 @@ const Signup = ({navigation}: {navigation: any}) => {
                         } else if (step === 3) {
                             if (!fullName) {
                                 setError("full_name");
+                            } else if (fullName.length > 50) {
+                                setError("full_name_long");
+
+                            } else if (!isValidFullName(fullName)) {
+                                setError("full_name_nonalpha");
                             } else {
                                 setError("");
                                 setStep(step + 1);
                             }
                         } else if (step === 4) {
-                            if (!username) {
+                            const result = await checkUsername(username);
+                            if (!result.success) {
+                                setError("username_exists");
+                            } else if (!username) {
                                 setError("username");
-                            } else {
-                                setError("");
-                                setStep(step + 1);
-                            }
-                        } else if (step === 5) {
-                            if (!password) {
-                                setError("password");
+                            } else if (username.length > 25) {
+                                setError("username_long");
+                            } else if (!isValidUsername(username)) {
+                                setError("username_badchar");
                             } else {
                                 setError("");
                                 setStep(step + 1);
@@ -189,8 +226,10 @@ const Signup = ({navigation}: {navigation: any}) => {
                     buttonStyle={styles.nextButton}
                     containerStyle={styles.buttonContainerStyle} 
                     onPress={async () => {
-                        if (!password) {
+                        if (!password || !isValidPass(password)) {
                             setError("password");
+                        } else if (password !== confirmPassword) {
+                            setError("confirm_password");
                         } else {
                             const signupData = {
                                 username: username,
@@ -198,7 +237,7 @@ const Signup = ({navigation}: {navigation: any}) => {
                                 pass: password,
                                 birthday: birthday,
                                 email: "",
-                                phone_no: phoneNo.country?.callingCode + phoneNo.number,
+                                phone_no: phoneNo.country?.callingCode + phoneNo.number.replace(/\s/g, ""),
                                 profile_pic: null                            
                             };
                             const loginData = {
@@ -270,7 +309,7 @@ const styles = StyleSheet.create({
     inputContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        borderWidth: 1,
+        borderWidth: 2,
         borderColor: "gray",
         borderRadius: 4,
         paddingHorizontal: hp('1%'),
@@ -293,6 +332,8 @@ const styles = StyleSheet.create({
     errorText: {
         color: Colors.errorRed,
         marginTop: hp('1%'),
+        textAlign: 'center',
+        justifyContent: 'center',
     },
 });
 
