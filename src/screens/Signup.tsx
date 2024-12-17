@@ -102,9 +102,8 @@ const Signup = ({navigation}: {navigation: any}) => {
                             onChangeText={(text: string) => {setUsername(text); setError("")}} 
                             autoCapitalize='none' />
                     </View>
-                    {error === "username" && <Text style={styles.errorText}>Please enter a username</Text>}
-                    {error === "username_long" && <Text style={styles.errorText}>Make sure your username is less than 25 characters</Text>}
-                    {error === "username_badchar" && <Text style={styles.errorText}>Please enter a username</Text>}
+                    {error === "username_long" && <Text style={styles.errorText}>Make sure your username is between 5 and 25 characters</Text>}
+                    {error === "username_badchar" && <Text style={styles.errorText}>Make sure your username only contains letters, numbers, periods, and underscores</Text>}
                     {error === "username_exists" && <Text style={styles.errorText}>This username already exists</Text>}
                     </>
                 )
@@ -204,12 +203,10 @@ const Signup = ({navigation}: {navigation: any}) => {
                             }
                         } else if (step === 4) {
                             const result = await checkUsername(username);
-                            if (!result.success) {
-                                setError("username_exists");
-                            } else if (!username) {
-                                setError("username");
-                            } else if (username.length > 25) {
+                            if (!username || username.length < 5 || username.length > 25) {
                                 setError("username_long");
+                            } else if (!result.success) {
+                                setError("username_exists");
                             } else if (!isValidUsername(username)) {
                                 setError("username_badchar");
                             } else {

@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     width: wp('50%'),
     height: hp('25%'),
     resizeMode: 'contain',
-    marginTop: hp('2%'),
+    marginTop: hp('5%'),
   },
   button: {
     backgroundColor: '#ffa938',

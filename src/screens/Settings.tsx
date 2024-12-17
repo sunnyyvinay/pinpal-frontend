@@ -6,9 +6,9 @@ import FeatherIcon from 'react-native-vector-icons/Feather';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import * as Colors from '../constants/colors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { getUser, updateUser } from '../services/user.service';
+import { checkUsername, getUser, updateUser } from '../services/user.service';
 import DatePicker from 'react-native-date-picker';
-import PhoneInput from 'react-native-phone-number-input';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import {ImagePickerResponse, launchImageLibrary, MediaType} from 'react-native-image-picker';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 const bcrypt = require("bcryptjs");
@@ -18,10 +18,18 @@ const Settings = ({ route, navigation }: any) => {
     
     const [modal, setModal] = useState<number>(0);
     const [newUserData, setNewUserData] = useState<any>({});
-    const [unformattedPhone, setUnformattedPhone] = useState<string>("");
     const [oldPass, setOldPass] = useState<string>("");
+    const [hiddenOldPass, setHiddenOldPass] = useState<boolean>(true);
+    const [hiddenNewPass, setHiddenNewPass] = useState<boolean>(true);
 
-    const [oldPassError, setOldPassError] = useState<string>("");
+    const [error, setError] = useState<any>({
+        full_name: "",
+        username: "",
+        birthday: "",
+        phone_no: "",
+        password: "",
+        old_password: ""
+    });
 
     function formatBirthday(date: string) {
         return new Date(date).toLocaleDateString('en-US', {
@@ -29,6 +37,15 @@ const Settings = ({ route, navigation }: any) => {
             month: 'long',
             day: 'numeric',
         });
+    }
+    function isValidFullName(fullName: string) {
+        return /^[a-zA-Z\s]*$/.test(fullName);
+    }
+    function isValidUsername(username: string) {
+        return /^[a-zA-Z0-9._]*$/.test(username);
+    }
+    function isValidPass(pass: string) {
+        return pass.length >= 7;
     }
 
     const openImagePicker = () => {
@@ -77,7 +94,6 @@ const Settings = ({ route, navigation }: any) => {
                     const userData = await getUser(user_id);
                     setUserData(userData.user);
                     setNewUserData({...userData.user, pass: ""});
-                    setUnformattedPhone(userData.user.phone_no);
                 } else {
                     navigation.navigate("Welcome");
                 }
@@ -87,10 +103,6 @@ const Settings = ({ route, navigation }: any) => {
         }
         fetchUserData();
     }, []);
-
-    // useEffect(() => {
-    //     setNewUserData({...userData, phone_no: unformattedPhone});
-    // }, [unformattedPhone]);
 
     return (
         <ScrollView contentContainerStyle={styles.container}>
@@ -159,20 +171,15 @@ const Settings = ({ route, navigation }: any) => {
                 <FeatherIcon name="edit-2" size={15} style={styles.fieldIcon} />
             </TouchableOpacity>
 
-            <TouchableOpacity 
-                style={styles.fieldView}
-                onPress={() => {
-                    setModal(4);
-                }}>
+            <TouchableOpacity style={styles.fieldView}>
                 <View style={styles.textView}>
                     <Text style={{...styles.fieldText}}>
                         Phone Number
                     </Text>
                     <Text style={{...styles.fieldText, fontWeight: 'normal', color: Colors.mediumGray}}>
-                        {userData.phone_no}
+                        {userData.phone_no && userData.phone_no.substring(0, 2) + " " + userData.phone_no.substring(2, userData.phone_no.length)}
                     </Text>
                 </View>
-                <FeatherIcon name="edit-2" size={15} style={styles.fieldIcon} />
             </TouchableOpacity>
 
             <TouchableOpacity 
@@ -202,14 +209,20 @@ const Settings = ({ route, navigation }: any) => {
 
             <Modal 
                 isVisible={modal === 1 ? true : false}
-                style={{marginVertical: '40%', marginHorizontal: '10%'}}
-                onBackdropPress={() => setModal(0)}>
+                style={{marginVertical: hp('35%'), marginHorizontal: wp('10%')}}
+                onBackdropPress={() => {
+                    setError({...error, username: ""});
+                    setNewUserData({...newUserData, username: userData.username});
+                    setModal(0);
+                }}>
                 <View style={styles.modalView}>
                     <Text style={styles.modalText}>Edit Username</Text>
                     <Input
                         value={newUserData.username}
                         placeholder='Enter new username'
                         autoCapitalize='none'
+                        errorMessage={error.username}
+                        errorStyle={styles.errorTextStyle}
                         onChangeText={text => setNewUserData({...newUserData, username: text})}
                         style={styles.modalInput}
                     />
@@ -221,14 +234,24 @@ const Settings = ({ route, navigation }: any) => {
                         containerStyle={styles.modalButton}
                         onPress={async () => {
                             try {
-                                const user_id = await AsyncStorage.getItem("user_id");
-                                if (user_id) {
-                                    await updateUser(user_id, newUserData);
-                                    setUserData({...userData, username: newUserData.username});
+                                const result = await checkUsername(newUserData.username);
+                                if (!newUserData.username || newUserData.username.length < 5 || newUserData.username.length > 25) {
+                                    setError({...error, username: "Make sure your username is between 5 and 25 characters"});
+                                } else if (!isValidUsername(newUserData.username)) {
+                                    setError({...error, username: "Make sure your username contains only letters, numbers, periods, and underscores"});
+                                } else if (!result.success) {
+                                    setError({...error, username: "This username already exists"}); 
                                 } else {
-                                    navigation.navigate("Welcome");
+                                    setError({...error, username: ""});
+                                    const user_id = await AsyncStorage.getItem("user_id");
+                                    if (user_id) {
+                                        await updateUser(user_id, newUserData);
+                                        setUserData({...userData, username: newUserData.username});
+                                    } else {
+                                        navigation.navigate("Welcome");
+                                    }
+                                    setModal(0);
                                 }
-                                setModal(0);
                             } catch (error) {
                                 console.log("Error updating username: ", error);
                             }
@@ -239,13 +262,19 @@ const Settings = ({ route, navigation }: any) => {
 
             <Modal 
                 isVisible={modal === 2 ? true : false}
-                style={{marginVertical: '40%', marginHorizontal: '10%'}}
-                onBackdropPress={() => setModal(0)}>
+                style={{marginVertical: hp('35%'), marginHorizontal: wp('10%')}}
+                onBackdropPress={() => {
+                    setError({...error, full_name: ""});
+                    setNewUserData({...newUserData, full_name: userData.full_name});
+                    setModal(0);
+                }}>
                 <View style={styles.modalView}>
                     <Text style={styles.modalText}>Edit Full Name</Text>
                     <Input
                         value={newUserData.full_name}
                         placeholder='Enter new full name'
+                        errorMessage={error.full_name}
+                        errorStyle={styles.errorTextStyle}
                         autoCapitalize='none'
                         onChangeText={text => setNewUserData({...newUserData, full_name: text})}
                         style={styles.modalInput}
@@ -258,14 +287,23 @@ const Settings = ({ route, navigation }: any) => {
                         containerStyle={styles.modalButton}
                         onPress={async () => {
                             try {
-                                const user_id = await AsyncStorage.getItem("user_id");
-                                if (user_id) {
-                                    await updateUser(user_id, newUserData);
-                                    setUserData({...userData, full_name: newUserData.full_name});
+                                if (!newUserData.full_name) {
+                                    setError({...error, full_name: "Please enter a full name"});
+                                } else if (newUserData.full_name.length > 50) {
+                                    setError({...error, full_name: "Make sure your full name is less than 50 characters"});
+                                } else if (!isValidFullName(newUserData.full_name)) {
+                                    setError({...error, full_name: "Make sure your full name only contains letters and whitespace"});
                                 } else {
-                                    navigation.navigate("Welcome");
+                                    setError({...error, full_name: ""});
+                                    const user_id = await AsyncStorage.getItem("user_id");
+                                    if (user_id) {
+                                        await updateUser(user_id, newUserData);
+                                        setUserData({...userData, full_name: newUserData.full_name});
+                                    } else {
+                                        navigation.navigate("Welcome");
+                                    }
+                                    setModal(0);
                                 }
-                                setModal(0);
                             } catch (error) {
                                 console.log("Error updating full name: ", error);
                             }
@@ -276,17 +314,22 @@ const Settings = ({ route, navigation }: any) => {
 
             <Modal 
                 isVisible={modal === 3 ? true : false}
-                style={{marginVertical: '30%', marginHorizontal: '10%'}}
-                onBackdropPress={() => setModal(0)}>
+                style={{marginVertical: hp('25%'), marginHorizontal: wp('10%')}}
+                onBackdropPress={() => {
+                    setError({...error, birthday: ""});
+                    setNewUserData({...newUserData, birthday: userData.birthday});
+                    setModal(0);
+                }}>
                 <View style={styles.modalView}>
                     <Text style={styles.modalText}>Edit Birthday</Text>
                     <DatePicker 
-                            mode='date'
-                            date={new Date(newUserData.birthday)}
-                            onDateChange={date => setNewUserData({...newUserData, birthday: date})}
-                            maximumDate={new Date()}
-                            modal={false}
-                        />
+                        mode='date'
+                        date={new Date(newUserData.birthday)}
+                        onDateChange={date => setNewUserData({...newUserData, birthday: date})}
+                        maximumDate={new Date()}
+                        modal={false}
+                    />
+                    <Text style={{...styles.errorTextStyle, marginTop: hp('2%'), textAlign: 'center', justifyContent: 'center'}}>{error.birthday}</Text>
                     <Button 
                         title="SAVE"
                         color={Colors.white}
@@ -295,14 +338,22 @@ const Settings = ({ route, navigation }: any) => {
                         containerStyle={styles.modalButton}
                         onPress={async () => {
                             try {
-                                const user_id = await AsyncStorage.getItem("user_id");
-                                if (user_id) {
-                                    await updateUser(user_id, newUserData);
-                                    setUserData({...userData, birthday: newUserData.birthday});
+                                const now = new Date();
+                                const thirteenYearsAgo = new Date();
+                                thirteenYearsAgo.setFullYear(now.getFullYear() - 13);
+                                if (newUserData.birthday > thirteenYearsAgo) {
+                                    setError({...error, birthday: "You must be 13 years or older"});
                                 } else {
-                                    navigation.navigate("Welcome");
+                                    setError({...error, birthday: ""});
+                                    const user_id = await AsyncStorage.getItem("user_id");
+                                    if (user_id) {
+                                        await updateUser(user_id, newUserData);
+                                        setUserData({...userData, birthday: newUserData.birthday});
+                                    } else {
+                                        navigation.navigate("Welcome");
+                                    }
+                                    setModal(0);
                                 }
-                                setModal(0);
                             } catch (error) {
                                 console.log("Error updating birthday: ", error);
                             }
@@ -312,63 +363,34 @@ const Settings = ({ route, navigation }: any) => {
             </Modal>
 
             <Modal 
-                isVisible={modal === 4 ? true : false}
-                style={{marginVertical: '40%', marginHorizontal: '10%'}}
-                onBackdropPress={() => setModal(0)}>
-                <View style={styles.modalView}>
-                    <Text style={styles.modalText}>Edit Phone Number</Text>
-                    <PhoneInput 
-                            layout="second" 
-                            defaultCode={'US'} 
-                            defaultValue={unformattedPhone} 
-                            onChangeText={setUnformattedPhone} 
-                            onChangeFormattedText={(text: string | undefined) => {newUserData.phone_no = text}}
-                            withShadow={true}
-                            autoFocus={true} />
-                    <Button 
-                        title="SAVE"
-                        color={Colors.white}
-                        buttonStyle={styles.logOutButton}
-                        titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'GentiumBookPlus' }}
-                        containerStyle={styles.modalButton}
-                        onPress={async () => {
-                            try {
-                                const user_id = await AsyncStorage.getItem("user_id");
-                                if (user_id) {
-                                    await updateUser(user_id, newUserData);
-                                    setUserData({...userData, phone_no: newUserData.phone_no});
-                                } else {
-                                    navigation.navigate("Welcome");
-                                }
-                                setModal(0);
-                            } catch (error) {
-                                console.log("Error updating phone number: ", error);
-                            }
-                        }}
-                    />
-                </View>
-            </Modal>
-
-            <Modal 
                 isVisible={modal === 6 ? true : false}
-                style={{marginVertical: '40%', marginHorizontal: '10%'}}
-                onBackdropPress={() => setModal(0)}>
+                style={{marginVertical: hp('30%'), marginHorizontal: wp('10%')}}
+                onBackdropPress={() => {
+                    setError({...error, pass: "", old_password: ""});
+                    setNewUserData({...newUserData, pass: ""});
+                    setOldPass("");
+                    setModal(0);
+                }}>
                 <View style={styles.modalView}>
                     <Text style={styles.modalText}>Edit Password</Text>
                     <Input
                         value={oldPass}
                         placeholder='Enter old password'
-                        errorMessage={oldPassError}
+                        errorMessage={error.old_password}
                         errorStyle={styles.errorTextStyle}
                         autoCapitalize='none'
                         onChangeText={text => setOldPass(text)}
+                        rightIcon={<Ionicons name={hiddenOldPass ? 'eye-outline' : 'eye-off-outline'} size={24} color="gray" onPress={() => setHiddenOldPass(!hiddenOldPass)} />}
                         style={styles.modalInput}
                     />
                     <Input
                         value={newUserData.pass}
                         placeholder='Enter new password'
+                        errorMessage={error.pass}
+                        errorStyle={styles.errorTextStyle}
                         autoCapitalize='none'
                         onChangeText={text => setNewUserData({...newUserData, pass: text})}
+                        rightIcon={<Ionicons name={hiddenNewPass ? 'eye-outline' : 'eye-off-outline'} size={24} color="gray" onPress={() => setHiddenNewPass(!hiddenNewPass)} />}
                         style={styles.modalInput}
                     />
                     <Button 
@@ -381,19 +403,24 @@ const Settings = ({ route, navigation }: any) => {
                             try {
                                 const validPassword = await bcrypt.compare(oldPass, userData.pass);
                                 if (!validPassword) {
-                                    setOldPassError("Incorrect old password");
-                                } else setOldPassError("");
-
-                                const user_id = await AsyncStorage.getItem("user_id");
-                                if (user_id) {
-                                    await updateUser(user_id, newUserData);
-                                    setUserData({...userData, pass: newUserData.pass});
+                                    setError({...error, old_password: "Incorrect old password"});
+                                } else if (!newUserData.pass || !isValidPass(newUserData.pass)) {
+                                    setError({...error, pass: "Password must be at least 7 characters long"});
                                 } else {
-                                    navigation.navigate("Welcome");
+                                    setError({...error, old_password: "", pass: ""});
+                                    const user_id = await AsyncStorage.getItem("user_id");
+                                    if (user_id) {
+                                        await updateUser(user_id, newUserData);
+                                        setUserData({...userData, pass: newUserData.pass});
+                                    } else {
+                                        navigation.navigate("Welcome");
+                                    }
+                                    setModal(0);
+                                    setNewUserData({...newUserData, pass: ""});
+                                    setOldPass("");
                                 }
-                                setModal(0);
-                                setNewUserData({...newUserData, pass: ""});
-                                setOldPass("");
+
+                                
                             } catch (error) {
                                 console.log("Error updating password: ", error);
                             }
@@ -414,26 +441,26 @@ const styles = StyleSheet.create({
     },
     sectionTitle: {
         alignSelf: 'flex-start',
-        marginLeft: 15,
+        marginLeft: wp('5%'),
         fontFamily: 'GentiumBookPlus',
         fontWeight: 'bold',
-        marginBottom: 10,
-        marginTop: 10,
+        marginBottom: hp('1%'),
+        marginTop: hp('2%'),
     },
     fieldView: {
-        width: '90%',
-        backgroundColor: Colors.whiteGray,
+        width: wp('95%'),
+        backgroundColor: Colors.lightGray,
         flex: 1,
         flexDirection: 'row',
-        borderRadius: 10,
-        marginBottom: 10,
+        borderRadius: hp('1%'),
+        marginBottom: hp('1%'),
     },
     textView: {
         flex: 0.95,
         flexDirection: 'column',
-        marginTop: 10,
-        marginBottom: 10,
-        marginLeft: 10,
+        marginTop: hp('1%'),
+        marginBottom: hp('1%'),
+        marginLeft: wp('2%'),
     },
     fieldText: {
         fontFamily: 'GentiumBookPlus',
@@ -443,71 +470,70 @@ const styles = StyleSheet.create({
     fieldIcon: {
         flex: 0.05,
         alignSelf: 'center',
-        marginRight: 5,
+        marginRight: wp('2%'),
     },
     pfpImage: {
         width: 100,
         height: 100,
-        borderRadius: 50,
+        borderRadius: hp('15%'),
         borderWidth: 2,
         borderColor: Colors.mediumOrange,
         alignSelf: 'center',
-        marginBottom: 10,
+        marginBottom: hp('1%'),
     },
     pfpOptionsView: {
         flex: 1,
         flexDirection: 'row',
         justifyContent: 'space-evenly',
         alignItems: 'center',
-        marginBottom: 10,
+        marginBottom: hp('1%'),
     },
     pfpEditIcon: {
-        width: 50,
-        height: 50,
-        borderRadius: 25,
+        width: wp('15%'),
+        height: hp('6%'),
+        borderRadius: hp('5%'),
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: Colors.mediumGray,
-        marginRight: 10
+        backgroundColor: Colors.whiteGray,
+        marginRight: wp('1%'),
     },
     pfpDeleteIcon: {
-        width: 50,
-        height: 50,
-        borderRadius: 25,
+        width: wp('15%'),
+        height: hp('6%'),
+        borderRadius: hp('5%'),
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: Colors.darkRed,
-        marginLeft: 10
+        marginLeft: wp('1%'),
     },
     logOutButton: {
         backgroundColor: Colors.darkOrange
     },
     logOutButtonContainer: {
-        width: '50%',
-        marginVertical: 20,
+        width: wp('50%'),
+        marginVertical: hp('2%'),
     },
     modalView: {
-        height: 50,
         backgroundColor: 'white',
-        padding: 5,
+        padding: wp('2%'),
         justifyContent: 'center',
         alignItems: 'center',
-        borderRadius: 10,
-        flex: 1,
+        borderRadius: hp('1%'),
+        flex: 3,
         flexDirection: 'column',
     },
     modalText: {
         fontSize: 20,
-        flex: 0.25,
+        flex: 0.5,
         fontFamily: 'GentiumBookPlus',
     },
     modalInput: {
-        flex: 1
+        flex: 2
     },
     modalButton: {
-        flex: 0.25,
-        width: '50%',
-        marginTop: 20,
+        flex: 0.5,
+        width: wp('50%'),
+        marginTop: hp('1%'),
     },
     errorTextStyle: {
         color: Colors.errorRed
