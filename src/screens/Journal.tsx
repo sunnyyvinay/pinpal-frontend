@@ -6,6 +6,7 @@ import * as Colors from '../constants/colors';
 import { Button, Divider } from '@rneui/themed';
 import { useFocusEffect } from '@react-navigation/native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 function Journal({ route, navigation }: any): React.JSX.Element {
   const [userData, setUserData] = useState<any>({});
@@ -115,12 +116,12 @@ const styles = StyleSheet.create({
   },
   fullNameStyle: {
     fontSize: 15,
-    fontFamily: 'GentiumBookPlus',
+    fontFamily: 'ChunkFive',
     color: Colors.black
   },
   usernameStyle: {
     fontSize: 13,
-    fontFamily: 'GentiumBookPlus',
+    fontFamily: 'ChunkFive',
     color: Colors.mediumGray
   },
   editButtonContainer: {
@@ -138,7 +139,7 @@ const styles = StyleSheet.create({
   editButtonText: {
     color: Colors.white, 
     fontWeight: '500', 
-    fontFamily: 'GentiumBookPlus', 
+    fontFamily: 'ChunkFive', 
     fontSize: 15,
     marginLeft: 5
   },
@@ -158,13 +159,13 @@ const styles = StyleSheet.create({
   },
   statTextNum: {
     color: Colors.black,
-    fontFamily: 'GentiumBookPlus',
+    fontFamily: 'ChunkFive',
     fontSize: 15,
     alignSelf: 'center',
   },
   statTextLabel: {
     color: Colors.darkGray,
-    fontFamily: 'GentiumBookPlus',
+    fontFamily: 'ChunkFive',
     fontSize: 12,
     alignSelf: 'center',
   },

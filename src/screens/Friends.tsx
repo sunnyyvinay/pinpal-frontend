@@ -3,6 +3,7 @@ import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-nati
 import { Image } from '@rneui/base';
 import { getUser, getUserFriends } from '../services/user.service';
 import * as Colors from '../constants/colors';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 function Friends(props: any): React.JSX.Element {
     const [friends, setFriends] = useState<any>([]);
@@ -74,12 +75,12 @@ const styles = StyleSheet.create({
     },
     friendFullName: {
         fontSize: 16,
-        fontFamily: 'GentiumBookPlus',
+        fontFamily: 'ChunkFive',
         flex: 0.45,
     },
     friendUsernameText: {
         fontSize: 14,
-        fontFamily: 'GentiumBookPlus',
+        fontFamily: 'ChunkFive',
         color: Colors.lightGray,
         flex: 0.45
     }

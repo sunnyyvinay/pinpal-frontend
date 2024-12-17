@@ -14,6 +14,7 @@ import Modal from "react-native-modal";
 import { locationTags, getLocationTagIcon } from '../constants/locationtags';
 import userSearchStyles from '../styles/usersearch';
 import userTagsStyles from '../styles/usertags';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 const AddPin = ({ route, navigation }: any) => {
     const [step, setStep] = useState<number>(1);
@@ -174,7 +175,7 @@ const AddPin = ({ route, navigation }: any) => {
                             color={Colors.white}
                             iconRight
                             iconContainerStyle={{ marginLeft: 10 }}
-                            titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'GentiumBookPlus' }}
+                            titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'ChunkFive' }}
                             buttonStyle={styles.buttonStyle}
                             containerStyle={styles.buttonContainerStyle} 
                             onPress={() => setStep(step + 1)} 
@@ -225,7 +226,7 @@ const AddPin = ({ route, navigation }: any) => {
                                     icon={<MaterialIcon name="edit" size={15} color={Colors.black} style={{ marginRight: 2 }}/>}
                                     color={Colors.black}
                                     iconContainerStyle={{ marginRight: 2 }}
-                                    titleStyle={{ color: Colors.black, fontWeight: '300', fontFamily: 'GentiumBookPlus', fontSize: 15 }}
+                                    titleStyle={{ color: Colors.black, fontWeight: '300', fontFamily: 'ChunkFive', fontSize: 15 }}
                                     buttonStyle={styles.locationTagsAddButton}
                                     containerStyle={styles.locationTagsAddButtonContainer} 
                                     onPress={() => setlocationTagsModal(true)}/>
@@ -235,7 +236,7 @@ const AddPin = ({ route, navigation }: any) => {
                                             title={tag} 
                                             key={index}
                                             buttonStyle={styles.locationTagButton} 
-                                            titleStyle={{ color: Colors.darkGray, fontWeight: '300', fontFamily: 'GentiumBookPlus', fontSize: 15 }}/>
+                                            titleStyle={{ color: Colors.darkGray, fontWeight: '300', fontFamily: 'ChunkFive', fontSize: 15 }}/>
                                     )
                                 })}
                             </View>
@@ -247,7 +248,7 @@ const AddPin = ({ route, navigation }: any) => {
                             color={Colors.white}
                             iconRight
                             iconContainerStyle={{ marginLeft: 10 }}
-                            titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'GentiumBookPlus' }}
+                            titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'ChunkFive' }}
                             buttonStyle={styles.buttonStyle}
                             containerStyle={styles.buttonContainerStyle} 
                             onPress={
@@ -426,7 +427,7 @@ const styles = StyleSheet.create({
     },
     label: {
         color: Colors.black,
-        fontFamily: 'GentiumBookPlus',
+        fontFamily: 'ChunkFive',
         fontSize: 15,
         fontWeight: '700',
         marginBottom: 4,
@@ -479,13 +480,13 @@ const styles = StyleSheet.create({
     },
     visibilityTitleText: {
         color: Colors.black,
-        fontFamily: 'GentiumBookPlus',
+        fontFamily: 'ChunkFive',
         fontWeight: '700',
         marginLeft: 5
     },
     visibilityText: {
         color: Colors.darkGray,
-        fontFamily: 'GentiumBookPlus',
+        fontFamily: 'ChunkFive',
         fontWeight: '700',
         marginRight: 5
     },
@@ -504,7 +505,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         marginTop: 10,
         marginBottom: 20,
-        fontFamily: 'GentiumBookPlus',
+        fontFamily: 'ChunkFive',
     },
     visibilityModalSubview: {
         flex: 1,
@@ -516,7 +517,7 @@ const styles = StyleSheet.create({
         flex: 0.65,
         marginLeft: 10,
         fontSize: 18,
-        fontFamily: 'GentiumBookPlus',
+        fontFamily: 'ChunkFive',
     },
     horizontalLine: {
         borderBottomColor: 'black',
@@ -531,7 +532,7 @@ const styles = StyleSheet.create({
     },
     locationTagsText: {
         fontSize: 15,
-        fontFamily: 'GentiumBookPlus',
+        fontFamily: 'ChunkFive',
         fontWeight: '700',
         color: Colors.black,
         marginBottom: 15,
@@ -564,7 +565,7 @@ const styles = StyleSheet.create({
     },
     locationTagsModalTitle: {
         fontSize: 20,
-        fontFamily: 'GentiumBookPlus'
+        fontFamily: 'ChunkFive'
     },
     locationTagsModalOpacity: {
         width: '100%',
@@ -594,13 +595,13 @@ const styles = StyleSheet.create({
     },
     userTagsTitleText: {
         color: Colors.black,
-        fontFamily: 'GentiumBookPlus',
+        fontFamily: 'ChunkFive',
         fontWeight: '700',
         marginLeft: 5
     },
     userTagsText: {
         color: Colors.darkGray,
-        fontFamily: 'GentiumBookPlus',
+        fontFamily: 'ChunkFive',
         fontWeight: '700',
         marginRight: 5
     }

@@ -2,6 +2,10 @@
   "migIndex": 1,
   "data": [
     {
+      "path": "assets/fonts/ChunkFive-Regular.otf",
+      "sha1": "8411f7a65d8eaca3da7a2c1ccdc77936513f0765"
+    },
+    {
       "path": "assets/fonts/GentiumBookPlus-BoldItalic.ttf",
       "sha1": "c4f2457391ca6720b80ab0b3e128de294f898c62"
     },

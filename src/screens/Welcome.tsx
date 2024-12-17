@@ -10,16 +10,16 @@ const Welcome = ({navigation}: {navigation: any}) => {
     <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 1}} colors={[Colors.yellow, Colors.darkOrange]} style={styles.gradientContainer}>
         <Image source={require('../../assets/images/full-logo.png')} style={styles.logo} />
         <Button 
-            title="LOG IN" 
+            title="Log In" 
             color={Colors.black}
-            titleStyle={{ color: Colors.white, fontWeight: '900', fontFamily: 'GentiumBookPlus' }}
+            titleStyle={{ color: Colors.white, fontWeight: '900', fontFamily: 'ChunkFive' }}
             buttonStyle={styles.button}
             containerStyle={styles.loginButtonContainer} 
             onPress={() => navigation.navigate("Login")} />
         <Button 
-            title="SIGN UP" 
+            title="Sign Up" 
             color={Colors.black}
-            titleStyle={{ color: Colors.white, fontWeight: '900', fontFamily: 'GentiumBookPlus' }}
+            titleStyle={{ color: Colors.white, fontWeight: '900', fontFamily: 'ChunkFive' }}
             buttonStyle={styles.button}
             containerStyle={styles.signupButtonContainer} 
             onPress={() => navigation.navigate("Signup")} />

@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import * as Colors from '../constants/colors';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 const userSearchStyles = StyleSheet.create({
     searchBarContainer: {
@@ -32,12 +33,12 @@ const userSearchStyles = StyleSheet.create({
     },
     searchUserFullName: {
         fontSize: 16,
-        fontFamily: 'GentiumBookPlus',
+        fontFamily: 'ChunkFive',
         flex: 0.45,
     },
     searchUserUsernameText: {
         fontSize: 14,
-        fontFamily: 'GentiumBookPlus',
+        fontFamily: 'ChunkFive',
         color: Colors.mediumGray,
         flex: 0.45
     },

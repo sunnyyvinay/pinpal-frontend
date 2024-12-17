@@ -168,7 +168,7 @@ const Signup = ({navigation}: {navigation: any}) => {
                     icon={<FontAwesome6Icon name="arrow-right-long" size={20} color={Colors.white} style={{ paddingLeft: 5, textAlign: 'center' }}/>}
                     color={Colors.black}
                     iconRight
-                    titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'GentiumBookPlus' }}
+                    titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'ChunkFive' }}
                     buttonStyle={styles.nextButton}
                     containerStyle={styles.buttonContainerStyle} 
                     onPress={ async () => {
@@ -217,9 +217,9 @@ const Signup = ({navigation}: {navigation: any}) => {
                     }} /> 
                 :
                 <Button 
-                    title="SIGN UP"
+                    title="Sign Up"
                     color={Colors.black}
-                    titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'GentiumBookPlus' }}
+                    titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'ChunkFive' }}
                     buttonStyle={styles.nextButton}
                     containerStyle={styles.buttonContainerStyle} 
                     onPress={async () => {
@@ -321,7 +321,8 @@ const styles = StyleSheet.create({
     },
     birthdayInputText: {
         color: Colors.black,
-        fontFamily: 'GentiumBookPlus',
+        fontFamily: 'ChunkFive',
+        fontWeight: '400',
         fontSize: hp('3%'),
         marginBottom: hp('1%'),
     },

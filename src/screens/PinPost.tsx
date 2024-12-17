@@ -16,6 +16,7 @@ import userSearchStyles from '../styles/usersearch';
 import Entypo from 'react-native-vector-icons/Entypo';
 import userTagsStyles from '../styles/usertags';
 import { ImagePickerResponse, launchImageLibrary, MediaType } from 'react-native-image-picker';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 const PinPost = (props:any) => {
     const { pin_id, pin_user_id } = props.route.params;
@@ -497,7 +498,7 @@ const PinPost = (props:any) => {
             icon={<MaterialIcon name="edit" size={15} color={Colors.black} style={{ marginRight: 2 }}/>}
             color={Colors.black}
             iconContainerStyle={{ marginRight: 2 }}
-            titleStyle={{ color: Colors.black, fontWeight: '300', fontFamily: 'GentiumBookPlus', fontSize: 15 }}
+            titleStyle={{ color: Colors.black, fontWeight: '300', fontFamily: 'ChunkFive', fontSize: 15 }}
             buttonStyle={styles.locationTagsAddButton}
             containerStyle={{...styles.locationTagsAddButtonContainer}} 
             onPress={() => {setUserTagState({...userTagState, modalVisible: true})}} />  
@@ -507,7 +508,7 @@ const PinPost = (props:any) => {
                   title={'@' + user.username} 
                   key={index}
                   buttonStyle={styles.userTagButton}
-                  titleStyle={{ color: Colors.mediumGray, fontWeight: '300', fontFamily: 'GentiumBookPlus', fontSize: 15 }} />
+                  titleStyle={{ color: Colors.mediumGray, fontWeight: '300', fontFamily: 'ChunkFive', fontSize: 15 }} />
               )
           })}
         </View>
@@ -521,7 +522,7 @@ const PinPost = (props:any) => {
                 title={'@' + user.username} 
                 key={index}
                 buttonStyle={styles.userTagButton}
-                titleStyle={{ color: Colors.white, fontWeight: '900', fontFamily: 'GentiumBookPlus', fontSize: 15 }} 
+                titleStyle={{ color: Colors.white, fontWeight: '900', fontFamily: 'ChunkFive', fontSize: 15 }} 
                 onPress={() => props.navigation.navigate('Profile', {user_id: user.user_id})}/>
             )
         })}
@@ -539,7 +540,7 @@ const PinPost = (props:any) => {
             icon={<MaterialIcon name="edit" size={15} color={Colors.black} style={{ marginRight: 2 }}/>}
             color={Colors.black}
             iconContainerStyle={{ marginRight: 2 }}
-            titleStyle={{ color: Colors.black, fontWeight: '300', fontFamily: 'GentiumBookPlus', fontSize: 15 }}
+            titleStyle={{ color: Colors.black, fontWeight: '300', fontFamily: 'ChunkFive', fontSize: 15 }}
             buttonStyle={styles.locationTagsAddButton}
             containerStyle={styles.locationTagsAddButtonContainer} 
             onPress={() => {setEditPinLocationTags(true)}} />  
@@ -549,7 +550,7 @@ const PinPost = (props:any) => {
                   title={tag} 
                   key={index}
                   buttonStyle={styles.locationTagButton}
-                  titleStyle={{ color: Colors.mediumGray, fontWeight: '300', fontFamily: 'GentiumBookPlus', fontSize: 15 }} />
+                  titleStyle={{ color: Colors.mediumGray, fontWeight: '300', fontFamily: 'ChunkFive', fontSize: 15 }} />
               )
           })}
         </View>
@@ -563,7 +564,7 @@ const PinPost = (props:any) => {
                 title={tag} 
                 key={index}
                 buttonStyle={styles.locationTagButton}
-                titleStyle={{ color: Colors.darkGray, fontWeight: '300', fontFamily: 'GentiumBookPlus', fontSize: 15 }} />
+                titleStyle={{ color: Colors.darkGray, fontWeight: '300', fontFamily: 'ChunkFive', fontSize: 15 }} />
             )
         })}
         </View>
@@ -595,7 +596,7 @@ const PinPost = (props:any) => {
         <Button 
           title="Cancel"
           color={Colors.black}
-          titleStyle={{ color: Colors.black, fontWeight: '700', fontFamily: 'GentiumBookPlus', fontSize: 14 }}
+          titleStyle={{ color: Colors.black, fontWeight: '700', fontFamily: 'ChunkFive', fontSize: 14 }}
           buttonStyle={styles.cancelEditButton}
           containerStyle={styles.cancelEditButtonContainer} 
           onPress={ () => {
@@ -605,7 +606,7 @@ const PinPost = (props:any) => {
         <Button 
           title="Save" 
           color={Colors.white}
-          titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'GentiumBookPlus', fontSize: 14 }}
+          titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'ChunkFive', fontSize: 14 }}
           buttonStyle={styles.saveEditButton}
           containerStyle={styles.saveEditButtonContainer} 
           onPress={
@@ -658,7 +659,7 @@ const styles = StyleSheet.create({
   usernameText: {
     textAlign: 'center',
     fontSize: 16,
-    fontFamily: 'GentiumBookPlus',
+    fontFamily: 'ChunkFive',
     marginLeft: 5,
   },
   postView: {
@@ -668,7 +669,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 28,
     fontWeight: 'bold',
-    fontFamily: 'GentiumBookPlus',
+    fontFamily: 'ChunkFive',
     color: Colors.mediumOrange,
     marginBottom: 5,
   },
@@ -679,7 +680,7 @@ const styles = StyleSheet.create({
   likesText: {
     marginHorizontal: 5,
     fontSize: 16,
-    fontFamily: 'GentiumBookPlus',
+    fontFamily: 'ChunkFive',
   },
   photosView: {
     marginTop: 5,
@@ -722,13 +723,13 @@ const styles = StyleSheet.create({
   },
   captionText: {
     fontSize: 18,
-    fontFamily: 'GentiumBookPlus',
+    fontFamily: 'ChunkFive',
     color: Colors.black,
   },
   createDateText: {
     color: Colors.darkGray,
     fontSize: 18,
-    fontFamily: 'GentiumBookPlus',
+    fontFamily: 'ChunkFive',
   },
   locationTagsButtonView: {
     flexDirection: 'row',
@@ -767,7 +768,7 @@ const styles = StyleSheet.create({
     flex: 0.99,
     marginLeft: 10,
     fontSize: 18,
-    fontFamily: 'GentiumBookPlus',
+    fontFamily: 'ChunkFive',
   },
   horizontalLine: {
     borderBottomColor: 'black',
@@ -808,7 +809,7 @@ const styles = StyleSheet.create({
     color: Colors.black,
     fontSize: 22,
     fontWeight: 'bold',
-    fontFamily: 'GentiumBookPlus',
+    fontFamily: 'ChunkFive',
     marginVertical: 5,
     marginTop: 20,
   },
@@ -821,7 +822,7 @@ const styles = StyleSheet.create({
       textAlign: 'center',
       alignSelf: 'center',
       fontSize: 15,
-      fontFamily: 'GentiumBookPlus',
+      fontFamily: 'ChunkFive',
       color: Colors.black,
       width: '90%',
       marginTop: 10,

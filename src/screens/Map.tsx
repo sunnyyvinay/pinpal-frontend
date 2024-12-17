@@ -17,6 +17,7 @@ import { locationTags } from '../constants/locationtags';
 import userTagsStyles from '../styles/usertags';
 import Entypo from 'react-native-vector-icons/Entypo';
 import userSearchStyles from '../styles/usersearch';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.Element {
   const { region, setRegion, dragMode, setDragMode } = useAppContext();
@@ -216,7 +217,7 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
               coordinate={{latitude: personalPin.latitude, longitude: personalPin.longitude}}
               image={require('../../assets/images/personal-pin.png')}
               title={personalPin.title} >
-                <Callout style={{...styles.pinCalloutStyle, height: 200}}>
+                <Callout style={{...styles.pinCalloutStyle, height: hp('30%')}}>
                   <View style={styles.pinCalloutView}>
                     <Text style={styles.pinCalloutTitle}>{personalPin.title}</Text>
                     <Image source={{uri: personalPin.photo}} style={styles.pinCalloutImage}/>
@@ -330,14 +331,14 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
               setDragMode({mode: 0, location: {latitude: 0, longitude: 0}, pin_index: -1});
               navigation.navigate("New pin", { latitude: changingRegion.latitude, longitude: changingRegion.longitude })
             }}>
-            <Icon name="checkmark-circle" size={40} color={Colors.green} style={styles.optionIcon} />
+            <Icon name="checkmark-circle" size={wp('10%')} color={Colors.green} style={styles.optionIcon} />
           </TouchableOpacity>
   
           <TouchableOpacity 
             onPress={() => {
               setDragMode({mode: 0, location: {latitude: 0, longitude: 0}, pin_index: -1});
             }}>
-            <MaterialIcon name="cancel" size={40} color={Colors.errorRed} style={styles.optionIcon}/>
+            <MaterialIcon name="cancel" size={wp('10%')} color={Colors.errorRed} style={styles.optionIcon}/>
           </TouchableOpacity>
         </SafeAreaView>
         );
@@ -355,14 +356,14 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
               await updatePinLocation(pins[dragMode.pin_index].user_id, pins[dragMode.pin_index].pin_id, {latitude: changingRegion.latitude, longitude: changingRegion.longitude});
               setDragMode({mode: 0, location: {latitude: 0, longitude: 0}, pin_index: -1});
             }}>
-            <Icon name="checkmark-circle" size={40} color={Colors.green} style={styles.optionIcon} />
+            <Icon name="checkmark-circle" size={wp('10%')} color={Colors.green} style={styles.optionIcon} />
           </TouchableOpacity>
 
           <TouchableOpacity 
             onPress={() => {
               setDragMode({mode: 0, location: {latitude: 0, longitude: 0}, pin_index: -1});
             }}>
-            <MaterialIcon name="cancel" size={40} color={Colors.errorRed} style={styles.optionIcon}/>
+            <MaterialIcon name="cancel" size={wp('10%')} color={Colors.errorRed} style={styles.optionIcon}/>
           </TouchableOpacity>
         </SafeAreaView>
         );
@@ -370,10 +371,10 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
   }
 
   return (
-    <View style={{width: '100%', height: '100%'}}>
+    <View style={{width: wp('100%'), height: hp('100%')}}>
       <View style={styles.filterView}>
-        <TouchableOpacity style={styles.filterIcon} onPress={() => {setTempFilterState({...filterState}); setPinFilterModalVisible(true);}}>
-          <Icon name="filter-circle" size={30} color={Colors.lightOrange} />
+        <TouchableOpacity style={styles.filterIcon} onPress={() => {if (dragMode.mode == 0) {setTempFilterState({...filterState}); setPinFilterModalVisible(true);}}}>
+          <Icon name="filter-circle" size={wp('8%')} color={Colors.lightOrange} />
         </TouchableOpacity>
         <View style={styles.verticalLine} />
         {filterState.location_tag ? 
@@ -410,16 +411,16 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
 
       <View style={styles.mapControlView}>
         {userFilterState.on ?
-          <TouchableOpacity style={styles.mapControlButton} onPress={() => {setUserFilterState({modalVisible: false, search: "", queryUsers: [], on: false, user: ""})}}>
-            <MaterialIcon name="search-off" size={25} color={Colors.lightOrange} />
+          <TouchableOpacity style={styles.mapControlButton} onPress={() => {if (dragMode.mode == 0) setUserFilterState({modalVisible: false, search: "", queryUsers: [], on: false, user: ""})}}>
+            <MaterialIcon name="search-off" size={wp('6%')} color={Colors.lightOrange} />
           </TouchableOpacity>
         :
-          <TouchableOpacity style={styles.mapControlButton} onPress={() => setUserFilterState({...userFilterState, modalVisible: true})}>
-            <MaterialIcon name="person-search" size={25} color={Colors.lightOrange} />
+          <TouchableOpacity style={styles.mapControlButton} onPress={() => {if (dragMode.mode == 0) setUserFilterState({...userFilterState, modalVisible: true})}}>
+            <MaterialIcon name="person-search" size={wp('6%')} color={Colors.lightOrange} />
           </TouchableOpacity>
         }
         <TouchableOpacity style={styles.mapControlButton} onPress={setCurrentLocation}>
-          <FontAwesome6 name="location-arrow" size={25} color={Colors.lightOrange} />
+          <FontAwesome6 name="location-arrow" size={wp('6%')} color={Colors.lightOrange} />
         </TouchableOpacity>
       </View>
       
@@ -440,9 +441,9 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
                     setTempFilterState({...tempFilterState, private: true});
                   }
               }}>
-              <MaterialIcon name="lock" size={25} style={{ flex: 0.25}}/>
+              <MaterialIcon name="lock" size={wp('6%')} style={{ flex: 0.25}}/>
               <Text style={{...styles.filterVisibilityText, flex: 0.65}}>Personal</Text>
-              <Icon name="checkmark-sharp" size={25} color={Colors.mediumOrange} style={tempFilterState.private ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
+              <Icon name="checkmark-sharp" size={wp('6%')} color={Colors.mediumOrange} style={tempFilterState.private ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
             </TouchableOpacity>
             <View style={styles.horizontalLine} />
 
@@ -455,9 +456,9 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
                     setTempFilterState({...tempFilterState, friends: true});
                   }
               }}>
-              <MaterialIcon name="people-alt" size={25} style={{ flex: 0.25}}/>
+              <MaterialIcon name="people-alt" size={wp('6%')} style={{ flex: 0.25}}/>
               <Text style={{...styles.filterVisibilityText, flex: 0.65}}>Friends</Text>
-              <Icon name="checkmark-sharp" size={25} color={Colors.mediumOrange} style={tempFilterState.friends ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
+              <Icon name="checkmark-sharp" size={wp('6%')} color={Colors.mediumOrange} style={tempFilterState.friends ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
             </TouchableOpacity>
             <View style={styles.horizontalLine} />
 
@@ -470,9 +471,9 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
                     setTempFilterState({...tempFilterState, public: true});
                   }
               }}>
-              <MaterialIcon name="public" size={25} style={{ flex: 0.25}}/>
+              <MaterialIcon name="public" size={wp('6%')} style={{ flex: 0.25}}/>
               <Text style={{...styles.filterVisibilityText, flex: 0.65}}>Public</Text>
-              <Icon name="checkmark-sharp" size={25} color={Colors.mediumOrange} style={tempFilterState.public ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
+              <Icon name="checkmark-sharp" size={wp('6%')} color={Colors.mediumOrange} style={tempFilterState.public ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
             </TouchableOpacity>
           </View>
       </Modal>
@@ -484,7 +485,7 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
         <View style={userTagsStyles.userTagsModalView}>
             <View style={userTagsStyles.userTagsModalHeader}>
                 <Text style={userTagsStyles.userTagsModalTitle}>Filter by user</Text>
-                <Entypo name="cross" size={25} color={Colors.mediumGray} onPress={() => setUserFilterState({...userFilterState, modalVisible: false})} style={{position: 'absolute', left: '55%'}}/>
+                <Entypo name="cross" size={wp('6%')} color={Colors.mediumGray} onPress={() => setUserFilterState({...userFilterState, modalVisible: false})} style={{position: 'absolute', left: wp('50%')}}/>
             </View>
             <SearchBar 
                 placeholder='Search...'
@@ -494,7 +495,7 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
                 lightTheme={true}
                 containerStyle={userSearchStyles.searchBarContainer}
                 onChangeText={(text) => setUserFilterState({...userFilterState, search: text})}/>
-            <ScrollView style={{width: '100%', flex: 1}}>
+            <ScrollView style={{width: wp('100%'), flex: 1}}>
               <View style={{flex: 0.8}}>
                   { userFilterState.queryUsers && userFilterState.queryUsers.length > 0 && userFilterState.queryUsers.map((user: any) => (
                       userView(user)
@@ -503,19 +504,18 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
             </ScrollView>
         </View>
     </Modal>
-
     </View> 
   )
 }
 
 const styles = StyleSheet.create({
   mapContainer: {
-    width: '100%',
-    height: '100%',
+    width: wp('100%'),
+    height: hp('100%'),
   },
   draggableOptionsView: {
     position: 'absolute',
-    top: '55%',
+    top: hp('55%'),
     alignItems: 'center',
     alignSelf: 'center',
     flex: 1,
@@ -524,12 +524,12 @@ const styles = StyleSheet.create({
   },
   optionIcon: {
     flex: 0.5,
-    marginHorizontal: 10
+    marginHorizontal: wp('2.5%'),
   },
   pinCalloutStyle: {
-    height: 225,
-    width: 200,
-    padding: 10,
+    height: hp('35%'),
+    width: wp('50%'),
+    padding: hp('1%'),
   },
   pinCalloutView: {
     alignItems: 'center',
@@ -537,52 +537,52 @@ const styles = StyleSheet.create({
   },
   pinCalloutTitle: {
     fontSize: 18,
-    fontFamily: 'GentiumBookPlus',
+    fontFamily: 'ChunkFive',
     fontWeight: 'bold',
-    marginBottom: 5
+    marginBottom: hp('0.5%')
   },
   pinCalloutUsername: {
     fontSize: 16,
     fontStyle: 'italic',
-    fontFamily: 'GentiumBookPlus',
+    fontFamily: 'ChunkFive',
     color: Colors.darkGray,
-    marginBottom: 5
+    marginBottom: hp('0.5%')
   },
   pinCalloutImage: {
-    width: 200,
-    height: 100,
-    borderRadius: 10,
+    width: wp('50%'),
+    height: hp('20%'),
+    borderRadius: hp('1%'),
     resizeMode: 'center',
   },
   pinCalloutViewButton: {
     backgroundColor: Colors.darkOrange,
     borderWidth: 0,
-    borderRadius: 10,
-    height: 30,
-    width: 70,
+    borderRadius: hp('1%'),
+    height: hp('3%'),
+    width: wp('20%'),
     justifyContent: 'center',
     alignItems: 'center',
   },
   pinCalloutViewButtonText: {
     color: Colors.white, 
     fontWeight: '700', 
-    fontFamily: 'GentiumBookPlus', 
+    fontFamily: 'ChunkFive', 
     fontSize: 12,
     textAlign: 'center'
   },
   mapControlView: {
     flexDirection: 'column',
     position: 'absolute',
-    padding: 10,
-    marginLeft: "80%",
-    marginTop: "110%"
+    padding: hp('1%'),
+    marginLeft: wp("80%"),
+    marginTop: hp("62.5%")
   },
   mapControlButton: {
     backgroundColor: 'white',
     borderWidth: 0,
-    borderRadius: 30,
-    height: 50,
-    width: 50,
+    borderRadius: hp('3%'),
+    height: hp('6%'),
+    width: hp('6%'),
     alignItems: 'center',
     justifyContent: 'center',
     shadowColor: 'black',
@@ -590,40 +590,40 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.6,
     shadowRadius: 4,
     flex: 0.5,
-    marginVertical: 5
+    marginVertical: hp('0.5%')
   },
   filterView: {
-    height: 40,
-    width: '100%',
+    height: hp('5%'),
+    width: wp('100%'),
     backgroundColor: 'white',
     flexDirection: 'row',
     alignItems: 'center',
   },
   filterIcon: {
-    marginLeft: 10,
+    marginLeft: wp('3%'),
   },
   verticalLine: {
-    height: '80%',
+    height: hp('80%'),
     width: 1,
     backgroundColor: Colors.mediumGray,
-    marginHorizontal: 10,
+    marginHorizontal: wp('3%'),
   },
   locationTagView: {
     flexDirection: 'row',
-    marginVertical: 5
+    marginVertical: hp('0.5%')
   },
   locationTagOpacity: {
     borderWidth: 0,
-    borderRadius: 20,
+    borderRadius: hp('2%'),
     backgroundColor: Colors.whiteOrange,
-    marginHorizontal: 5,
+    marginHorizontal: wp('1%'),
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 7,
+    padding: hp('1%'),
   },
   locationTagText: {
     fontSize: 12,
-    fontFamily: 'GentiumBookPlus',
+    fontFamily: 'ChunkFive',
     color: Colors.darkGray,
     textAlign: "center",
   },
@@ -631,35 +631,36 @@ const styles = StyleSheet.create({
     borderBottomColor: 'black',
     borderBottomWidth: StyleSheet.hairlineWidth,
     alignSelf: 'center',
-    width: '100%',
+    width: wp('75%'),
   },
   pinFilterModal: {
     justifyContent: 'center',
   },
   pinFilterModalView: {
     backgroundColor: 'white',
-    padding: 20,
+    padding: hp('2%'),
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 10,
+    borderRadius: hp('1%'),
     flex: 0.4,
   },
   pinFilterModalTitle: {
     fontSize: 20,
-    marginTop: 20,
-    marginBottom: 20,
+    marginTop: hp('2%'),
+    marginBottom: hp('2%'),
+    fontFamily: 'ChunkFive',
   },
   filterVisibilityOpacity: {
     flex: 1,
     flexDirection: 'row',
-    padding: 10,
+    padding: hp('1%'),
     alignItems: 'center',
   },
   filterVisibilityText: {
     flex: 0.99,
-    marginLeft: 10,
+    marginLeft: wp('1%'),
     fontSize: 18,
-    fontFamily: 'GentiumBookPlus',
+    fontFamily: 'ChunkFive',
   },
 });
 

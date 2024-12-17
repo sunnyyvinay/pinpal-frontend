@@ -8,6 +8,7 @@ import { Button, Divider } from '@rneui/themed';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Icon from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 function Profile(props: any): React.JSX.Element {
   const [currUser, setCurrUser] = useState<string|null>("");
@@ -179,12 +180,12 @@ const styles = StyleSheet.create({
   },
   fullNameStyle: {
     fontSize: 15,
-    fontFamily: 'GentiumBookPlus',
+    fontFamily: 'ChunkFive',
     color: Colors.black
   },
   usernameStyle: {
     fontSize: 13,
-    fontFamily: 'GentiumBookPlus',
+    fontFamily: 'ChunkFive',
     color: Colors.mediumGray
   },
   statsContainer: {
@@ -203,13 +204,13 @@ const styles = StyleSheet.create({
   },
   statTextNum: {
     color: Colors.black,
-    fontFamily: 'GentiumBookPlus',
+    fontFamily: 'ChunkFive',
     fontSize: 15,
     alignSelf: 'center',
   },
   statTextLabel: {
     color: Colors.darkGray,
-    fontFamily: 'GentiumBookPlus',
+    fontFamily: 'ChunkFive',
     fontSize: 12,
     alignSelf: 'center',
   },
@@ -230,7 +231,7 @@ const styles = StyleSheet.create({
   },
   requestText: {
     color: Colors.white,
-    fontFamily: 'GentiumBookPlus',
+    fontFamily: 'ChunkFive',
     fontWeight: '500',
     fontSize: 15,
     marginLeft: 5

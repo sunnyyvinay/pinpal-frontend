@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import * as Colors from '../constants/colors';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 const userTagsStyles = StyleSheet.create({
     userTagsModal: {
@@ -21,12 +22,12 @@ const userTagsStyles = StyleSheet.create({
     userTagsModalTitle: {
         fontSize: 20,
         textAlign: 'center',
-        fontFamily: 'GentiumBookPlus',
+        fontFamily: 'ChunkFive',
     },
     userTagsModalText: {
         marginLeft: 10,
         fontSize: 14,
-        fontFamily: 'GentiumBookPlus',
+        fontFamily: 'ChunkFive',
         marginBottom: 5,
         marginTop: 15,
     },

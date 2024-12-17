@@ -44,6 +44,7 @@
 		CD9687237F925D96D3F1CBC7 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 59FC3CCB0471EE1186F928DD /* PrivacyInfo.xcprivacy */; };
 		D7F983707B114B22ADF8CE40 /* Sansation_Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AFA3A992A947444BAF27E915 /* Sansation_Bold.ttf */; };
 		F06199079DA143B5BBBD9154 /* GentiumBookPlusBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 07316B7F503A4CC8BB13E47E /* GentiumBookPlusBold.ttf */; };
+		B2B95907635B4ADCAC436BB3 /* ChunkFive-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9D14D53B377645EAAE5902EF /* ChunkFive-Regular.otf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -105,6 +106,7 @@
 		E80E0DE07AB94679A0B72505 /* GentiumBookPlus-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GentiumBookPlus-BoldItalic.ttf"; path = "../assets/fonts/GentiumBookPlus-BoldItalic.ttf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		FD38407AC46E4644B6933DF9 /* Sansation_Bold_Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Sansation_Bold_Italic.ttf; path = ../assets/fonts/Sansation_Bold_Italic.ttf; sourceTree = "<group>"; };
+		9D14D53B377645EAAE5902EF /* ChunkFive-Regular.otf */ = {isa = PBXFileReference; name = "ChunkFive-Regular.otf"; path = "../assets/fonts/ChunkFive-Regular.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -215,6 +217,7 @@
 				236345E997BA4AB0909623FE /* GentiumBookPlus-Regular.ttf */,
 				07316B7F503A4CC8BB13E47E /* GentiumBookPlusBold.ttf */,
 				672938C3639F475499157E97 /* GentiumBookPlusItalic.ttf */,
+				9D14D53B377645EAAE5902EF /* ChunkFive-Regular.otf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -381,6 +384,7 @@
 				9858878196204A56AFCBAA1A /* GentiumBookPlus-Regular.ttf in Resources */,
 				F06199079DA143B5BBBD9154 /* GentiumBookPlusBold.ttf in Resources */,
 				6D81C220B87444C3BE6B215D /* GentiumBookPlusItalic.ttf in Resources */,
+				B2B95907635B4ADCAC436BB3 /* ChunkFive-Regular.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

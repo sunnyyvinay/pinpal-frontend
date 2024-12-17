@@ -60,9 +60,9 @@ const Login = ({navigation}: {navigation: any}) => {
         )}
 
         <Button 
-            title="LOG IN" 
+            title="Log In" 
             color={Colors.black}
-            titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'GentiumBookPlus' }}
+            titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'ChunkFive' }}
             buttonStyle={styles.button}
             containerStyle={styles.loginButtonContainer} 
             onPress={async () => {
@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
   backButtonContainer: {
     position: 'absolute',
     marginLeft: wp('5%'),
-    marginTop: hp('3%'),
+    marginTop: hp('5%'),
     alignSelf: 'flex-start',
   },
   loginButtonContainer: {

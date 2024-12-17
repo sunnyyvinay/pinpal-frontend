@@ -8,6 +8,7 @@ import * as Colors from '../constants/colors';
 import { Image, StyleSheet, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ContextProvider } from '../AppContext';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 const Tab = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = 'Map';
@@ -31,7 +32,7 @@ function NavBar({ route, navigation }: any): React.JSX.Element {
     <ContextProvider>
     <Tab.Navigator
       initialRouteName={INITIAL_ROUTE_NAME}
-      screenOptions={{tabBarLabelStyle: {paddingBottom: 5}, tabBarActiveTintColor: Colors.darkOrange, tabBarInactiveTintColor: Colors.mediumGray}}>
+      screenOptions={{tabBarLabelStyle: {paddingBottom: hp('0.5%')}, tabBarActiveTintColor: Colors.darkOrange, tabBarInactiveTintColor: Colors.mediumGray}}>
       <Tab.Screen
         name="Map"
         component={Map}
@@ -41,7 +42,7 @@ function NavBar({ route, navigation }: any): React.JSX.Element {
             ),
             headerLeft: () => (addFriendsIcon()),
             headerTitle: () => <Image source={require('../../assets/images/full-logo.png')} style={styles.headerTitle}/>,
-            headerRight: () => <Icon name="settings-outline" size={30} style={styles.settingsButton} onPress={() => navigation.navigate("Settings")}/>
+            headerRight: () => <Icon name="settings-outline" size={wp('8%')} style={styles.settingsButton} onPress={() => navigation.navigate("Settings")}/>
         }}
       />
       <Tab.Screen
@@ -60,7 +61,7 @@ function NavBar({ route, navigation }: any): React.JSX.Element {
             ),
             headerLeft: () => (addFriendsIcon()),
             headerTitle: "My Journal",
-            headerRight: () => <Icon name="settings-outline" size={30} style={styles.settingsButton} onPress={() => navigation.navigate("Settings")}/>
+            headerRight: () => <Icon name="settings-outline" size={wp('8%')} style={styles.settingsButton} onPress={() => navigation.navigate("Settings")}/>
         }}
       />
     </Tab.Navigator>
@@ -71,19 +72,19 @@ function NavBar({ route, navigation }: any): React.JSX.Element {
 const styles = StyleSheet.create({
   addFriendsButton: {
     flex: 1,
-    width: 30,
-    height: 30,
+    width: wp('8%'),
+    height: wp('8%'),
     resizeMode: 'contain',
-    marginLeft: 10
+    marginLeft: wp('4%')
   },
   headerTitle: {
     flex: 1,
-    width: 100,
-    height: 100,
+    width: wp('25%'),
+    height: wp('25%'),
     resizeMode: 'contain',
   },
   settingsButton: {
-    marginRight: 10
+    marginRight: wp('4%')
   }
 });
 

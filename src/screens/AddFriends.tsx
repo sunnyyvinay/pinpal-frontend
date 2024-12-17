@@ -7,6 +7,7 @@ import * as Colors from '../constants/colors';
 import Icon from 'react-native-vector-icons/Ionicons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import userSearchStyles from '../styles/usersearch';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 const AddFriends = ({ route, navigation }: any) => {
     let user_id: string | null = '';
@@ -137,7 +138,7 @@ const styles = StyleSheet.create({
     friendRequestTitleText: {
         marginLeft: 10,
         fontSize: 18,
-        fontFamily: 'GentiumBookPlus',
+        fontFamily: 'ChunkFive',
         marginBottom: 5,
         marginTop: 15
     },
@@ -156,7 +157,7 @@ const styles = StyleSheet.create({
     acceptViewText: {
         color: Colors.white,
         fontWeight: '500',
-        fontFamily: 'GentiumBookPlus',
+        fontFamily: 'ChunkFive',
         fontSize: 14,
         textAlign: 'center'
     },

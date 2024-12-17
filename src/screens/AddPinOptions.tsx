@@ -6,6 +6,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import * as Colors from '../constants/colors';
 import GetLocation, { isLocationError } from 'react-native-get-location';
 import { useAppContext } from '../AppContext';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 function AddPinOptions({ route, navigation }: any): React.JSX.Element {
   const [modalVisible, setModalVisible] = useState(false);
@@ -58,7 +59,7 @@ function AddPinOptions({ route, navigation }: any): React.JSX.Element {
                 title="Current location" 
                 color={Colors.white}
                 buttonStyle={styles.optionButton}
-                titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'GentiumBookPlus' }}
+                titleStyle={{ color: Colors.white, fontWeight: '500', fontFamily: 'ChunkFive' }}
                 containerStyle={styles.optionButtonContainer}
                 onPress= {async () => {
                   setModalVisible(false);
@@ -69,7 +70,7 @@ function AddPinOptions({ route, navigation }: any): React.JSX.Element {
                 title="Dragged location" 
                 color={Colors.white}
                 buttonStyle={styles.optionButton}
-                titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'GentiumBookPlus' }}
+                titleStyle={{ color: Colors.white, fontWeight: '500', fontFamily: 'ChunkFive' }}
                 containerStyle={styles.optionButtonContainer}
                 onPress= {() => {
                   setModalVisible(false);
@@ -85,36 +86,38 @@ function AddPinOptions({ route, navigation }: any): React.JSX.Element {
 const styles = StyleSheet.create({
   content: {
     backgroundColor: 'white',
-    padding: 20,
+    padding: wp('5%'),
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 10,
+    borderRadius: wp('2.5%'),
   },
   contentTitle: {
-    fontSize: 20,
-    marginBottom: 5,
+    fontSize: wp('5%'),
+    marginBottom: hp('1%'),
+    fontFamily: 'ChunkFive',
+    fontWeight: '500'
   },
   contentView: {
     justifyContent: 'center',
   },
   buttonStyle: {
-    height: 80,
-    width: 80,
+    height: hp('7%'),
+    width: hp('7%'),
     backgroundColor: Colors.darkOrange,
-    borderRadius: 100,
+    borderRadius: hp('15%'),
     justifyContent: 'center',
     alignItems: 'center',
     shadowColor: 'black',
     shadowOffset: { width: 4, height: 4 },
     shadowOpacity: 0.6,
-    paddingBottom: 20,
   },
   optionButton: {
-    backgroundColor: Colors.mediumOrange
+    backgroundColor: Colors.mediumOrange,
+    borderRadius: wp('5%')
   },
   optionButtonContainer: {
-    width: '75%',
-    marginTop: 20,
+    width: wp('75%'),
+    marginTop: hp('2%'),
   }
 });
 

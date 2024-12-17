@@ -196,10 +196,10 @@ const Settings = ({ route, navigation }: any) => {
             </TouchableOpacity>
 
             <Button 
-                title="LOG OUT" 
+                title="Log Out" 
                 color={Colors.white}
                 buttonStyle={styles.logOutButton}
-                titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'GentiumBookPlus' }}
+                titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'ChunkFive' }}
                 containerStyle={styles.logOutButtonContainer}
                 onPress={async () => {
                     await AsyncStorage.removeItem("user_id");
@@ -230,7 +230,7 @@ const Settings = ({ route, navigation }: any) => {
                         title="SAVE"
                         color={Colors.white}
                         buttonStyle={styles.logOutButton}
-                        titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'GentiumBookPlus' }}
+                        titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'ChunkFive' }}
                         containerStyle={styles.modalButton}
                         onPress={async () => {
                             try {
@@ -283,7 +283,7 @@ const Settings = ({ route, navigation }: any) => {
                         title="SAVE"
                         color={Colors.white}
                         buttonStyle={styles.logOutButton}
-                        titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'GentiumBookPlus' }}
+                        titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'ChunkFive' }}
                         containerStyle={styles.modalButton}
                         onPress={async () => {
                             try {
@@ -334,7 +334,7 @@ const Settings = ({ route, navigation }: any) => {
                         title="SAVE"
                         color={Colors.white}
                         buttonStyle={styles.logOutButton}
-                        titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'GentiumBookPlus' }}
+                        titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'ChunkFive' }}
                         containerStyle={styles.modalButton}
                         onPress={async () => {
                             try {
@@ -397,7 +397,7 @@ const Settings = ({ route, navigation }: any) => {
                         title="SAVE"
                         color={Colors.white}
                         buttonStyle={styles.logOutButton}
-                        titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'GentiumBookPlus' }}
+                        titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'ChunkFive' }}
                         containerStyle={styles.modalButton}
                         onPress={async () => {
                             try {
@@ -442,18 +442,19 @@ const styles = StyleSheet.create({
     sectionTitle: {
         alignSelf: 'flex-start',
         marginLeft: wp('5%'),
-        fontFamily: 'GentiumBookPlus',
+        fontFamily: 'ChunkFive',
         fontWeight: 'bold',
         marginBottom: hp('1%'),
         marginTop: hp('2%'),
     },
     fieldView: {
+        paddingVertical: hp('0.5%'),
         width: wp('95%'),
         backgroundColor: Colors.lightGray,
         flex: 1,
         flexDirection: 'row',
         borderRadius: hp('1%'),
-        marginBottom: hp('1%'),
+        marginBottom: hp('1.5%'),
     },
     textView: {
         flex: 0.95,
@@ -463,7 +464,7 @@ const styles = StyleSheet.create({
         marginLeft: wp('2%'),
     },
     fieldText: {
-        fontFamily: 'GentiumBookPlus',
+        fontFamily: 'ChunkFive',
         flex: 0.5,
         color: Colors.darkGray
     },
@@ -515,7 +516,7 @@ const styles = StyleSheet.create({
     },
     modalView: {
         backgroundColor: 'white',
-        padding: wp('2%'),
+        padding: wp('5%'),
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: hp('1%'),
@@ -525,7 +526,7 @@ const styles = StyleSheet.create({
     modalText: {
         fontSize: 20,
         flex: 0.5,
-        fontFamily: 'GentiumBookPlus',
+        fontFamily: 'ChunkFive',
     },
     modalInput: {
         flex: 2
