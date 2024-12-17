@@ -6,7 +6,7 @@ import FeatherIcon from 'react-native-vector-icons/Feather';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import * as Colors from '../constants/colors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { checkUsername, getUser, updateUser } from '../services/user.service';
+import { checkUsername, getUser, updateUser, updateUserPic } from '../services/user.service';
 import DatePicker from 'react-native-date-picker';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import {ImagePickerResponse, launchImageLibrary, MediaType} from 'react-native-image-picker';
@@ -19,9 +19,9 @@ const Settings = ({ route, navigation }: any) => {
     const [modal, setModal] = useState<number>(0);
     const [newUserData, setNewUserData] = useState<any>({});
     const [oldPass, setOldPass] = useState<string>("");
+
     const [hiddenOldPass, setHiddenOldPass] = useState<boolean>(true);
     const [hiddenNewPass, setHiddenNewPass] = useState<boolean>(true);
-
     const [error, setError] = useState<any>({
         full_name: "",
         username: "",
@@ -71,12 +71,12 @@ const Settings = ({ route, navigation }: any) => {
                     type: 'image/jpeg',
                     name: user_id + '.jpg',
                 });
-                formData.append('username', userData.username);
-                formData.append('full_name', userData.full_name);
-                formData.append('birthday', userData.birthday);
-                formData.append('phone_no', userData.phone_no);
-                formData.append('pass', userData.pass);
-                await updateUser(user_id, formData);
+                // formData.append('username', userData.username);
+                // formData.append('full_name', userData.full_name);
+                // formData.append('birthday', userData.birthday);
+                // formData.append('phone_no', userData.phone_no);
+                // formData.append('pass', userData.pass);
+                await updateUserPic(user_id, formData);
                 setUserData({...userData, profile_pic: imageUri});
                 } else {
                     navigation.navigate("Welcome");
@@ -113,11 +113,11 @@ const Settings = ({ route, navigation }: any) => {
             </TouchableOpacity>
             <View style={styles.pfpOptionsView}>
                 <TouchableOpacity style={styles.pfpEditIcon} onPress={openImagePicker}>
-                        <MaterialIcon name="add-a-photo" size={20} />
+                    <MaterialIcon name="add-a-photo" size={20} />
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.pfpDeleteIcon} onPress={async () => {
                     setUserData({...userData, profile_pic: null});
-                    await updateUser(userData.user_id, userData);
+                    await updateUserPic(userData.user_id, null);
                 }}>
                     <Ionicons name="trash" size={20} color={Colors.lightRed} />
                 </TouchableOpacity>

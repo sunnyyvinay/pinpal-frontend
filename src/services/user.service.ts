@@ -67,6 +67,16 @@ export const updateUser = async (id: string, user: any) => {
   }
 }
 
+// UPDATE USER PROFILE PIC
+export const updateUserPic = async (id: string, user: any) => {
+  try {
+      const response = await axios.put(`${apiUrl}/${id}/update_profile_pic`, user);
+      return response.data;
+  } catch (error) {
+      return error;
+  }
+}
+
 // GET USER PINS
 export const getPins = async (id: string) => {
   try {
