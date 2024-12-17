@@ -9,18 +9,11 @@
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* pinpalfrontendTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* pinpalfrontendTests.m */; };
 		0C80B921A6F3F58F76C31292 /* libPods-pinpalfrontend.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DCACB8F33CDC322A6C60F78 /* libPods-pinpalfrontend.a */; };
-		0ED6278CFECD4EC09D75D6F1 /* Sansation_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1C09564894554EEEA2D1B856 /* Sansation_Regular.ttf */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		214E2FE89175467F814F1939 /* Sansation_Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 37D17C76B2DF482F9F4E5147 /* Sansation_Italic.ttf */; };
-		4835F1380D2D4240B93CF861 /* GentiumBookPlus-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E80E0DE07AB94679A0B72505 /* GentiumBookPlus-BoldItalic.ttf */; };
-		59B9B1780D624B22AF90774D /* Sansation_Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 367B728F52CC4F898E120E0F /* Sansation_Light.ttf */; };
-		6105B53E06FE461D8E79D881 /* Sansation_Bold_Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FD38407AC46E4644B6933DF9 /* Sansation_Bold_Italic.ttf */; };
-		6D81C220B87444C3BE6B215D /* GentiumBookPlusItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 672938C3639F475499157E97 /* GentiumBookPlusItalic.ttf */; };
 		7699B88040F8A987B510C191 /* libPods-pinpalfrontend-pinpalfrontendTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-pinpalfrontend-pinpalfrontendTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		9858878196204A56AFCBAA1A /* GentiumBookPlus-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 236345E997BA4AB0909623FE /* GentiumBookPlus-Regular.ttf */; };
 		A336A9922C6BD0E4005D99D4 /* AntDesign.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A336A97E2C6BD0E4005D99D4 /* AntDesign.ttf */; };
 		A336A9932C6BD0E4005D99D4 /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A336A97F2C6BD0E4005D99D4 /* Entypo.ttf */; };
 		A336A9942C6BD0E4005D99D4 /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A336A9802C6BD0E4005D99D4 /* EvilIcons.ttf */; };
@@ -40,10 +33,7 @@
 		A336A9A22C6BD0E4005D99D4 /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A336A98E2C6BD0E4005D99D4 /* Octicons.ttf */; };
 		A336A9A32C6BD0E4005D99D4 /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A336A98F2C6BD0E4005D99D4 /* SimpleLineIcons.ttf */; };
 		A336A9A42C6BD0E4005D99D4 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A336A9902C6BD0E4005D99D4 /* Zocial.ttf */; };
-		A3FADC1342824607982FF923 /* Sansation_Light_Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 44A8A4E9007C4DE98095C793 /* Sansation_Light_Italic.ttf */; };
 		CD9687237F925D96D3F1CBC7 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 59FC3CCB0471EE1186F928DD /* PrivacyInfo.xcprivacy */; };
-		D7F983707B114B22ADF8CE40 /* Sansation_Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AFA3A992A947444BAF27E915 /* Sansation_Bold.ttf */; };
-		F06199079DA143B5BBBD9154 /* GentiumBookPlusBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 07316B7F503A4CC8BB13E47E /* GentiumBookPlusBold.ttf */; };
 		B2B95907635B4ADCAC436BB3 /* ChunkFive-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9D14D53B377645EAAE5902EF /* ChunkFive-Regular.otf */; };
 /* End PBXBuildFile section */
 
@@ -61,7 +51,6 @@
 		00E356EE1AD99517003FC87E /* pinpalfrontendTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = pinpalfrontendTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* pinpalfrontendTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = pinpalfrontendTests.m; sourceTree = "<group>"; };
-		07316B7F503A4CC8BB13E47E /* GentiumBookPlusBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = GentiumBookPlusBold.ttf; path = ../assets/fonts/GentiumBookPlusBold.ttf; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* pinpalfrontend.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = pinpalfrontend.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = pinpalfrontend/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = pinpalfrontend/AppDelegate.mm; sourceTree = "<group>"; };
@@ -70,17 +59,11 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = pinpalfrontend/main.m; sourceTree = "<group>"; };
 		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = pinpalfrontend/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		19F6CBCC0A4E27FBF8BF4A61 /* libPods-pinpalfrontend-pinpalfrontendTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-pinpalfrontend-pinpalfrontendTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		1C09564894554EEEA2D1B856 /* Sansation_Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Sansation_Regular.ttf; path = ../assets/fonts/Sansation_Regular.ttf; sourceTree = "<group>"; };
-		236345E997BA4AB0909623FE /* GentiumBookPlus-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GentiumBookPlus-Regular.ttf"; path = "../assets/fonts/GentiumBookPlus-Regular.ttf"; sourceTree = "<group>"; };
-		367B728F52CC4F898E120E0F /* Sansation_Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Sansation_Light.ttf; path = ../assets/fonts/Sansation_Light.ttf; sourceTree = "<group>"; };
-		37D17C76B2DF482F9F4E5147 /* Sansation_Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Sansation_Italic.ttf; path = ../assets/fonts/Sansation_Italic.ttf; sourceTree = "<group>"; };
 		3B4392A12AC88292D35C810B /* Pods-pinpalfrontend.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-pinpalfrontend.debug.xcconfig"; path = "Target Support Files/Pods-pinpalfrontend/Pods-pinpalfrontend.debug.xcconfig"; sourceTree = "<group>"; };
-		44A8A4E9007C4DE98095C793 /* Sansation_Light_Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Sansation_Light_Italic.ttf; path = ../assets/fonts/Sansation_Light_Italic.ttf; sourceTree = "<group>"; };
 		5709B34CF0A7D63546082F79 /* Pods-pinpalfrontend.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-pinpalfrontend.release.xcconfig"; path = "Target Support Files/Pods-pinpalfrontend/Pods-pinpalfrontend.release.xcconfig"; sourceTree = "<group>"; };
 		59FC3CCB0471EE1186F928DD /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = pinpalfrontend/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		5B7EB9410499542E8C5724F5 /* Pods-pinpalfrontend-pinpalfrontendTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-pinpalfrontend-pinpalfrontendTests.debug.xcconfig"; path = "Target Support Files/Pods-pinpalfrontend-pinpalfrontendTests/Pods-pinpalfrontend-pinpalfrontendTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5DCACB8F33CDC322A6C60F78 /* libPods-pinpalfrontend.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-pinpalfrontend.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		672938C3639F475499157E97 /* GentiumBookPlusItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = GentiumBookPlusItalic.ttf; path = ../assets/fonts/GentiumBookPlusItalic.ttf; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = pinpalfrontend/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-pinpalfrontend-pinpalfrontendTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-pinpalfrontend-pinpalfrontendTests.release.xcconfig"; path = "Target Support Files/Pods-pinpalfrontend-pinpalfrontendTests/Pods-pinpalfrontend-pinpalfrontendTests.release.xcconfig"; sourceTree = "<group>"; };
 		A336A97E2C6BD0E4005D99D4 /* AntDesign.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = AntDesign.ttf; sourceTree = "<group>"; };
@@ -102,10 +85,7 @@
 		A336A98E2C6BD0E4005D99D4 /* Octicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Octicons.ttf; sourceTree = "<group>"; };
 		A336A98F2C6BD0E4005D99D4 /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = SimpleLineIcons.ttf; sourceTree = "<group>"; };
 		A336A9902C6BD0E4005D99D4 /* Zocial.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Zocial.ttf; sourceTree = "<group>"; };
-		AFA3A992A947444BAF27E915 /* Sansation_Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Sansation_Bold.ttf; path = ../assets/fonts/Sansation_Bold.ttf; sourceTree = "<group>"; };
-		E80E0DE07AB94679A0B72505 /* GentiumBookPlus-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GentiumBookPlus-BoldItalic.ttf"; path = "../assets/fonts/GentiumBookPlus-BoldItalic.ttf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
-		FD38407AC46E4644B6933DF9 /* Sansation_Bold_Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Sansation_Bold_Italic.ttf; path = ../assets/fonts/Sansation_Bold_Italic.ttf; sourceTree = "<group>"; };
 		9D14D53B377645EAAE5902EF /* ChunkFive-Regular.otf */ = {isa = PBXFileReference; name = "ChunkFive-Regular.otf"; path = "../assets/fonts/ChunkFive-Regular.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
@@ -207,16 +187,6 @@
 		902B0F7D0647469ABDBDDCEB /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				AFA3A992A947444BAF27E915 /* Sansation_Bold.ttf */,
-				FD38407AC46E4644B6933DF9 /* Sansation_Bold_Italic.ttf */,
-				37D17C76B2DF482F9F4E5147 /* Sansation_Italic.ttf */,
-				367B728F52CC4F898E120E0F /* Sansation_Light.ttf */,
-				44A8A4E9007C4DE98095C793 /* Sansation_Light_Italic.ttf */,
-				1C09564894554EEEA2D1B856 /* Sansation_Regular.ttf */,
-				E80E0DE07AB94679A0B72505 /* GentiumBookPlus-BoldItalic.ttf */,
-				236345E997BA4AB0909623FE /* GentiumBookPlus-Regular.ttf */,
-				07316B7F503A4CC8BB13E47E /* GentiumBookPlusBold.ttf */,
-				672938C3639F475499157E97 /* GentiumBookPlusItalic.ttf */,
 				9D14D53B377645EAAE5902EF /* ChunkFive-Regular.otf */,
 			);
 			name = Resources;
@@ -374,16 +344,6 @@
 				A336A99A2C6BD0E4005D99D4 /* FontAwesome6_Brands.ttf in Resources */,
 				A336A9A02C6BD0E4005D99D4 /* MaterialCommunityIcons.ttf in Resources */,
 				CD9687237F925D96D3F1CBC7 /* PrivacyInfo.xcprivacy in Resources */,
-				D7F983707B114B22ADF8CE40 /* Sansation_Bold.ttf in Resources */,
-				6105B53E06FE461D8E79D881 /* Sansation_Bold_Italic.ttf in Resources */,
-				214E2FE89175467F814F1939 /* Sansation_Italic.ttf in Resources */,
-				59B9B1780D624B22AF90774D /* Sansation_Light.ttf in Resources */,
-				A3FADC1342824607982FF923 /* Sansation_Light_Italic.ttf in Resources */,
-				0ED6278CFECD4EC09D75D6F1 /* Sansation_Regular.ttf in Resources */,
-				4835F1380D2D4240B93CF861 /* GentiumBookPlus-BoldItalic.ttf in Resources */,
-				9858878196204A56AFCBAA1A /* GentiumBookPlus-Regular.ttf in Resources */,
-				F06199079DA143B5BBBD9154 /* GentiumBookPlusBold.ttf in Resources */,
-				6D81C220B87444C3BE6B215D /* GentiumBookPlusItalic.ttf in Resources */,
 				B2B95907635B4ADCAC436BB3 /* ChunkFive-Regular.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
