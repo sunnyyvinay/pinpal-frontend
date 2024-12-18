@@ -4,6 +4,62 @@
     {
       "path": "assets/fonts/ChunkFive-Regular.otf",
       "sha1": "8411f7a65d8eaca3da7a2c1ccdc77936513f0765"
+    },
+    {
+      "path": "assets/fonts/FuturaCyrillicBold.ttf",
+      "sha1": "2989a119b87e505033ded08ecd3fefd5ec4ae52e"
+    },
+    {
+      "path": "assets/fonts/FuturaCyrillicBook.ttf",
+      "sha1": "b7b19190884328e2a0a90b72c7546a135128f7d6"
+    },
+    {
+      "path": "assets/fonts/FuturaCyrillicDemi.ttf",
+      "sha1": "6349a64f7a95756f3f43a350166e7d7e47c7c660"
+    },
+    {
+      "path": "assets/fonts/FuturaCyrillicExtraBold.ttf",
+      "sha1": "f6ee553abbdc01280d2c374c532e087838dd3095"
+    },
+    {
+      "path": "assets/fonts/FuturaCyrillicHeavy.ttf",
+      "sha1": "1de37ec5788fa3ec00ae2197f34069f5144d29ee"
+    },
+    {
+      "path": "assets/fonts/FuturaCyrillicLight.ttf",
+      "sha1": "cf54cf45625a4810cb2c2aefe285840732d64496"
+    },
+    {
+      "path": "assets/fonts/FuturaCyrillicMedium.ttf",
+      "sha1": "b69396104293cc9419fc4ab87a6ee64c9faaf9fa"
+    },
+    {
+      "path": "assets/fonts/Helvetica-Bold.ttf",
+      "sha1": "d064906892c6baf2916d5102910026ba0a4f2664"
+    },
+    {
+      "path": "assets/fonts/Helvetica-BoldOblique.ttf",
+      "sha1": "afe42ef13d2c3ce4b2a15ec73d7996f53e37e676"
+    },
+    {
+      "path": "assets/fonts/Helvetica-Oblique.ttf",
+      "sha1": "1b41bf58374f95e319e8ae4deebd79a694802e6b"
+    },
+    {
+      "path": "assets/fonts/Helvetica.ttf",
+      "sha1": "53cb59bdb997dd39dc70b95d50133583e66ebdcb"
+    },
+    {
+      "path": "assets/fonts/helvetica-compressed-5871d14b6903a.otf",
+      "sha1": "8ddd4a7955071a6aeb51e67002299aa2bde407e2"
+    },
+    {
+      "path": "assets/fonts/helvetica-light-587ebe5a59211.ttf",
+      "sha1": "a7d02da118efb487c83136ea82b1d40e19dc019b"
+    },
+    {
+      "path": "assets/fonts/helvetica-rounded-bold-5871d05ead8de.otf",
+      "sha1": "9979d852574beb09a99841fda8d3ef030e9a4b64"
     }
   ]
 }

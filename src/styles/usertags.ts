@@ -8,28 +8,28 @@ const userTagsStyles = StyleSheet.create({
     },
     userTagsModalView: {
         backgroundColor: 'white',
-        padding: 10,
+        padding: hp('1%'),
         justifyContent: 'center',
         alignItems: 'center',
-        borderRadius: 10,
+        borderRadius: hp('1%'),
         flex: 0.9,
     },
     userTagsModalHeader: {
         flexDirection: 'row',
-        marginTop: 10,
-        marginBottom: 10
+        marginTop: hp('1%'),
+        marginBottom: hp('1%'),
     },
     userTagsModalTitle: {
         fontSize: 20,
         textAlign: 'center',
-        fontFamily: 'ChunkFive',
+        fontFamily: 'Futura',
     },
     userTagsModalText: {
-        marginLeft: 10,
+        marginLeft: wp('5%'),
         fontSize: 14,
-        fontFamily: 'ChunkFive',
-        marginBottom: 5,
-        marginTop: 15,
+        fontFamily: 'Futura',
+        marginBottom: hp('0.5%'),
+        marginTop: hp('1.5%'),
     },
 });
 

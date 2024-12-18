@@ -56,7 +56,7 @@ function Profile(props: any): React.JSX.Element {
         <TouchableOpacity 
             style={{...styles.requestOpacity, backgroundColor: Colors.lightOrange}}
             onPress={() => props.navigation.navigate("Settings")}>
-            <MaterialIcons name='edit' size={15} color={Colors.white} />
+            <MaterialIcons name='edit' size={hp('2%')} color={Colors.white} />
             <Text style={styles.requestText}>Edit Profile</Text>
         </TouchableOpacity>
       );
@@ -71,7 +71,7 @@ function Profile(props: any): React.JSX.Element {
               createFriendRequest(currUser, userData.user_id);
               setFriendStatus(0);
             }}>
-            <Icon name='person-add' size={15} color={Colors.white} />
+            <Icon name='person-add' size={hp('2%')} color={Colors.white} />
             <Text style={styles.requestText}>Add Friend</Text>
           </TouchableOpacity>
         );
@@ -105,7 +105,7 @@ function Profile(props: any): React.JSX.Element {
               acceptFriendRequest(currUser, userData.user_id);
               setFriendStatus(-1);
             }}>
-            <FontAwesome5 name='user-check' size={15} color={Colors.white} />
+            <FontAwesome5 name='user-check' size={hp('2%')} color={Colors.white} />
             <Text style={styles.requestText}>Accept Friend Request</Text>
           </TouchableOpacity>
         );
@@ -138,7 +138,7 @@ function Profile(props: any): React.JSX.Element {
         </TouchableOpacity>
       </View>
 
-      <View style={{width: '100%', height: 50}}>
+      <View style={{width: '100%', height: hp('5%')}}>
         {friendRequestView()}
       </View>
       
@@ -160,36 +160,36 @@ function Profile(props: any): React.JSX.Element {
 
 const styles = StyleSheet.create({
   profileContainer: {
-    margin: 10,
+    margin: hp('1%'),
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
   pfpImage: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    borderWidth: 2,
+    width: hp('5%'),
+    height: hp('5%'),
+    borderRadius: hp('2.5%'),
+    borderWidth: hp('0.2%'),
     borderColor: Colors.mediumOrange,
     flex: 1
   },  
   nameContainer: {
     flex: 1, 
-    marginLeft: 5,
+    marginLeft: wp('1%'),
     alignSelf: 'center'
   },
   fullNameStyle: {
     fontSize: 15,
-    fontFamily: 'ChunkFive',
+    fontFamily: 'Futura',
     color: Colors.black
   },
   usernameStyle: {
     fontSize: 13,
-    fontFamily: 'ChunkFive',
+    fontFamily: 'Futura',
     color: Colors.mediumGray
   },
   statsContainer: {
-    margin: 5,
+    margin: hp('0.5%'),
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-around',
@@ -197,32 +197,32 @@ const styles = StyleSheet.create({
   statCard: {
     backgroundColor: Colors.whiteOrange,
     flex: 1,
-    marginHorizontal: 10,
+    marginHorizontal: hp('1%'),
     alignSelf: 'center',
-    borderRadius: 10,
-    paddingVertical: 5
+    borderRadius: hp('1%'),
+    paddingVertical: hp('0.5%')
   },
   statTextNum: {
     color: Colors.black,
-    fontFamily: 'ChunkFive',
+    fontFamily: 'Futura',
     fontSize: 15,
     alignSelf: 'center',
   },
   statTextLabel: {
     color: Colors.darkGray,
-    fontFamily: 'ChunkFive',
+    fontFamily: 'Futura',
     fontSize: 12,
     alignSelf: 'center',
   },
   dividerStyle: {
-    margin: 10
+    margin: hp('1%')
   },
   requestOpacity: {
-    width: '90%',
+    width: wp('90%'),
     alignSelf: 'center',
-    borderRadius: 10,
-    marginVertical: 10,
-    marginHorizontal: 10,
+    borderRadius: hp('1%'),
+    marginVertical: hp('1%'),
+    marginHorizontal: wp('5%'),
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
@@ -232,9 +232,9 @@ const styles = StyleSheet.create({
   requestText: {
     color: Colors.white,
     fontFamily: 'ChunkFive',
-    fontWeight: '500',
+    fontWeight: '300',
     fontSize: 15,
-    marginLeft: 5
+    marginLeft: wp('1%')
   },
   journalPinView: {
     width: '100%',
@@ -244,13 +244,15 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     justifyContent: 'flex-start',
     alignContent: 'flex-start',
+    paddingHorizontal: wp('1%')
   },
   journalPinImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 10,
-    marginVertical: 5,
-    marginHorizontal: 10
+    width: hp('12.5%'),
+    height: hp('12.5%'),
+    borderRadius: hp('1%'),
+    marginVertical: hp('0.5%'),
+    marginHorizontal: wp('2.5%'),
+    alignSelf: 'center'
   }
 });
 

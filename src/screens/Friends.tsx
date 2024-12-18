@@ -59,28 +59,28 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        marginVertical: 10,
-        marginLeft: 10
+        marginVertical: hp('1%'),
+        marginLeft: wp('0.5%')
     },
     friendPfp: {
-        width: 35,
-        height: 35,
-        borderRadius: 20,
+        width: hp('3.5%'),
+        height: hp('3.5%'),
+        borderRadius: hp('2%'),
         flex: 0.1
     },
     friendTextView: {
-        marginLeft: 5,
+        marginLeft: wp('1%'),
         flexDirection: 'column',
         flex: 0.9
     },
     friendFullName: {
         fontSize: 16,
-        fontFamily: 'ChunkFive',
+        fontFamily: 'Futura',
         flex: 0.45,
     },
     friendUsernameText: {
         fontSize: 14,
-        fontFamily: 'ChunkFive',
+        fontFamily: 'Futura',
         color: Colors.lightGray,
         flex: 0.45
     }

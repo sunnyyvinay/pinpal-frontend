@@ -4,12 +4,12 @@ import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-nativ
 
 const userSearchStyles = StyleSheet.create({
     searchBarContainer: {
-        width: '90%',
-        marginTop: 10,
+        width: wp('90%'),
+        marginTop: hp('1%'),
         alignSelf: 'center',
         backgroundColor: 'transparent',
-        height: 20,
-        marginBottom: 40,
+        height: hp('5%'),
+        marginBottom: hp('4%'),
         borderBottomColor: 'transparent',
         borderTopColor: 'transparent'
     },
@@ -18,29 +18,29 @@ const userSearchStyles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-evenly',
-        marginVertical: 10,
-        marginLeft: 30
+        marginVertical: hp('1%'),
+        marginLeft: wp('5%')
     },
     searchUserPfp: {
-        width: 50,
-        height: 50,
-        borderRadius: 20,
+        width: hp('5%'),
+        height: hp('5%'),
+        borderRadius: hp('2%'),
         resizeMode: 'contain'
     },
     searchUserTextView: {
-        marginLeft: 10,
+        marginLeft: wp('3%'),
         flexDirection: 'column'
     },
     searchUserFullName: {
         fontSize: 16,
-        fontFamily: 'ChunkFive',
+        fontFamily: 'Futura',
         flex: 0.45,
     },
     searchUserUsernameText: {
         fontSize: 14,
-        fontFamily: 'ChunkFive',
+        fontFamily: 'Futura',
         color: Colors.mediumGray,
-        flex: 0.45
+        flex: 0.45,
     },
 });
 

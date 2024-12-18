@@ -193,7 +193,7 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
         <TouchableOpacity key={searchedUserCount} onPress={() => {
             setUserFilterState({modalVisible: false, search: "", on: true, queryUsers: [], user: user.user_id})
           }}>
-            <View style={userSearchStyles.searchUserView}>
+            <View style={{...userSearchStyles.searchUserView, marginLeft: wp('10%')}}>
                 <Image 
                     source={user.profile_pic ? {uri: user.profile_pic} : require('../../assets/images/default-pfp.jpg')} 
                     style={{...userSearchStyles.searchUserPfp, flex: 0.1}} />
@@ -493,7 +493,7 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
                 round={true}
                 autoCapitalize="none"
                 lightTheme={true}
-                containerStyle={userSearchStyles.searchBarContainer}
+                containerStyle={{...userSearchStyles.searchBarContainer, width: wp('80%')}}
                 onChangeText={(text) => setUserFilterState({...userFilterState, search: text})}/>
             <ScrollView style={{width: wp('100%'), flex: 1}}>
               <View style={{flex: 0.8}}>
@@ -623,7 +623,7 @@ const styles = StyleSheet.create({
   },
   locationTagText: {
     fontSize: 12,
-    fontFamily: 'ChunkFive',
+    fontFamily: 'Futura',
     color: Colors.darkGray,
     textAlign: "center",
   },
@@ -648,7 +648,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginTop: hp('2%'),
     marginBottom: hp('2%'),
-    fontFamily: 'ChunkFive',
+    fontFamily: 'Futura',
   },
   filterVisibilityOpacity: {
     flex: 1,
@@ -660,7 +660,7 @@ const styles = StyleSheet.create({
     flex: 0.99,
     marginLeft: wp('1%'),
     fontSize: 18,
-    fontFamily: 'ChunkFive',
+    fontFamily: 'Futura',
   },
 });
 

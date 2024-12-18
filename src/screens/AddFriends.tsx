@@ -80,12 +80,12 @@ const AddFriends = ({ route, navigation }: any) => {
                             }}>
                             <Text style={styles.acceptViewText}>Accept</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={{flex: 0.1, marginRight: 3}} onPress={async () => { 
+                        <TouchableOpacity style={{flex: 0.1, marginRight: wp('2%')}} onPress={async () => { 
                             user_id = await AsyncStorage.getItem("user_id");
                             if (user_id) await deleteFriendRequest(user.user_id, user_id) 
                             setState({...state, friend_requests: state.friend_requests.filter((u: any) => u.user_id !== user.user_id)})
                         }}>
-                            <MaterialIcon name="cancel" size={25} color={Colors.errorRed} />
+                            <MaterialIcon name="cancel" size={wp('6%')} color={Colors.errorRed} />
                         </TouchableOpacity>
                     </View> 
                     :
@@ -136,19 +136,19 @@ const AddFriends = ({ route, navigation }: any) => {
 
 const styles = StyleSheet.create({
     friendRequestTitleText: {
-        marginLeft: 10,
+        marginLeft: wp('5%'),
         fontSize: 18,
         fontFamily: 'ChunkFive',
-        marginBottom: 5,
-        marginTop: 15
+        marginBottom: hp('0.5%'),
+        marginTop: hp('1.5%')
     },
     acceptButton: {
         backgroundColor: Colors.mediumOrange
     },
     acceptView: {
         flex: 0.2,
-        borderRadius: 30,
-        marginRight: 10,
+        borderRadius: hp('3%'),
+        marginRight: wp('2%'),
         backgroundColor: Colors.mediumOrange,
         padding: 3,
         justifyContent: 'center',

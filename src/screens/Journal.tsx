@@ -70,14 +70,14 @@ function Journal({ route, navigation }: any): React.JSX.Element {
         </TouchableOpacity>
       </View>
 
-      <View style={{width: '100%', height: 50}}>
+      
         <TouchableOpacity 
             style={styles.editButtonContainer}
             onPress={() => navigation.navigate("Settings")}>
-            <MaterialIcons name='edit' size={15} color={Colors.white} style={{marginRight: 5}}/>
+            <MaterialIcons name='edit' size={hp('2%')} color={Colors.white} style={{marginRight: wp('1%')}}/>
             <Text style={styles.editButtonText}>Edit Profile</Text>
         </TouchableOpacity>
-      </View>
+      
 
       <Divider style={styles.dividerStyle}/>
 
@@ -97,41 +97,42 @@ function Journal({ route, navigation }: any): React.JSX.Element {
 
 const styles = StyleSheet.create({
   profileContainer: {
-    margin: 10,
+    margin: hp('1%'),
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
   pfpImage: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    borderWidth: 2,
+    width: hp('5%'),
+    height: hp('5%'),
+    borderRadius: hp('2.5%'),
+    borderWidth: hp('0.2%'),
     borderColor: Colors.mediumOrange,
   },  
   nameContainer: {
     flex: 1, 
-    marginLeft: 5,
+    marginLeft: wp('2%'),
     alignSelf: 'center'
   },
   fullNameStyle: {
     fontSize: 15,
-    fontFamily: 'ChunkFive',
+    fontFamily: 'Futura',
     color: Colors.black
   },
   usernameStyle: {
     fontSize: 13,
-    fontFamily: 'ChunkFive',
+    fontFamily: 'Futura',
     color: Colors.mediumGray
   },
   editButtonContainer: {
-    width: '90%',
+    width: wp('90%'),
+    height: hp('3%'),
     flex: 1,
     flexDirection: 'row',
     backgroundColor: Colors.lightOrange,
-    borderRadius: 10,
-    marginVertical: 10,
-    marginHorizontal: 10,
+    borderRadius: hp('1%'),
+    marginVertical: hp('2%'),
+    marginHorizontal: wp('1%'),
     alignItems: 'center',
     justifyContent: 'center',
     alignSelf: 'center'
@@ -141,10 +142,10 @@ const styles = StyleSheet.create({
     fontWeight: '500', 
     fontFamily: 'ChunkFive', 
     fontSize: 15,
-    marginLeft: 5
+    marginLeft: wp('1%')
   },
   statsContainer: {
-    margin: 5,
+    margin: wp('1%'),
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-around',
@@ -152,41 +153,43 @@ const styles = StyleSheet.create({
   statCard: {
     backgroundColor: Colors.whiteOrange,
     flex: 1,
-    marginHorizontal: 10,
+    marginHorizontal: wp('2%'),
     alignSelf: 'center',
-    borderRadius: 10,
-    paddingVertical: 5
+    borderRadius: hp('1%'),
+    paddingVertical: hp('0.5%')
   },
   statTextNum: {
     color: Colors.black,
-    fontFamily: 'ChunkFive',
+    fontFamily: 'Futura',
     fontSize: 15,
     alignSelf: 'center',
   },
   statTextLabel: {
     color: Colors.darkGray,
-    fontFamily: 'ChunkFive',
+    fontFamily: 'Futura',
     fontSize: 12,
     alignSelf: 'center',
   },
   dividerStyle: {
-    margin: 10
+    margin: hp('1%'),
   },
   journalPinView: {
     width: '100%',
-    display: 'flex',
     height: '100%',
+    display: 'flex',
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'flex-start',
     alignContent: 'flex-start',
+    paddingHorizontal: wp('1%')
   },
   journalPinImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 10,
-    marginVertical: 5,
-    marginHorizontal: 10
+    width: hp('12.5%'),
+    height: hp('12.5%'),
+    borderRadius: hp('1%'),
+    marginVertical: hp('0.5%'),
+    marginHorizontal: wp('2.5%'),
+    alignSelf: 'center'
   }
 });
 

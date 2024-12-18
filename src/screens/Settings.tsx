@@ -227,7 +227,7 @@ const Settings = ({ route, navigation }: any) => {
                         style={styles.modalInput}
                     />
                     <Button 
-                        title="SAVE"
+                        title="Save"
                         color={Colors.white}
                         buttonStyle={styles.logOutButton}
                         titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'ChunkFive' }}
@@ -280,7 +280,7 @@ const Settings = ({ route, navigation }: any) => {
                         style={styles.modalInput}
                     />
                     <Button 
-                        title="SAVE"
+                        title="Save"
                         color={Colors.white}
                         buttonStyle={styles.logOutButton}
                         titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'ChunkFive' }}
@@ -331,7 +331,7 @@ const Settings = ({ route, navigation }: any) => {
                     />
                     <Text style={{...styles.errorTextStyle, marginTop: hp('2%'), textAlign: 'center', justifyContent: 'center'}}>{error.birthday}</Text>
                     <Button 
-                        title="SAVE"
+                        title="Save"
                         color={Colors.white}
                         buttonStyle={styles.logOutButton}
                         titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'ChunkFive' }}
@@ -394,7 +394,7 @@ const Settings = ({ route, navigation }: any) => {
                         style={styles.modalInput}
                     />
                     <Button 
-                        title="SAVE"
+                        title="Save"
                         color={Colors.white}
                         buttonStyle={styles.logOutButton}
                         titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'ChunkFive' }}
@@ -464,7 +464,7 @@ const styles = StyleSheet.create({
         marginLeft: wp('2%'),
     },
     fieldText: {
-        fontFamily: 'ChunkFive',
+        fontFamily: 'Futura',
         flex: 0.5,
         color: Colors.darkGray
     },
@@ -526,7 +526,7 @@ const styles = StyleSheet.create({
     modalText: {
         fontSize: 20,
         flex: 0.5,
-        fontFamily: 'ChunkFive',
+        fontFamily: 'Futura',
     },
     modalInput: {
         flex: 2
