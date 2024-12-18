@@ -234,9 +234,9 @@ const PinPost = (props:any) => {
                   setEditPinVisibility(false);
                   setPinActionModalVisible(false);
                 }}>
-                  <MaterialIcon name="lock" size={25} style={{ flex: 0.25}}/>
+                  <MaterialIcon name="lock" size={hp('2.5%')} style={{ flex: 0.25}}/>
                   <Text style={{...styles.pinActionModelSubviewText, flex: 0.65}}>Private</Text>
-                  <Icon name="checkmark-sharp" size={25} color={Colors.mediumOrange} style={pinData.visibility === 0 ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
+                  <Icon name="checkmark-sharp" size={hp('2.5%')} color={Colors.mediumOrange} style={pinData.visibility === 0 ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
               </TouchableOpacity>
               <View style={styles.horizontalLine} />
 
@@ -247,9 +247,9 @@ const PinPost = (props:any) => {
                   setEditPinVisibility(false);
                   setPinActionModalVisible(false);
                 }}>
-                  <MaterialIcon name="people-alt" size={25} style={{ flex: 0.25}}/>
+                  <MaterialIcon name="people-alt" size={hp('2.5%')} style={{ flex: 0.25}}/>
                   <Text style={{...styles.pinActionModelSubviewText, flex: 0.65}}>Friends</Text>
-                  <Icon name="checkmark-sharp" size={25} color={Colors.mediumOrange} style={pinData.visibility === 1 ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
+                  <Icon name="checkmark-sharp" size={hp('2.5%')} color={Colors.mediumOrange} style={pinData.visibility === 1 ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
               </TouchableOpacity>
               <View style={styles.horizontalLine} />
 
@@ -260,9 +260,9 @@ const PinPost = (props:any) => {
                   setEditPinVisibility(false);
                   setPinActionModalVisible(false);
                 }}>
-                  <MaterialIcon name="public" size={25} style={{ flex: 0.25}}/>
+                  <MaterialIcon name="public" size={hp('2.5%')} style={{ flex: 0.25}}/>
                   <Text style={{...styles.pinActionModelSubviewText, flex: 0.65}}>Public</Text>
-                  <Icon name="checkmark-sharp" size={25} color={Colors.mediumOrange} style={pinData.visibility === 2 ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
+                  <Icon name="checkmark-sharp" size={hp('2.5%')} color={Colors.mediumOrange} style={pinData.visibility === 2 ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
               </TouchableOpacity>
           </View>) 
           :
@@ -272,7 +272,7 @@ const PinPost = (props:any) => {
                   setPinActionModalVisible(false);
                   setEditMode(true);
                 }}>
-                  <MaterialIcon name="edit" size={20} color={Colors.black} />
+                  <MaterialIcon name="edit" size={hp('2%')} color={Colors.black} />
                   <Text style={styles.pinActionModelSubviewText}>Edit pin</Text>
               </TouchableOpacity>
               <View style={styles.horizontalLine} />
@@ -281,7 +281,7 @@ const PinPost = (props:any) => {
                 onPress={() => {
                   setEditPinVisibility(true);
                 }}>
-                  <MaterialIcon name="visibility" size={20} color={Colors.black} />
+                  <MaterialIcon name="visibility" size={hp('2%')} color={Colors.black} />
                   <Text style={styles.pinActionModelSubviewText}>Change visibility</Text>
               </TouchableOpacity>
               <View style={styles.horizontalLine} />
@@ -325,7 +325,7 @@ const PinPost = (props:any) => {
                                 }}>
                                 {getLocationTagIcon(tag)}
                                 <Text style={styles.locationTagsModalText}>{tag}</Text>
-                                <Icon name="checkmark-sharp" size={25} color={Colors.mediumOrange} style={editedPinData.location_tags.includes(tag) ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
+                                <Icon name="checkmark-sharp" size={hp('2.5%')} color={Colors.mediumOrange} style={editedPinData.location_tags.includes(tag) ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
                             </TouchableOpacity>
                             <View style={styles.horizontalLine} />
                         </View>
@@ -369,7 +369,7 @@ const PinPost = (props:any) => {
         <View style={userTagsStyles.userTagsModalView}>
             <View style={userTagsStyles.userTagsModalHeader}>
                 <Text style={userTagsStyles.userTagsModalTitle}>Tag Users</Text>
-                <Entypo name="cross" size={25} color={Colors.mediumGray} onPress={() => setUserTagState({...userTagState, modalVisible: false})} style={{position: 'absolute', left: '55%'}}/>
+                <Entypo name="cross" size={hp('2.5%')} color={Colors.mediumGray} onPress={() => setUserTagState({...userTagState, modalVisible: false})} style={{position: 'absolute', left: wp('45%')}}/>
             </View>
             <SearchBar 
                 placeholder='Search...'
@@ -377,7 +377,7 @@ const PinPost = (props:any) => {
                 round={true}
                 autoCapitalize="none"
                 lightTheme={true}
-                containerStyle={userSearchStyles.searchBarContainer}
+                containerStyle={{...userSearchStyles.searchBarContainer, width: wp('80%')}}
                 onChangeText={(text) => setUserTagState({...userTagState, search: text})}/>
             {userTagState.search.length === 0 && editedPinData.user_tags.length > 0 && <Text style={userTagsStyles.userTagsModalText}>Tagged</Text>}
             <ScrollView style={{width: '100%', flex: 1}}>
@@ -398,11 +398,11 @@ const PinPost = (props:any) => {
                                 <Text style={userSearchStyles.searchUserFullName}>{user.full_name}</Text>
                                 <Text style={userSearchStyles.searchUserUsernameText}>{user.username}</Text>
                             </View>
-                            <TouchableOpacity style={{flex: 0.1, marginRight: 3}} onPress={() => {
+                            <TouchableOpacity style={{flex: 0.1, marginRight: wp('2%')}} onPress={() => {
                                 setEditedPinData((prevData: any) => 
                                   ({...prevData, user_tags: prevData.user_tags.filter((tag_id: string) => tag_id !== user.user_id)}))
                             }}>
-                                <Entypo name="cross" size={25} color={Colors.mediumGray} />
+                                <Entypo name="cross" size={hp('2.5%')} color={Colors.mediumGray} />
                             </TouchableOpacity>
                         </View> 
                         ))}
@@ -424,7 +424,7 @@ const PinPost = (props:any) => {
 
         {personal && !editMode ? 
         <TouchableOpacity onPress={() => setPinActionModalVisible(true)}>
-          <MaterialIcon name="more-vert" size={20} color={Colors.black} />
+          <MaterialIcon name="more-vert" size={hp('2%')} color={Colors.black} />
         </TouchableOpacity>
         : null}
       </View>
@@ -447,10 +447,10 @@ const PinPost = (props:any) => {
         <View style={styles.photosView}>
           {editMode ?
             <TouchableOpacity onPress={openImagePicker}>
-              <Image source={editedPinData.photo && {uri: editedPinData.photo}} style={{width: screenWidth, height: 200}}/>
+              <Image source={editedPinData.photo && {uri: editedPinData.photo}} style={{width: screenWidth, height: hp('20%')}}/>
             </TouchableOpacity>
             :
-            <Image source={pinData.photo && {uri: pinData.photo}} style={{width: screenWidth, height: 200}}/>
+            <Image source={pinData.photo && {uri: pinData.photo}} style={{width: screenWidth, height: hp('20%')}}/>
           }
 
             {/* <Carousel
@@ -495,10 +495,10 @@ const PinPost = (props:any) => {
         <View style={styles.locationTagsButtonView}>
           <Button 
             title={editedPinData.user_tags.length > 0 ? "Edit user tags" : "Add user tags"}
-            icon={<MaterialIcon name="edit" size={15} color={Colors.black} style={{ marginRight: 2 }}/>}
+            icon={<MaterialIcon name="edit" size={hp('1.5%')} color={Colors.black} style={{ marginRight: wp('0.5%') }}/>}
             color={Colors.black}
-            iconContainerStyle={{ marginRight: 2 }}
-            titleStyle={{ color: Colors.black, fontWeight: '300', fontFamily: 'ChunkFive', fontSize: 15 }}
+            iconContainerStyle={{ marginRight: wp('0.5%') }}
+            titleStyle={{ color: Colors.black, fontFamily: 'Futura', fontSize: 15 }}
             buttonStyle={styles.locationTagsAddButton}
             containerStyle={{...styles.locationTagsAddButtonContainer}} 
             onPress={() => {setUserTagState({...userTagState, modalVisible: true})}} />  
@@ -508,7 +508,7 @@ const PinPost = (props:any) => {
                   title={'@' + user.username} 
                   key={index}
                   buttonStyle={styles.userTagButton}
-                  titleStyle={{ color: Colors.mediumGray, fontWeight: '300', fontFamily: 'ChunkFive', fontSize: 15 }} />
+                  titleStyle={{ color: Colors.mediumGray, fontFamily: 'Futura', fontSize: 15 }} />
               )
           })}
         </View>
@@ -522,7 +522,7 @@ const PinPost = (props:any) => {
                 title={'@' + user.username} 
                 key={index}
                 buttonStyle={styles.userTagButton}
-                titleStyle={{ color: Colors.white, fontWeight: '900', fontFamily: 'ChunkFive', fontSize: 15 }} 
+                titleStyle={{ color: Colors.white, fontFamily: 'Futura', fontSize: 15 }} 
                 onPress={() => props.navigation.navigate('Profile', {user_id: user.user_id})}/>
             )
         })}
@@ -537,10 +537,10 @@ const PinPost = (props:any) => {
         <View style={styles.locationTagsButtonView}>
           <Button 
             title={editedPinData.location_tags.length > 0 ? "Edit location tags" : "Add location tags"}
-            icon={<MaterialIcon name="edit" size={15} color={Colors.black} style={{ marginRight: 2 }}/>}
+            icon={<MaterialIcon name="edit" size={hp('1.5%')} color={Colors.black} style={{ marginRight: wp('0.5%') }}/>}
             color={Colors.black}
-            iconContainerStyle={{ marginRight: 2 }}
-            titleStyle={{ color: Colors.black, fontWeight: '300', fontFamily: 'ChunkFive', fontSize: 15 }}
+            iconContainerStyle={{ marginRight: wp('0.5%') }}
+            titleStyle={{ color: Colors.black, fontFamily: 'Futura', fontSize: 15 }}
             buttonStyle={styles.locationTagsAddButton}
             containerStyle={styles.locationTagsAddButtonContainer} 
             onPress={() => {setEditPinLocationTags(true)}} />  
@@ -550,7 +550,7 @@ const PinPost = (props:any) => {
                   title={tag} 
                   key={index}
                   buttonStyle={styles.locationTagButton}
-                  titleStyle={{ color: Colors.mediumGray, fontWeight: '300', fontFamily: 'ChunkFive', fontSize: 15 }} />
+                  titleStyle={{ color: Colors.mediumGray, fontFamily: 'Futura', fontSize: 15 }} />
               )
           })}
         </View>
@@ -564,7 +564,7 @@ const PinPost = (props:any) => {
                 title={tag} 
                 key={index}
                 buttonStyle={styles.locationTagButton}
-                titleStyle={{ color: Colors.darkGray, fontWeight: '300', fontFamily: 'ChunkFive', fontSize: 15 }} />
+                titleStyle={{ color: Colors.darkGray, fontFamily: 'Futura', fontSize: 15 }} />
             )
         })}
         </View>
@@ -584,7 +584,7 @@ const PinPost = (props:any) => {
               await addPinLike(user_id, pin_id);
             }
           }}>
-            {likes.liked ? <Icon name="heart" size={30} color={Colors.mediumOrange} /> : <Icon name="heart-outline" size={30} color={Colors.black} />}
+            {likes.liked ? <Icon name="heart" size={hp('3%')} color={Colors.mediumOrange} /> : <Icon name="heart-outline" size={hp('3%')} color={Colors.black} />}
           </TouchableOpacity>
           {likes.liked ? <Text style={{...styles.likesText, color: Colors.mediumOrange}}>{likes.count}</Text> : <Text style={{...styles.likesText, color: Colors.black}}>{likes.count === 0 ? "Like" : likes.count}</Text>}
         </View>
@@ -596,7 +596,7 @@ const PinPost = (props:any) => {
         <Button 
           title="Cancel"
           color={Colors.black}
-          titleStyle={{ color: Colors.black, fontWeight: '700', fontFamily: 'ChunkFive', fontSize: 14 }}
+          titleStyle={{ color: Colors.black, fontWeight: '500', fontFamily: 'ChunkFive', fontSize: 14 }}
           buttonStyle={styles.cancelEditButton}
           containerStyle={styles.cancelEditButtonContainer} 
           onPress={ () => {
@@ -606,7 +606,7 @@ const PinPost = (props:any) => {
         <Button 
           title="Save" 
           color={Colors.white}
-          titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'ChunkFive', fontSize: 14 }}
+          titleStyle={{ color: Colors.white, fontWeight: '500', fontFamily: 'ChunkFive', fontSize: 14 }}
           buttonStyle={styles.saveEditButton}
           containerStyle={styles.saveEditButtonContainer} 
           onPress={
@@ -640,8 +640,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-start',
-    marginHorizontal: 10,
-    marginVertical: 10,
+    marginHorizontal: wp('2%'),
+    marginVertical: hp('1%'),
   },
   userView: {
     flex: 0.99,
@@ -649,18 +649,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   pfpImage: {
-    width: 40,
-    height: 40,
-    borderRadius: 50,
-    borderWidth: 2,
+    width: hp('4%'),
+    height: hp('4%'),
+    borderRadius: hp('5%'),
+    borderWidth: hp('0.2%'),
     borderColor: Colors.mediumOrange,
     alignSelf: 'center',
   },
   usernameText: {
     textAlign: 'center',
     fontSize: 16,
-    fontFamily: 'ChunkFive',
-    marginLeft: 5,
+    fontFamily: 'Futura',
+    marginLeft: wp('1%'),
   },
   postView: {
     backgroundColor: Colors.white,
@@ -669,42 +669,42 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 28,
     fontWeight: 'bold',
-    fontFamily: 'ChunkFive',
+    fontFamily: 'Futura',
     color: Colors.mediumOrange,
-    marginBottom: 5,
+    marginBottom: hp('0.5%'),
   },
   likesView: {
     alignItems: 'center',
     marginVertical: 10,
   },
   likesText: {
-    marginHorizontal: 5,
+    marginHorizontal: wp('1%'),
     fontSize: 16,
-    fontFamily: 'ChunkFive',
+    fontFamily: 'Futura',
   },
   photosView: {
-    marginTop: 5,
-    marginBottom: 5,
+    marginTop: hp('0.5%'),
+    marginBottom: hp('0.5%'),
   },
   slide: {
     justifyContent: 'center',
     alignItems: 'center',
   },
   image: {
-    width: '95%',
-    height: 200,
-    borderRadius: 10,
+    width: wp('95%'),
+    height: hp('50%'),
+    borderRadius: hp('1%'),
   },
   paginationContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
-    marginTop: 10,
+    marginTop: hp('1%'),
   },
   dot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    marginHorizontal: 4,
+    width: hp('0.8%'),
+    height: hp('0.8%'),
+    borderRadius: hp('0.4%'),
+    marginHorizontal: hp('0.4%'),
   },
   activeDot: {
     backgroundColor: Colors.mediumOrange,
@@ -714,35 +714,35 @@ const styles = StyleSheet.create({
   },
   captionView: {
     borderWidth: 0,
-    borderRadius: 20,
-    marginVertical: 5,
-    marginHorizontal: 15,
-    padding: 10,
+    borderRadius: hp('2%'),
+    marginVertical: hp('0.5%'),
+    marginHorizontal: wp('4%'),
+    padding: hp('1%'),
     justifyContent: 'center',
     alignItems: 'center',
   },
   captionText: {
     fontSize: 18,
-    fontFamily: 'ChunkFive',
+    fontFamily: 'Futura',
     color: Colors.black,
   },
   createDateText: {
     color: Colors.darkGray,
     fontSize: 18,
-    fontFamily: 'ChunkFive',
+    fontFamily: 'Futura',
   },
   locationTagsButtonView: {
     flexDirection: 'row',
     justifyContent: 'center',
     flexWrap: 'wrap',
-    columnGap: 5,
-    rowGap: 5,
-    marginVertical: 10,
+    columnGap: hp('0.5%'),
+    rowGap: hp('0.5%'),
+    marginVertical: hp('1%'),
   },
   locationTagButton: {
     backgroundColor: Colors.whiteOrange,
     borderWidth: 0,
-    borderRadius: 20,
+    borderRadius: hp('2%'),
   },
   userTagButton: {
     backgroundColor: Colors.mediumOrange,
@@ -752,23 +752,23 @@ const styles = StyleSheet.create({
   },
   pinActionModalView: {
     backgroundColor: 'white',
-    padding: 20,
+    padding: hp('2%'),
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 10,
+    borderRadius: hp('1%'),
     flex: 0.3,
   },
   pinActionModelSubview: {
     flex: 1,
     flexDirection: 'row',
-    padding: 10,
+    padding: hp('1%'),
     alignItems: 'center',
   },
   pinActionModelSubviewText: {
     flex: 0.99,
-    marginLeft: 10,
+    marginLeft: wp('2%'),
     fontSize: 18,
-    fontFamily: 'ChunkFive',
+    fontFamily: 'Futura',
   },
   horizontalLine: {
     borderBottomColor: 'black',
@@ -780,27 +780,27 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginVertical: 10,
-    marginTop: 20,
-    marginHorizontal: 40,
+    marginVertical: wp('2%'),
+    marginTop: hp('2%'),
+    marginHorizontal: wp('8%'),
   },
   cancelEditButton: {
     backgroundColor: Colors.lightGray,
     borderColor: 'transparent',
     borderWidth: 0,
-    borderRadius: 10,
+    borderRadius: hp('1%'),
   },
   cancelEditButtonContainer: {
-    width: 125,
+    width: wp('17.5%'),
   },
   saveEditButton: {
     backgroundColor: Colors.mediumOrange,
     borderColor: 'transparent',
     borderWidth: 0,
-    borderRadius: 10,
+    borderRadius: hp('1%'),
   },
   saveEditButtonContainer: {
-    width: 125,
+    width: wp('17.5%'),
   },
   editTitleInput: {
     flex: 1,
@@ -809,43 +809,43 @@ const styles = StyleSheet.create({
     color: Colors.black,
     fontSize: 22,
     fontWeight: 'bold',
-    fontFamily: 'ChunkFive',
-    marginVertical: 5,
-    marginTop: 20,
+    fontFamily: 'Futura',
+    marginVertical: hp('0.5%'),
+    marginTop: hp('2%'),
   },
   editCaptionInput: {
-      height: 70,
+      height: hp('8%'),
       borderColor: Colors.lightGray,
       borderWidth: 1,
       borderRadius: 4,
-      paddingHorizontal: 8,
+      paddingHorizontal: wp('2%'),
       textAlign: 'center',
       alignSelf: 'center',
       fontSize: 15,
-      fontFamily: 'ChunkFive',
+      fontFamily: 'Futura',
       color: Colors.black,
-      width: '90%',
-      marginTop: 10,
-      marginBottom: 5,
+      width: wp('90%'),
+      marginTop: hp('1%'),
+      marginBottom: hp('0.5%'),
   },
   locationTagsAddButton: {
     backgroundColor: Colors.whiteGray,
     borderColor: 'transparent',
     borderWidth: 0,
-    borderRadius: 20,
+    borderRadius: hp('2%'),
   },
   locationTagsAddButtonContainer: {
-    width: 175,
+    width: wp('17.5%'),
   },
   locationTagsModal: {
     justifyContent: 'center',
   },
   locationTagsModalView: {
       backgroundColor: 'white',
-      padding: 20,
+      padding: hp('2%'),
       justifyContent: 'space-evenly',
       alignItems: 'center',
-      borderRadius: 10,
+      borderRadius: hp('1%'),
       flex: 0.75,
   },
   locationTagsModalTitle: {
@@ -856,7 +856,7 @@ const styles = StyleSheet.create({
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
-      marginVertical: 20,
+      marginVertical: hp('2%'),
   },
   locationTagsModalText: {
       fontSize: 18,
