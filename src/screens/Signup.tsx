@@ -165,7 +165,7 @@ const Signup = ({navigation}: {navigation: any}) => {
                 step < 5 ? 
                 <Button 
                     title="NEXT" 
-                    icon={<FontAwesome6Icon name="arrow-right-long" size={20} color={Colors.white} style={{ paddingLeft: 5, textAlign: 'center' }}/>}
+                    icon={<FontAwesome6Icon name="arrow-right-long" size={20} color={Colors.white} style={{ paddingLeft: wp('1%'), textAlign: 'center' }}/>}
                     color={Colors.black}
                     iconRight
                     titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'ChunkFive' }}

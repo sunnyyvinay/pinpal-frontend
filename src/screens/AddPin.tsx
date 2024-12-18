@@ -15,6 +15,7 @@ import { locationTags, getLocationTagIcon } from '../constants/locationtags';
 import userSearchStyles from '../styles/usersearch';
 import userTagsStyles from '../styles/usertags';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import FontAwesome6Icon from 'react-native-vector-icons/FontAwesome6';
 
 const AddPin = ({ route, navigation }: any) => {
     const [step, setStep] = useState<number>(1);
@@ -161,20 +162,20 @@ const AddPin = ({ route, navigation }: any) => {
                 return (
                     <View style={styles.inputViewContainer}>
                         {pinData.photo ? 
-                        <TouchableOpacity onPress={openImagePicker} style={{width: '100%', height: '50%'}}>
+                        <TouchableOpacity onPress={openImagePicker} style={{width: wp('90%'), height: hp('50%')}}>
                             <Image source={{ uri: pinData.photo }} style={styles.pickPhoto} /> 
                         </TouchableOpacity>
                         : 
                         <TouchableOpacity onPress={openImagePicker} style={styles.pickPhotoContainer} >
-                            <MaterialIcon name="add-a-photo" size={50} />
+                            <MaterialIcon name="add-a-photo" size={hp('5%')} />
                         </TouchableOpacity>
                         }
                         <Button 
                             title="NEXT" 
-                            icon={<Icon name="arrow-forward-circle-outline" size={20} color={Colors.white} style={{ marginLeft: 5 }}/>}
+                            icon={<FontAwesome6Icon name="arrow-right-long" size={20} color={Colors.white} style={{ paddingLeft: wp('1%'), textAlign: 'center' }}/>}
                             color={Colors.white}
                             iconRight
-                            iconContainerStyle={{ marginLeft: 10 }}
+                            iconContainerStyle={{ marginLeft: wp('2%') }}
                             titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'ChunkFive' }}
                             buttonStyle={styles.buttonStyle}
                             containerStyle={styles.buttonContainerStyle} 
