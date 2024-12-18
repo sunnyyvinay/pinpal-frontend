@@ -201,7 +201,7 @@ const AddPin = ({ route, navigation }: any) => {
                             <TextInput
                                 value={pinData.caption}
                                 placeholder="Write a caption..."
-                                style={{...styles.input, height: 100}}
+                                style={{...styles.input, height: hp('10%')}}
                                 onChangeText={(text: string) => setPinData({ ...pinData, caption: text })}
                                 autoCapitalize="none"
                                 multiline={true}
@@ -210,12 +210,12 @@ const AddPin = ({ route, navigation }: any) => {
                         </View>
 
                         <TouchableOpacity onPress={() => {setVisibilityModal(true)}} style={styles.visibilityInputView}>
-                            <Text style={styles.visibilityTitleText}>Visibility</Text>
+                            <Text style={{...styles.visibilityTitleText, fontWeight: '700'}}>Visibility</Text>
                             <Text style={styles.visibilityText}>{getVisibilityString(pinData.visibility)}</Text>
                         </TouchableOpacity>
 
                         <TouchableOpacity onPress={() => {setUserTagState({...userTagState,modalVisible: true, search: "", queryUsers: []})}} style={styles.userTagsInputView}>
-                            <Text style={styles.userTagsTitleText}>Tagged Users</Text>
+                            <Text style={{...styles.visibilityTitleText, fontWeight: '700'}}>Tagged Users</Text>
                             <Text style={styles.userTagsText}>{userTagDisplayText()}</Text>
                         </TouchableOpacity>  
 
@@ -224,10 +224,10 @@ const AddPin = ({ route, navigation }: any) => {
                             <View style={styles.locationTagsButtonView}>
                                 <Button 
                                     title="Edit"
-                                    icon={<MaterialIcon name="edit" size={15} color={Colors.black} style={{ marginRight: 2 }}/>}
+                                    icon={<MaterialIcon name="edit" size={hp('2%')} color={Colors.black} style={{ marginRight: 2 }}/>}
                                     color={Colors.black}
                                     iconContainerStyle={{ marginRight: 2 }}
-                                    titleStyle={{ color: Colors.black, fontWeight: '300', fontFamily: 'ChunkFive', fontSize: 15 }}
+                                    titleStyle={{ color: Colors.black, fontFamily: 'Futura', fontSize: 15 }}
                                     buttonStyle={styles.locationTagsAddButton}
                                     containerStyle={styles.locationTagsAddButtonContainer} 
                                     onPress={() => setlocationTagsModal(true)}/>
@@ -237,18 +237,18 @@ const AddPin = ({ route, navigation }: any) => {
                                             title={tag} 
                                             key={index}
                                             buttonStyle={styles.locationTagButton} 
-                                            titleStyle={{ color: Colors.darkGray, fontWeight: '300', fontFamily: 'ChunkFive', fontSize: 15 }}/>
+                                            titleStyle={{ color: Colors.darkGray, fontFamily: 'Futura', fontSize: 15 }}/>
                                     )
                                 })}
                             </View>
                         </View>
                         
                         <Button 
-                            title="ADD PIN" 
-                            icon={<MaterialIcon name="person-pin-circle" size={20} color={Colors.white} style={{ marginLeft: 5 }} />}
+                            title="Add Pin" 
+                            icon={<MaterialIcon name="person-pin-circle" size={hp('3%')} color={Colors.white} style={{ marginLeft: wp('1%') }} />}
                             color={Colors.white}
                             iconRight
-                            iconContainerStyle={{ marginLeft: 10 }}
+                            iconContainerStyle={{ marginLeft: wp('1%') }}
                             titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'ChunkFive' }}
                             buttonStyle={styles.buttonStyle}
                             containerStyle={styles.buttonContainerStyle} 
@@ -292,7 +292,7 @@ const AddPin = ({ route, navigation }: any) => {
                 <View style={userTagsStyles.userTagsModalView}>
                     <View style={userTagsStyles.userTagsModalHeader}>
                         <Text style={userTagsStyles.userTagsModalTitle}>Tag Users</Text>
-                        <Entypo name="cross" size={25} color={Colors.mediumGray} onPress={() => setUserTagState({...userTagState, modalVisible: false})} style={{position: 'absolute', left: '55%'}}/>
+                        <Entypo name="cross" size={hp('2.5%')} color={Colors.mediumGray} onPress={() => setUserTagState({...userTagState, modalVisible: false})} style={{position: 'absolute', left: wp('45%')}}/>
                     </View>
                     <SearchBar 
                         placeholder='Search...'
@@ -300,7 +300,7 @@ const AddPin = ({ route, navigation }: any) => {
                         round={true}
                         autoCapitalize="none"
                         lightTheme={true}
-                        containerStyle={userSearchStyles.searchBarContainer}
+                        containerStyle={{...userSearchStyles.searchBarContainer, width: wp('80%')}}
                         onChangeText={(text) => setUserTagState({...userTagState, search: text})}/>
                     {userTagState.search.length === 0 && pinData.user_tags.length > 0 && <Text style={userTagsStyles.userTagsModalText}>Tagged</Text>}
                     <ScrollView style={{width: '100%', flex: 1}}>
@@ -326,7 +326,7 @@ const AddPin = ({ route, navigation }: any) => {
                                             tag_id !== user.user_id
                                         )}))
                                     }}>
-                                        <Entypo name="cross" size={25} color={Colors.mediumGray} />
+                                        <Entypo name="cross" size={hp('3%')} color={Colors.mediumGray} />
                                     </TouchableOpacity>
                                 </View> 
                                 ))}
@@ -347,9 +347,9 @@ const AddPin = ({ route, navigation }: any) => {
                             setPinData({ ...pinData, visibility: 0});
                             setVisibilityModal(false);
                         }}>
-                        <MaterialIcon name="lock" size={25} style={{ flex: 0.25}}/>
+                        <MaterialIcon name="lock" size={hp('3%')} style={{ flex: 0.25}}/>
                         <Text style={styles.visibilityModalSubviewText}>Private</Text>
-                        <Icon name="checkmark-sharp" size={25} color={Colors.mediumOrange} style={pinData.visibility === 0 ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
+                        <Icon name="checkmark-sharp" size={hp('3%')} color={Colors.mediumOrange} style={pinData.visibility === 0 ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
                     </TouchableOpacity>
                     <View style={styles.horizontalLine} />
                     
@@ -358,9 +358,9 @@ const AddPin = ({ route, navigation }: any) => {
                             setPinData({ ...pinData, visibility: 1});
                             setVisibilityModal(false);
                         }}>
-                        <MaterialIcon name="people-alt" size={25} style={{ flex: 0.25}}/>
+                        <MaterialIcon name="people-alt" size={hp('3%')} style={{ flex: 0.25}}/>
                         <Text style={styles.visibilityModalSubviewText}>Friends</Text>
-                        <Icon name="checkmark-sharp" size={25} color={Colors.mediumOrange} style={pinData.visibility === 1 ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
+                        <Icon name="checkmark-sharp" size={hp('3%')} color={Colors.mediumOrange} style={pinData.visibility === 1 ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
                     </TouchableOpacity>
                     <View style={styles.horizontalLine} />
                     
@@ -369,9 +369,9 @@ const AddPin = ({ route, navigation }: any) => {
                             setPinData({ ...pinData, visibility: 2});
                             setVisibilityModal(false);
                         }}>
-                        <MaterialIcon name="public" size={25} style={{ flex: 0.25}}/>
+                        <MaterialIcon name="public" size={hp('3%')} style={{ flex: 0.25}}/>
                         <Text style={styles.visibilityModalSubviewText}>Public</Text>
-                        <Icon name="checkmark-sharp" size={25} color={Colors.mediumOrange} style={pinData.visibility === 2 ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
+                        <Icon name="checkmark-sharp" size={hp('3%')} color={Colors.mediumOrange} style={pinData.visibility === 2 ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
                     </TouchableOpacity>
                 </View>
             </Modal>
@@ -397,7 +397,7 @@ const AddPin = ({ route, navigation }: any) => {
                                         }}>
                                         {getLocationTagIcon(tag)}
                                         <Text style={styles.locationTagsModalText}>{tag}</Text>
-                                        <Icon name="checkmark-sharp" size={25} color={Colors.mediumOrange} style={pinData.location_tags.includes(tag) ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
+                                        <Icon name="checkmark-sharp" size={hp('3%')} color={Colors.mediumOrange} style={pinData.location_tags.includes(tag) ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
                                     </TouchableOpacity>
                                     <View style={styles.horizontalLine} />
                                 </View>
@@ -420,47 +420,47 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         flexDirection: 'column',
         flex: 1,
-        padding: 10,
+        padding: hp('1%'),
     },
     inputContainer: {
-        marginVertical: 10,
-        width: '90%',
+        marginVertical: hp('1%'),
+        width: wp('90%'),
     },
     label: {
         color: Colors.black,
-        fontFamily: 'ChunkFive',
-        fontSize: 15,
+        fontFamily: 'Futura',
         fontWeight: '700',
+        fontSize: 14,
         marginBottom: 4,
     },
     input: {
-        height: 40,
-        borderColor: Colors.lightGray,
-        borderWidth: 1,
-        borderRadius: 4,
-        paddingHorizontal: 8,
+        height: hp('4%'),
+        borderColor: "gray",
+        borderWidth: hp('0.2%'),
+        borderRadius: hp('0.4%'),
+        paddingHorizontal: wp('1.5%'),
     },
     buttonStyle: {
         backgroundColor: Colors.darkOrange,
         borderColor: 'transparent',
         borderWidth: 0,
-        borderRadius: 30,
+        borderRadius: hp('3%'),
     },
     buttonContainerStyle: {
-        width: '75%',
-        marginHorizontal: 50,
-        marginTop: 20,
+        width: wp('75%'),
+        marginHorizontal: wp('10%'),
+        marginTop: hp('2%'),
     },
     pickPhotoContainer: {
-        width: 300,
-        height: 300,
+        width: wp('90%'),
+        height: wp('90%'),
         borderWidth: 2,
         borderColor: Colors.mediumOrange,
         backgroundColor: Colors.whiteGray,
         justifyContent: 'center',
         alignItems: 'center',
-        marginBottom: 30,
-        marginTop: 30,
+        marginBottom: hp('3%'),
+        marginTop: hp('3%'),
     },
     pickPhoto: {
         width: '100%',
@@ -470,55 +470,54 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     visibilityInputView: {
-        width: '90%',
-        padding: 15,
-        borderRadius: 10,
+        width: wp('90%'),
+        padding: hp('1.5%'),
+        borderRadius: hp('1%'),
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginTop: 20,
+        marginTop: hp('2%'),
         backgroundColor: Colors.whiteGray,
     },
     visibilityTitleText: {
+        fontSize: 13,
         color: Colors.black,
-        fontFamily: 'ChunkFive',
-        fontWeight: '700',
-        marginLeft: 5
+        fontFamily: 'Futura',
+        marginLeft: wp('1%')
     },
     visibilityText: {
         color: Colors.darkGray,
-        fontFamily: 'ChunkFive',
-        fontWeight: '700',
-        marginRight: 5
+        fontFamily: 'Futura',
+        marginRight: wp('1%')
     },
     visibilityModal: {
         justifyContent: 'center',
     },
     visibilityModalView: {
         backgroundColor: 'white',
-        padding: 20,
+        padding: hp('2%'),
         justifyContent: 'center',
         alignItems: 'center',
-        borderRadius: 10,
+        borderRadius: hp('1%'),
         flex: 0.5,
     },
     visibilityModalTitle: {
         fontSize: 20,
-        marginTop: 10,
-        marginBottom: 20,
-        fontFamily: 'ChunkFive',
+        marginTop: hp('1%'),
+        marginBottom: hp('2%'),
+        fontFamily: 'Futura',
     },
     visibilityModalSubview: {
         flex: 1,
         flexDirection: 'row',
-        padding: 10,
+        padding: hp('1%'),
         alignItems: 'center',
     },
     visibilityModalSubviewText: {
         flex: 0.65,
-        marginLeft: 10,
+        marginLeft: wp('2%'),
         fontSize: 18,
-        fontFamily: 'ChunkFive',
+        fontFamily: 'Futura',
     },
     horizontalLine: {
         borderBottomColor: 'black',
@@ -527,83 +526,81 @@ const styles = StyleSheet.create({
         width: '100%',
     },
     locationTagsView: {
-        marginTop: 20,
-        marginLeft: 20,
+        marginTop: hp('2%'),
+        marginLeft: wp('2%'),
         alignSelf: 'flex-start',
     },
     locationTagsText: {
-        fontSize: 15,
-        fontFamily: 'ChunkFive',
+        fontSize: 14,
+        fontFamily: 'Futura',
         fontWeight: '700',
         color: Colors.black,
-        marginBottom: 15,
+        marginBottom: hp('1.5%'),
     },
     locationTagsAddButton: {
         backgroundColor: Colors.whiteGray,
         borderColor: 'transparent',
         borderWidth: 0,
-        borderRadius: 20,
+        borderRadius: hp('2%'),
     },
     locationTagsAddButtonContainer: {
-        width: 65,
+        width: wp('17.5%'),
     },
     locationTagsButtonView: {
         flexDirection: 'row',
         flexWrap: 'wrap',
-        columnGap: 5,
-        rowGap: 5,
+        columnGap: hp('0.5%'),
+        rowGap: hp('0.5%'),
     },
     locationTagsModal: {
         justifyContent: 'center',
     },
     locationTagsModalView: {
         backgroundColor: 'white',
-        padding: 20,
+        padding: hp('2%'),
         justifyContent: 'space-evenly',
         alignItems: 'center',
-        borderRadius: 10,
-        flex: 0.75,
+        borderRadius: hp('1%'),
+        flex: 0.6,
     },
     locationTagsModalTitle: {
         fontSize: 20,
-        fontFamily: 'ChunkFive'
+        fontFamily: 'Futura'
     },
     locationTagsModalOpacity: {
         width: '100%',
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        marginVertical: 20,
+        marginVertical: hp('2%'),
     },
     locationTagsModalText: {
         fontSize: 20,
-        flex: 0.65
+        flex: 0.5
     },
     locationTagButton: {
         backgroundColor: Colors.whiteOrange,
         borderWidth: 0,
-        borderRadius: 20,
+        borderRadius: hp('2%'),
     }, 
     userTagsInputView: {
-        width: '90%',
-        padding: 15,
-        borderRadius: 10,
+        width: wp('90%'),
+        padding: hp('1.5%'),
+        borderRadius: hp('1%'),
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginTop: 20,
+        marginTop: hp('2%'),
         backgroundColor: Colors.whiteGray,
     },
     userTagsTitleText: {
         color: Colors.black,
-        fontFamily: 'ChunkFive',
-        fontWeight: '700',
-        marginLeft: 5
+        fontFamily: 'Futura',
+        marginLeft: wp('1%')
     },
     userTagsText: {
         color: Colors.darkGray,
-        fontFamily: 'ChunkFive',
-        fontWeight: '700',
-        marginRight: 5
+        fontFamily: 'Futura',
+        marginRight: wp('1%')
     }
 })
