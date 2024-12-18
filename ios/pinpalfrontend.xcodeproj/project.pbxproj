@@ -42,13 +42,6 @@
 		091211DF00D14BA19AE10AD9 /* FuturaCyrillicHeavy.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 24085CE15322488FAB8A5CE8 /* FuturaCyrillicHeavy.ttf */; };
 		45AD6E66C3DB454EA1649FD8 /* FuturaCyrillicLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EFF981E5134F4C6085B44D2A /* FuturaCyrillicLight.ttf */; };
 		AF1026DB95164B54BFC3E386 /* FuturaCyrillicMedium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 255C4067962941F48A9ED035 /* FuturaCyrillicMedium.ttf */; };
-		C37A9B8BC71C4703BF637B0D /* helvetica-compressed-5871d14b6903a.otf in Resources */ = {isa = PBXBuildFile; fileRef = 74313B06DD5F40FCB84B5EBB /* helvetica-compressed-5871d14b6903a.otf */; };
-		4FAB885EC1D645E7A92F8059 /* helvetica-rounded-bold-5871d05ead8de.otf in Resources */ = {isa = PBXBuildFile; fileRef = 320CB1DDC1BE4C69AEEB1AD8 /* helvetica-rounded-bold-5871d05ead8de.otf */; };
-		F757D412B1E9435F9EADEF51 /* Helvetica-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3B3FF7F75A46431C81632A3A /* Helvetica-Bold.ttf */; };
-		17A3EC700E9B43A496024A6F /* Helvetica-BoldOblique.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B63C17B4AEE24A61A481B734 /* Helvetica-BoldOblique.ttf */; };
-		1838A0546E5F42ADB113E01F /* Helvetica-Oblique.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D039087236F344F998D13A6F /* Helvetica-Oblique.ttf */; };
-		9812BDC72FA7432D97D59AA6 /* Helvetica.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 815D7542E29D43778FC8C978 /* Helvetica.ttf */; };
-		7C15923465F84141902AA4BA /* helvetica-light-587ebe5a59211.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CE54613945304BB697E7BB9F /* helvetica-light-587ebe5a59211.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -108,13 +101,6 @@
 		24085CE15322488FAB8A5CE8 /* FuturaCyrillicHeavy.ttf */ = {isa = PBXFileReference; name = "FuturaCyrillicHeavy.ttf"; path = "../assets/fonts/FuturaCyrillicHeavy.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		EFF981E5134F4C6085B44D2A /* FuturaCyrillicLight.ttf */ = {isa = PBXFileReference; name = "FuturaCyrillicLight.ttf"; path = "../assets/fonts/FuturaCyrillicLight.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		255C4067962941F48A9ED035 /* FuturaCyrillicMedium.ttf */ = {isa = PBXFileReference; name = "FuturaCyrillicMedium.ttf"; path = "../assets/fonts/FuturaCyrillicMedium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		74313B06DD5F40FCB84B5EBB /* helvetica-compressed-5871d14b6903a.otf */ = {isa = PBXFileReference; name = "helvetica-compressed-5871d14b6903a.otf"; path = "../assets/fonts/helvetica-compressed-5871d14b6903a.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		320CB1DDC1BE4C69AEEB1AD8 /* helvetica-rounded-bold-5871d05ead8de.otf */ = {isa = PBXFileReference; name = "helvetica-rounded-bold-5871d05ead8de.otf"; path = "../assets/fonts/helvetica-rounded-bold-5871d05ead8de.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		3B3FF7F75A46431C81632A3A /* Helvetica-Bold.ttf */ = {isa = PBXFileReference; name = "Helvetica-Bold.ttf"; path = "../assets/fonts/Helvetica-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		B63C17B4AEE24A61A481B734 /* Helvetica-BoldOblique.ttf */ = {isa = PBXFileReference; name = "Helvetica-BoldOblique.ttf"; path = "../assets/fonts/Helvetica-BoldOblique.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		D039087236F344F998D13A6F /* Helvetica-Oblique.ttf */ = {isa = PBXFileReference; name = "Helvetica-Oblique.ttf"; path = "../assets/fonts/Helvetica-Oblique.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		815D7542E29D43778FC8C978 /* Helvetica.ttf */ = {isa = PBXFileReference; name = "Helvetica.ttf"; path = "../assets/fonts/Helvetica.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		CE54613945304BB697E7BB9F /* helvetica-light-587ebe5a59211.ttf */ = {isa = PBXFileReference; name = "helvetica-light-587ebe5a59211.ttf"; path = "../assets/fonts/helvetica-light-587ebe5a59211.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -223,13 +209,6 @@
 				24085CE15322488FAB8A5CE8 /* FuturaCyrillicHeavy.ttf */,
 				EFF981E5134F4C6085B44D2A /* FuturaCyrillicLight.ttf */,
 				255C4067962941F48A9ED035 /* FuturaCyrillicMedium.ttf */,
-				74313B06DD5F40FCB84B5EBB /* helvetica-compressed-5871d14b6903a.otf */,
-				320CB1DDC1BE4C69AEEB1AD8 /* helvetica-rounded-bold-5871d05ead8de.otf */,
-				3B3FF7F75A46431C81632A3A /* Helvetica-Bold.ttf */,
-				B63C17B4AEE24A61A481B734 /* Helvetica-BoldOblique.ttf */,
-				D039087236F344F998D13A6F /* Helvetica-Oblique.ttf */,
-				815D7542E29D43778FC8C978 /* Helvetica.ttf */,
-				CE54613945304BB697E7BB9F /* helvetica-light-587ebe5a59211.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -394,13 +373,6 @@
 				091211DF00D14BA19AE10AD9 /* FuturaCyrillicHeavy.ttf in Resources */,
 				45AD6E66C3DB454EA1649FD8 /* FuturaCyrillicLight.ttf in Resources */,
 				AF1026DB95164B54BFC3E386 /* FuturaCyrillicMedium.ttf in Resources */,
-				C37A9B8BC71C4703BF637B0D /* helvetica-compressed-5871d14b6903a.otf in Resources */,
-				4FAB885EC1D645E7A92F8059 /* helvetica-rounded-bold-5871d05ead8de.otf in Resources */,
-				F757D412B1E9435F9EADEF51 /* Helvetica-Bold.ttf in Resources */,
-				17A3EC700E9B43A496024A6F /* Helvetica-BoldOblique.ttf in Resources */,
-				1838A0546E5F42ADB113E01F /* Helvetica-Oblique.ttf in Resources */,
-				9812BDC72FA7432D97D59AA6 /* Helvetica.ttf in Resources */,
-				7C15923465F84141902AA4BA /* helvetica-light-587ebe5a59211.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
