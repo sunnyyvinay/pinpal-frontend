@@ -85,7 +85,7 @@ function Journal({ route, navigation }: any): React.JSX.Element {
       <View style={styles.journalPinView}>
         {!tagged && journalData.pins.length == 0 &&
           <View style={styles.noPinsView}>
-            <FontAwesome6Icon name='map-location-dot' size={hp('10%')} color={Colors.black} style={{marginBottom: hp('1%')}}/>
+            <FontAwesome6Icon name='map-location-dot' size={hp('10%')} color={Colors.mediumGray} style={{marginBottom: hp('1%')}}/>
             <Text style={styles.noPinsText}>You don't have any pins yet</Text>
           </View>
         }

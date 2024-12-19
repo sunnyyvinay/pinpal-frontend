@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
         flex: 0.2,
         borderRadius: hp('3%'),
         marginRight: wp('2%'),
-        backgroundColor: Colors.mediumOrange,
+        backgroundColor: Colors.darkOrange,
         padding: 3,
         justifyContent: 'center',
         alignItems: 'center',

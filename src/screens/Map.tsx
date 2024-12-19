@@ -306,8 +306,9 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
           <Marker 
             key={0}
             coordinate={{latitude: changingRegion.latitude, longitude: changingRegion.longitude}} 
-            image={require('../../assets/images/personal-pin.png')}
-            opacity={0.7} />
+            opacity={0.7}>
+              <Image source={require('../../assets/images/personal-pin.png')} style={{width: wp('5.5%'), height: hp('5.5%')}} resizeMode='contain' />
+          </Marker>
         );
       
       case 2:
@@ -315,8 +316,9 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
           <Marker 
             key={0}
             coordinate={{latitude: changingRegion.latitude, longitude: changingRegion.longitude}} 
-            image={require('../../assets/images/personal-pin.png')}
-            opacity={0.7} />
+            opacity={0.7}>
+              <Image source={require('../../assets/images/personal-pin.png')} style={{width: wp('5.5%'), height: hp('5.5%')}} resizeMode='contain' />
+          </Marker>
         );   
     }
   }
@@ -544,7 +546,7 @@ const styles = StyleSheet.create({
   pinCalloutUsername: {
     fontSize: 16,
     fontStyle: 'italic',
-    fontFamily: 'ChunkFive',
+    fontFamily: 'Futura',
     color: Colors.darkGray,
     marginBottom: hp('0.5%')
   },

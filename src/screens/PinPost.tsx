@@ -8,6 +8,7 @@ import * as Colors from '../constants/colors';
 import { Button, Divider, Input, SearchBar } from '@rneui/themed';
 import Icon from 'react-native-vector-icons/Ionicons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Modal from "react-native-modal";
 import { deletePin, updatePin } from '../services/user.service';
 import { locationTags, getLocationTagIcon } from '../constants/locationtags';
@@ -396,7 +397,7 @@ const PinPost = (props:any) => {
 
         {personal && !editMode ? 
         <TouchableOpacity onPress={() => setPinActionModalVisible(true)}>
-          <MaterialIcon name="more-vert" size={hp('2%')} color={Colors.black} />
+          <MaterialCommunityIcons name="dots-vertical-circle" size={hp('3%')} color={Colors.mediumGray} />
         </TouchableOpacity>
         : null}
       </View>
@@ -466,8 +467,8 @@ const PinPost = (props:any) => {
             {userTagState.editedTaggedUsers && userTagState.editedTaggedUsers.length > 0 && userTagState.editedTaggedUsers.map((user:any, index:number) => {
               return (
                 <TouchableOpacity style={styles.taggedUserIndivView} key={index} onPress={() => props.navigation.navigate('Profile', {user_id: user.user_id})}>
-                  <Image source={pinUserData.profile_pic ? {uri: pinUserData.profile_pic} : require('../../assets/images/default-pfp.jpg')} style={styles.taggedUserPfp} />
-                  <Text style={styles.taggedUserText}>{pinUserData.username}</Text>
+                  <Image source={user.profile_pic ? {uri: user.profile_pic} : require('../../assets/images/default-pfp.jpg')} style={styles.taggedUserPfp} />
+                  <Text style={styles.taggedUserText}>{user.username}</Text>
                 </TouchableOpacity>
               )
           })}
@@ -479,8 +480,8 @@ const PinPost = (props:any) => {
         {userTagState.taggedUsers && userTagState.taggedUsers.length > 0 && userTagState.taggedUsers.map((user:any, index:number) => {
             return (
               <TouchableOpacity style={styles.taggedUserIndivView} key={index} onPress={() => props.navigation.navigate('Profile', {user_id: user.user_id})}>
-                <Image source={pinUserData.profile_pic ? {uri: pinUserData.profile_pic} : require('../../assets/images/default-pfp.jpg')} style={styles.taggedUserPfp} />
-                <Text style={styles.taggedUserText}>{pinUserData.username}</Text>
+                <Image source={user.profile_pic ? {uri: user.profile_pic} : require('../../assets/images/default-pfp.jpg')} style={styles.taggedUserPfp} />
+                <Text style={styles.taggedUserText}>{user.username}</Text>
               </TouchableOpacity>
             )
         })}

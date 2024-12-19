@@ -9,11 +9,12 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Icon from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import FontAwesome6Icon from 'react-native-vector-icons/FontAwesome6';
 
 function Profile(props: any): React.JSX.Element {
   const [currUser, setCurrUser] = useState<string|null>("");
   const [userData, setUserData] = useState<any>({});
-  const [friendStatus, setFriendStatus] = useState<number>(-1); // -1 for not friends, 0 for pending, 1 for friends
+  const [friendStatus, setFriendStatus] = useState<number>(-1); // -1 for not friends, 0 for pending, 1 for friends, -2 for pending
   type ProfileState = {
     pins: any[];
     friends: any[];
@@ -38,10 +39,41 @@ function Profile(props: any): React.JSX.Element {
                 setUserData(userData.user);
                 const friendStatusData = await getFriendStatus(curr_user_id, user_id);
                 setFriendStatus(friendStatusData.status);
-                const pinData = await getPins(user_id);
                 const friendData = await getUserFriends(user_id);
+
+                const pinData = await getPins(user_id);
+                let displayedPinData = [];
+                if (curr_user_id != user_id) {
+                  for (const pin of pinData.pins) {
+                    if (pin.visibility == 2) {
+                      displayedPinData.push(pin);
+                    } else if (pin.visibility == 1 && friendStatusData.status == 1) {
+                      displayedPinData.push(pin);
+                    }
+                  }
+                } else {
+                  displayedPinData = pinData.pins ? pinData.pins : [];
+                }
+                
                 const taggedData = await getTaggedPins(user_id);
-                setProfileData({ ...profileData, friends: friendData.friends ? friendData.friends : [], pins: pinData.pins ? pinData.pins : [], tagged_pins: taggedData.pins ? taggedData.pins : []});
+                let displayedTaggedPinData = [];
+                if (curr_user_id != user_id) {
+                  for (const pin of taggedData.pins) {
+                    if (pin.visibility == 2) {
+                      displayedTaggedPinData.push(pin);
+                    } else if (pin.visibility == 1) { // check if curr user is friends with tagged pin user
+                      const tagged_pin_user = pin.user_id;
+                      const tagged_pin_user_friend_status = await getFriendStatus(curr_user_id, tagged_pin_user);
+                      if (tagged_pin_user == curr_user_id || tagged_pin_user_friend_status.status == 1) {
+                        displayedTaggedPinData.push(pin);
+                      }
+                    }
+                  }
+                } else {
+                  displayedTaggedPinData = taggedData.pins ? taggedData.pins : [];
+                }
+
+                setProfileData({ ...profileData, friends: friendData.friends ? friendData.friends : [], pins: displayedPinData, tagged_pins: displayedTaggedPinData});
             } else {
                 props.navigation.navigate("Welcome");
             }
@@ -105,7 +137,7 @@ function Profile(props: any): React.JSX.Element {
             style={{...styles.requestOpacity, backgroundColor: Colors.lightOrange}}
             onPress={async() => {
               acceptFriendRequest(currUser, userData.user_id);
-              setFriendStatus(-1);
+              setFriendStatus(1);
             }}>
             <FontAwesome5 name='user-check' size={hp('2%')} color={Colors.white} />
             <Text style={styles.requestText}>Accept Friend Request</Text>
@@ -147,15 +179,26 @@ function Profile(props: any): React.JSX.Element {
       <Divider style={styles.dividerStyle}/>
 
       <View style={styles.journalPinView}>
+        {!tagged && profileData.pins.length == 0 &&
+          <View style={styles.noPinsView}>
+            <FontAwesome6Icon name='map-location-dot' size={hp('10%')} color={Colors.mediumGray} style={{marginBottom: hp('1%')}}/>
+            <Text style={styles.noPinsText}>This user has no pins</Text>
+          </View>
+        }
         {!tagged && profileData.pins.length != 0 && profileData.pins.map((pin: any) => {
           return (
             <TouchableOpacity key={pin.pin_id} onPress={() => props.navigation.navigate("Pin detail", {pin_id: pin.pin_id, pin_user_id: pin.user_id})}>
               <Image source={{uri: pin.photo}} style={styles.journalPinImage} />
             </TouchableOpacity>
-              
           )
         }).reverse()}
 
+        {tagged && profileData.tagged_pins.length == 0 &&
+          <View style={styles.noPinsView}>
+            <FontAwesome6Icon name='map-location-dot' size={hp('10%')} color={Colors.mediumGray} style={{marginBottom: hp('1%')}}/>
+            <Text style={styles.noPinsText}>This user has no tagged pins</Text>
+          </View>
+        }
         {tagged && profileData.tagged_pins.length != 0 && profileData.tagged_pins.map((pin: any) => {
           return (
             <TouchableOpacity key={pin.pin_id} onPress={() => props.navigation.navigate("Pin detail", {pin_id: pin.pin_id, pin_user_id: pin.user_id})}>
@@ -263,6 +306,21 @@ const styles = StyleSheet.create({
     marginVertical: hp('0.5%'),
     marginHorizontal: wp('2.5%'),
     alignSelf: 'center'
+  },
+  noPinsView: {
+    width: '100%',
+    height: '75%',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  noPinsText: {
+    color: Colors.mediumGray,
+    fontFamily: 'ChunkFive',
+    fontSize: 15,
+    alignSelf: 'center',
+    marginTop: hp('2%')
   }
 });
 
