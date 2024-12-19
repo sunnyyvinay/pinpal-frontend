@@ -24,6 +24,8 @@ function Profile(props: any): React.JSX.Element {
     friends: [],
     tagged_pins: []
   });
+
+  const [tagged, setTagged] = useState<boolean>(false);
   
   useEffect(() => {
     const fetchUserData = async () => {
@@ -132,9 +134,9 @@ function Profile(props: any): React.JSX.Element {
           <Text style={styles.statTextNum}>{profileData.friends.length || 0}</Text>
           <Text style={styles.statTextLabel}>Friends</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.statCard}>
-          <Text style={styles.statTextNum}>{profileData.tagged_pins.length || 0}</Text>
-          <Text style={styles.statTextLabel}>Tagged Pins</Text>
+        <TouchableOpacity style={{...styles.statCard, backgroundColor: tagged ? Colors.mediumOrange : Colors.whiteOrange}} onPress={() => setTagged(!tagged)}>
+          <Text style={{...styles.statTextNum, color: tagged ? Colors.white : Colors.black}}>{profileData.tagged_pins.length || 0}</Text>
+          <Text style={{...styles.statTextLabel, color: tagged ? Colors.white : Colors.black}}>Tagged Pins</Text>
         </TouchableOpacity>
       </View>
 
@@ -145,12 +147,20 @@ function Profile(props: any): React.JSX.Element {
       <Divider style={styles.dividerStyle}/>
 
       <View style={styles.journalPinView}>
-        {profileData.pins.length != 0 && profileData.pins.map((pin: any) => {
+        {!tagged && profileData.pins.length != 0 && profileData.pins.map((pin: any) => {
           return (
             <TouchableOpacity key={pin.pin_id} onPress={() => props.navigation.navigate("Pin detail", {pin_id: pin.pin_id, pin_user_id: pin.user_id})}>
               <Image source={{uri: pin.photo}} style={styles.journalPinImage} />
             </TouchableOpacity>
               
+          )
+        }).reverse()}
+
+        {tagged && profileData.tagged_pins.length != 0 && profileData.tagged_pins.map((pin: any) => {
+          return (
+            <TouchableOpacity key={pin.pin_id} onPress={() => props.navigation.navigate("Pin detail", {pin_id: pin.pin_id, pin_user_id: pin.user_id})}>
+              <Image source={{uri: pin.photo}} style={styles.journalPinImage} />
+            </TouchableOpacity>
           )
         }).reverse()}
       </View>

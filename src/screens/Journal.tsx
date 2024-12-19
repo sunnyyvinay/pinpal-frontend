@@ -7,6 +7,7 @@ import { Button, Divider } from '@rneui/themed';
 import { useFocusEffect } from '@react-navigation/native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import FontAwesome6Icon from 'react-native-vector-icons/FontAwesome6';
 
 function Journal({ route, navigation }: any): React.JSX.Element {
   const [userData, setUserData] = useState<any>({});
@@ -20,6 +21,8 @@ function Journal({ route, navigation }: any): React.JSX.Element {
     friends: [],
     tagged_pins: []
   });
+
+  const [tagged, setTagged] = useState<boolean>(false);
   
   useFocusEffect(
     useCallback(() => {
@@ -64,13 +67,12 @@ function Journal({ route, navigation }: any): React.JSX.Element {
           <Text style={styles.statTextNum}>{journalData.friends.length}</Text>
           <Text style={styles.statTextLabel}>Friends</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.statCard}>
-          <Text style={styles.statTextNum}>{journalData.tagged_pins.length}</Text>
-          <Text style={styles.statTextLabel}>Tagged Pins</Text>
+        <TouchableOpacity style={{...styles.statCard, backgroundColor: tagged ? Colors.mediumOrange : Colors.whiteOrange}} onPress={() => setTagged(!tagged)}>
+          <Text style={{...styles.statTextNum, color: tagged ? Colors.white : Colors.black}}>{journalData.tagged_pins.length}</Text>
+          <Text style={{...styles.statTextLabel, color: tagged ? Colors.white : Colors.black}}>Tagged Pins</Text>
         </TouchableOpacity>
       </View>
 
-      
         <TouchableOpacity 
             style={styles.editButtonContainer}
             onPress={() => navigation.navigate("Settings")}>
@@ -78,11 +80,30 @@ function Journal({ route, navigation }: any): React.JSX.Element {
             <Text style={styles.editButtonText}>Edit Profile</Text>
         </TouchableOpacity>
       
-
       <Divider style={styles.dividerStyle}/>
 
       <View style={styles.journalPinView}>
-        {journalData.pins.length != 0 && journalData.pins.map((pin: any) => {
+        {!tagged && journalData.pins.length == 0 &&
+          <View style={styles.noPinsView}>
+            <FontAwesome6Icon name='map-location-dot' size={hp('10%')} color={Colors.black} style={{marginBottom: hp('1%')}}/>
+            <Text style={styles.noPinsText}>You don't have any pins yet</Text>
+          </View>
+        }
+        {!tagged && journalData.pins.length != 0 && journalData.pins.map((pin: any) => {
+          return (
+            <TouchableOpacity key={pin.pin_id} onPress={() => navigation.navigate("Pin detail", {pin_id: pin.pin_id, pin_user_id: pin.user_id})}>
+              <Image source={{uri: pin.photo}} style={styles.journalPinImage} />
+            </TouchableOpacity>
+          )
+        }).reverse()}
+
+        {tagged && journalData.tagged_pins.length == 0 &&
+          <View style={styles.noPinsView}>
+            <FontAwesome6Icon name='map-location-dot' size={hp('10%')} color={Colors.mediumGray} style={{marginBottom: hp('1%')}}/>
+            <Text style={styles.noPinsText}>You're not tagged in any pins</Text>
+          </View>
+        }
+        {tagged && journalData.tagged_pins.length != 0 && journalData.tagged_pins.map((pin: any) => {
           return (
             <TouchableOpacity key={pin.pin_id} onPress={() => navigation.navigate("Pin detail", {pin_id: pin.pin_id, pin_user_id: pin.user_id})}>
               <Image source={{uri: pin.photo}} style={styles.journalPinImage} />
@@ -91,7 +112,6 @@ function Journal({ route, navigation }: any): React.JSX.Element {
         }).reverse()}
       </View>
     </ScrollView>
-    
   );
 }
 
@@ -190,6 +210,21 @@ const styles = StyleSheet.create({
     marginVertical: hp('0.5%'),
     marginHorizontal: wp('2.5%'),
     alignSelf: 'center'
+  },
+  noPinsView: {
+    width: '100%',
+    height: '75%',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  noPinsText: {
+    color: Colors.mediumGray,
+    fontFamily: 'ChunkFive',
+    fontSize: 15,
+    alignSelf: 'center',
+    marginTop: hp('2%')
   }
 });
 
