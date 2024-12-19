@@ -106,12 +106,13 @@ const AddPin = ({ route, navigation }: any) => {
             } else if (response.assets && response.assets.length > 0) {
                 if (response.assets[0].fileSize && response.assets[0].fileSize > 7340032) { // 7 MB
                     setError({...error, photo: "File too large. Please upload a smaller file"});
-              } else if (user_id && response.assets) {
-                  setPinData({...pinData, photo: response.assets[0].uri});
-                  } else {
-                      navigation.navigate("Welcome");
-                  }
-              } 
+                } else if (user_id && response.assets) {
+                    setError({...error, photo: ""});
+                    setPinData({...pinData, photo: response.assets[0].uri});
+                } else {
+                    navigation.navigate("Welcome");
+                }
+            } 
         });
     };
 

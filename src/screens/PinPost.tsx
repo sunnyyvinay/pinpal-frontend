@@ -72,6 +72,9 @@ const PinPost = (props:any) => {
       count: 0
     });
 
+    const { width: screenWidth } = Dimensions.get('window');
+
+    /*
     interface PhotoItem {
       url: string;
     }
@@ -80,8 +83,8 @@ const PinPost = (props:any) => {
       {url: "https://images.unsplash.com/photo-1725733802754-c2a87bda47b2?q=80&w=2874&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"}
     ];
     const [activePhotoSlide, setActivePhotoSlide] = useState<number>(0);
-    const { width: screenWidth } = Dimensions.get('window');
-
+    */
+    
     useEffect(() => {
       const getInfo = async () => {
         const user_id = await AsyncStorage.getItem("user_id");
@@ -160,6 +163,7 @@ const PinPost = (props:any) => {
       
     }, [JSON.stringify(pinData.user_tags), JSON.stringify(editedPinData.user_tags)]);
 
+    /*
     const renderItem = ({ item }: { item: PhotoItem }) => {
       return (
         <View style={styles.slide}>
@@ -182,6 +186,7 @@ const PinPost = (props:any) => {
         </View>
       );
     };
+    */
 
     const openImagePicker = () => {
       const options = {
@@ -452,26 +457,9 @@ const PinPost = (props:any) => {
             :
             <Image source={pinData.photo && {uri: pinData.photo}} style={{width: screenWidth, height: hp('20%')}}/>
           }
-
-            {/* <Carousel
-              width={screenWidth}
-              height={200}
-              data={tempPhotos}
-              onSnapToItem={(index) => setActivePhotoSlide(index)}
-              renderItem={renderItem}
-            />
-            {renderPagination()} */}
-
         </View>
         
         {editMode ?
-          // <Input
-          //   value={editedPinData.caption}
-          //   placeholder='Enter new pin caption'
-          //   autoCapitalize='none'
-          //   onChangeText={text => setEditedPinData({...editedPinData, caption: text})}
-          //   style={styles.editCaptionInput}
-          // />
             <TextInput
                 value={editedPinData.caption}
                 placeholder="Write a caption..."

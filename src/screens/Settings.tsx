@@ -23,6 +23,7 @@ const Settings = ({ route, navigation }: any) => {
     const [hiddenOldPass, setHiddenOldPass] = useState<boolean>(true);
     const [hiddenNewPass, setHiddenNewPass] = useState<boolean>(true);
     const [error, setError] = useState<any>({
+        photo: "",
         full_name: "",
         username: "",
         birthday: "",
@@ -57,27 +58,25 @@ const Settings = ({ route, navigation }: any) => {
         };
     
         launchImageLibrary(options, async (response: ImagePickerResponse) => {
-          const user_id = await AsyncStorage.getItem("user_id");
-          if (response.errorCode) {
-            console.log('Image picker error: ', response.errorMessage);
-          } else if (response.assets && response.assets.length > 0) {
-            if (response.assets[0].fileSize && response.assets[0].fileSize > 7340032) { // 7 MB
-                console.log("File too large. Please upload a smaller file");
-            } else if (user_id && response.assets) {
-                const imageUri = response.assets[0].uri;
-                const formData = new FormData();
-                formData.append('profile_pic', {
-                    uri: imageUri,
-                    type: 'image/jpeg',
-                    name: user_id + '.jpg',
-                });
-                // formData.append('username', userData.username);
-                // formData.append('full_name', userData.full_name);
-                // formData.append('birthday', userData.birthday);
-                // formData.append('phone_no', userData.phone_no);
-                // formData.append('pass', userData.pass);
-                await updateUserPic(user_id, formData);
-                setUserData({...userData, profile_pic: imageUri});
+            const user_id = await AsyncStorage.getItem("user_id");
+            if (response.errorCode) {
+                setError({...error, photo: "An error occurred. Please try again."});
+                console.log('Image picker error: ', response.errorMessage);
+            } else if (response.assets && response.assets.length > 0) {
+                if (response.assets[0].fileSize && response.assets[0].fileSize > 7340032) { // 7 MB
+                    setError({...error, photo: "File too large. Please upload a smaller file"});
+                } else if (user_id && response.assets) {
+                    setError({...error, photo: ""});
+                    const imageUri = response.assets[0].uri;
+                    const formData = new FormData();
+                    formData.append('profile_pic', {
+                        uri: imageUri,
+                        type: 'image/jpeg',
+                        name: user_id + '.jpg',
+                    });
+                    
+                    await updateUserPic(user_id, formData);
+                    setUserData({...userData, profile_pic: imageUri});
                 } else {
                     navigation.navigate("Welcome");
                 }
@@ -111,6 +110,7 @@ const Settings = ({ route, navigation }: any) => {
             <TouchableOpacity onPress={openImagePicker}>
                 <Image source={userData.profile_pic && userData.profile_pic != "" ? {uri: userData.profile_pic} : require('../../assets/images/default-pfp.jpg')} style={styles.pfpImage} />
             </TouchableOpacity>
+            {error.photo && <Text style={styles.errorTextStyle}>{error.photo}</Text>}
             <View style={styles.pfpOptionsView}>
                 <TouchableOpacity style={styles.pfpEditIcon} onPress={openImagePicker}>
                     <MaterialIcon name="add-a-photo" size={20} />
@@ -537,6 +537,7 @@ const styles = StyleSheet.create({
         marginTop: hp('1%'),
     },
     errorTextStyle: {
+        marginTop: hp('1%'),
         color: Colors.errorRed
     }
 });
