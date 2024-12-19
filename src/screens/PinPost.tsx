@@ -8,7 +8,6 @@ import * as Colors from '../constants/colors';
 import { Button, Divider, Input, SearchBar } from '@rneui/themed';
 import Icon from 'react-native-vector-icons/Ionicons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import Carousel from 'react-native-reanimated-carousel';
 import Modal from "react-native-modal";
 import { deletePin, updatePin } from '../services/user.service';
 import { locationTags, getLocationTagIcon } from '../constants/locationtags';
@@ -72,19 +71,10 @@ const PinPost = (props:any) => {
       count: 0
     });
 
+    const [error, setError] = useState<any>({title: "", caption: "", photo: ""});
+
     const { width: screenWidth } = Dimensions.get('window');
 
-    /*
-    interface PhotoItem {
-      url: string;
-    }
-    const tempPhotos: PhotoItem[] = [
-      {url: "https://images.unsplash.com/photo-1720802616209-c174c23f6565?q=80&w=2971&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"},
-      {url: "https://images.unsplash.com/photo-1725733802754-c2a87bda47b2?q=80&w=2874&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"}
-    ];
-    const [activePhotoSlide, setActivePhotoSlide] = useState<number>(0);
-    */
-    
     useEffect(() => {
       const getInfo = async () => {
         const user_id = await AsyncStorage.getItem("user_id");
@@ -163,31 +153,6 @@ const PinPost = (props:any) => {
       
     }, [JSON.stringify(pinData.user_tags), JSON.stringify(editedPinData.user_tags)]);
 
-    /*
-    const renderItem = ({ item }: { item: PhotoItem }) => {
-      return (
-        <View style={styles.slide}>
-          <Image source={{ uri: item.url }} style={styles.image} />
-        </View>
-      );
-    };
-    const renderPagination = () => {
-      return (
-        <View style={styles.paginationContainer}>
-          {tempPhotos.map((_, index) => (
-            <View
-              key={index}
-              style={[
-                styles.dot,
-                activePhotoSlide === index ? styles.activeDot : styles.inactiveDot,
-              ]}
-            />
-          ))}
-        </View>
-      );
-    };
-    */
-
     const openImagePicker = () => {
       const options = {
           mediaType: 'photo' as MediaType,
@@ -199,16 +164,18 @@ const PinPost = (props:any) => {
       launchImageLibrary(options, async (response: ImagePickerResponse) => {
           const user_id = await AsyncStorage.getItem("user_id");
           if (response.errorCode) {
+            setError({...error, photo: "An error occurred. Please try again."});
             console.log('Image picker error: ', response.errorMessage);
           } else if (response.assets && response.assets.length > 0) {
             if (response.assets[0].fileSize && response.assets[0].fileSize > 7340032) { // 7 MB
-                console.log("File too large. Please upload a smaller file");
+                setError({...error, photo: "File too large. Please upload a smaller file"});
             } else if (user_id && response.assets) {
+                setError({...error, photo: ""});
                 setEditedPinData({...editedPinData, photo: response.assets[0].uri});
-                } else {
-                  props.navigation.navigate("Welcome");
-                }
-            } 
+            } else {
+                props.navigation.navigate("Welcome");
+              }
+          } 
       });
   };
 
@@ -236,8 +203,8 @@ const PinPost = (props:any) => {
                 onPress={async () => {
                   setPinData({...pinData, visibility: 0});
                   await updatePin(pin_user_id, pin_id, {...pinData, visibility: 0}, null);
-                  setEditPinVisibility(false);
                   setPinActionModalVisible(false);
+                  setEditPinVisibility(false);
                 }}>
                   <MaterialIcon name="lock" size={hp('2.5%')} style={{ flex: 0.25}}/>
                   <Text style={{...styles.pinActionModelSubviewText, flex: 0.65}}>Private</Text>
@@ -249,8 +216,8 @@ const PinPost = (props:any) => {
                 onPress={async () => {
                   setPinData({...pinData, visibility: 1});
                   await updatePin(pin_user_id, pin_id, {...pinData, visibility: 1}, null);
-                  setEditPinVisibility(false);
                   setPinActionModalVisible(false);
+                  setEditPinVisibility(false);
                 }}>
                   <MaterialIcon name="people-alt" size={hp('2.5%')} style={{ flex: 0.25}}/>
                   <Text style={{...styles.pinActionModelSubviewText, flex: 0.65}}>Friends</Text>
@@ -262,8 +229,8 @@ const PinPost = (props:any) => {
                 onPress={async () => {
                   setPinData({...pinData, visibility: 2});
                   await updatePin(pin_user_id, pin_id, {...pinData, visibility: 2}, null);
-                  setEditPinVisibility(false);
                   setPinActionModalVisible(false);
+                  setEditPinVisibility(false);
                 }}>
                   <MaterialIcon name="public" size={hp('2.5%')} style={{ flex: 0.25}}/>
                   <Text style={{...styles.pinActionModelSubviewText, flex: 0.65}}>Public</Text>
@@ -434,25 +401,28 @@ const PinPost = (props:any) => {
         : null}
       </View>
 
-      {/* <Divider color={Colors.mediumGray} style={{width: '95%', alignSelf: 'center'}} /> */}
-
       <View style={styles.postView}>
-        {editMode ? 
-           <Input
+        {editMode ?
+        <>
+          <TextInput
               value={editedPinData.title}
               placeholder='Enter new pin title'
               autoCapitalize='none'
-              onChangeText={text => setEditedPinData({...editedPinData, title: text})}
+              onChangeText={text => {setEditedPinData({...editedPinData, title: text}); setError({...error, title: ""})}}
               style={styles.editTitleInput}
-            />
+          />
+          {error.title != "" && <Text style={styles.errorText}>{error.title}</Text>}
+        </>
           : 
            <Text style={styles.pinTitleText}>{pinData.title}</Text>
         }
 
         <View style={styles.photosView}>
           {editMode ?
-            <TouchableOpacity onPress={openImagePicker}>
-              <Image source={editedPinData.photo && {uri: editedPinData.photo}} style={{width: screenWidth, height: hp('20%')}}/>
+            <TouchableOpacity onPress={openImagePicker} style={{justifyContent: 'center'}}>
+              <Image source={editedPinData.photo && {uri: editedPinData.photo}} style={{width: screenWidth, height: hp('20%'), opacity: 0.75}} />
+              <MaterialIcon name="add-a-photo" size={hp('5%')} style={{position: 'absolute', alignSelf: 'center', opacity: 0.75}} />
+              <Text style={styles.errorText}>{error.photo}</Text>
             </TouchableOpacity>
             :
             <Image source={pinData.photo && {uri: pinData.photo}} style={{width: screenWidth, height: hp('20%')}}/>
@@ -460,15 +430,18 @@ const PinPost = (props:any) => {
         </View>
         
         {editMode ?
-            <TextInput
-                value={editedPinData.caption}
-                placeholder="Write a caption..."
-                style={styles.editCaptionInput}
-                onChangeText={text => setEditedPinData({...editedPinData, caption: text})}
-                autoCapitalize="none"
-                multiline={true}
-                textAlignVertical="top"
-            />
+        <>
+        <TextInput
+          value={editedPinData.caption}
+          placeholder="Write a caption..."
+          style={styles.editCaptionInput}
+          onChangeText={text => {setEditedPinData({...editedPinData, caption: text}); setError({...error, caption: ""})}}
+          autoCapitalize="none"
+          multiline={true}
+          textAlignVertical="top" />
+        {error.caption != "" && <Text style={styles.errorText}>{error.caption}</Text>}
+        </>
+            
         :
           <View style={styles.captionView}>
             <Text style={{textAlign: 'center'}}>
@@ -492,11 +465,10 @@ const PinPost = (props:any) => {
             onPress={() => {setUserTagState({...userTagState, modalVisible: true})}} />  
             {userTagState.editedTaggedUsers && userTagState.editedTaggedUsers.length > 0 && userTagState.editedTaggedUsers.map((user:any, index:number) => {
               return (
-                <Button 
-                  title={'@' + user.username} 
-                  key={index}
-                  buttonStyle={styles.userTagButton}
-                  titleStyle={{ color: Colors.mediumGray, fontFamily: 'Futura', fontSize: 15 }} />
+                <TouchableOpacity style={styles.taggedUserIndivView} key={index} onPress={() => props.navigation.navigate('Profile', {user_id: user.user_id})}>
+                  <Image source={pinUserData.profile_pic ? {uri: pinUserData.profile_pic} : require('../../assets/images/default-pfp.jpg')} style={styles.taggedUserPfp} />
+                  <Text style={styles.taggedUserText}>{pinUserData.username}</Text>
+                </TouchableOpacity>
               )
           })}
         </View>
@@ -506,12 +478,10 @@ const PinPost = (props:any) => {
         <View style={styles.locationTagsButtonView}>
         {userTagState.taggedUsers && userTagState.taggedUsers.length > 0 && userTagState.taggedUsers.map((user:any, index:number) => {
             return (
-              <Button 
-                title={'@' + user.username} 
-                key={index}
-                buttonStyle={styles.userTagButton}
-                titleStyle={{ color: Colors.white, fontFamily: 'Futura', fontSize: 15 }} 
-                onPress={() => props.navigation.navigate('Profile', {user_id: user.user_id})}/>
+              <TouchableOpacity style={styles.taggedUserIndivView} key={index} onPress={() => props.navigation.navigate('Profile', {user_id: user.user_id})}>
+                <Image source={pinUserData.profile_pic ? {uri: pinUserData.profile_pic} : require('../../assets/images/default-pfp.jpg')} style={styles.taggedUserPfp} />
+                <Text style={styles.taggedUserText}>{pinUserData.username}</Text>
+              </TouchableOpacity>
             )
         })}
         </View>
@@ -519,7 +489,6 @@ const PinPost = (props:any) => {
         </View>
         }
       
-        
         {/* Location Tags */}
         {editMode ? 
         <View style={styles.locationTagsButtonView}>
@@ -538,7 +507,7 @@ const PinPost = (props:any) => {
                   title={tag} 
                   key={index}
                   buttonStyle={styles.locationTagButton}
-                  titleStyle={{ color: Colors.mediumGray, fontFamily: 'Futura', fontSize: 15 }} />
+                  titleStyle={{ color: Colors.darkGray, fontFamily: 'Futura', fontSize: 15 }} />
               )
           })}
         </View>
@@ -584,7 +553,7 @@ const PinPost = (props:any) => {
         <Button 
           title="Cancel"
           color={Colors.black}
-          titleStyle={{ color: Colors.black, fontWeight: '500', fontFamily: 'ChunkFive', fontSize: 14 }}
+          titleStyle={{ color: Colors.white, fontWeight: '500', fontFamily: 'ChunkFive', fontSize: 14 }}
           buttonStyle={styles.cancelEditButton}
           containerStyle={styles.cancelEditButtonContainer} 
           onPress={ () => {
@@ -599,16 +568,22 @@ const PinPost = (props:any) => {
           containerStyle={styles.saveEditButtonContainer} 
           onPress={
               async () => {
-                  const user_id = await AsyncStorage.getItem("user_id");
-                  const formData = new FormData();
-                  formData.append('photo', {
-                      uri: editedPinData.photo,
-                      type: 'image/jpeg',
-                      name: user_id + '.jpg',
-                  });
-                  await updatePin(pin_user_id, pin_id, editedPinData, formData);
-                  setPinData(editedPinData);
-                  setEditMode(false);
+                  if (editedPinData.title.length === 0 || editedPinData.title.length > 50) {
+                      setError({...error, title: "Title must be between 1 and 50 characters"});
+                  } else if (editedPinData.caption.length > 100) {
+                      setError({...error, caption: "Caption must be less than 100 characters"});
+                  } else {
+                    const user_id = await AsyncStorage.getItem("user_id");
+                    const formData = new FormData();
+                    formData.append('photo', {
+                        uri: editedPinData.photo,
+                        type: 'image/jpeg',
+                        name: user_id + '.jpg',
+                    });
+                    await updatePin(pin_user_id, pin_id, editedPinData, formData);
+                    setPinData(editedPinData);
+                    setEditMode(false);
+                  }
               }
           }/>
       </View>
@@ -629,7 +604,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
     marginHorizontal: wp('2%'),
-    marginVertical: hp('1%'),
+    marginVertical: hp('1.5%'),
   },
   userView: {
     flex: 0.99,
@@ -655,11 +630,11 @@ const styles = StyleSheet.create({
   },
   pinTitleText: {
     textAlign: 'center',
-    fontSize: 28,
-    fontWeight: 'bold',
-    fontFamily: 'Futura',
+    fontFamily: 'ChunkFive',
+    fontSize: 24,
     color: Colors.mediumOrange,
     marginBottom: hp('0.5%'),
+    flexWrap: 'wrap',
   },
   likesView: {
     alignItems: 'center',
@@ -673,32 +648,6 @@ const styles = StyleSheet.create({
   photosView: {
     marginTop: hp('0.5%'),
     marginBottom: hp('0.5%'),
-  },
-  slide: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  image: {
-    width: wp('95%'),
-    height: hp('50%'),
-    borderRadius: hp('1%'),
-  },
-  paginationContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    marginTop: hp('1%'),
-  },
-  dot: {
-    width: hp('0.8%'),
-    height: hp('0.8%'),
-    borderRadius: hp('0.4%'),
-    marginHorizontal: hp('0.4%'),
-  },
-  activeDot: {
-    backgroundColor: Colors.mediumOrange,
-  },
-  inactiveDot: {
-    backgroundColor: 'gray',
   },
   captionView: {
     borderWidth: 0,
@@ -725,7 +674,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     columnGap: hp('0.5%'),
     rowGap: hp('0.5%'),
-    marginVertical: hp('1%'),
+    marginVertical: hp('2%'),
   },
   locationTagButton: {
     backgroundColor: Colors.whiteOrange,
@@ -754,7 +703,7 @@ const styles = StyleSheet.create({
   },
   pinActionModelSubviewText: {
     flex: 0.99,
-    marginLeft: wp('2%'),
+    marginLeft: wp('4%'),
     fontSize: 18,
     fontFamily: 'Futura',
   },
@@ -766,32 +715,34 @@ const styles = StyleSheet.create({
   },
   editButtonsView: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
     alignItems: 'center',
     marginVertical: wp('2%'),
     marginTop: hp('2%'),
-    marginHorizontal: wp('8%'),
   },
   cancelEditButton: {
-    backgroundColor: Colors.lightGray,
+    backgroundColor: Colors.darkGray,
     borderColor: 'transparent',
     borderWidth: 0,
     borderRadius: hp('1%'),
   },
   cancelEditButtonContainer: {
-    width: wp('17.5%'),
+    width: wp('40%'),
   },
   saveEditButton: {
-    backgroundColor: Colors.mediumOrange,
+    backgroundColor: Colors.darkOrange,
     borderColor: 'transparent',
     borderWidth: 0,
     borderRadius: hp('1%'),
   },
   saveEditButtonContainer: {
-    width: wp('17.5%'),
+    width: wp('40%'),
   },
   editTitleInput: {
-    flex: 1,
+    width: wp('90%'),
+    borderColor: Colors.mediumGray,
+    borderWidth: hp('0.2%'),
+    borderRadius: hp('0.4%'),
     textAlign: 'center',
     alignSelf: 'center',
     color: Colors.black,
@@ -802,11 +753,11 @@ const styles = StyleSheet.create({
     marginTop: hp('2%'),
   },
   editCaptionInput: {
-      height: hp('8%'),
-      borderColor: Colors.lightGray,
-      borderWidth: 1,
-      borderRadius: 4,
-      paddingHorizontal: wp('2%'),
+      height: hp('10%'),
+      borderColor: Colors.mediumGray,
+      borderWidth: hp('0.2%'),
+      borderRadius: hp('0.4%'),
+      paddingHorizontal: wp('1.5%'),
       textAlign: 'center',
       alignSelf: 'center',
       fontSize: 15,
@@ -823,7 +774,7 @@ const styles = StyleSheet.create({
     borderRadius: hp('2%'),
   },
   locationTagsAddButtonContainer: {
-    width: wp('17.5%'),
+    width: wp('45%'),
   },
   locationTagsModal: {
     justifyContent: 'center',
@@ -844,11 +795,37 @@ const styles = StyleSheet.create({
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
-      marginVertical: hp('2%'),
+      marginVertical: hp('3%'),
   },
   locationTagsModalText: {
       fontSize: 18,
       flex: 0.65
+  },
+  taggedUserIndivView: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginHorizontal: hp('1.5%'),
+  },
+  taggedUserPfp: {
+    width: hp('4%'),
+    height: hp('4%'),
+    borderRadius: hp('5%'),
+    borderWidth: hp('0.2%'),
+    borderColor: Colors.mediumOrange,
+    alignSelf: 'center',
+  },
+  taggedUserText: {
+    color: Colors.mediumOrange, 
+    fontFamily: 'Futura', 
+    fontSize: 15,
+    marginLeft: hp('1%'),
+  },
+  errorText: {
+    color: Colors.errorRed,
+    marginTop: hp('1%'),
+    textAlign: 'center',
+    justifyContent: 'center',
   },
 })
 

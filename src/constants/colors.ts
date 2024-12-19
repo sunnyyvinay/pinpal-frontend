@@ -10,7 +10,7 @@ export const lightBlue = '#00b5f2';
 export const mediumBlue = '#0244ff';
 export const darkBlue = '#0033CC';
 
-export const darkGray = '#333333';
+export const darkGray = '#3b3b3b';
 export const mediumGray = '#a6a4a4';
 export const lightGray = '#f5f5f5';
 export const whiteGray = '#e8e6e6';
