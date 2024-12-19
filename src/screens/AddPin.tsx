@@ -45,6 +45,8 @@ const AddPin = ({ route, navigation }: any) => {
         taggedUsers: [],
     });
     let searchedUserCount: number = 0;
+
+    const [error, setError] = useState<any>({title: "", caption: "", photo: ""});
    
     // USE EFFECT: SEARCH USERS
     useEffect(() => {
@@ -99,10 +101,11 @@ const AddPin = ({ route, navigation }: any) => {
         launchImageLibrary(options, async (response: ImagePickerResponse) => {
             const user_id = await AsyncStorage.getItem("user_id");
             if (response.errorCode) {
-              console.log('Image picker error: ', response.errorMessage);
+                setError({...error, photo: "An error occurred. Please try again."});
+                console.log('Image picker error: ', response.errorMessage);
             } else if (response.assets && response.assets.length > 0) {
-              if (response.assets[0].fileSize && response.assets[0].fileSize > 7340032) { // 7 MB
-                  console.log("File too large. Please upload a smaller file");
+                if (response.assets[0].fileSize && response.assets[0].fileSize > 7340032) { // 7 MB
+                    setError({...error, photo: "File too large. Please upload a smaller file"});
               } else if (user_id && response.assets) {
                   setPinData({...pinData, photo: response.assets[0].uri});
                   } else {
@@ -180,7 +183,8 @@ const AddPin = ({ route, navigation }: any) => {
                             buttonStyle={styles.buttonStyle}
                             containerStyle={styles.buttonContainerStyle} 
                             onPress={() => setStep(step + 1)} 
-                            disabled={!pinData.photo}/> 
+                            disabled={!pinData.photo}/>
+                        {error.photo != "" && <Text style={styles.errorText}>{error.photo}</Text>} 
                     </View>
                 )
             case 2:
@@ -192,21 +196,23 @@ const AddPin = ({ route, navigation }: any) => {
                                 value={pinData.title}
                                 placeholder="Give a pin title"
                                 style={styles.input}
-                                onChangeText={(text: string) => setPinData({ ...pinData, title: text })}
+                                onChangeText={(text: string) => {setPinData({ ...pinData, title: text }); setError({...error, title: ""})}}
                                 autoCapitalize="none"
                             />
+                            {error.title != "" && <Text style={styles.errorText}>{error.title}</Text>}
                         </View>
                         <View style={styles.inputContainer}>
                             <Text style={styles.label}>Caption</Text>
                             <TextInput
                                 value={pinData.caption}
                                 placeholder="Write a caption..."
-                                style={{...styles.input, height: hp('10%')}}
-                                onChangeText={(text: string) => setPinData({ ...pinData, caption: text })}
+                                style={{...styles.input, height: hp('12.5%')}}
+                                onChangeText={(text: string) => {setPinData({ ...pinData, caption: text }); setError({...error, caption: ""})}}
                                 autoCapitalize="none"
                                 multiline={true}
                                 textAlignVertical="top"
                             />
+                            {error.caption != "" && <Text style={styles.errorText}>{error.caption}</Text>}
                         </View>
 
                         <TouchableOpacity onPress={() => {setVisibilityModal(true)}} style={styles.visibilityInputView}>
@@ -254,27 +260,26 @@ const AddPin = ({ route, navigation }: any) => {
                             containerStyle={styles.buttonContainerStyle} 
                             onPress={
                                 async () => {
-                                    const user_id = await AsyncStorage.getItem("user_id");
-                                    if (user_id) {
-                                        const pinInput = {...pinData, latitude: lat_long[0], longitude: lat_long[1]};
-                                        const formData = new FormData();
-                                        formData.append('photo', {
-                                            uri: pinData.photo,
-                                            type: 'image/jpeg',
-                                            name: user_id + '.jpg',
-                                        });
-                                        // formData.append('latitude', lat_long[0]);
-                                        // formData.append('longitude', lat_long[1]);
-                                        // formData.append('title', pinData.title);
-                                        // formData.append('caption', pinData.caption);
-                                        // formData.append('create_date', pinData.create_date);
-                                        // formData.append('location_tags', pinData.location_tags);
-                                        // formData.append('visibility', pinData.visibility);
-                                        // formData.append('user_tags', pinData.user_tags);
-                                        await addPin(user_id, pinInput, formData);
-                                        navigation.navigate("NavBar", { screen: 'Map' });
+                                    if (pinData.title.length == 0 || pinData.title.length > 30) {
+                                        setError({...error, title: "Title must be between 1 and 30 characters"});
+                                    } else if (pinData.caption.length > 100) {
+                                        setError({...error, caption: "Caption must be less than 100 characters"});
                                     } else {
-                                        navigation.navigate("Welcome");
+                                        const user_id = await AsyncStorage.getItem("user_id");
+                                        if (user_id) {
+                                            const pinInput = {...pinData, latitude: lat_long[0], longitude: lat_long[1]};
+                                            const formData = new FormData();
+                                            formData.append('photo', {
+                                                uri: pinData.photo,
+                                                type: 'image/jpeg',
+                                                name: user_id + '.jpg',
+                                            });
+                                            
+                                            await addPin(user_id, pinInput, formData);
+                                            navigation.navigate("NavBar", { screen: 'Map' });
+                                        } else {
+                                            navigation.navigate("Welcome");
+                                        }
                                     }
                                 }
                             } /> 
@@ -423,11 +428,11 @@ const styles = StyleSheet.create({
         padding: hp('1%'),
     },
     inputContainer: {
-        marginVertical: hp('1%'),
+        marginVertical: hp('2%'),
         width: wp('90%'),
     },
     label: {
-        color: Colors.black,
+        color: Colors.darkGray,
         fontFamily: 'Futura',
         fontWeight: '700',
         fontSize: 14,
@@ -449,7 +454,7 @@ const styles = StyleSheet.create({
     buttonContainerStyle: {
         width: wp('75%'),
         marginHorizontal: wp('10%'),
-        marginTop: hp('2%'),
+        marginTop: hp('4%'),
     },
     pickPhotoContainer: {
         width: wp('90%'),
@@ -526,7 +531,7 @@ const styles = StyleSheet.create({
         width: '100%',
     },
     locationTagsView: {
-        marginTop: hp('2%'),
+        marginTop: hp('3%'),
         marginLeft: wp('2%'),
         alignSelf: 'flex-start',
     },
@@ -590,7 +595,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginTop: hp('2%'),
+        marginTop: hp('3%'),
         backgroundColor: Colors.whiteGray,
     },
     userTagsTitleText: {
@@ -602,5 +607,11 @@ const styles = StyleSheet.create({
         color: Colors.darkGray,
         fontFamily: 'Futura',
         marginRight: wp('1%')
-    }
+    },
+    errorText: {
+        color: Colors.errorRed,
+        marginTop: hp('1%'),
+        textAlign: 'center',
+        justifyContent: 'center',
+    },
 })
