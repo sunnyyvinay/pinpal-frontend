@@ -215,8 +215,8 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
             <Marker
               key={personalPin.pin_id}  
               coordinate={{latitude: personalPin.latitude, longitude: personalPin.longitude}}
-              image={require('../../assets/images/personal-pin.png')}
               title={personalPin.title} >
+                <Image source={require('../../assets/images/personal-pin.png')} style={{width: wp('5.5%'), height: hp('5.5%')}} resizeMode='contain' />
                 <Callout style={{...styles.pinCalloutStyle, height: hp('30%')}}>
                   <View style={styles.pinCalloutView}>
                     <Text style={styles.pinCalloutTitle}>{personalPin.title}</Text>
@@ -252,8 +252,8 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
             <Marker
               key={friendPin.pin_id}  
               coordinate={{latitude: friendPin.latitude, longitude: friendPin.longitude}}
-              image={require('../../assets/images/friend-pin.png')}
               title={friendPin.title} >
+                <Image source={require('../../assets/images/friend-pin.png')} style={{width: wp('5.5%'), height: hp('5.5%')}} resizeMode='contain' />
                 <Callout style={styles.pinCalloutStyle}>
                   <View style={styles.pinCalloutView}>
                     <Text style={styles.pinCalloutTitle}>{friendPin.title}</Text>
@@ -278,8 +278,8 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
             <Marker
               key={publicPin.pin_id}  
               coordinate={{latitude: publicPin.latitude, longitude: publicPin.longitude}}
-              image={require('../../assets/images/public-pin.png')}
               title={publicPin.title} >
+                <Image source={require('../../assets/images/public-pin.png')} style={{width: wp('5.5%'), height: hp('5.5%')}} resizeMode='contain' />
                 <Callout style={styles.pinCalloutStyle}>
                   <View style={styles.pinCalloutView}>
                     <Text style={styles.pinCalloutTitle}>{publicPin.title}</Text>
@@ -511,11 +511,11 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
 const styles = StyleSheet.create({
   mapContainer: {
     width: wp('100%'),
-    height: hp('100%'),
+    height: hp('80%'),
   },
   draggableOptionsView: {
     position: 'absolute',
-    top: hp('55%'),
+    top: hp('40%'),
     alignItems: 'center',
     alignSelf: 'center',
     flex: 1,
