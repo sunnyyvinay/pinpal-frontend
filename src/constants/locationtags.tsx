@@ -6,12 +6,14 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import * as Colors from '../constants/colors';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
-const locationTags = ['Food', 'Viewpoint', 'Shopping', 'Beach', 'Club', 'Other'];
+const locationTags = ['Food', 'Vibes','Viewpoint', 'Shopping', 'Beach', 'Club', 'Other'];
 
 const getLocationTagIcon = (locationTag: string) : JSX.Element => {
     switch (locationTag) {
         case "Food":
             return (<Icon name="restaurant" size={hp('2%')} color={Colors.black} style={{ flex: 0.15}}/>);
+        case "Vibes":
+            return (<MaterialIcon name="emoji-emotions" size={hp('2%')} color={Colors.black} style={{ flex: 0.15}}/>);
         case "Viewpoint":
             return (<FontAwesome6 name="mountain-sun" size={hp('2%')} color={Colors.black} style={{ flex: 0.15}}/>);
         case "Shopping":

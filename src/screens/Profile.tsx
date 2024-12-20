@@ -42,6 +42,7 @@ function Profile(props: any): React.JSX.Element {
                 const friendData = await getUserFriends(user_id);
 
                 const pinData = await getPins(user_id);
+                
                 let displayedPinData = [];
                 if (curr_user_id != user_id) {
                   for (const pin of pinData.pins) {
@@ -72,7 +73,7 @@ function Profile(props: any): React.JSX.Element {
                 } else {
                   displayedTaggedPinData = taggedData.pins ? taggedData.pins : [];
                 }
-
+                
                 setProfileData({ ...profileData, friends: friendData.friends ? friendData.friends : [], pins: displayedPinData, tagged_pins: displayedTaggedPinData});
             } else {
                 props.navigation.navigate("Welcome");
