@@ -544,7 +544,10 @@ const PinPost = (props:any) => {
           }}>
             {likes.liked ? <Icon name="heart" size={hp('3%')} color={Colors.mediumOrange} /> : <Icon name="heart-outline" size={hp('3%')} color={Colors.black} />}
           </TouchableOpacity>
-          {likes.liked ? <Text style={{...styles.likesText, color: Colors.mediumOrange}}>{likes.count}</Text> : <Text style={{...styles.likesText, color: Colors.black}}>{likes.count === 0 ? "Like" : likes.count}</Text>}
+          {likes.liked ? 
+            <Text style={{...styles.likesText, color: Colors.mediumOrange}} onPress={() => {props.navigation.navigate('UserList', {id: pin_id, type: "Likes"})}}>{likes.count === 1 ? (likes.count + " like") : (likes.count + " likes")}</Text> 
+            : 
+            <Text style={{...styles.likesText, color: Colors.black}} onPress={() => {props.navigation.navigate('UserList', {id: pin_id, type: "Likes"})}}>{likes.count === 0 ? "Like" : likes.count}</Text>}
         </View>
         }
       </View>
@@ -642,6 +645,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   likesText: {
+    marginTop: hp('0.5%'),
     marginHorizontal: wp('1%'),
     fontSize: 16,
     fontFamily: 'Futura',

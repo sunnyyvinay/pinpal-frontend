@@ -162,7 +162,7 @@ function Profile(props: any): React.JSX.Element {
           <Text style={styles.statTextLabel}>Pins</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.statCard}
-          onPress={() => props.navigation.navigate("Friends", {id: userData.user_id})}>
+          onPress={() => props.navigation.navigate("UserList", {id: userData.user_id, type: "Friends"})}>
           <Text style={styles.statTextNum}>{profileData.friends.length || 0}</Text>
           <Text style={styles.statTextLabel}>Friends</Text>
         </TouchableOpacity>

@@ -63,7 +63,7 @@ function Journal({ route, navigation }: any): React.JSX.Element {
           <Text style={styles.statTextLabel}>Pins</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.statCard}
-          onPress={() => navigation.navigate("Friends", {id: userData.user_id})}>
+          onPress={() => navigation.navigate("UserList", {id: userData.user_id, type: "Friends"})}>
           <Text style={styles.statTextNum}>{journalData.friends.length}</Text>
           <Text style={styles.statTextLabel}>Friends</Text>
         </TouchableOpacity>

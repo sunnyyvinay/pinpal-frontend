@@ -14,7 +14,7 @@ import { ContextProvider } from './AppContext';
 import PinPost from './screens/PinPost';
 import AddFriends from './screens/AddFriends';
 import Profile from './screens/Profile';
-import Friends from './screens/Friends';
+import UserList from './screens/UserList';
 
 const Stack = createNativeStackNavigator();
 function App(): React.JSX.Element {
@@ -52,7 +52,7 @@ function App(): React.JSX.Element {
         <Stack.Screen name="Pin detail" component={PinPost} options={({navigation}) => ({headerShown: true, headerLeft: () => <BackButton navigation={navigation} />})} />
         <Stack.Screen name="Add Friends" component={AddFriends} options={({navigation}) => ({headerShown: true, headerLeft: () => <BackButton navigation={navigation} />})} />
         <Stack.Screen name="Profile" component={Profile} options={({navigation}) => ({headerShown: true, headerLeft: () => <BackButton navigation={navigation} />})} />
-        <Stack.Screen name="Friends" component={Friends} options={({navigation}) => ({headerShown: true, headerLeft: () => <BackButton navigation={navigation} />})} />  
+        <Stack.Screen name="UserList" component={UserList} options={({navigation}) => ({headerShown: true, headerLeft: () => <BackButton navigation={navigation} />})} />  
       </Stack.Navigator>
     </NavigationContainer>
     </ContextProvider>
