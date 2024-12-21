@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import NavBar from './components/NavBar';
 import Welcome from './screens/Welcome';
 import Signup from './screens/Signup';
@@ -9,7 +9,6 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import BackButton from './components/BackButton';
 import AddPinOptions from './screens/AddPinOptions';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ContextProvider } from './AppContext';
 import PinPost from './screens/PinPost';
 import AddFriends from './screens/AddFriends';

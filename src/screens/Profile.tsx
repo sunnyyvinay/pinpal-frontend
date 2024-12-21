@@ -4,7 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ScrollView, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { Image } from '@rneui/base';
 import * as Colors from '../constants/colors';
-import { Button, Divider } from '@rneui/themed';
+import { Divider } from '@rneui/themed';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Icon from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';

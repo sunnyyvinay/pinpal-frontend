@@ -1,5 +1,5 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Map from '../screens/Map';
 import Journal from '../screens/Journal';
 import AddPinModal from '../screens/AddPinOptions';

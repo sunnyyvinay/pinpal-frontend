@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { Button, SearchBar } from '@rneui/themed';
-import { acceptFriendRequest, deleteFriendRequest, getSearchUsers, getUser, getUserRequests } from '../services/user.service';
+import { SearchBar } from '@rneui/themed';
+import { acceptFriendRequest, deleteFriendRequest, getSearchUsers, getUserRequests } from '../services/user.service';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Colors from '../constants/colors';
-import Icon from 'react-native-vector-icons/Ionicons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import userSearchStyles from '../styles/usersearch';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';

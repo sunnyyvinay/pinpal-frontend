@@ -1,9 +1,8 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { Image } from '@rneui/base';
 import { getUser, getUserFriends, getPinLikes } from '../services/user.service';
 import * as Colors from '../constants/colors';
-import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import userListStyles from '../styles/userlist';
 
 function UserList(props: any): React.JSX.Element {

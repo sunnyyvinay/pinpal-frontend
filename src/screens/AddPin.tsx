@@ -1,10 +1,8 @@
-import { Button, Input, SearchBar } from '@rneui/themed';
+import { Button, SearchBar } from '@rneui/themed';
 import React, { useEffect, useState } from 'react'
-import { Image, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import GetLocation, { isLocationError } from 'react-native-get-location';
+import { Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import Entypo from 'react-native-vector-icons/Entypo';
 import * as Colors from '../constants/colors';
 import { ImagePickerResponse, launchImageLibrary, MediaType } from 'react-native-image-picker';

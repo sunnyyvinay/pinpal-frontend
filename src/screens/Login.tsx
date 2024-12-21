@@ -2,11 +2,10 @@ import React, { useState } from 'react'
 import LinearGradient from 'react-native-linear-gradient'
 import * as Colors from '../constants/colors';
 import { Image, StyleSheet, Text, TextInput, View } from 'react-native';
-import { Button, Input } from '@rneui/themed';
+import { Button } from '@rneui/themed';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import { loginUser } from '../services/user.service';
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 const Login = ({navigation}: {navigation: any}) => {
