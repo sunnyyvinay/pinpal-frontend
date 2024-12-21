@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import NavBar from './components/NavBar';
 import Welcome from './screens/Welcome';
 import Signup from './screens/Signup';
@@ -18,30 +18,10 @@ import UserList from './screens/UserList';
 
 const Stack = createNativeStackNavigator();
 function App(): React.JSX.Element {
-  /*
-  useEffect(() => {
-    const fetchUserData = async () => {
-        try {
-            const user_id  = await AsyncStorage.getItem("user_id");
-            if (user_id) {
-                setIsLoggedIn(true);
-            } else {
-                setIsLoggedIn(false);
-            }
-        } catch (error) {
-            console.log("Error fetching Settings data: ", error);
-        } 
-    }
-    fetchUserData();
-  });
-  */
-
-  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
-
   return (
     <ContextProvider>
     <NavigationContainer>
-      <Stack.Navigator initialRouteName={isLoggedIn ? "NavBar" : "Welcome"} screenOptions={{ headerShown: isLoggedIn }} >
+      <Stack.Navigator initialRouteName={"NavBar"} screenOptions={{ headerShown: false }} >
         <Stack.Screen name="Welcome" component={Welcome} />
         <Stack.Screen name="Signup" component={Signup} />
         <Stack.Screen name="Login" component={Login} />

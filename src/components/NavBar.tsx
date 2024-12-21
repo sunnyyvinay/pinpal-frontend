@@ -1,5 +1,5 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Map from '../screens/Map';
 import Journal from '../screens/Journal';
 import AddPinModal from '../screens/AddPinOptions';
@@ -19,6 +19,7 @@ const AddPinComponent = () => {
 
 function NavBar({ route, navigation }: any): React.JSX.Element {
   const user_id  = AsyncStorage.getItem("user_id");
+  if (!user_id) navigation.navigate("Welcome");
 
   const addFriendsIcon = () => {
     return (
