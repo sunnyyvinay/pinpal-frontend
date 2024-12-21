@@ -41,7 +41,7 @@ function App(): React.JSX.Element {
   return (
     <ContextProvider>
     <NavigationContainer>
-      <Stack.Navigator initialRouteName={isLoggedIn ? "NavBar" : "Welcome"} screenOptions={{ headerShown: false }} >
+      <Stack.Navigator initialRouteName={isLoggedIn ? "NavBar" : "Welcome"} screenOptions={{ headerShown: isLoggedIn }} >
         <Stack.Screen name="Welcome" component={Welcome} />
         <Stack.Screen name="Signup" component={Signup} />
         <Stack.Screen name="Login" component={Login} />

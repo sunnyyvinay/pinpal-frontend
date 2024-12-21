@@ -74,9 +74,14 @@ const Settings = ({ route, navigation }: any) => {
                         type: 'image/jpeg',
                         name: user_id + '.jpg',
                     });
+
+                    try {
+                        await updateUserPic(user_id, formData);
+                        setUserData({...userData, profile_pic: imageUri});
+                    } catch (error) {
+                        console.log("Error updating profile pic: ", error);
+                    }
                     
-                    await updateUserPic(user_id, formData);
-                    setUserData({...userData, profile_pic: imageUri});
                 } else {
                     navigation.navigate("Welcome");
                 }
@@ -116,8 +121,12 @@ const Settings = ({ route, navigation }: any) => {
                     <MaterialIcon name="add-a-photo" size={20} />
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.pfpDeleteIcon} onPress={async () => {
-                    setUserData({...userData, profile_pic: null});
-                    await updateUserPic(userData.user_id, null);
+                    try {
+                        setUserData({...userData, profile_pic: null});
+                        await updateUserPic(userData.user_id, null);
+                    } catch (error) {
+                        console.log("Error updating profile pic: ", error);
+                    }
                 }}>
                     <Ionicons name="trash" size={20} color={Colors.lightRed} />
                 </TouchableOpacity>

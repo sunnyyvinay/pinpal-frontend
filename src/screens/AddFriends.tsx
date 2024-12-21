@@ -74,16 +74,24 @@ const AddFriends = ({ route, navigation }: any) => {
                             <Text style={userSearchStyles.searchUserUsernameText}>{user.username}</Text>
                         </View>
                         <TouchableOpacity style={styles.acceptView} onPress={async () => {
-                                user_id = await AsyncStorage.getItem("user_id");
-                                if (user_id) await acceptFriendRequest(user.user_id, user_id);
-                                setState({...state, friend_requests: state.friend_requests.filter((u: any) => u.user_id !== user.user_id)}) 
+                                try {
+                                    user_id = await AsyncStorage.getItem("user_id");
+                                    if (user_id) await acceptFriendRequest(user.user_id, user_id);
+                                    setState({...state, friend_requests: state.friend_requests.filter((u: any) => u.user_id !== user.user_id)}) 
+                                } catch (error) {
+                                    console.error(error);
+                                }
                             }}>
                             <Text style={styles.acceptViewText}>Accept</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={{flex: 0.1, marginRight: wp('2%')}} onPress={async () => { 
-                            user_id = await AsyncStorage.getItem("user_id");
-                            if (user_id) await deleteFriendRequest(user.user_id, user_id) 
-                            setState({...state, friend_requests: state.friend_requests.filter((u: any) => u.user_id !== user.user_id)})
+                            try {
+                                user_id = await AsyncStorage.getItem("user_id");
+                                if (user_id) await deleteFriendRequest(user.user_id, user_id) 
+                                setState({...state, friend_requests: state.friend_requests.filter((u: any) => u.user_id !== user.user_id)})
+                            } catch (error) {
+                                console.error(error);
+                            }
                         }}>
                             <MaterialIcon name="cancel" size={wp('6%')} color={Colors.errorRed} />
                         </TouchableOpacity>

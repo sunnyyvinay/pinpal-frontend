@@ -261,26 +261,30 @@ const AddPin = ({ route, navigation }: any) => {
                             containerStyle={styles.buttonContainerStyle} 
                             onPress={
                                 async () => {
-                                    if (pinData.title.length == 0 || pinData.title.length > 30) {
-                                        setError({...error, title: "Title must be between 1 and 30 characters"});
-                                    } else if (pinData.caption.length > 100) {
-                                        setError({...error, caption: "Caption must be less than 100 characters"});
-                                    } else {
-                                        const user_id = await AsyncStorage.getItem("user_id");
-                                        if (user_id) {
-                                            const pinInput = {...pinData, latitude: lat_long[0], longitude: lat_long[1]};
-                                            const formData = new FormData();
-                                            formData.append('photo', {
-                                                uri: pinData.photo,
-                                                type: 'image/jpeg',
-                                                name: user_id + '.jpg',
-                                            });
-                                            
-                                            await addPin(user_id, pinInput, formData);
-                                            navigation.navigate("NavBar", { screen: 'Map' });
+                                    try {
+                                        if (pinData.title.length == 0 || pinData.title.length > 30) {
+                                            setError({...error, title: "Title must be between 1 and 30 characters"});
+                                        } else if (pinData.caption.length > 100) {
+                                            setError({...error, caption: "Caption must be less than 100 characters"});
                                         } else {
-                                            navigation.navigate("Welcome");
+                                            const user_id = await AsyncStorage.getItem("user_id");
+                                            if (user_id) {
+                                                const pinInput = {...pinData, latitude: lat_long[0], longitude: lat_long[1]};
+                                                const formData = new FormData();
+                                                formData.append('photo', {
+                                                    uri: pinData.photo,
+                                                    type: 'image/jpeg',
+                                                    name: user_id + '.jpg',
+                                                });
+                                                
+                                                await addPin(user_id, pinInput, formData);
+                                                navigation.navigate("NavBar", { screen: 'Map' });
+                                            } else {
+                                                navigation.navigate("Welcome");
+                                            }
                                         }
+                                    } catch (error) {
+                                        console.log(error);
                                     }
                                 }
                             } /> 

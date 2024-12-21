@@ -104,7 +104,11 @@ const PinPost = (props:any) => {
         }
       }
 
-      getInfo();
+      try {
+        getInfo();
+      } catch (error) {
+        console.error(error);
+      }      
     }, []);
 
     // USE EFFECT: SEARCH USERS
@@ -202,10 +206,14 @@ const PinPost = (props:any) => {
             (<View style={styles.pinActionModalView}>
               <TouchableOpacity style={styles.pinActionModelSubview}
                 onPress={async () => {
-                  setPinData({...pinData, visibility: 0});
-                  await updatePin(pin_user_id, pin_id, {...pinData, visibility: 0}, null);
-                  setPinActionModalVisible(false);
-                  setEditPinVisibility(false);
+                  try {
+                    setPinData({...pinData, visibility: 0});
+                    await updatePin(pin_user_id, pin_id, {...pinData, visibility: 0}, null);
+                    setPinActionModalVisible(false);
+                    setEditPinVisibility(false);
+                  } catch (error) {
+                    console.error(error);
+                  }
                 }}>
                   <MaterialIcon name="lock" size={hp('2.5%')} style={{ flex: 0.25}}/>
                   <Text style={{...styles.pinActionModelSubviewText, flex: 0.65}}>Private</Text>
@@ -215,10 +223,14 @@ const PinPost = (props:any) => {
 
               <TouchableOpacity style={styles.pinActionModelSubview}
                 onPress={async () => {
-                  setPinData({...pinData, visibility: 1});
-                  await updatePin(pin_user_id, pin_id, {...pinData, visibility: 1}, null);
-                  setPinActionModalVisible(false);
-                  setEditPinVisibility(false);
+                  try {
+                    setPinData({...pinData, visibility: 1});
+                    await updatePin(pin_user_id, pin_id, {...pinData, visibility: 1}, null);
+                    setPinActionModalVisible(false);
+                    setEditPinVisibility(false);
+                  } catch (error) {
+                    console.error(error);
+                  }
                 }}>
                   <MaterialIcon name="people-alt" size={hp('2.5%')} style={{ flex: 0.25}}/>
                   <Text style={{...styles.pinActionModelSubviewText, flex: 0.65}}>Friends</Text>
@@ -228,10 +240,14 @@ const PinPost = (props:any) => {
 
               <TouchableOpacity style={styles.pinActionModelSubview}
                 onPress={async () => {
-                  setPinData({...pinData, visibility: 2});
-                  await updatePin(pin_user_id, pin_id, {...pinData, visibility: 2}, null);
-                  setPinActionModalVisible(false);
-                  setEditPinVisibility(false);
+                  try {
+                    setPinData({...pinData, visibility: 2});
+                    await updatePin(pin_user_id, pin_id, {...pinData, visibility: 2}, null);
+                    setPinActionModalVisible(false);
+                    setEditPinVisibility(false);
+                  } catch (error) {
+                    console.error(error);
+                  }
                 }}>
                   <MaterialIcon name="public" size={hp('2.5%')} style={{ flex: 0.25}}/>
                   <Text style={{...styles.pinActionModelSubviewText, flex: 0.65}}>Public</Text>
@@ -261,9 +277,13 @@ const PinPost = (props:any) => {
 
               <TouchableOpacity style={styles.pinActionModelSubview} 
                 onPress={async () => {
-                  await deletePin(pin_user_id, pin_id); 
-                  setPinActionModalVisible(false); 
-                  props.navigation.navigate("NavBar", { screen: 'Map' }); 
+                  try {
+                    await deletePin(pin_user_id, pin_id); 
+                    setPinActionModalVisible(false); 
+                    props.navigation.navigate("NavBar", { screen: 'Map' }); 
+                  } catch (error) {
+                    console.error(error);
+                  }
                 }}>
                   <MaterialIcon name="delete-outline" size={20} color={Colors.errorRed} />
                   <Text style={{...styles.pinActionModelSubviewText, color: Colors.errorRed}}>Delete pin</Text>
@@ -535,11 +555,19 @@ const PinPost = (props:any) => {
           <TouchableOpacity onPress={async () => {
             const user_id = await AsyncStorage.getItem("user_id");
             if (likes.liked) {
-              setLikes({liked: false, count: likes.count - 1});
-              await deletePinLike(user_id, pin_id);
+              try {
+                setLikes({liked: false, count: likes.count - 1});
+                await deletePinLike(user_id, pin_id);
+              } catch (error) {
+                console.log(error);
+              }
             } else {
-              setLikes({liked: true, count: likes.count + 1});
-              await addPinLike(user_id, pin_id);
+              try {
+                setLikes({liked: true, count: likes.count + 1});
+                await addPinLike(user_id, pin_id);
+              } catch (error) {
+                console.log(error);
+              }
             }
           }}>
             {likes.liked ? <Icon name="heart" size={hp('3%')} color={Colors.mediumOrange} /> : <Icon name="heart-outline" size={hp('3%')} color={Colors.black} />}
@@ -577,16 +605,20 @@ const PinPost = (props:any) => {
                   } else if (editedPinData.caption.length > 100) {
                       setError({...error, caption: "Caption must be less than 100 characters"});
                   } else {
-                    const user_id = await AsyncStorage.getItem("user_id");
-                    const formData = new FormData();
-                    formData.append('photo', {
-                        uri: editedPinData.photo,
-                        type: 'image/jpeg',
-                        name: user_id + '.jpg',
-                    });
-                    await updatePin(pin_user_id, pin_id, editedPinData, formData);
-                    setPinData(editedPinData);
-                    setEditMode(false);
+                    try {
+                      const user_id = await AsyncStorage.getItem("user_id");
+                      const formData = new FormData();
+                      formData.append('photo', {
+                          uri: editedPinData.photo,
+                          type: 'image/jpeg',
+                          name: user_id + '.jpg',
+                      });
+                      await updatePin(pin_user_id, pin_id, editedPinData, formData);
+                      setPinData(editedPinData);
+                      setEditMode(false);
+                    } catch (error) {
+                      console.log(error);
+                    }
                   }
               }
           }/>

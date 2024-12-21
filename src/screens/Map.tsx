@@ -159,7 +159,11 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
         }
       }
 
-      setPinState();
+      try {
+        setPinState();
+      } catch (error) {
+        console.error(error);
+      }
     }, [filterState])
   );
 
@@ -350,13 +354,17 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
         <SafeAreaView style={styles.draggableOptionsView}>
           <TouchableOpacity 
             onPress={async () => {
-              setPins((prevArray) => {
-                const newArray = [...prevArray];
-                newArray[dragMode.pin_index] = {...newArray[dragMode.pin_index], latitude: changingRegion.latitude, longitude: changingRegion.longitude};
-                return newArray;
-              });
-              await updatePinLocation(pins[dragMode.pin_index].user_id, pins[dragMode.pin_index].pin_id, {latitude: changingRegion.latitude, longitude: changingRegion.longitude});
-              setDragMode({mode: 0, location: {latitude: 0, longitude: 0}, pin_index: -1});
+              try {
+                setPins((prevArray) => {
+                  const newArray = [...prevArray];
+                  newArray[dragMode.pin_index] = {...newArray[dragMode.pin_index], latitude: changingRegion.latitude, longitude: changingRegion.longitude};
+                  return newArray;
+                });
+                await updatePinLocation(pins[dragMode.pin_index].user_id, pins[dragMode.pin_index].pin_id, {latitude: changingRegion.latitude, longitude: changingRegion.longitude});
+                setDragMode({mode: 0, location: {latitude: 0, longitude: 0}, pin_index: -1});
+              } catch (error) {
+                console.error(error);
+              }
             }}>
             <Icon name="checkmark-circle" size={wp('10%')} color={Colors.green} style={styles.optionIcon} />
           </TouchableOpacity>

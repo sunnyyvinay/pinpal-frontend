@@ -202,16 +202,20 @@ const Signup = ({navigation}: {navigation: any}) => {
                                 setStep(step + 1);
                             }
                         } else if (step === 4) {
-                            const result = await checkUsername(username);
-                            if (!username || username.length < 5 || username.length > 25) {
-                                setError("username_long");
-                            } else if (!result.success) {
-                                setError("username_exists");
-                            } else if (!isValidUsername(username)) {
-                                setError("username_badchar");
-                            } else {
-                                setError("");
-                                setStep(step + 1);
+                            try {
+                                const result = await checkUsername(username);
+                                if (!username || username.length < 5 || username.length > 25) {
+                                    setError("username_long");
+                                } else if (!result.success) {
+                                    setError("username_exists");
+                                } else if (!isValidUsername(username)) {
+                                    setError("username_badchar");
+                                } else {
+                                    setError("");
+                                    setStep(step + 1);
+                                }
+                            } catch (error) {
+                                console.log(error);
                             }
                         }
                     }} /> 
