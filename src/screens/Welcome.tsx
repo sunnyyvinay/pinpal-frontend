@@ -1,11 +1,23 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import LinearGradient from 'react-native-linear-gradient'
 import * as Colors from '../constants/colors';
 import { Image, StyleSheet } from 'react-native';
 import { Button } from '@rneui/themed';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Welcome = ({navigation}: {navigation: any}) => {
+  // useEffect(() => {
+  //   const checkUser = async () => {
+  //     const user_id = await AsyncStorage.getItem('user_id');
+  //     if (user_id) {
+  //       navigation.navigate("NavBar");
+  //     }
+  //   }
+
+  //   checkUser();
+  // })
+
   return (
     <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 1}} colors={[Colors.yellow, Colors.darkOrange]} style={styles.gradientContainer}>
         <Image source={require('../../assets/images/full-logo.png')} style={styles.logo} />

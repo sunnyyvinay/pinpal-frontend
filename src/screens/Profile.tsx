@@ -225,7 +225,6 @@ const styles = StyleSheet.create({
     borderRadius: hp('2.5%'),
     borderWidth: hp('0.2%'),
     borderColor: Colors.mediumOrange,
-    flex: 1
   },  
   nameContainer: {
     flex: 1, 

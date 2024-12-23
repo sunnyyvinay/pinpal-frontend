@@ -8,12 +8,16 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* pinpalfrontendTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* pinpalfrontendTests.m */; };
+		091211DF00D14BA19AE10AD9 /* FuturaCyrillicHeavy.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 24085CE15322488FAB8A5CE8 /* FuturaCyrillicHeavy.ttf */; };
 		0C80B921A6F3F58F76C31292 /* libPods-pinpalfrontend.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DCACB8F33CDC322A6C60F78 /* libPods-pinpalfrontend.a */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		45AD6E66C3DB454EA1649FD8 /* FuturaCyrillicLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EFF981E5134F4C6085B44D2A /* FuturaCyrillicLight.ttf */; };
+		7567610D2A55498EB592F174 /* FuturaCyrillicExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 589930ABE2DF4D2FA6FB949D /* FuturaCyrillicExtraBold.ttf */; };
 		7699B88040F8A987B510C191 /* libPods-pinpalfrontend-pinpalfrontendTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-pinpalfrontend-pinpalfrontendTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		8777A77FBE1A4A89A3155624 /* FuturaCyrillicBook.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B64CBF3A1ED14CF786593FDD /* FuturaCyrillicBook.ttf */; };
 		A336A9922C6BD0E4005D99D4 /* AntDesign.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A336A97E2C6BD0E4005D99D4 /* AntDesign.ttf */; };
 		A336A9932C6BD0E4005D99D4 /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A336A97F2C6BD0E4005D99D4 /* Entypo.ttf */; };
 		A336A9942C6BD0E4005D99D4 /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A336A9802C6BD0E4005D99D4 /* EvilIcons.ttf */; };
@@ -33,15 +37,11 @@
 		A336A9A22C6BD0E4005D99D4 /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A336A98E2C6BD0E4005D99D4 /* Octicons.ttf */; };
 		A336A9A32C6BD0E4005D99D4 /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A336A98F2C6BD0E4005D99D4 /* SimpleLineIcons.ttf */; };
 		A336A9A42C6BD0E4005D99D4 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A336A9902C6BD0E4005D99D4 /* Zocial.ttf */; };
-		CD9687237F925D96D3F1CBC7 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 59FC3CCB0471EE1186F928DD /* PrivacyInfo.xcprivacy */; };
-		B2B95907635B4ADCAC436BB3 /* ChunkFive-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9D14D53B377645EAAE5902EF /* ChunkFive-Regular.otf */; };
-		E1912DCC998B403D8BE2CBFB /* FuturaCyrillicBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 11F4AE76FD5D4617BABDA902 /* FuturaCyrillicBold.ttf */; };
-		8777A77FBE1A4A89A3155624 /* FuturaCyrillicBook.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B64CBF3A1ED14CF786593FDD /* FuturaCyrillicBook.ttf */; };
-		E0727C2DDCEC4BEC814D0CC1 /* FuturaCyrillicDemi.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DCCED119C02749C1BDA5E4F6 /* FuturaCyrillicDemi.ttf */; };
-		7567610D2A55498EB592F174 /* FuturaCyrillicExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 589930ABE2DF4D2FA6FB949D /* FuturaCyrillicExtraBold.ttf */; };
-		091211DF00D14BA19AE10AD9 /* FuturaCyrillicHeavy.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 24085CE15322488FAB8A5CE8 /* FuturaCyrillicHeavy.ttf */; };
-		45AD6E66C3DB454EA1649FD8 /* FuturaCyrillicLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EFF981E5134F4C6085B44D2A /* FuturaCyrillicLight.ttf */; };
 		AF1026DB95164B54BFC3E386 /* FuturaCyrillicMedium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 255C4067962941F48A9ED035 /* FuturaCyrillicMedium.ttf */; };
+		B2B95907635B4ADCAC436BB3 /* ChunkFive-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9D14D53B377645EAAE5902EF /* ChunkFive-Regular.otf */; };
+		CD9687237F925D96D3F1CBC7 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 59FC3CCB0471EE1186F928DD /* PrivacyInfo.xcprivacy */; };
+		E0727C2DDCEC4BEC814D0CC1 /* FuturaCyrillicDemi.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DCCED119C02749C1BDA5E4F6 /* FuturaCyrillicDemi.ttf */; };
+		E1912DCC998B403D8BE2CBFB /* FuturaCyrillicBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 11F4AE76FD5D4617BABDA902 /* FuturaCyrillicBold.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,6 +58,7 @@
 		00E356EE1AD99517003FC87E /* pinpalfrontendTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = pinpalfrontendTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* pinpalfrontendTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = pinpalfrontendTests.m; sourceTree = "<group>"; };
+		11F4AE76FD5D4617BABDA902 /* FuturaCyrillicBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = FuturaCyrillicBold.ttf; path = ../assets/fonts/FuturaCyrillicBold.ttf; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* pinpalfrontend.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = pinpalfrontend.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = pinpalfrontend/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = pinpalfrontend/AppDelegate.mm; sourceTree = "<group>"; };
@@ -66,13 +67,17 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = pinpalfrontend/main.m; sourceTree = "<group>"; };
 		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = pinpalfrontend/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		19F6CBCC0A4E27FBF8BF4A61 /* libPods-pinpalfrontend-pinpalfrontendTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-pinpalfrontend-pinpalfrontendTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		24085CE15322488FAB8A5CE8 /* FuturaCyrillicHeavy.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = FuturaCyrillicHeavy.ttf; path = ../assets/fonts/FuturaCyrillicHeavy.ttf; sourceTree = "<group>"; };
+		255C4067962941F48A9ED035 /* FuturaCyrillicMedium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = FuturaCyrillicMedium.ttf; path = ../assets/fonts/FuturaCyrillicMedium.ttf; sourceTree = "<group>"; };
 		3B4392A12AC88292D35C810B /* Pods-pinpalfrontend.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-pinpalfrontend.debug.xcconfig"; path = "Target Support Files/Pods-pinpalfrontend/Pods-pinpalfrontend.debug.xcconfig"; sourceTree = "<group>"; };
 		5709B34CF0A7D63546082F79 /* Pods-pinpalfrontend.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-pinpalfrontend.release.xcconfig"; path = "Target Support Files/Pods-pinpalfrontend/Pods-pinpalfrontend.release.xcconfig"; sourceTree = "<group>"; };
+		589930ABE2DF4D2FA6FB949D /* FuturaCyrillicExtraBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = FuturaCyrillicExtraBold.ttf; path = ../assets/fonts/FuturaCyrillicExtraBold.ttf; sourceTree = "<group>"; };
 		59FC3CCB0471EE1186F928DD /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = pinpalfrontend/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		5B7EB9410499542E8C5724F5 /* Pods-pinpalfrontend-pinpalfrontendTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-pinpalfrontend-pinpalfrontendTests.debug.xcconfig"; path = "Target Support Files/Pods-pinpalfrontend-pinpalfrontendTests/Pods-pinpalfrontend-pinpalfrontendTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5DCACB8F33CDC322A6C60F78 /* libPods-pinpalfrontend.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-pinpalfrontend.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = pinpalfrontend/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-pinpalfrontend-pinpalfrontendTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-pinpalfrontend-pinpalfrontendTests.release.xcconfig"; path = "Target Support Files/Pods-pinpalfrontend-pinpalfrontendTests/Pods-pinpalfrontend-pinpalfrontendTests.release.xcconfig"; sourceTree = "<group>"; };
+		9D14D53B377645EAAE5902EF /* ChunkFive-Regular.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "ChunkFive-Regular.otf"; path = "../assets/fonts/ChunkFive-Regular.otf"; sourceTree = "<group>"; };
 		A336A97E2C6BD0E4005D99D4 /* AntDesign.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = AntDesign.ttf; sourceTree = "<group>"; };
 		A336A97F2C6BD0E4005D99D4 /* Entypo.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Entypo.ttf; sourceTree = "<group>"; };
 		A336A9802C6BD0E4005D99D4 /* EvilIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = EvilIcons.ttf; sourceTree = "<group>"; };
@@ -92,15 +97,10 @@
 		A336A98E2C6BD0E4005D99D4 /* Octicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Octicons.ttf; sourceTree = "<group>"; };
 		A336A98F2C6BD0E4005D99D4 /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = SimpleLineIcons.ttf; sourceTree = "<group>"; };
 		A336A9902C6BD0E4005D99D4 /* Zocial.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Zocial.ttf; sourceTree = "<group>"; };
+		B64CBF3A1ED14CF786593FDD /* FuturaCyrillicBook.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = FuturaCyrillicBook.ttf; path = ../assets/fonts/FuturaCyrillicBook.ttf; sourceTree = "<group>"; };
+		DCCED119C02749C1BDA5E4F6 /* FuturaCyrillicDemi.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = FuturaCyrillicDemi.ttf; path = ../assets/fonts/FuturaCyrillicDemi.ttf; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
-		9D14D53B377645EAAE5902EF /* ChunkFive-Regular.otf */ = {isa = PBXFileReference; name = "ChunkFive-Regular.otf"; path = "../assets/fonts/ChunkFive-Regular.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		11F4AE76FD5D4617BABDA902 /* FuturaCyrillicBold.ttf */ = {isa = PBXFileReference; name = "FuturaCyrillicBold.ttf"; path = "../assets/fonts/FuturaCyrillicBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		B64CBF3A1ED14CF786593FDD /* FuturaCyrillicBook.ttf */ = {isa = PBXFileReference; name = "FuturaCyrillicBook.ttf"; path = "../assets/fonts/FuturaCyrillicBook.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		DCCED119C02749C1BDA5E4F6 /* FuturaCyrillicDemi.ttf */ = {isa = PBXFileReference; name = "FuturaCyrillicDemi.ttf"; path = "../assets/fonts/FuturaCyrillicDemi.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		589930ABE2DF4D2FA6FB949D /* FuturaCyrillicExtraBold.ttf */ = {isa = PBXFileReference; name = "FuturaCyrillicExtraBold.ttf"; path = "../assets/fonts/FuturaCyrillicExtraBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		24085CE15322488FAB8A5CE8 /* FuturaCyrillicHeavy.ttf */ = {isa = PBXFileReference; name = "FuturaCyrillicHeavy.ttf"; path = "../assets/fonts/FuturaCyrillicHeavy.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		EFF981E5134F4C6085B44D2A /* FuturaCyrillicLight.ttf */ = {isa = PBXFileReference; name = "FuturaCyrillicLight.ttf"; path = "../assets/fonts/FuturaCyrillicLight.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		255C4067962941F48A9ED035 /* FuturaCyrillicMedium.ttf */ = {isa = PBXFileReference; name = "FuturaCyrillicMedium.ttf"; path = "../assets/fonts/FuturaCyrillicMedium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		EFF981E5134F4C6085B44D2A /* FuturaCyrillicLight.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = FuturaCyrillicLight.ttf; path = ../assets/fonts/FuturaCyrillicLight.ttf; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */

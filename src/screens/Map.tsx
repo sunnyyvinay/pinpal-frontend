@@ -80,9 +80,10 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
     location_tag: "",
   });
 
-  const tempImg = "https://images.unsplash.com/photo-1720802616209-c174c23f6565?q=80&w=2971&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
-
   const setCurrentLocation = async () => {
+    const user_id = await AsyncStorage.getItem("user_id");
+    if (!user_id) navigation.navigate("Welcome");
+
     await GetLocation.getCurrentPosition({
       enableHighAccuracy: true,
       timeout: 30000,
@@ -584,7 +585,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     position: 'absolute',
     padding: hp('1%'),
-    marginLeft: wp("80%"),
+    marginLeft: wp("82.5%"),
     marginTop: hp("62.5%")
   },
   mapControlButton: {
@@ -603,7 +604,7 @@ const styles = StyleSheet.create({
     marginVertical: hp('0.5%')
   },
   filterView: {
-    height: hp('5%'),
+    height: hp('6%'),
     width: wp('100%'),
     backgroundColor: 'white',
     flexDirection: 'row',
