@@ -1,8 +1,7 @@
 import axios from 'axios';
 
-const apiUrl = "http://localhost:3000/api/user";
-//const apiUrl = "54.215.204.243:3000/api/user";
-//const apiUrl = "http://172.23.200.37:3000/api/user";
+//const apiUrl = "http://localhost:3000/api/user";
+const apiUrl = "https://api.pinpal.info/api/user";
 
 interface UserSignup {
     username: string;
@@ -44,6 +43,7 @@ export const checkUsername = async (username: string) => {
       const response = await axios.get(`${apiUrl}/username_exists/${username}`);
       return response.data;
   } catch (error) {
+      console.log(error);
       return error;
   }
 }
