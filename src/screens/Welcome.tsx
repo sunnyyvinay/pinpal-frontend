@@ -24,14 +24,14 @@ const Welcome = ({navigation}: {navigation: any}) => {
         <Button 
             title="Log In" 
             color={Colors.black}
-            titleStyle={{ color: Colors.white, fontWeight: '900', fontFamily: 'ChunkFive' }}
+            titleStyle={{ color: '#cf4300', fontWeight: '900', fontFamily: 'ChunkFive' }}
             buttonStyle={styles.button}
             containerStyle={styles.loginButtonContainer} 
             onPress={() => navigation.navigate("Login")} />
         <Button 
             title="Sign Up" 
             color={Colors.black}
-            titleStyle={{ color: Colors.white, fontWeight: '900', fontFamily: 'ChunkFive' }}
+            titleStyle={{ color: '#cf4300', fontWeight: '900', fontFamily: 'ChunkFive' }}
             buttonStyle={styles.button}
             containerStyle={styles.signupButtonContainer} 
             onPress={() => navigation.navigate("Signup")} />
@@ -55,7 +55,8 @@ const styles = StyleSheet.create({
     marginTop: hp('5%'),
   },
   button: {
-    backgroundColor: '#ffa938',
+    // backgroundColor: '#ffa938',
+    backgroundColor: '#e2e5de',
     borderColor: 'transparent',
     borderWidth: 0,
     borderRadius: wp('10%'),
