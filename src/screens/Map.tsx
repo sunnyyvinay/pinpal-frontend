@@ -389,7 +389,7 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
         </TouchableOpacity>
         <View style={styles.verticalLine} />
         {filterState.location_tag ? 
-          <TouchableOpacity style={styles.locationTagOpacity} onPress={() => { setFilterState({...filterState, location_tag: ""}); }}>
+          <TouchableOpacity style={{...styles.locationTagOpacity, backgroundColor: Colors.lightOrange}} onPress={() => { setFilterState({...filterState, location_tag: ""}); }}>
             <Text style={styles.locationTagText}>{filterState.location_tag}</Text>
           </TouchableOpacity>
           :

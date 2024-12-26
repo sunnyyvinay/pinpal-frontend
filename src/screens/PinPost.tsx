@@ -444,7 +444,7 @@ const PinPost = (props:any) => {
               <Text style={styles.errorText}>{error.photo}</Text>
             </TouchableOpacity>
             :
-            <Image source={pinData.photo && {uri: pinData.photo}} style={{width: screenWidth, height: hp('20%')}}/>
+            <Image source={pinData.photo && {uri: pinData.photo}} style={{width: screenWidth, height: hp('40%'), resizeMode: 'cover'}}/>
           }
         </View>
         

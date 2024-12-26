@@ -70,8 +70,7 @@ const Signup = ({navigation}: {navigation: any}) => {
                             date={birthday}
                             onDateChange={(date: Date) => {setBirthday(date); setError("")}}
                             maximumDate={new Date()}
-                            modal={false}
-                        />
+                            modal={false} />
                         {error === "birthday" && <Text style={styles.errorText}>You must be 13 years or older</Text>}                  
                     </View>
                 )

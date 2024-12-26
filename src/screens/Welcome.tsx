@@ -7,16 +7,16 @@ import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-nativ
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Welcome = ({navigation}: {navigation: any}) => {
-  // useEffect(() => {
-  //   const checkUser = async () => {
-  //     const user_id = await AsyncStorage.getItem('user_id');
-  //     if (user_id) {
-  //       navigation.navigate("NavBar");
-  //     }
-  //   }
+  useEffect(() => {
+    const checkUser = async () => {
+      const user_id = await AsyncStorage.getItem('user_id');
+      if (user_id) {
+        navigation.navigate("NavBar");
+      }
+    }
 
-  //   checkUser();
-  // })
+    checkUser();
+  })
 
   return (
     <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 1}} colors={[Colors.yellow, Colors.darkOrange]} style={styles.gradientContainer}>

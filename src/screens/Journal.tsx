@@ -92,7 +92,7 @@ function Journal({ route, navigation }: any): React.JSX.Element {
         {!tagged && journalData.pins.length != 0 && journalData.pins.map((pin: any) => {
           return (
             <TouchableOpacity key={pin.pin_id} onPress={() => navigation.navigate("Pin detail", {pin_id: pin.pin_id, pin_user_id: pin.user_id})}>
-              <Image source={{uri: pin.photo}} style={styles.journalPinImage} />
+              <Image source={{uri: pin.photo || require('../../assets/images/default-pfp.jpg')}} style={styles.journalPinImage} />
             </TouchableOpacity>
           )
         }).reverse()}
