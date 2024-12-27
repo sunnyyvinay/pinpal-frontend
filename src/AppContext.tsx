@@ -18,7 +18,7 @@ const Context = createContext<ContextType | undefined>(undefined);
 
 // Create a provider component
 export const ContextProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [region, setRegion] = useState<Region>({latitude: 34.0699, longitude: 118.4438, latitudeDelta: 0.05, longitudeDelta: 0.05});
+  const [region, setRegion] = useState<Region>({latitude: 34.0699, longitude: 118.4438, latitudeDelta: 0.03, longitudeDelta: 0.03});
   const [dragMode, setDragMode] = useState<DragOptions>({mode: 0, location: {latitude: 0, longitude: 0}, pin_index: -1});
   const [darkTheme, setDarkTheme] = useState<boolean>(false);
 

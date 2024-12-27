@@ -22,7 +22,7 @@ import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-nativ
 function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.Element {
   const { region, setRegion, dragMode, setDragMode } = useAppContext();
   type Region = {latitude: number, longitude: number, latitudeDelta: number, longitudeDelta: number};
-  const [changingRegion, setChangingRegion] = useState<Region>({latitude: 34.0699, longitude: 118.4438, latitudeDelta: 0.05, longitudeDelta: 0.05});
+  const [changingRegion, setChangingRegion] = useState<Region>({latitude: 34.0699, longitude: 118.4438, latitudeDelta: 0.03, longitudeDelta: 0.03});
   type Pin = {
     user_id: string,
     pin_id: string,
@@ -92,15 +92,15 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
       },
     })
     .then(newLocation => {
-      //setRegion({latitude: newLocation.latitude, longitude: newLocation.longitude, latitudeDelta: 0.05, longitudeDelta: 0.05});
-      setChangingRegion({latitude: newLocation.latitude, longitude: newLocation.longitude, latitudeDelta: 0.05, longitudeDelta: 0.05});
+      //setRegion({latitude: newLocation.latitude, longitude: newLocation.longitude, latitudeDelta: 0.03, longitudeDelta: 0.03});
+      setChangingRegion({latitude: newLocation.latitude, longitude: newLocation.longitude, latitudeDelta: 0.03, longitudeDelta: 0.03});
     })
     .catch(ex => {
       if (isLocationError(ex)) {
         const {code, message} = ex;
         console.warn(code, message);
-        //setRegion({latitude: 34.0699, longitude: 118.4438, latitudeDelta: 0.05, longitudeDelta: 0.05});
-        setChangingRegion({latitude: 34.0699, longitude: 118.4438, latitudeDelta: 0.05, longitudeDelta: 0.05});
+        //setRegion({latitude: 34.0699, longitude: 118.4438, latitudeDelta: 0.03, longitudeDelta: 0.03});
+        setChangingRegion({latitude: 34.0699, longitude: 118.4438, latitudeDelta: 0.03, longitudeDelta: 0.03});
       } else {
         console.warn(ex);
       }
