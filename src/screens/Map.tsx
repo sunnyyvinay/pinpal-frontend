@@ -565,6 +565,7 @@ const styles = StyleSheet.create({
     height: hp('20%'),
     borderRadius: hp('1%'),
     resizeMode: 'center',
+    backgroundColor: Colors.whiteGray
   },
   pinCalloutViewButton: {
     backgroundColor: Colors.darkOrange,

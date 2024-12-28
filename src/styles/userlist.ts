@@ -17,6 +17,7 @@ const userListStyles = StyleSheet.create({
         borderRadius: hp('2.5%'),
         borderWidth: hp('0.2%'),
         borderColor: Colors.mediumOrange,
+        backgroundColor: Colors.whiteGray
     },
     userTextView: {
         marginLeft: wp('3%'),

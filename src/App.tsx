@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import NavBar from './components/NavBar';
 import Welcome from './screens/Welcome';
 import Signup from './screens/Signup';
@@ -14,11 +14,12 @@ import PinPost from './screens/PinPost';
 import AddFriends from './screens/AddFriends';
 import Profile from './screens/Profile';
 import UserList from './screens/UserList';
-import {Appearance} from 'react-native';
+import { Appearance } from 'react-native';
 
 const Stack = createNativeStackNavigator();
 function App(): React.JSX.Element {
   Appearance.setColorScheme('light');
+
   return (
     <ContextProvider>
     <NavigationContainer>

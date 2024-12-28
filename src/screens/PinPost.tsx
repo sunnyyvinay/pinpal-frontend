@@ -409,8 +409,8 @@ const PinPost = (props:any) => {
     <ScrollView style={{backgroundColor: Colors.white}}>
       <View style={styles.topView}>
         <TouchableOpacity style={styles.userView} onPress={() =>props.navigation.navigate('Profile', {user_id: pinUserData.user_id})}>
-          <Image source={pinUserData.profile_pic ? {uri: pinUserData.profile_pic} : require('../../assets/images/default-pfp.jpg')} style={styles.pfpImage} />
-          <Text style={styles.usernameText}>{pinUserData.username}</Text>
+          <Image source={pinUserData && pinUserData.profile_pic ? {uri: pinUserData.profile_pic} : require('../../assets/images/default-pfp.jpg')} style={styles.pfpImage} />
+          <Text style={styles.usernameText}>{pinUserData && pinUserData.username}</Text>
         </TouchableOpacity>
 
         {personal && !editMode ? 
@@ -424,7 +424,7 @@ const PinPost = (props:any) => {
         {editMode ?
         <>
           <TextInput
-              value={editedPinData.title}
+              value={editedPinData && editedPinData.title}
               placeholder='Enter new pin title'
               autoCapitalize='none'
               onChangeText={text => {setEditedPinData({...editedPinData, title: text}); setError({...error, title: ""})}}
@@ -433,25 +433,25 @@ const PinPost = (props:any) => {
           {error.title != "" && <Text style={styles.errorText}>{error.title}</Text>}
         </>
           : 
-           <Text style={styles.pinTitleText}>{pinData.title}</Text>
+           <Text style={styles.pinTitleText}>{pinData && pinData.title}</Text>
         }
 
         <View style={styles.photosView}>
           {editMode ?
             <TouchableOpacity onPress={openImagePicker} style={{justifyContent: 'center'}}>
-              <Image source={editedPinData.photo && {uri: editedPinData.photo}} style={{width: screenWidth, height: hp('20%'), opacity: 0.75}} />
+              <Image source={editedPinData && editedPinData.photo && {uri: editedPinData.photo}} style={{width: screenWidth, height: hp('20%'), opacity: 0.75}} />
               <MaterialIcon name="add-a-photo" size={hp('5%')} style={{position: 'absolute', alignSelf: 'center', opacity: 0.75}} />
               <Text style={styles.errorText}>{error.photo}</Text>
             </TouchableOpacity>
             :
-            <Image source={pinData.photo && {uri: pinData.photo}} style={{width: screenWidth, height: hp('40%'), resizeMode: 'cover'}}/>
+            <Image source={pinData && pinData.photo && {uri: pinData.photo}} style={styles.pinImage}/>
           }
         </View>
         
         {editMode ?
         <>
         <TextInput
-          value={editedPinData.caption}
+          value={editedPinData && editedPinData.caption}
           placeholder="Write a caption..."
           style={styles.editCaptionInput}
           onChangeText={text => {setEditedPinData({...editedPinData, caption: text}); setError({...error, caption: ""})}}
@@ -460,12 +460,11 @@ const PinPost = (props:any) => {
           textAlignVertical="top" />
         {error.caption != "" && <Text style={styles.errorText}>{error.caption}</Text>}
         </>
-            
         :
           <View style={styles.captionView}>
             <Text style={{textAlign: 'center'}}>
               <Text style={styles.createDateText}>{formatTimestamp(pinData.create_date)}</Text>
-              <Text style={styles.captionText}>{pinData.caption ? " - \"" + pinData.caption + "\"" : null}</Text>
+              <Text style={styles.captionText}>{pinData && pinData.caption ? " - \"" + pinData.caption + "\"" : null}</Text>
             </Text>
           </View>
         }
@@ -474,7 +473,7 @@ const PinPost = (props:any) => {
         {editMode ? 
         <View style={styles.locationTagsButtonView}>
           <Button 
-            title={editedPinData.user_tags.length > 0 ? "Edit user tags" : "Add user tags"}
+            title={editedPinData && editedPinData.user_tags.length > 0 ? "Edit user tags" : "Add user tags"}
             icon={<MaterialIcon name="edit" size={hp('1.5%')} color={Colors.black} style={{ marginRight: wp('0.5%') }}/>}
             color={Colors.black}
             iconContainerStyle={{ marginRight: wp('0.5%') }}
@@ -482,7 +481,7 @@ const PinPost = (props:any) => {
             buttonStyle={styles.locationTagsAddButton}
             containerStyle={{...styles.locationTagsAddButtonContainer}} 
             onPress={() => {setUserTagState({...userTagState, modalVisible: true})}} />  
-            {userTagState.editedTaggedUsers && userTagState.editedTaggedUsers.length > 0 && userTagState.editedTaggedUsers.map((user:any, index:number) => {
+            {userTagState && userTagState.editedTaggedUsers && userTagState.editedTaggedUsers.length > 0 && userTagState.editedTaggedUsers.map((user:any, index:number) => {
               return (
                 <TouchableOpacity style={styles.taggedUserIndivView} key={index} onPress={() => props.navigation.navigate('Profile', {user_id: user.user_id})}>
                   <Image source={user.profile_pic ? {uri: user.profile_pic} : require('../../assets/images/default-pfp.jpg')} style={styles.taggedUserPfp} />
@@ -493,9 +492,9 @@ const PinPost = (props:any) => {
         </View>
         : 
         <View>
-          {userTagState.taggedUsers && userTagState.taggedUsers.length > 0 &&
+          {userTagState && userTagState.taggedUsers && userTagState.taggedUsers.length > 0 &&
         <View style={styles.locationTagsButtonView}>
-        {userTagState.taggedUsers && userTagState.taggedUsers.length > 0 && userTagState.taggedUsers.map((user:any, index:number) => {
+        {userTagState && userTagState.taggedUsers && userTagState.taggedUsers.length > 0 && userTagState.taggedUsers.map((user:any, index:number) => {
             return (
               <TouchableOpacity style={styles.taggedUserIndivView} key={index} onPress={() => props.navigation.navigate('Profile', {user_id: user.user_id})}>
                 <Image source={user.profile_pic ? {uri: user.profile_pic} : require('../../assets/images/default-pfp.jpg')} style={styles.taggedUserPfp} />
@@ -512,7 +511,7 @@ const PinPost = (props:any) => {
         {editMode ? 
         <View style={styles.locationTagsButtonView}>
           <Button 
-            title={editedPinData.location_tags.length > 0 ? "Edit location tags" : "Add location tags"}
+            title={editedPinData && editedPinData.location_tags.length > 0 ? "Edit location tags" : "Add location tags"}
             icon={<MaterialIcon name="edit" size={hp('1.5%')} color={Colors.black} style={{ marginRight: wp('0.5%') }}/>}
             color={Colors.black}
             iconContainerStyle={{ marginRight: wp('0.5%') }}
@@ -520,7 +519,7 @@ const PinPost = (props:any) => {
             buttonStyle={styles.locationTagsAddButton}
             containerStyle={styles.locationTagsAddButtonContainer} 
             onPress={() => {setEditPinLocationTags(true)}} />  
-            {editedPinData.location_tags.map((tag:string, index:number) => {
+            {editedPinData && editedPinData.location_tags.map((tag:string, index:number) => {
               return (
                 <Button 
                   title={tag} 
@@ -532,9 +531,9 @@ const PinPost = (props:any) => {
         </View>
         :
         <View>
-        {pinData.location_tags.length > 0 &&
+        {pinData && pinData.location_tags.length > 0 &&
         <View style={styles.locationTagsButtonView}>
-        {pinData.location_tags.length > 0 && pinData.location_tags.map((tag:string, index:number) => {
+        {pinData && pinData.location_tags.length > 0 && pinData.location_tags.map((tag:string, index:number) => {
             return (
               <Button 
                 title={tag} 
@@ -652,6 +651,7 @@ const styles = StyleSheet.create({
     borderWidth: hp('0.2%'),
     borderColor: Colors.mediumOrange,
     alignSelf: 'center',
+    backgroundColor: Colors.whiteGray
   },
   usernameText: {
     textAlign: 'center',
@@ -684,6 +684,12 @@ const styles = StyleSheet.create({
     marginTop: hp('0.5%'),
     marginBottom: hp('0.5%'),
   },
+  pinImage: {
+    width: wp('100%'), 
+    height: hp('40%'), 
+    resizeMode: 'cover',
+    backgroundColor: Colors.whiteGray
+  },
   captionView: {
     borderWidth: 0,
     borderRadius: hp('2%'),
@@ -710,6 +716,7 @@ const styles = StyleSheet.create({
     columnGap: hp('0.5%'),
     rowGap: hp('0.5%'),
     marginVertical: hp('2%'),
+    marginHorizontal: wp('1%'),
   },
   locationTagButton: {
     backgroundColor: Colors.whiteOrange,
@@ -849,6 +856,7 @@ const styles = StyleSheet.create({
     borderWidth: hp('0.2%'),
     borderColor: Colors.mediumOrange,
     alignSelf: 'center',
+    backgroundColor: Colors.whiteGray
   },
   taggedUserText: {
     color: Colors.mediumOrange, 

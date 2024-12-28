@@ -27,6 +27,7 @@ const userSearchStyles = StyleSheet.create({
         borderRadius: hp('2.5%'),
         borderWidth: hp('0.2%'),
         borderColor: Colors.mediumOrange,
+        backgroundColor: Colors.whiteGray
     },
     searchUserTextView: {
         marginLeft: wp('3%'),

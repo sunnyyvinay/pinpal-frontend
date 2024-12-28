@@ -113,7 +113,7 @@ const Settings = ({ route, navigation }: any) => {
             <Text style={styles.sectionTitle}>Account Information</Text>          
             
             <TouchableOpacity onPress={openImagePicker}>
-                <Image source={userData.profile_pic && userData.profile_pic != "" ? {uri: userData.profile_pic} : require('../../assets/images/default-pfp.jpg')} style={styles.pfpImage} />
+                <Image source={userData && userData.profile_pic && userData.profile_pic != "" ? {uri: userData.profile_pic} : require('../../assets/images/default-pfp.jpg')} style={styles.pfpImage} />
             </TouchableOpacity>
             {error.photo && <Text style={styles.errorTextStyle}>{error.photo}</Text>}
             <View style={styles.pfpOptionsView}>
@@ -142,7 +142,7 @@ const Settings = ({ route, navigation }: any) => {
                         Username
                     </Text>
                     <Text style={{...styles.fieldText, fontWeight: 'normal', color: Colors.mediumGray}}>
-                        {userData.username}
+                        {userData && userData.username}
                     </Text>
                 </View>
                 <FeatherIcon name="edit-2" size={15} style={styles.fieldIcon} />
@@ -158,7 +158,7 @@ const Settings = ({ route, navigation }: any) => {
                         Full Name
                     </Text>
                     <Text style={{...styles.fieldText, fontWeight: 'normal', color: Colors.mediumGray}}>
-                        {userData.full_name}
+                        {userData && userData.full_name}
                     </Text>
                 </View>
                 <FeatherIcon name="edit-2" size={15} style={styles.fieldIcon} />
@@ -174,7 +174,7 @@ const Settings = ({ route, navigation }: any) => {
                         Birthday
                     </Text>
                     <Text style={{...styles.fieldText, fontWeight: 'normal', color: Colors.mediumGray}}>
-                        {formatBirthday(userData.birthday)}
+                        {userData && formatBirthday(userData.birthday)}
                     </Text>
                 </View>
                 <FeatherIcon name="edit-2" size={15} style={styles.fieldIcon} />
@@ -186,7 +186,7 @@ const Settings = ({ route, navigation }: any) => {
                         Phone Number
                     </Text>
                     <Text style={{...styles.fieldText, fontWeight: 'normal', color: Colors.mediumGray}}>
-                        {userData.phone_no && userData.phone_no.substring(0, 2) + " " + userData.phone_no.substring(2, userData.phone_no.length)}
+                        {userData && userData.phone_no && userData.phone_no.substring(0, 2) + " " + userData.phone_no.substring(2, userData.phone_no.length)}
                     </Text>
                 </View>
             </TouchableOpacity>

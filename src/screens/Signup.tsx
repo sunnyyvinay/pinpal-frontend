@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, TextInput } from 'react-native';
+import { View, StyleSheet, TextInput, Image } from 'react-native';
 import { Button, Text } from '@rneui/themed';
 import LinearGradient from 'react-native-linear-gradient';
 import * as Colors from '../constants/colors';
-import { Image } from '@rneui/base';
 import Icon from 'react-native-vector-icons/Ionicons';
 import PhoneInput, { ICountry } from 'react-native-international-phone-number';
 import DatePicker from 'react-native-date-picker';
@@ -286,17 +285,18 @@ const styles = StyleSheet.create({
         marginHorizontal: wp('12%'),
         marginTop: hp('10%'),
     },
-    backButtonContainer: {
-        position: 'absolute',
-        marginLeft: wp('5%'),
-        marginTop: hp('5%'),
-        alignSelf: 'flex-start',
-    },
     backButton: {
         backgroundColor: Colors.white,
         borderColor: 'transparent',
         borderWidth: 0,
         borderRadius: wp('10%'),
+        marginTop: hp('3%'),
+    },
+    backButtonContainer: {
+        position: 'absolute',
+        marginLeft: wp('5%'),
+        marginTop: hp('5%'),
+        alignSelf: 'flex-start',
     },
     inputViewContainer: {
         width: wp('90%'),

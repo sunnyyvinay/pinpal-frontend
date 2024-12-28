@@ -66,11 +66,11 @@ const AddFriends = ({ route, navigation }: any) => {
                 { request ?
                     <View style={userSearchStyles.searchUserView}>
                         <Image 
-                            source={user.profile_pic ? {uri: user.profile_pic} : require('../../assets/images/default-pfp.jpg')} 
+                            source={user && user.profile_pic ? {uri: user.profile_pic} : require('../../assets/images/default-pfp.jpg')} 
                             style={{...userSearchStyles.searchUserPfp}} />
                         <View style={{...userSearchStyles.searchUserTextView, flex: 0.6}}>
-                            <Text style={userSearchStyles.searchUserFullName}>{user.full_name}</Text>
-                            <Text style={userSearchStyles.searchUserUsernameText}>{user.username}</Text>
+                            <Text style={userSearchStyles.searchUserFullName}>{user && user.full_name}</Text>
+                            <Text style={userSearchStyles.searchUserUsernameText}>{user && user.username}</Text>
                         </View>
                         <TouchableOpacity style={styles.acceptView} onPress={async () => {
                                 try {
@@ -98,11 +98,11 @@ const AddFriends = ({ route, navigation }: any) => {
                     :
                     <View style={userSearchStyles.searchUserView}>
                         <Image 
-                            source={user.profile_pic ? {uri: user.profile_pic} : require('../../assets/images/default-pfp.jpg')} 
+                            source={user && user.profile_pic ? {uri: user.profile_pic} : require('../../assets/images/default-pfp.jpg')} 
                             style={{...userSearchStyles.searchUserPfp}} />
                         <View style={{...userSearchStyles.searchUserTextView}}>
-                            <Text style={userSearchStyles.searchUserFullName}>{user.full_name}</Text>
-                            <Text style={userSearchStyles.searchUserUsernameText}>{user.username}</Text>
+                            <Text style={userSearchStyles.searchUserFullName}>{user && user.full_name}</Text>
+                            <Text style={userSearchStyles.searchUserUsernameText}>{user && user.username}</Text>
                         </View>
                     </View>
                 }
@@ -124,14 +124,14 @@ const AddFriends = ({ route, navigation }: any) => {
         <ScrollView>
             { state.search.length === 0 ?
                 <View style={{flex: 1}}>
-                    { state.friend_requests && state.friend_requests.length > 0 ? <Text style={styles.friendRequestTitleText}>Friend Requests</Text> : null }
-                    { state.friend_requests && state.friend_requests.length > 0 && state.friend_requests.map((user: any) => (
+                    { state && state.friend_requests && state.friend_requests.length > 0 ? <Text style={styles.friendRequestTitleText}>Friend Requests</Text> : null }
+                    { state && state.friend_requests && state.friend_requests.length > 0 && state.friend_requests.map((user: any) => (
                         userView(user, true)
                     ))}
                 </View> 
                 :
                 <View style={{flex: 1}}>
-                    { state.queryUsers && state.queryUsers.length > 0 && state.queryUsers.map((user: any) => (
+                    { state && state.queryUsers && state.queryUsers.length > 0 && state.queryUsers.map((user: any) => (
                         userView(user, false)
                     ))}
                 </View>

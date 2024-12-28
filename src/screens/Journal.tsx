@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { getPins, getTaggedPins, getUser, getUserFriends } from '../services/user.service';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import * as Colors from '../constants/colors';
 import { Divider } from '@rneui/themed';
 import { useFocusEffect } from '@react-navigation/native';
@@ -23,37 +23,48 @@ function Journal({ route, navigation }: any): React.JSX.Element {
   });
 
   const [tagged, setTagged] = useState<boolean>(false);
+
+  const [refreshing, setRefreshing] = useState<boolean>(false);
+
+  const fetchUserData = async () => {
+    try {
+      const user_id  = await AsyncStorage.getItem("user_id");
+      if (user_id) {
+          const userData = await getUser(user_id);
+          setUserData(userData.user);
+          const pinData = await getPins(user_id);
+          const friendData = await getUserFriends(user_id);
+          const taggedPinData = await getTaggedPins(user_id);
+          setJournalData({ ...journalData, friends: friendData.friends ? friendData.friends : [], pins: pinData.pins ? pinData.pins : [], tagged_pins: taggedPinData.pins ? taggedPinData.pins : [] });
+      } else {
+        navigation.navigate("Welcome");
+      }
+    } catch (error) {
+      console.log(error);
+    }        
+  }
   
   useFocusEffect(
     useCallback(() => {
-      const fetchUserData = async () => {
-        try {
-            const user_id  = await AsyncStorage.getItem("user_id");
-            if (user_id) {
-                const userData = await getUser(user_id);
-                setUserData(userData.user);
-                const pinData = await getPins(user_id);
-                const friendData = await getUserFriends(user_id);
-                const taggedPinData = await getTaggedPins(user_id);
-                setJournalData({ ...journalData, friends: friendData.friends ? friendData.friends : [], pins: pinData.pins ? pinData.pins : [], tagged_pins: taggedPinData.pins ? taggedPinData.pins : [] });
-            } else {
-                navigation.navigate("Welcome");
-            }
-        } catch (error) {
-            console.log("Error fetching Settings data: ", error);
-        } 
-    }
-    fetchUserData();
+      fetchUserData();
     }, [])
   );
 
   return (
-    <ScrollView style={{width: '100%', height: '100%', backgroundColor: Colors.white}}>
+    <ScrollView style={{width: '100%', height: '100%', backgroundColor: Colors.white}}
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={() => {setRefreshing(true); fetchUserData(); setRefreshing(false);}}
+          colors={[Colors.whiteGray]}
+          progressBackgroundColor={Colors.mediumGray}
+        />
+      }>
       <View style={styles.profileContainer}>
-        <Image source={userData.profile_pic && userData.profile_pic != "" ? {uri: userData.profile_pic} : require('../../assets/images/default-pfp.jpg')} style={styles.pfpImage} />
+        <Image source={userData && userData.profile_pic && userData.profile_pic != "" ? {uri: userData.profile_pic} : require('../../assets/images/default-pfp.jpg')} style={styles.pfpImage} />
         <View style={styles.nameContainer}>
-          <Text style={styles.fullNameStyle}>{userData.full_name}</Text>
-          <Text style={styles.usernameStyle}>@{userData.username}</Text>
+          <Text style={styles.fullNameStyle}>{userData && userData.full_name}</Text>
+          <Text style={styles.usernameStyle}>{userData && ('@' + userData.username)}</Text>
         </View>
       </View>
 
@@ -73,12 +84,12 @@ function Journal({ route, navigation }: any): React.JSX.Element {
         </TouchableOpacity>
       </View>
 
-        <TouchableOpacity 
-            style={styles.editButtonContainer}
-            onPress={() => navigation.navigate("Settings")}>
-            <MaterialIcons name='edit' size={hp('2%')} color={Colors.white} style={{marginRight: wp('1%')}}/>
-            <Text style={styles.editButtonText}>Edit Profile</Text>
-        </TouchableOpacity>
+      <TouchableOpacity 
+          style={styles.editButtonContainer}
+          onPress={() => navigation.navigate("Settings")}>
+          <MaterialIcons name='edit' size={hp('2%')} color={Colors.white} style={{marginRight: wp('1%')}}/>
+          <Text style={styles.editButtonText}>Edit Profile</Text>
+      </TouchableOpacity>
       
       <Divider style={styles.dividerStyle}/>
 
@@ -128,6 +139,7 @@ const styles = StyleSheet.create({
     borderRadius: hp('4%'),
     borderWidth: hp('0.2%'),
     borderColor: Colors.mediumOrange,
+    backgroundColor: Colors.whiteGray
   },  
   nameContainer: {
     flex: 1, 
@@ -209,7 +221,8 @@ const styles = StyleSheet.create({
     borderRadius: hp('1%'),
     marginVertical: hp('0.5%'),
     marginHorizontal: wp('2.5%'),
-    alignSelf: 'center'
+    alignSelf: 'center',
+    backgroundColor: Colors.whiteGray,
   },
   noPinsView: {
     width: '100%',

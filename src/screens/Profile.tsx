@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getFriendStatus, getUser, createFriendRequest, deleteFriendRequest, acceptFriendRequest, getUserFriends, getPins, getTaggedPins} from '../services/user.service';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { ScrollView, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-import { Image } from '@rneui/base';
+import { ScrollView, StyleSheet, Text, View, TouchableOpacity, RefreshControl, Image } from 'react-native';
 import * as Colors from '../constants/colors';
 import { Divider } from '@rneui/themed';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -27,61 +26,64 @@ function Profile(props: any): React.JSX.Element {
   });
 
   const [tagged, setTagged] = useState<boolean>(false);
+
+  const [refreshing, setRefreshing] = useState<boolean>(false);
+
+  const fetchUserData = async () => {
+    try {
+        const user_id  = props.route.params.user_id;
+        const curr_user_id = await AsyncStorage.getItem("user_id");
+        setCurrUser(curr_user_id);
+        if (user_id) {
+            const userData = await getUser(user_id);
+            setUserData(userData.user);
+            const friendStatusData = await getFriendStatus(curr_user_id, user_id);
+            setFriendStatus(friendStatusData.status);
+            const friendData = await getUserFriends(user_id);
+
+            const pinData = await getPins(user_id);
+            
+            let displayedPinData = [];
+            if (curr_user_id != user_id) {
+              for (const pin of pinData.pins) {
+                if (pin.visibility == 2) {
+                  displayedPinData.push(pin);
+                } else if (pin.visibility == 1 && friendStatusData.status == 1) {
+                  displayedPinData.push(pin);
+                }
+              }
+            } else {
+              displayedPinData = pinData.pins ? pinData.pins : [];
+            }
+            
+            const taggedData = await getTaggedPins(user_id);
+            let displayedTaggedPinData = [];
+            if (curr_user_id != user_id) {
+              for (const pin of taggedData.pins) {
+                if (pin.visibility == 2) {
+                  displayedTaggedPinData.push(pin);
+                } else if (pin.visibility == 1) { // check if curr user is friends with tagged pin user
+                  const tagged_pin_user = pin.user_id;
+                  const tagged_pin_user_friend_status = await getFriendStatus(curr_user_id, tagged_pin_user);
+                  if (tagged_pin_user == curr_user_id || tagged_pin_user_friend_status.status == 1) {
+                    displayedTaggedPinData.push(pin);
+                  }
+                }
+              }
+            } else {
+              displayedTaggedPinData = taggedData.pins ? taggedData.pins : [];
+            }
+            
+            setProfileData({ ...profileData, friends: friendData.friends ? friendData.friends : [], pins: displayedPinData, tagged_pins: displayedTaggedPinData});
+        } else {
+            props.navigation.navigate("Welcome");
+        }
+    } catch (error) {
+        console.log("Error fetching profile data: ", error);
+    } 
+  }
   
   useEffect(() => {
-    const fetchUserData = async () => {
-        try {
-            const user_id  = props.route.params.user_id;
-            const curr_user_id = await AsyncStorage.getItem("user_id");
-            setCurrUser(curr_user_id);
-            if (user_id) {
-                const userData = await getUser(user_id);
-                setUserData(userData.user);
-                const friendStatusData = await getFriendStatus(curr_user_id, user_id);
-                setFriendStatus(friendStatusData.status);
-                const friendData = await getUserFriends(user_id);
-
-                const pinData = await getPins(user_id);
-                
-                let displayedPinData = [];
-                if (curr_user_id != user_id) {
-                  for (const pin of pinData.pins) {
-                    if (pin.visibility == 2) {
-                      displayedPinData.push(pin);
-                    } else if (pin.visibility == 1 && friendStatusData.status == 1) {
-                      displayedPinData.push(pin);
-                    }
-                  }
-                } else {
-                  displayedPinData = pinData.pins ? pinData.pins : [];
-                }
-                
-                const taggedData = await getTaggedPins(user_id);
-                let displayedTaggedPinData = [];
-                if (curr_user_id != user_id) {
-                  for (const pin of taggedData.pins) {
-                    if (pin.visibility == 2) {
-                      displayedTaggedPinData.push(pin);
-                    } else if (pin.visibility == 1) { // check if curr user is friends with tagged pin user
-                      const tagged_pin_user = pin.user_id;
-                      const tagged_pin_user_friend_status = await getFriendStatus(curr_user_id, tagged_pin_user);
-                      if (tagged_pin_user == curr_user_id || tagged_pin_user_friend_status.status == 1) {
-                        displayedTaggedPinData.push(pin);
-                      }
-                    }
-                  }
-                } else {
-                  displayedTaggedPinData = taggedData.pins ? taggedData.pins : [];
-                }
-                
-                setProfileData({ ...profileData, friends: friendData.friends ? friendData.friends : [], pins: displayedPinData, tagged_pins: displayedTaggedPinData});
-            } else {
-                props.navigation.navigate("Welcome");
-            }
-        } catch (error) {
-            console.log("Error fetching profile data: ", error);
-        } 
-    }
     fetchUserData();
 }, [props.route.params.user_id]);
 
@@ -148,9 +150,17 @@ function Profile(props: any): React.JSX.Element {
   }
 
   return (
-    <ScrollView style={{width: '100%', height: '100%', backgroundColor: Colors.white}}>
+    <ScrollView style={{width: '100%', height: '100%', backgroundColor: Colors.white}}
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={() => {setRefreshing(true); fetchUserData(); setRefreshing(false);}}
+          colors={[Colors.whiteGray]}
+          progressBackgroundColor={Colors.mediumGray}
+        />
+      }>
       <View style={styles.profileContainer}>
-        <Image source={userData.profile_pic ? {uri: userData.profile_pic} : require('../../assets/images/default-pfp.jpg')} style={styles.pfpImage} />
+        <Image source={userData && userData.profile_pic && userData.profile_pic != "" ? {uri: userData.profile_pic} : require('../../assets/images/default-pfp.jpg')} style={styles.pfpImage} />
         <View style={styles.nameContainer}>
           <Text style={styles.fullNameStyle}>{userData.full_name}</Text>
           <Text style={styles.usernameStyle}>@{userData.username}</Text>
@@ -225,6 +235,7 @@ const styles = StyleSheet.create({
     borderRadius: hp('4%'),
     borderWidth: hp('0.2%'),
     borderColor: Colors.mediumOrange,
+    backgroundColor: Colors.whiteGray
   },  
   nameContainer: {
     flex: 1, 
