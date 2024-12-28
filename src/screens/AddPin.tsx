@@ -147,8 +147,8 @@ const AddPin = ({ route, navigation }: any) => {
                 <View style={userSearchStyles.searchUserView}>
                     <Image 
                         source={user.profile_pic ? {uri: user.profile_pic} : require('../../assets/images/default-pfp.jpg')} 
-                        style={{...userSearchStyles.searchUserPfp, flex: 0.1}} />
-                    <View style={{...userSearchStyles.searchUserTextView, flex: 0.9}}>
+                        style={{...userSearchStyles.searchUserPfp}} />
+                    <View style={{...userSearchStyles.searchUserTextView}}>
                         <Text style={userSearchStyles.searchUserFullName}>{user.full_name}</Text>
                         <Text style={userSearchStyles.searchUserUsernameText}>{user.username}</Text>
                     </View>
@@ -324,8 +324,8 @@ const AddPin = ({ route, navigation }: any) => {
                                 <View style={userSearchStyles.searchUserView} key={index}>
                                     <Image 
                                         source={user.profile_pic ? {uri: user.profile_pic} : require('../../assets/images/default-pfp.jpg')} 
-                                        style={{...userSearchStyles.searchUserPfp, flex: 0.1}} />
-                                    <View style={{...userSearchStyles.searchUserTextView, flex: 0.8}}>
+                                        style={{...userSearchStyles.searchUserPfp}} />
+                                    <View style={{...userSearchStyles.searchUserTextView, flex: 0.85}}>
                                         <Text style={userSearchStyles.searchUserFullName}>{user.full_name}</Text>
                                         <Text style={userSearchStyles.searchUserUsernameText}>{user.username}</Text>
                                     </View>

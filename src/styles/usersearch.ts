@@ -17,15 +17,14 @@ const userSearchStyles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-evenly',
+        justifyContent: 'flex-start',
         marginVertical: hp('1%'),
         marginLeft: wp('5%')
     },
     searchUserPfp: {
-        width: hp('5%'),
-        height: hp('5%'),
+        width: hp('4%'),
+        height: hp('4%'),
         borderRadius: hp('2%'),
-        resizeMode: 'contain'
     },
     searchUserTextView: {
         marginLeft: wp('3%'),

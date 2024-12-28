@@ -340,8 +340,8 @@ const PinPost = (props:any) => {
             <View style={userSearchStyles.searchUserView}>
                 <Image 
                     source={user.profile_pic ? {uri: user.profile_pic} : require('../../assets/images/default-pfp.jpg')} 
-                    style={{...userSearchStyles.searchUserPfp, flex: 0.1}} />
-                <View style={{...userSearchStyles.searchUserTextView, flex: 0.9}}>
+                    style={{...userSearchStyles.searchUserPfp}} />
+                <View style={{...userSearchStyles.searchUserTextView}}>
                     <Text style={userSearchStyles.searchUserFullName}>{user.full_name}</Text>
                     <Text style={userSearchStyles.searchUserUsernameText}>{user.username}</Text>
                 </View>
@@ -384,12 +384,12 @@ const PinPost = (props:any) => {
                         <View style={userSearchStyles.searchUserView} key={index}>
                             <Image 
                                 source={user.profile_pic ? {uri: user.profile_pic} : require('../../assets/images/default-pfp.jpg')} 
-                                style={{...userSearchStyles.searchUserPfp, flex: 0.1}} />
-                            <View style={{...userSearchStyles.searchUserTextView, flex: 0.8}}>
+                                style={{...userSearchStyles.searchUserPfp}} />
+                            <View style={{...userSearchStyles.searchUserTextView, flex: 0.9}}>
                                 <Text style={userSearchStyles.searchUserFullName}>{user.full_name}</Text>
                                 <Text style={userSearchStyles.searchUserUsernameText}>{user.username}</Text>
                             </View>
-                            <TouchableOpacity style={{flex: 0.1, marginRight: wp('2%')}} onPress={() => {
+                            <TouchableOpacity style={{flex: 0.1, justifyContent: 'flex-end',marginRight: wp('2%')}} onPress={() => {
                                 setEditedPinData((prevData: any) => 
                                   ({...prevData, user_tags: prevData.user_tags.filter((tag_id: string) => tag_id !== user.user_id)}))
                             }}>
