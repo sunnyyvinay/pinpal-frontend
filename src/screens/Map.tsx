@@ -416,7 +416,8 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
           setChangingRegion(newRegion);
         }}
         style={styles.mapContainer}
-        showsPointsOfInterest={true}>
+        showsPointsOfInterest={true}
+        showsUserLocation={true}>
         {handleDragMode()}
       </MapView>
 

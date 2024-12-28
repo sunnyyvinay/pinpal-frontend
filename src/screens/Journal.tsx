@@ -95,7 +95,7 @@ function Journal({ route, navigation }: any): React.JSX.Element {
               <Image source={{uri: pin.photo || require('../../assets/images/default-pfp.jpg')}} style={styles.journalPinImage} />
             </TouchableOpacity>
           )
-        })}
+        }).reverse()}
 
         {tagged && journalData.tagged_pins.length == 0 &&
           <View style={styles.noPinsView}>
@@ -109,7 +109,7 @@ function Journal({ route, navigation }: any): React.JSX.Element {
               <Image source={{uri: pin.photo}} style={styles.journalPinImage} />
             </TouchableOpacity>
           )
-        })}
+        }).reverse()}
       </View>
     </ScrollView>
   );
@@ -123,9 +123,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   pfpImage: {
-    width: hp('5%'),
-    height: hp('5%'),
-    borderRadius: hp('2.5%'),
+    width: hp('8%'),
+    height: hp('8%'),
+    borderRadius: hp('4%'),
     borderWidth: hp('0.2%'),
     borderColor: Colors.mediumOrange,
   },  
