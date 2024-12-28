@@ -12,10 +12,11 @@ const userListStyles = StyleSheet.create({
         marginLeft: wp('0.5%')
     },
     userPfp: {
-        width: hp('3.5%'),
-        height: hp('3.5%'),
-        borderRadius: hp('2%'),
-        flex: 0.1
+        width: hp('5%'),
+        height: hp('5%'),
+        borderRadius: hp('2.5%'),
+        borderWidth: hp('0.2%'),
+        borderColor: Colors.mediumOrange,
     },
     userTextView: {
         marginLeft: wp('3%'),

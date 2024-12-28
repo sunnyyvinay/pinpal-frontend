@@ -646,9 +646,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   pfpImage: {
-    width: hp('4%'),
-    height: hp('4%'),
-    borderRadius: hp('5%'),
+    width: hp('5%'),
+    height: hp('5%'),
+    borderRadius: hp('2.5%'),
     borderWidth: hp('0.2%'),
     borderColor: Colors.mediumOrange,
     alignSelf: 'center',
@@ -657,7 +657,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 16,
     fontFamily: 'Futura',
-    marginLeft: wp('1%'),
+    marginLeft: wp('2%'),
   },
   postView: {
     backgroundColor: Colors.white,

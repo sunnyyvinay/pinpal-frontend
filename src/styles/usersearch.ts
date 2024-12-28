@@ -22,9 +22,11 @@ const userSearchStyles = StyleSheet.create({
         marginLeft: wp('5%')
     },
     searchUserPfp: {
-        width: hp('4%'),
-        height: hp('4%'),
-        borderRadius: hp('2%'),
+        width: hp('5%'),
+        height: hp('5%'),
+        borderRadius: hp('2.5%'),
+        borderWidth: hp('0.2%'),
+        borderColor: Colors.mediumOrange,
     },
     searchUserTextView: {
         marginLeft: wp('3%'),

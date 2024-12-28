@@ -228,7 +228,7 @@ const styles = StyleSheet.create({
   },  
   nameContainer: {
     flex: 1, 
-    marginLeft: wp('1%'),
+    marginLeft: wp('2%'),
     alignSelf: 'center'
   },
   fullNameStyle: {
