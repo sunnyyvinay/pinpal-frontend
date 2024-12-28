@@ -95,7 +95,7 @@ function Journal({ route, navigation }: any): React.JSX.Element {
               <Image source={{uri: pin.photo || require('../../assets/images/default-pfp.jpg')}} style={styles.journalPinImage} />
             </TouchableOpacity>
           )
-        }).reverse()}
+        })}
 
         {tagged && journalData.tagged_pins.length == 0 &&
           <View style={styles.noPinsView}>
@@ -109,7 +109,7 @@ function Journal({ route, navigation }: any): React.JSX.Element {
               <Image source={{uri: pin.photo}} style={styles.journalPinImage} />
             </TouchableOpacity>
           )
-        }).reverse()}
+        })}
       </View>
     </ScrollView>
   );

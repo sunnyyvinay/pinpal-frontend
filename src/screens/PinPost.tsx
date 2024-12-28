@@ -600,8 +600,8 @@ const PinPost = (props:any) => {
               async () => {
                   if (editedPinData.title.length === 0 || editedPinData.title.length > 50) {
                       setError({...error, title: "Title must be between 1 and 50 characters"});
-                  } else if (editedPinData.caption.length > 100) {
-                      setError({...error, caption: "Caption must be less than 100 characters"});
+                  } else if (editedPinData.caption.length > 250) {
+                      setError({...error, caption: "Caption must be less than 250 characters"});
                   } else {
                     try {
                       const user_id = await AsyncStorage.getItem("user_id");

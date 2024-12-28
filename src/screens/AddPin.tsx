@@ -262,8 +262,8 @@ const AddPin = ({ route, navigation }: any) => {
                                     try {
                                         if (pinData.title.length == 0 || pinData.title.length > 30) {
                                             setError({...error, title: "Title must be between 1 and 30 characters"});
-                                        } else if (pinData.caption.length > 100) {
-                                            setError({...error, caption: "Caption must be less than 100 characters"});
+                                        } else if (pinData.caption.length > 250) {
+                                            setError({...error, caption: "Caption must be less than 250 characters"});
                                         } else {
                                             const user_id = await AsyncStorage.getItem("user_id");
                                             if (user_id) {

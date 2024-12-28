@@ -192,7 +192,7 @@ function Profile(props: any): React.JSX.Element {
               <Image source={{uri: pin.photo}} style={styles.journalPinImage} />
             </TouchableOpacity>
           )
-        }).reverse()}
+        })}
 
         {tagged && profileData.tagged_pins.length == 0 &&
           <View style={styles.noPinsView}>
@@ -206,7 +206,7 @@ function Profile(props: any): React.JSX.Element {
               <Image source={{uri: pin.photo}} style={styles.journalPinImage} />
             </TouchableOpacity>
           )
-        }).reverse()}
+        })}
       </View>
     </ScrollView>
   );

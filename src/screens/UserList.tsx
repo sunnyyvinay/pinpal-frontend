@@ -63,7 +63,7 @@ function UserList(props: any): React.JSX.Element {
             <TouchableOpacity onPress={() => props.navigation.navigate("Profile", {user_id: user.user.user_id})} key={index}>
                 <View style={userListStyles.userView}>
                     <Image 
-                        source={user.profile_pic ? {uri: user.user.profile_pic} : require('../../assets/images/default-pfp.jpg')} 
+                        source={user.user.profile_pic ? {uri: user.user.profile_pic} : require('../../assets/images/default-pfp.jpg')} 
                         style={userListStyles.userPfp} />
                     <View style={userListStyles.userTextView}>
                         <Text style={userListStyles.userFullName}>{user.user.full_name}</Text>
