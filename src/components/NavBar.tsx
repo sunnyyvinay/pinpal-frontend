@@ -1,5 +1,5 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import React from 'react';
+import React, { useEffect } from 'react';
 import Map from '../screens/Map';
 import Journal from '../screens/Journal';
 import AddPinModal from '../screens/AddPinOptions';
@@ -21,10 +21,18 @@ function NavBar({ route, navigation }: any): React.JSX.Element {
   const user_id  = AsyncStorage.getItem("user_id");
   if (!user_id) navigation.navigate("Welcome");
 
+  const [theme, setTheme] = React.useState('light');
+    useEffect(() => {
+        const getTheme = async () => {
+            setTheme(await AsyncStorage.getItem('theme') || 'light');
+        }
+        getTheme();
+    })
+
   const addFriendsIcon = () => {
     return (
       <TouchableOpacity onPress={() => navigation.navigate("Add Friends")}> 
-        <Image source={require('../../assets/images/add-friends-icon.png')} style={styles.addFriendsButton}/> 
+        <Image source={require('../../assets/images/add-friends-icon.png')} style={{...styles.addFriendsButton, tintColor: theme === "dark" ? Colors.white : Colors.black}}/> 
       </TouchableOpacity>
     )
   }
@@ -33,7 +41,7 @@ function NavBar({ route, navigation }: any): React.JSX.Element {
     <ContextProvider>
     <Tab.Navigator
       initialRouteName={INITIAL_ROUTE_NAME}
-      screenOptions={{tabBarLabelStyle: {paddingBottom: hp('0.5%')}, tabBarActiveTintColor: Colors.darkOrange, tabBarInactiveTintColor: Colors.mediumGray}}>
+      screenOptions={{tabBarLabelStyle: {paddingBottom: hp('0.5%')}, tabBarActiveTintColor: theme === "dark" ? Colors.mediumOrange : Colors.darkOrange, tabBarInactiveTintColor: Colors.mediumGray, tabBarStyle: {backgroundColor: theme === "dark" ? Colors.darkBackground : Colors.white}}}>
       <Tab.Screen
         name="Map"
         component={Map}
@@ -43,7 +51,8 @@ function NavBar({ route, navigation }: any): React.JSX.Element {
             ),
             headerLeft: () => (addFriendsIcon()),
             headerTitle: () => <Image source={require('../../assets/images/full-logo.png')} style={styles.headerTitle}/>,
-            headerRight: () => <Icon name="settings-outline" size={wp('8%')} style={styles.settingsButton} onPress={() => navigation.navigate("Settings")}/>
+            headerRight: () => <Icon name="settings-outline" size={wp('8%')} style={styles.settingsButton} onPress={() => navigation.navigate("Settings")} color={theme === "dark" ? Colors.white : Colors.black}/>,
+            headerStyle: {backgroundColor: theme === "dark" ? Colors.darkBackground : Colors.white}
         }}
       />
       <Tab.Screen
@@ -62,7 +71,9 @@ function NavBar({ route, navigation }: any): React.JSX.Element {
             ),
             headerLeft: () => (addFriendsIcon()),
             headerTitle: "My Journal",
-            headerRight: () => <Icon name="settings-outline" size={wp('8%')} style={styles.settingsButton} onPress={() => navigation.navigate("Settings")}/>
+            headerTitleStyle: {color: theme === "dark" ? Colors.white : Colors.black},
+            headerRight: () => <Icon name="settings-outline" size={wp('8%')} style={styles.settingsButton} onPress={() => navigation.navigate("Settings")} color={theme === "dark" ? Colors.white : Colors.black}/>,
+            headerStyle: {backgroundColor: theme === "dark" ? Colors.darkBackground : Colors.white}
         }}
       />
     </Tab.Navigator>

@@ -16,6 +16,7 @@ import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-nativ
 import FontAwesome6Icon from 'react-native-vector-icons/FontAwesome6';
 
 const AddPin = ({ route, navigation }: any) => {
+    const [theme, setTheme] = React.useState('light');
     const [step, setStep] = useState<number>(1);
     const lat_long = [route.params.latitude, route.params.longitude];
     const [pinData, setPinData] = useState<any>({
@@ -88,6 +89,14 @@ const AddPin = ({ route, navigation }: any) => {
         fetchData();
       }, [JSON.stringify(pinData.user_tags)]);
 
+      useEffect(() => {
+        AsyncStorage.getItem("theme").then((value) => {
+            if (value) {
+                setTheme(value);
+            }
+        });
+      }, []);
+
     const openImagePicker = () => {
         const options = {
             mediaType: 'photo' as MediaType,
@@ -149,8 +158,8 @@ const AddPin = ({ route, navigation }: any) => {
                         source={user.profile_pic ? {uri: user.profile_pic} : require('../../assets/images/default-pfp.jpg')} 
                         style={{...userSearchStyles.searchUserPfp}} />
                     <View style={{...userSearchStyles.searchUserTextView}}>
-                        <Text style={userSearchStyles.searchUserFullName}>{user.full_name}</Text>
-                        <Text style={userSearchStyles.searchUserUsernameText}>{user.username}</Text>
+                        <Text style={{...userSearchStyles.searchUserFullName, color: theme === 'dark' ? Colors.white : Colors.black}}>{user.full_name}</Text>
+                        <Text style={{...userSearchStyles.searchUserUsernameText, color: theme === 'dark' ? Colors.mediumGray : Colors.black}}>{user.username}</Text>
                     </View>
                 </View>
             </TouchableOpacity>
@@ -168,7 +177,7 @@ const AddPin = ({ route, navigation }: any) => {
                             <Image source={{ uri: pinData.photo }} style={styles.pickPhoto} /> 
                         </TouchableOpacity>
                         : 
-                        <TouchableOpacity onPress={openImagePicker} style={styles.pickPhotoContainer} >
+                        <TouchableOpacity onPress={openImagePicker} style={{...styles.pickPhotoContainer, backgroundColor: theme === 'dark' ? Colors.mediumGray : Colors.whiteGray}} >
                             <MaterialIcon name="add-a-photo" size={hp('5%')} />
                         </TouchableOpacity>
                         }
@@ -179,7 +188,7 @@ const AddPin = ({ route, navigation }: any) => {
                             iconRight
                             iconContainerStyle={{ marginLeft: wp('2%') }}
                             titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'ChunkFive' }}
-                            buttonStyle={styles.buttonStyle}
+                            buttonStyle={{...styles.buttonStyle, backgroundColor: theme === 'dark' ? Colors.mediumOrange : Colors.darkOrange}}
                             containerStyle={styles.buttonContainerStyle} 
                             onPress={() => setStep(step + 1)} 
                             disabled={!pinData.photo}/>
@@ -190,22 +199,22 @@ const AddPin = ({ route, navigation }: any) => {
                 return (
                     <View style={styles.inputViewContainer}>
                         <View style={styles.inputContainer}>
-                            <Text style={styles.label}>Title</Text>
+                            <Text style={{...styles.label, color: theme === 'dark' ? Colors.white : Colors.black}}>Title</Text>
                             <TextInput
                                 value={pinData.title}
                                 placeholder="Give a pin title"
-                                style={styles.input}
+                                style={{...styles.input, color: theme === 'dark' ? Colors.white : Colors.black}}
                                 onChangeText={(text: string) => {setPinData({ ...pinData, title: text }); setError({...error, title: ""})}}
                                 autoCapitalize="none"
                             />
                             {error.title != "" && <Text style={styles.errorText}>{error.title}</Text>}
                         </View>
                         <View style={styles.inputContainer}>
-                            <Text style={styles.label}>Caption</Text>
+                            <Text style={{...styles.label, color: theme === 'dark' ? Colors.white : Colors.black}}>Caption</Text>
                             <TextInput
                                 value={pinData.caption}
                                 placeholder="Write a caption..."
-                                style={{...styles.input, height: hp('12.5%')}}
+                                style={{...styles.input, height: hp('12.5%'), color: theme === 'dark' ? Colors.white : Colors.black}}
                                 onChangeText={(text: string) => {setPinData({ ...pinData, caption: text }); setError({...error, caption: ""})}}
                                 autoCapitalize="none"
                                 multiline={true}
@@ -214,18 +223,18 @@ const AddPin = ({ route, navigation }: any) => {
                             {error.caption != "" && <Text style={styles.errorText}>{error.caption}</Text>}
                         </View>
 
-                        <TouchableOpacity onPress={() => {setVisibilityModal(true)}} style={styles.visibilityInputView}>
+                        <TouchableOpacity onPress={() => {setVisibilityModal(true)}} style={{...styles.visibilityInputView, backgroundColor: theme === 'dark' ? Colors.mediumGray : Colors.whiteGray}}>
                             <Text style={{...styles.visibilityTitleText, fontWeight: '700'}}>Visibility</Text>
                             <Text style={styles.visibilityText}>{getVisibilityString(pinData.visibility)}</Text>
                         </TouchableOpacity>
 
-                        <TouchableOpacity onPress={() => {setUserTagState({...userTagState,modalVisible: true, search: "", queryUsers: []})}} style={styles.userTagsInputView}>
+                        <TouchableOpacity onPress={() => {setUserTagState({...userTagState,modalVisible: true, search: "", queryUsers: []})}} style={{...styles.userTagsInputView, backgroundColor: theme === 'dark' ? Colors.mediumGray : Colors.whiteGray}}>
                             <Text style={{...styles.visibilityTitleText, fontWeight: '700'}}>Tagged Users</Text>
                             <Text style={styles.userTagsText}>{userTagDisplayText()}</Text>
                         </TouchableOpacity>  
 
                         <View style={styles.locationTagsView}>
-                            <Text style={styles.locationTagsText}>Location Tags</Text>
+                            <Text style={{...styles.locationTagsText, color: theme === 'dark' ? Colors.white : Colors.black}}>Location Tags</Text>
                             <View style={styles.locationTagsButtonView}>
                                 <Button 
                                     title="Edit"
@@ -233,7 +242,7 @@ const AddPin = ({ route, navigation }: any) => {
                                     color={Colors.black}
                                     iconContainerStyle={{ marginRight: 2 }}
                                     titleStyle={{ color: Colors.black, fontFamily: 'Futura', fontSize: 15 }}
-                                    buttonStyle={styles.locationTagsAddButton}
+                                    buttonStyle={{...styles.locationTagsAddButton, backgroundColor: theme === 'dark' ? Colors.mediumGray : Colors.whiteGray}}
                                     containerStyle={styles.locationTagsAddButtonContainer} 
                                     onPress={() => setlocationTagsModal(true)}/>
                                 {pinData.location_tags.map((tag:string, index:number) => {
@@ -255,7 +264,7 @@ const AddPin = ({ route, navigation }: any) => {
                             iconRight
                             iconContainerStyle={{ marginLeft: wp('1%') }}
                             titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'ChunkFive' }}
-                            buttonStyle={styles.buttonStyle}
+                            buttonStyle={{...styles.buttonStyle, backgroundColor: theme === 'dark' ? Colors.mediumOrange : Colors.darkOrange}}
                             containerStyle={styles.buttonContainerStyle} 
                             onPress={
                                 async () => {
@@ -291,15 +300,15 @@ const AddPin = ({ route, navigation }: any) => {
         }
     }
     return (
-        <ScrollView contentContainerStyle={{flex: 1, backgroundColor: Colors.white}}>
+        <ScrollView contentContainerStyle={{flex: 1, backgroundColor: theme === 'dark' ? Colors.darkBackground : Colors.white}}>
             {renderStep(step)}
             <Modal 
                 isVisible={userTagState.modalVisible} 
                 onBackdropPress={() => setUserTagState({...userTagState, modalVisible: false})}
                 style={userTagsStyles.userTagsModal} >
-                <View style={userTagsStyles.userTagsModalView}>
+                <View style={{...userTagsStyles.userTagsModalView, backgroundColor: theme === 'dark' ? Colors.darkBackground : Colors.white}}>
                     <View style={userTagsStyles.userTagsModalHeader}>
-                        <Text style={userTagsStyles.userTagsModalTitle}>Tag Users</Text>
+                        <Text style={{...userTagsStyles.userTagsModalTitle, color: theme === 'dark' ? Colors.white : Colors.black}}>Tag Users</Text>
                         <Entypo name="cross" size={hp('2.5%')} color={Colors.mediumGray} onPress={() => setUserTagState({...userTagState, modalVisible: false})} style={{position: 'absolute', left: wp('45%')}}/>
                     </View>
                     <SearchBar 
@@ -307,10 +316,10 @@ const AddPin = ({ route, navigation }: any) => {
                         value={userTagState.search}
                         round={true}
                         autoCapitalize="none"
-                        lightTheme={true}
+                        lightTheme={theme === 'light'}
                         containerStyle={{...userSearchStyles.searchBarContainer, width: wp('80%')}}
                         onChangeText={(text) => setUserTagState({...userTagState, search: text})}/>
-                    {userTagState.search.length === 0 && pinData.user_tags.length > 0 && <Text style={userTagsStyles.userTagsModalText}>Tagged</Text>}
+                    {userTagState.search.length === 0 && pinData.user_tags.length > 0 && <Text style={{...userTagsStyles.userTagsModalText, color: theme === 'dark' ? Colors.white : Colors.black}}>Tagged</Text>}
                     <ScrollView style={{width: '100%', flex: 1}}>
                         { userTagState.search.length > 0 ?
                             <View style={{flex: 0.8}}>
@@ -326,8 +335,8 @@ const AddPin = ({ route, navigation }: any) => {
                                         source={user.profile_pic ? {uri: user.profile_pic} : require('../../assets/images/default-pfp.jpg')} 
                                         style={{...userSearchStyles.searchUserPfp}} />
                                     <View style={{...userSearchStyles.searchUserTextView, flex: 0.85}}>
-                                        <Text style={userSearchStyles.searchUserFullName}>{user.full_name}</Text>
-                                        <Text style={userSearchStyles.searchUserUsernameText}>{user.username}</Text>
+                                        <Text style={{...userSearchStyles.searchUserFullName, color: theme === 'dark' ? Colors.white : Colors.black}}>{user.full_name}</Text>
+                                        <Text style={{...userSearchStyles.searchUserUsernameText, color: theme === 'dark' ? Colors.mediumGray : Colors.black}}>{user.username}</Text>
                                     </View>
                                     <TouchableOpacity style={{flex: 0.1, marginRight: 3}} onPress={() => {
                                         setPinData((prevData: any) => ({...prevData, user_tags: prevData.user_tags.filter((tag_id: string) => 
@@ -348,15 +357,15 @@ const AddPin = ({ route, navigation }: any) => {
                 isVisible={visibilityModal} 
                 onBackdropPress={() => setVisibilityModal(false)}
                 style={styles.visibilityModal} >
-                <View style={styles.visibilityModalView}>
-                    <Text style={styles.visibilityModalTitle}>Select visibility</Text>
+                <View style={{...styles.visibilityModalView, backgroundColor: theme === 'dark' ? Colors.darkBackground : Colors.white}}>
+                    <Text style={{...styles.visibilityModalTitle, color: theme === 'dark' ? Colors.white : Colors.black}}>Select visibility</Text>
                     <TouchableOpacity style={styles.visibilityModalSubview} 
                         onPress={() => {
                             setPinData({ ...pinData, visibility: 0});
                             setVisibilityModal(false);
                         }}>
-                        <MaterialIcon name="lock" size={hp('3%')} style={{ flex: 0.25}}/>
-                        <Text style={styles.visibilityModalSubviewText}>Private</Text>
+                        <MaterialIcon name="lock" size={hp('3%')} style={{ flex: 0.25}} color={theme === 'dark' ? Colors.white : Colors.black}/>
+                        <Text style={{...styles.visibilityModalSubviewText, color: theme === 'dark' ? Colors.white : Colors.black}}>Private</Text>
                         <Icon name="checkmark-sharp" size={hp('3%')} color={Colors.mediumOrange} style={pinData.visibility === 0 ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
                     </TouchableOpacity>
                     <View style={styles.horizontalLine} />
@@ -366,8 +375,8 @@ const AddPin = ({ route, navigation }: any) => {
                             setPinData({ ...pinData, visibility: 1});
                             setVisibilityModal(false);
                         }}>
-                        <MaterialIcon name="people-alt" size={hp('3%')} style={{ flex: 0.25}}/>
-                        <Text style={styles.visibilityModalSubviewText}>Friends</Text>
+                        <MaterialIcon name="people-alt" size={hp('3%')} style={{ flex: 0.25}} color={theme === 'dark' ? Colors.white : Colors.black}/>
+                        <Text style={{...styles.visibilityModalSubviewText, color: theme === 'dark' ? Colors.white : Colors.black}}>Friends</Text>
                         <Icon name="checkmark-sharp" size={hp('3%')} color={Colors.mediumOrange} style={pinData.visibility === 1 ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
                     </TouchableOpacity>
                     <View style={styles.horizontalLine} />
@@ -377,8 +386,8 @@ const AddPin = ({ route, navigation }: any) => {
                             setPinData({ ...pinData, visibility: 2});
                             setVisibilityModal(false);
                         }}>
-                        <MaterialIcon name="public" size={hp('3%')} style={{ flex: 0.25}}/>
-                        <Text style={styles.visibilityModalSubviewText}>Public</Text>
+                        <MaterialIcon name="public" size={hp('3%')} style={{ flex: 0.25}} color={theme === 'dark' ? Colors.white : Colors.black}/>
+                        <Text style={{...styles.visibilityModalSubviewText, color: theme === 'dark' ? Colors.white : Colors.black}}>Public</Text>
                         <Icon name="checkmark-sharp" size={hp('3%')} color={Colors.mediumOrange} style={pinData.visibility === 2 ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
                     </TouchableOpacity>
                 </View>
@@ -388,8 +397,8 @@ const AddPin = ({ route, navigation }: any) => {
                 isVisible={locationTagsModal} 
                 onBackdropPress={() => setlocationTagsModal(false)}
                 style={styles.locationTagsModal} >
-                <View style={styles.locationTagsModalView}>
-                    <Text style={styles.locationTagsModalTitle}>Select location tags</Text>
+                <View style={{...styles.locationTagsModalView, backgroundColor: theme === 'dark' ? Colors.darkBackground : Colors.white}}>
+                    <Text style={{...styles.locationTagsModalTitle, color: theme === 'dark' ? Colors.white : Colors.black}}>Select location tags</Text>
                     <View>
                         {locationTags.map((tag, index) => {
                             return (
@@ -404,7 +413,7 @@ const AddPin = ({ route, navigation }: any) => {
                                             }
                                         }}>
                                         {getLocationTagIcon(tag)}
-                                        <Text style={styles.locationTagsModalText}>{tag}</Text>
+                                        <Text style={{...styles.locationTagsModalText, color: theme === 'dark' ? Colors.white : Colors.black}}>{tag}</Text>
                                         <Icon name="checkmark-sharp" size={hp('3%')} color={Colors.mediumOrange} style={pinData.location_tags.includes(tag) ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
                                     </TouchableOpacity>
                                     <View style={styles.horizontalLine} />

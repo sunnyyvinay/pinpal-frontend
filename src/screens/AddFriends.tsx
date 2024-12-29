@@ -9,6 +9,7 @@ import userSearchStyles from '../styles/usersearch';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 const AddFriends = ({ route, navigation }: any) => {
+    const [theme, setTheme] = React.useState('light');
     let user_id: string | null = '';
     let searchedUserCount: number = 0;
     type State = {
@@ -25,6 +26,7 @@ const AddFriends = ({ route, navigation }: any) => {
     useEffect(() => {
         const getFriendsState = async () => {
             user_id = await AsyncStorage.getItem("user_id");
+            setTheme(await AsyncStorage.getItem('theme') || 'light');
             if (user_id) {
                 const friendRequestData = await getUserRequests(user_id);
                 setState({...state, friend_requests: friendRequestData.friend_requests});
@@ -67,12 +69,12 @@ const AddFriends = ({ route, navigation }: any) => {
                     <View style={userSearchStyles.searchUserView}>
                         <Image 
                             source={user && user.profile_pic ? {uri: user.profile_pic} : require('../../assets/images/default-pfp.jpg')} 
-                            style={{...userSearchStyles.searchUserPfp}} />
+                            style={{...userSearchStyles.searchUserPfp, borderColor: theme === 'dark' ? Colors.mediumOrange : Colors.darkOrange}} />
                         <View style={{...userSearchStyles.searchUserTextView, flex: 0.6}}>
-                            <Text style={userSearchStyles.searchUserFullName}>{user && user.full_name}</Text>
-                            <Text style={userSearchStyles.searchUserUsernameText}>{user && user.username}</Text>
+                            <Text style={{...userSearchStyles.searchUserFullName, color: theme === 'dark' ? Colors.white : Colors.black}}>{user && user.full_name}</Text>
+                            <Text style={{...userSearchStyles.searchUserUsernameText, color: theme === 'dark' ? Colors.mediumGray : Colors.black}}>{user && user.username}</Text>
                         </View>
-                        <TouchableOpacity style={styles.acceptView} onPress={async () => {
+                        <TouchableOpacity style={{...styles.acceptView, backgroundColor: theme === 'dark' ? Colors.mediumOrange : Colors.darkOrange}} onPress={async () => {
                                 try {
                                     user_id = await AsyncStorage.getItem("user_id");
                                     if (user_id) await acceptFriendRequest(user.user_id, user_id);
@@ -99,10 +101,10 @@ const AddFriends = ({ route, navigation }: any) => {
                     <View style={userSearchStyles.searchUserView}>
                         <Image 
                             source={user && user.profile_pic ? {uri: user.profile_pic} : require('../../assets/images/default-pfp.jpg')} 
-                            style={{...userSearchStyles.searchUserPfp}} />
+                            style={{...userSearchStyles.searchUserPfp, borderColor: theme === 'dark' ? Colors.mediumOrange : Colors.darkOrange}} />
                         <View style={{...userSearchStyles.searchUserTextView}}>
-                            <Text style={userSearchStyles.searchUserFullName}>{user && user.full_name}</Text>
-                            <Text style={userSearchStyles.searchUserUsernameText}>{user && user.username}</Text>
+                            <Text style={{...userSearchStyles.searchUserFullName, color: theme === 'dark' ? Colors.white : Colors.black}}>{user && user.full_name}</Text>
+                            <Text style={{...userSearchStyles.searchUserUsernameText, color: theme === 'dark' ? Colors.mediumGray : Colors.black}}>{user && user.username}</Text>
                         </View>
                     </View>
                 }
@@ -111,13 +113,13 @@ const AddFriends = ({ route, navigation }: any) => {
     }
 
   return (
-    <View style={{width: "100%", height: "100%", backgroundColor: Colors.white}}>
+    <View style={{width: "100%", height: "100%", backgroundColor: theme === 'dark' ? Colors.darkBackground : Colors.white}}>
         <SearchBar 
             placeholder='Search...'
             value={state.search}
             round={true}
             autoCapitalize="none"
-            lightTheme={true}
+            lightTheme={theme === 'dark' ? false : true}
             containerStyle={userSearchStyles.searchBarContainer}
             onChangeText={(text) => setState({...state, search: text})}/>
         

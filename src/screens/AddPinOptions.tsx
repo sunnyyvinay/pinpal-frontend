@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Modal from "react-native-modal";
 import { Button } from '@rneui/themed';
 import {StyleSheet, View, TouchableOpacity, Text } from 'react-native';
@@ -7,11 +7,20 @@ import * as Colors from '../constants/colors';
 import GetLocation, { isLocationError } from 'react-native-get-location';
 import { useAppContext } from '../AppContext';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function AddPinOptions({ route, navigation }: any): React.JSX.Element {
   const [modalVisible, setModalVisible] = useState(false);
   var lat_long = {latitude : 0, longitude: 0};
   const { dragMode, setDragMode } = useAppContext();
+
+  const [theme, setTheme] = React.useState('light');
+    useEffect(() => {
+        const getTheme = async () => {
+            setTheme(await AsyncStorage.getItem('theme') || 'light');
+        }
+        getTheme();
+    })
 
   const getCurrLocation = async () => {
     await GetLocation.getCurrentPosition({
@@ -44,7 +53,7 @@ function AddPinOptions({ route, navigation }: any): React.JSX.Element {
             setModalVisible(true);
           }
         }}
-        style={styles.buttonStyle}>
+        style={{...styles.buttonStyle, backgroundColor: Colors.darkOrange}}>
         <Icon name={'add'} size={40} color={Colors.white}/>
       </TouchableOpacity>
 
@@ -53,8 +62,8 @@ function AddPinOptions({ route, navigation }: any): React.JSX.Element {
           isVisible={modalVisible}
           style={styles.contentView}
           onBackdropPress={() => setModalVisible(false)}>
-          <View style={styles.content}>
-            <Text style={styles.contentTitle}>Add pin at..</Text>
+          <View style={{...styles.content, backgroundColor: theme === 'dark' ? Colors.darkGray : Colors.white}}>
+            <Text style={{...styles.contentTitle, color: theme === 'dark' ? Colors.white : Colors.black}}>Add pin at..</Text>
             <Button 
                 title="Current location" 
                 color={Colors.white}

@@ -11,7 +11,7 @@ const userTagsStyles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: hp('1%'),
-        flex: 0.9,
+        flex: 0.8,
     },
     userTagsModalHeader: {
         flexDirection: 'row',

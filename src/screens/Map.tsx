@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Appearance, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import GetLocation, { isLocationError } from 'react-native-get-location';
 import MapView, { Callout, CalloutSubview, Marker } from 'react-native-maps';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -20,6 +20,7 @@ import userSearchStyles from '../styles/usersearch';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.Element {
+  const [theme, setTheme] = useState('light');
   const { region, setRegion, dragMode, setDragMode } = useAppContext();
   type Region = {latitude: number, longitude: number, latitudeDelta: number, longitudeDelta: number};
   const [changingRegion, setChangingRegion] = useState<Region>({latitude: 34.0699, longitude: 118.4438, latitudeDelta: 0.03, longitudeDelta: 0.03});
@@ -115,6 +116,7 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
     useCallback(() => {
       const setPinState = async () => {
         const user_id = await AsyncStorage.getItem("user_id");
+        setTheme(await AsyncStorage.getItem("theme") || "light");
         if (user_id) {
           // PERSONAL PINS
           if (filterState.private) {
@@ -417,7 +419,8 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
         }}
         style={styles.mapContainer}
         showsPointsOfInterest={true}
-        showsUserLocation={true}>
+        showsUserLocation={true}
+        userInterfaceStyle={theme === "dark" ? "dark" : "light"}>
         {handleDragMode()}
       </MapView>
 

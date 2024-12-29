@@ -1,4 +1,5 @@
 {
   "name": "pinpal-frontend",
-  "displayName": "PinPal"
+  "displayName": "PinPal",
+  "userInterfaceStyle": "automatic"
 }
