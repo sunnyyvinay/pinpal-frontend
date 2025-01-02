@@ -507,6 +507,7 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
                 value={userFilterState.search}
                 round={true}
                 autoCapitalize="none"
+                autoCorrect={false}
                 lightTheme={true}
                 containerStyle={{...userSearchStyles.searchBarContainer, width: wp('80%')}}
                 onChangeText={(text) => setUserFilterState({...userFilterState, search: text})}/>

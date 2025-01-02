@@ -107,7 +107,7 @@ const PinPost = (props:any) => {
       } catch (error) {
         console.error(error);
       }      
-    }, []);
+    }, [pin_id]);
 
     // USE EFFECT: SEARCH USERS
     useEffect(() => {
@@ -367,6 +367,7 @@ const PinPost = (props:any) => {
                 value={userTagState.search}
                 round={true}
                 autoCapitalize="none"
+                autoCorrect={false}
                 lightTheme={true}
                 containerStyle={{...userSearchStyles.searchBarContainer, width: wp('80%')}}
                 onChangeText={(text) => setUserTagState({...userTagState, search: text})}/>

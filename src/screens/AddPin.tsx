@@ -316,6 +316,7 @@ const AddPin = ({ route, navigation }: any) => {
                         value={userTagState.search}
                         round={true}
                         autoCapitalize="none"
+                        autoCorrect={false}
                         lightTheme={theme === 'light'}
                         containerStyle={{...userSearchStyles.searchBarContainer, width: wp('80%')}}
                         onChangeText={(text) => setUserTagState({...userTagState, search: text})}/>

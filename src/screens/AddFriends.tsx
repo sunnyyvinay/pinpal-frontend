@@ -119,6 +119,7 @@ const AddFriends = ({ route, navigation }: any) => {
             value={state.search}
             round={true}
             autoCapitalize="none"
+            autoCorrect={false}
             lightTheme={theme === 'dark' ? false : true}
             containerStyle={userSearchStyles.searchBarContainer}
             onChangeText={(text) => setState({...state, search: text})}/>
