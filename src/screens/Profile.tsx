@@ -316,7 +316,8 @@ const styles = StyleSheet.create({
     borderRadius: hp('1%'),
     marginVertical: hp('0.5%'),
     marginHorizontal: wp('2.5%'),
-    alignSelf: 'center'
+    alignSelf: 'center',
+    backgroundColor: Colors.whiteGray
   },
   noPinsView: {
     width: '100%',
