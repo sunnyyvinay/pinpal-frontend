@@ -1,6 +1,6 @@
 import { Button, SearchBar } from '@rneui/themed';
 import React, { useEffect, useLayoutEffect, useState } from 'react'
-import { Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -47,6 +47,7 @@ const AddPin = ({ route, navigation }: any) => {
     let searchedUserCount: number = 0;
 
     const [error, setError] = useState<any>({title: "", caption: "", photo: ""});
+    const [loading, setLoading] = useState<boolean>(false); // For 'Add Pin' button
    
     // USE EFFECT: SEARCH USERS
     useEffect(() => {
@@ -265,9 +266,11 @@ const AddPin = ({ route, navigation }: any) => {
                             iconContainerStyle={{ marginLeft: wp('1%') }}
                             titleStyle={{ color: Colors.white, fontWeight: '700', fontFamily: 'ChunkFive' }}
                             buttonStyle={{...styles.buttonStyle, backgroundColor: theme === 'dark' ? Colors.mediumOrange : Colors.darkOrange}}
-                            containerStyle={styles.buttonContainerStyle} 
+                            containerStyle={styles.buttonContainerStyle}
+                            disabled={loading} 
                             onPress={
                                 async () => {
+                                    setLoading(true);
                                     try {
                                         if (pinData.title.length == 0 || pinData.title.length > 30) {
                                             setError({...error, title: "Title must be between 1 and 30 characters"});
@@ -292,9 +295,14 @@ const AddPin = ({ route, navigation }: any) => {
                                         }
                                     } catch (error) {
                                         console.log(error);
+                                    } finally {
+                                        setLoading(false);
                                     }
                                 }
-                            } /> 
+                            } />
+                            {loading ? 
+                            <ActivityIndicator size="large" color={Colors.mediumOrange} style={{marginTop: hp('2%')}}/>
+                            : null} 
                     </View>
                 )
         }

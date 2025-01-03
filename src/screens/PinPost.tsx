@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { addPinLike, deletePinLike, getPin, getPinLikes, getSearchUsers, getUser } from '../services/user.service';
-import { Dimensions, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Dimensions, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import * as Colors from '../constants/colors';
 import { Button, SearchBar } from '@rneui/themed';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -73,6 +73,7 @@ const PinPost = (props:any) => {
     });
 
     const [error, setError] = useState<any>({title: "", caption: "", photo: ""});
+    const [loading, setLoading] = useState<any>({editSave: false});
 
     const { width: screenWidth } = Dimensions.get('window');
 
@@ -605,8 +606,10 @@ const PinPost = (props:any) => {
           titleStyle={{ color: Colors.white, fontWeight: '500', fontFamily: 'ChunkFive', fontSize: 14 }}
           buttonStyle={styles.saveEditButton}
           containerStyle={styles.saveEditButtonContainer} 
+          disabled={loading.editSave}
           onPress={
               async () => {
+                  setLoading({...loading, editSave: true});
                   if (editedPinData.title.length === 0 || editedPinData.title.length > 50) {
                       setError({...error, title: "Title must be between 1 and 50 characters"});
                   } else if (editedPinData.caption.length > 250) {
@@ -625,10 +628,13 @@ const PinPost = (props:any) => {
                       setEditMode(false);
                     } catch (error) {
                       console.log(error);
+                    } finally {
+                      setLoading({...loading, editSave: false});
                     }
                   }
               }
           }/>
+          {loading.editSave ? <ActivityIndicator style={{marginRight: wp('1%')}} size="small" color={Colors.mediumOrange} /> : null}
       </View>
       : null
       }

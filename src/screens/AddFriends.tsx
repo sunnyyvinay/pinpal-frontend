@@ -111,7 +111,7 @@ const AddFriends = ({ route, navigation }: any) => {
                             style={{...userSearchStyles.searchUserPfp, borderColor: theme === 'dark' ? Colors.mediumOrange : Colors.darkOrange}} />
                         <View style={{...userSearchStyles.searchUserTextView}}>
                             <Text style={{...userSearchStyles.searchUserFullName, color: theme === 'dark' ? Colors.white : Colors.black}}>{user && user.full_name}</Text>
-                            <Text style={{...userSearchStyles.searchUserUsernameText, color: theme === 'dark' ? Colors.mediumGray : Colors.black}}>{user && user.username}</Text>
+                            <Text style={{...userSearchStyles.searchUserUsernameText}}>{user && user.username}</Text>
                         </View>
                     </View>
                 }

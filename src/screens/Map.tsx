@@ -232,7 +232,7 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
               title={personalPin.title} >
                 <Image source={require('../../assets/images/personal-pin.png')} style={{width: wp('5.5%'), height: hp('5.5%')}} resizeMode='contain' />
                 <Callout style={{...styles.pinCalloutStyle, height: hp('30%')}}>
-                  <View style={{...styles.pinCalloutView, backgroundColor: theme === "dark" ? Colors.darkBackground : Colors.white}}>
+                  <View style={{...styles.pinCalloutView}}>
                     <Text style={styles.pinCalloutTitle}>{personalPin.title}</Text>
                     <Image source={{uri: personalPin.photo}} style={styles.pinCalloutImage}/>
                   </View>

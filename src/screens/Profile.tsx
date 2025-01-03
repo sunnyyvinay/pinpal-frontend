@@ -177,7 +177,7 @@ useLayoutEffect(() => {
       </View>
 
       <View style={styles.statsContainer}>
-        <TouchableOpacity style={styles.statCard}>
+        <TouchableOpacity style={styles.statCard} onPress={() => {setTagged(false);}}>
           <Text style={styles.statTextNum}>{profileData.pins.length || 0}</Text>
           <Text style={styles.statTextLabel}>Pins</Text>
         </TouchableOpacity>

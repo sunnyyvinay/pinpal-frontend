@@ -53,11 +53,11 @@ function Journal({ route, navigation }: any): React.JSX.Element {
   );
 
   useLayoutEffect(() => {
-          navigation.setOptions({
-              headerStyle: {backgroundColor: theme == "dark" ? Colors.darkBackground : Colors.white},
-              headerTitleStyle: {color: theme == "dark" ? Colors.white : Colors.black},
-          });
-      }, [navigation, theme]);
+      navigation.setOptions({
+          headerStyle: {backgroundColor: theme == "dark" ? Colors.darkBackground : Colors.white},
+          headerTitleStyle: {color: theme == "dark" ? Colors.mediumOrange : Colors.darkOrange},
+      });
+  }, [navigation, theme]);
 
   return (
     <ScrollView style={{width: '100%', height: '100%', backgroundColor: theme == 'dark' ? Colors.darkBackground : Colors.white}}
@@ -78,7 +78,7 @@ function Journal({ route, navigation }: any): React.JSX.Element {
       </View>
 
       <View style={styles.statsContainer}>
-        <TouchableOpacity style={{...styles.statCard}}>
+        <TouchableOpacity style={{...styles.statCard}} onPress={() => {setTagged(false);}}>
           <Text style={{...styles.statTextNum}}>{journalData.pins.length}</Text>
           <Text style={{...styles.statTextLabel}}>Pins</Text>
         </TouchableOpacity>
