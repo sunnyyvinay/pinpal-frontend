@@ -3,8 +3,10 @@ import { RefreshControl, ScrollView, Text, TouchableOpacity, View, Image } from 
 import { getUser, getUserFriends, getPinLikes } from '../services/user.service';
 import * as Colors from '../constants/colors';
 import userListStyles from '../styles/userlist';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function UserList(props: any): React.JSX.Element {
+    const [theme, setTheme] = useState<string>("light");
     const [users, setUsers] = useState<any>([]);
     const [refreshing, setRefreshing] = useState<boolean>(false);
 
@@ -12,6 +14,7 @@ function UserList(props: any): React.JSX.Element {
         try {
             const user_id = props.route.params.id;
             const type = props.route.params.type;
+            setTheme(await AsyncStorage.getItem("theme") || "light");
             if (user_id) {
                 if (type == "Friends") {
                     let friendData = await getUserFriends(user_id);
@@ -59,7 +62,7 @@ function UserList(props: any): React.JSX.Element {
     }, []);
 
   return (
-    <ScrollView style={{width: '100%', height: '100%', backgroundColor: Colors.white}}
+    <ScrollView style={{width: '100%', height: '100%', backgroundColor: theme == "dark" ? Colors.darkBackground : Colors.white}}
         refreshControl={
             <RefreshControl
                 refreshing={refreshing}
@@ -75,7 +78,7 @@ function UserList(props: any): React.JSX.Element {
                         source={user.user.profile_pic ? {uri: user.user.profile_pic} : require('../../assets/images/default-pfp.jpg')} 
                         style={userListStyles.userPfp} />
                     <View style={userListStyles.userTextView}>
-                        <Text style={userListStyles.userFullName}>{user.user.full_name}</Text>
+                        <Text style={{...userListStyles.userFullName, color: theme == "dark" ? Colors.white : Colors.black}}>{user.user.full_name}</Text>
                         <Text style={userListStyles.userUsernameText}>{user.user.username}</Text>
                     </View>
                 </View>

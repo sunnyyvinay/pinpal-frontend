@@ -94,7 +94,7 @@ const AddFriends = ({ route, navigation }: any) => {
                                 console.error(error);
                             }
                         }}>
-                            <MaterialIcon name="cancel" size={wp('6%')} color={Colors.errorRed} />
+                            <MaterialIcon name="cancel" size={wp('6%')} color={theme === 'dark' ? Colors.lightRed : Colors.errorRed} />
                         </TouchableOpacity>
                     </View> 
                     :
@@ -127,7 +127,7 @@ const AddFriends = ({ route, navigation }: any) => {
         <ScrollView>
             { state.search.length === 0 ?
                 <View style={{flex: 1}}>
-                    { state && state.friend_requests && state.friend_requests.length > 0 ? <Text style={styles.friendRequestTitleText}>Friend Requests</Text> : null }
+                    { state && state.friend_requests && state.friend_requests.length > 0 ? <Text style={{...styles.friendRequestTitleText, color: theme === 'dark' ? Colors.whiteGray : Colors.black}}>Friend Requests</Text> : null }
                     { state && state.friend_requests && state.friend_requests.length > 0 && state.friend_requests.map((user: any) => (
                         userView(user, true)
                     ))}

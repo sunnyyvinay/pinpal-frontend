@@ -17,6 +17,7 @@ import { ImagePickerResponse, launchImageLibrary, MediaType } from 'react-native
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 const PinPost = (props:any) => {
+    const [theme, setTheme] = useState('light');
     const { pin_id, pin_user_id } = props.route.params;
     const [pinData, setPinData] = useState<any>({
       title: "",
@@ -77,6 +78,7 @@ const PinPost = (props:any) => {
     useEffect(() => {
       const getInfo = async () => {
         const user_id = await AsyncStorage.getItem("user_id");
+        setTheme(await AsyncStorage.getItem("theme") || "light");
         if (user_id) {
             setPersonal(user_id === pin_user_id);
         } else {
@@ -201,7 +203,7 @@ const PinPost = (props:any) => {
         onBackdropPress={() => {setEditPinVisibility(false); setPinActionModalVisible(false);}} 
         style={styles.pinActionModalStyle}>
           {editPinVisibility ?
-            (<View style={styles.pinActionModalView}>
+            (<View style={{...styles.pinActionModalView, backgroundColor: theme === 'dark' ? Colors.darkBackground : Colors.white}}>
               <TouchableOpacity style={styles.pinActionModelSubview}
                 onPress={async () => {
                   try {
@@ -213,8 +215,8 @@ const PinPost = (props:any) => {
                     console.error(error);
                   }
                 }}>
-                  <MaterialIcon name="lock" size={hp('2.5%')} style={{ flex: 0.25}}/>
-                  <Text style={{...styles.pinActionModelSubviewText, flex: 0.65}}>Private</Text>
+                  <MaterialIcon name="lock" size={hp('2.5%')} style={{ flex: 0.25}} color={theme === 'dark' ? Colors.white : Colors.black}/>
+                  <Text style={{...styles.pinActionModelSubviewText, flex: 0.65, color: theme === 'dark' ? Colors.white : Colors.black}}>Private</Text>
                   <Icon name="checkmark-sharp" size={hp('2.5%')} color={Colors.mediumOrange} style={pinData.visibility === 0 ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
               </TouchableOpacity>
               <View style={styles.horizontalLine} />
@@ -230,8 +232,8 @@ const PinPost = (props:any) => {
                     console.error(error);
                   }
                 }}>
-                  <MaterialIcon name="people-alt" size={hp('2.5%')} style={{ flex: 0.25}}/>
-                  <Text style={{...styles.pinActionModelSubviewText, flex: 0.65}}>Friends</Text>
+                  <MaterialIcon name="people-alt" size={hp('2.5%')} style={{ flex: 0.25}} color={theme === 'dark' ? Colors.white : Colors.black}/>
+                  <Text style={{...styles.pinActionModelSubviewText, flex: 0.65, color: theme === 'dark' ? Colors.white : Colors.black}}>Friends</Text>
                   <Icon name="checkmark-sharp" size={hp('2.5%')} color={Colors.mediumOrange} style={pinData.visibility === 1 ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
               </TouchableOpacity>
               <View style={styles.horizontalLine} />
@@ -247,20 +249,20 @@ const PinPost = (props:any) => {
                     console.error(error);
                   }
                 }}>
-                  <MaterialIcon name="public" size={hp('2.5%')} style={{ flex: 0.25}}/>
-                  <Text style={{...styles.pinActionModelSubviewText, flex: 0.65}}>Public</Text>
+                  <MaterialIcon name="public" size={hp('2.5%')} style={{ flex: 0.25}} color={theme === 'dark' ? Colors.white : Colors.black}/>
+                  <Text style={{...styles.pinActionModelSubviewText, flex: 0.65, color: theme === 'dark' ? Colors.white : Colors.black}}>Public</Text>
                   <Icon name="checkmark-sharp" size={hp('2.5%')} color={Colors.mediumOrange} style={pinData.visibility === 2 ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
               </TouchableOpacity>
           </View>) 
           :
-          (<View style={styles.pinActionModalView}>
+          (<View style={{...styles.pinActionModalView, backgroundColor: theme === 'dark' ? Colors.darkBackground : Colors.white}}>
               <TouchableOpacity style={styles.pinActionModelSubview}
                 onPress={() => {
                   setPinActionModalVisible(false);
                   setEditMode(true);
                 }}>
-                  <MaterialIcon name="edit" size={hp('2%')} color={Colors.black} />
-                  <Text style={styles.pinActionModelSubviewText}>Edit pin</Text>
+                  <MaterialIcon name="edit" size={hp('2%')} color={theme === 'dark' ? Colors.white : Colors.black} />
+                  <Text style={{...styles.pinActionModelSubviewText, color: theme === 'dark' ? Colors.white : Colors.black}}>Edit pin</Text>
               </TouchableOpacity>
               <View style={styles.horizontalLine} />
 
@@ -268,8 +270,8 @@ const PinPost = (props:any) => {
                 onPress={() => {
                   setEditPinVisibility(true);
                 }}>
-                  <MaterialIcon name="visibility" size={hp('2%')} color={Colors.black} />
-                  <Text style={styles.pinActionModelSubviewText}>Change visibility</Text>
+                  <MaterialIcon name="visibility" size={hp('2%')} color={theme === 'dark' ? Colors.white : Colors.black} />
+                  <Text style={{...styles.pinActionModelSubviewText, color: theme === 'dark' ? Colors.white : Colors.black}}>Change visibility</Text>
               </TouchableOpacity>
               <View style={styles.horizontalLine} />
 
@@ -283,8 +285,8 @@ const PinPost = (props:any) => {
                     console.error(error);
                   }
                 }}>
-                  <MaterialIcon name="delete-outline" size={20} color={Colors.errorRed} />
-                  <Text style={{...styles.pinActionModelSubviewText, color: Colors.errorRed}}>Delete pin</Text>
+                  <MaterialIcon name="delete-outline" size={20} color={theme === 'dark' ? Colors.lightRed : Colors.errorRed} />
+                  <Text style={{...styles.pinActionModelSubviewText, color: theme === 'dark' ? Colors.lightRed : Colors.errorRed}}>Delete pin</Text>
               </TouchableOpacity>
           </View>)
           }
@@ -299,8 +301,8 @@ const PinPost = (props:any) => {
         isVisible={editPinLocationTags} 
         onBackdropPress={() => setEditPinLocationTags(false)}
         style={styles.locationTagsModal} >
-        <View style={styles.locationTagsModalView}>
-            <Text style={styles.locationTagsModalTitle}>Select location tags</Text>
+        <View style={{...styles.locationTagsModalView, backgroundColor: theme === 'dark' ? Colors.darkBackground : Colors.white}}>
+            <Text style={{...styles.locationTagsModalTitle, color: theme === 'dark' ? Colors.white : Colors.black}}>Select location tags</Text>
             <View>
                 {locationTags.map((tag, index) => {
                     return (
@@ -315,7 +317,7 @@ const PinPost = (props:any) => {
                                     }
                                 }}>
                                 {getLocationTagIcon(tag)}
-                                <Text style={styles.locationTagsModalText}>{tag}</Text>
+                                <Text style={{...styles.locationTagsModalText, color: theme === 'dark' ? Colors.white : Colors.black}}>{tag}</Text>
                                 <Icon name="checkmark-sharp" size={hp('2.5%')} color={Colors.mediumOrange} style={editedPinData.location_tags.includes(tag) ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
                             </TouchableOpacity>
                             <View style={styles.horizontalLine} />
@@ -342,7 +344,7 @@ const PinPost = (props:any) => {
                     source={user.profile_pic ? {uri: user.profile_pic} : require('../../assets/images/default-pfp.jpg')} 
                     style={{...userSearchStyles.searchUserPfp}} />
                 <View style={{...userSearchStyles.searchUserTextView}}>
-                    <Text style={userSearchStyles.searchUserFullName}>{user.full_name}</Text>
+                    <Text style={{...userSearchStyles.searchUserFullName, color: theme === 'dark' ? Colors.white : Colors.black}}>{user.full_name}</Text>
                     <Text style={userSearchStyles.searchUserUsernameText}>{user.username}</Text>
                 </View>
             </View>
@@ -357,9 +359,9 @@ const PinPost = (props:any) => {
         isVisible={userTagState.modalVisible} 
         onBackdropPress={() => setUserTagState({...userTagState, modalVisible: false})}
         style={userTagsStyles.userTagsModal} >
-        <View style={userTagsStyles.userTagsModalView}>
+        <View style={{...userTagsStyles.userTagsModalView, backgroundColor: theme === 'dark' ? Colors.darkBackground : Colors.white}}>
             <View style={userTagsStyles.userTagsModalHeader}>
-                <Text style={userTagsStyles.userTagsModalTitle}>Tag Users</Text>
+                <Text style={{...userTagsStyles.userTagsModalTitle, color: theme === 'dark' ? Colors.white : Colors.black}}>Tag Users</Text>
                 <Entypo name="cross" size={hp('2.5%')} color={Colors.mediumGray} onPress={() => setUserTagState({...userTagState, modalVisible: false})} style={{position: 'absolute', left: wp('45%')}}/>
             </View>
             <SearchBar 
@@ -368,10 +370,10 @@ const PinPost = (props:any) => {
                 round={true}
                 autoCapitalize="none"
                 autoCorrect={false}
-                lightTheme={true}
+                lightTheme={theme === 'light'}
                 containerStyle={{...userSearchStyles.searchBarContainer, width: wp('80%')}}
                 onChangeText={(text) => setUserTagState({...userTagState, search: text})}/>
-            {userTagState.search.length === 0 && editedPinData.user_tags.length > 0 && <Text style={userTagsStyles.userTagsModalText}>Tagged</Text>}
+            {userTagState.search.length === 0 && editedPinData.user_tags.length > 0 && <Text style={{...userTagsStyles.userTagsModalText, color: theme === 'dark' ? Colors.white : Colors.black}}>Tagged</Text>}
             <ScrollView style={{width: '100%', flex: 1}}>
                 { userTagState.search.length > 0 ?
                     <View style={{flex: 0.8}}>
@@ -387,7 +389,7 @@ const PinPost = (props:any) => {
                                 source={user.profile_pic ? {uri: user.profile_pic} : require('../../assets/images/default-pfp.jpg')} 
                                 style={{...userSearchStyles.searchUserPfp}} />
                             <View style={{...userSearchStyles.searchUserTextView, flex: 0.9}}>
-                                <Text style={userSearchStyles.searchUserFullName}>{user.full_name}</Text>
+                                <Text style={{...userSearchStyles.searchUserFullName, color: theme === 'dark' ? Colors.white : Colors.black}}>{user.full_name}</Text>
                                 <Text style={userSearchStyles.searchUserUsernameText}>{user.username}</Text>
                             </View>
                             <TouchableOpacity style={{flex: 0.1, justifyContent: 'flex-end',marginRight: wp('2%')}} onPress={() => {
@@ -407,11 +409,11 @@ const PinPost = (props:any) => {
   }
 
   return (
-    <ScrollView style={{backgroundColor: Colors.white}}>
+    <ScrollView style={{backgroundColor: theme === 'dark' ? Colors.darkBackground : Colors.white}}>
       <View style={styles.topView}>
         <TouchableOpacity style={styles.userView} onPress={() =>props.navigation.navigate('Profile', {user_id: pinUserData.user_id})}>
           <Image source={pinUserData && pinUserData.profile_pic ? {uri: pinUserData.profile_pic} : require('../../assets/images/default-pfp.jpg')} style={styles.pfpImage} />
-          <Text style={styles.usernameText}>{pinUserData && pinUserData.username}</Text>
+          <Text style={{...styles.usernameText, color: theme === 'dark' ? Colors.white : Colors.black}}>{pinUserData && pinUserData.username}</Text>
         </TouchableOpacity>
 
         {personal && !editMode ? 
@@ -421,7 +423,7 @@ const PinPost = (props:any) => {
         : null}
       </View>
 
-      <View style={styles.postView}>
+      <View style={{...styles.postView, backgroundColor: theme === 'dark' ? Colors.darkBackground : Colors.white}}>
         {editMode ?
         <>
           <TextInput
@@ -429,12 +431,12 @@ const PinPost = (props:any) => {
               placeholder='Enter new pin title'
               autoCapitalize='none'
               onChangeText={text => {setEditedPinData({...editedPinData, title: text}); setError({...error, title: ""})}}
-              style={styles.editTitleInput}
+              style={{...styles.editTitleInput, color: theme === 'dark' ? Colors.white : Colors.black}}
           />
           {error.title != "" && <Text style={styles.errorText}>{error.title}</Text>}
         </>
           : 
-           <Text style={styles.pinTitleText}>{pinData && pinData.title}</Text>
+           <Text style={{...styles.pinTitleText, color: theme === 'dark' ? Colors.darkOrange : Colors.mediumOrange}}>{pinData && pinData.title}</Text>
         }
 
         <View style={styles.photosView}>
@@ -454,7 +456,7 @@ const PinPost = (props:any) => {
         <TextInput
           value={editedPinData && editedPinData.caption}
           placeholder="Write a caption..."
-          style={styles.editCaptionInput}
+          style={{...styles.editCaptionInput, color: theme === 'dark' ? Colors.white : Colors.black}}
           onChangeText={text => {setEditedPinData({...editedPinData, caption: text}); setError({...error, caption: ""})}}
           autoCapitalize="none"
           multiline={true}
@@ -464,8 +466,8 @@ const PinPost = (props:any) => {
         :
           <View style={styles.captionView}>
             <Text style={{textAlign: 'center'}}>
-              <Text style={styles.createDateText}>{formatTimestamp(pinData.create_date)}</Text>
-              <Text style={styles.captionText}>{pinData && pinData.caption ? " - \"" + pinData.caption + "\"" : null}</Text>
+              <Text style={{...styles.createDateText, color: theme === 'dark' ? Colors.mediumGray : Colors.darkGray}}>{formatTimestamp(pinData.create_date)}</Text>
+              <Text style={{...styles.captionText, color: theme === 'dark' ? Colors.white : Colors.black}}>{pinData && pinData.caption ? " - \"" + pinData.caption + "\"" : null}</Text>
             </Text>
           </View>
         }
@@ -568,12 +570,12 @@ const PinPost = (props:any) => {
               }
             }
           }}>
-            {likes.liked ? <Icon name="heart" size={hp('3%')} color={Colors.mediumOrange} /> : <Icon name="heart-outline" size={hp('3%')} color={Colors.black} />}
+            {likes.liked ? <Icon name="heart" size={hp('3%')} color={Colors.mediumOrange} /> : <Icon name="heart-outline" size={hp('3%')} color={theme === "dark" ? Colors.white : Colors.black} />}
           </TouchableOpacity>
           {likes.liked ? 
             <Text style={{...styles.likesText, color: Colors.mediumOrange}} onPress={() => {props.navigation.navigate('UserList', {id: pin_id, type: "Likes"})}}>{likes.count === 1 ? (likes.count + " like") : (likes.count + " likes")}</Text> 
             : 
-            <Text style={{...styles.likesText, color: Colors.black}} onPress={() => {props.navigation.navigate('UserList', {id: pin_id, type: "Likes"})}}>{likes.count === 0 ? "Like" : likes.count}</Text>}
+            <Text style={{...styles.likesText, color: theme === "dark" ? Colors.white : Colors.black}} onPress={() => {props.navigation.navigate('UserList', {id: pin_id, type: "Likes"})}}>{likes.count === 0 ? "Like" : likes.count === 1 ? (likes.count + " like") : (likes.count + " likes")}</Text>}
         </View>
         }
       </View>
@@ -689,7 +691,7 @@ const styles = StyleSheet.create({
     width: wp('100%'), 
     height: hp('40%'), 
     resizeMode: 'cover',
-    backgroundColor: Colors.whiteGray
+    backgroundColor: Colors.mediumGray
   },
   captionView: {
     borderWidth: 0,
@@ -764,7 +766,7 @@ const styles = StyleSheet.create({
     marginTop: hp('2%'),
   },
   cancelEditButton: {
-    backgroundColor: Colors.darkGray,
+    backgroundColor: Colors.mediumGray,
     borderColor: 'transparent',
     borderWidth: 0,
     borderRadius: hp('1%'),

@@ -14,6 +14,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 const bcrypt = require("bcryptjs");
 
 const Settings = ({ route, navigation }: any) => {
+    const [theme, setTheme] = useState('light');
     const [userData, setUserData] = useState<any>({});
     
     const [modal, setModal] = useState<number>(0);
@@ -94,6 +95,7 @@ const Settings = ({ route, navigation }: any) => {
         const fetchUserData = async () => {
             try {
                 const user_id  = await AsyncStorage.getItem("user_id");
+                setTheme(await AsyncStorage.getItem("theme") || "light");
                 if (user_id) {
                     const userData = await getUser(user_id);
                     setUserData(userData.user);
@@ -109,8 +111,8 @@ const Settings = ({ route, navigation }: any) => {
     }, []);
 
     return (
-        <ScrollView contentContainerStyle={styles.container}>
-            <Text style={styles.sectionTitle}>Account Information</Text>          
+        <ScrollView contentContainerStyle={{...styles.container, backgroundColor: theme == "dark" ? Colors.darkBackground : Colors.white}}>
+            <Text style={{...styles.sectionTitle, color: theme == "dark" ? Colors.white : Colors.black  }}>Account Information</Text>          
             
             <TouchableOpacity onPress={openImagePicker}>
                 <Image source={userData && userData.profile_pic && userData.profile_pic != "" ? {uri: userData.profile_pic} : require('../../assets/images/default-pfp.jpg')} style={styles.pfpImage} />
@@ -133,7 +135,7 @@ const Settings = ({ route, navigation }: any) => {
             </View>
             
             <TouchableOpacity 
-                style={styles.fieldView} 
+                style={{...styles.fieldView, backgroundColor: theme == "dark" ? Colors.mediumGray : Colors.lightGray}} 
                 onPress={() => {
                     setModal(1);
                 }}>
@@ -141,7 +143,7 @@ const Settings = ({ route, navigation }: any) => {
                     <Text style={{...styles.fieldText}}>
                         Username
                     </Text>
-                    <Text style={{...styles.fieldText, fontWeight: 'normal', color: Colors.mediumGray}}>
+                    <Text style={{...styles.fieldText, fontWeight: 'normal', color: theme == "dark" ? Colors.darkGray : Colors.mediumGray}}>
                         {userData && userData.username}
                     </Text>
                 </View>
@@ -149,7 +151,7 @@ const Settings = ({ route, navigation }: any) => {
             </TouchableOpacity>
 
             <TouchableOpacity 
-                style={styles.fieldView}
+                style={{...styles.fieldView, backgroundColor: theme =='dark' ? Colors.mediumGray : Colors.lightGray}}
                 onPress={() => {
                     setModal(2);
                 }}>
@@ -157,7 +159,7 @@ const Settings = ({ route, navigation }: any) => {
                     <Text style={{...styles.fieldText}}>
                         Full Name
                     </Text>
-                    <Text style={{...styles.fieldText, fontWeight: 'normal', color: Colors.mediumGray}}>
+                    <Text style={{...styles.fieldText, fontWeight: 'normal', color: theme == "dark" ? Colors.darkGray : Colors.mediumGray}}>
                         {userData && userData.full_name}
                     </Text>
                 </View>
@@ -165,7 +167,7 @@ const Settings = ({ route, navigation }: any) => {
             </TouchableOpacity>
 
             <TouchableOpacity 
-                style={styles.fieldView}
+                style={{...styles.fieldView, backgroundColor: theme =='dark' ? Colors.mediumGray : Colors.lightGray}}
                 onPress={() => {
                     setModal(3);
                 }}>
@@ -173,31 +175,31 @@ const Settings = ({ route, navigation }: any) => {
                     <Text style={{...styles.fieldText}}>
                         Birthday
                     </Text>
-                    <Text style={{...styles.fieldText, fontWeight: 'normal', color: Colors.mediumGray}}>
+                    <Text style={{...styles.fieldText, fontWeight: 'normal', color: theme == "dark" ? Colors.darkGray : Colors.mediumGray}}>
                         {userData && formatBirthday(userData.birthday)}
                     </Text>
                 </View>
                 <FeatherIcon name="edit-2" size={15} style={styles.fieldIcon} />
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.fieldView}>
+            <TouchableOpacity style={{...styles.fieldView, backgroundColor: theme =='dark' ? Colors.mediumGray : Colors.lightGray}}>
                 <View style={styles.textView}>
                     <Text style={{...styles.fieldText}}>
                         Phone Number
                     </Text>
-                    <Text style={{...styles.fieldText, fontWeight: 'normal', color: Colors.mediumGray}}>
+                    <Text style={{...styles.fieldText, fontWeight: 'normal', color: theme == "dark" ? Colors.darkGray : Colors.mediumGray}}>
                         {userData && userData.phone_no && userData.phone_no.substring(0, 2) + " " + userData.phone_no.substring(2, userData.phone_no.length)}
                     </Text>
                 </View>
             </TouchableOpacity>
 
             <TouchableOpacity 
-                style={styles.fieldView}
+                style={{...styles.fieldView, height: hp('5.5%'), backgroundColor: theme =='dark' ? Colors.mediumGray : Colors.lightGray}}
                 onPress={() => {
                     setModal(6);
                 }}>
-                <View style={styles.textView}>
-                    <Text style={{...styles.fieldText}}>
+                <View style={{...styles.textView}}>
+                    <Text style={{...styles.fieldText, flex: 1}}>
                         Change Your Password
                     </Text>
                 </View>
@@ -224,8 +226,8 @@ const Settings = ({ route, navigation }: any) => {
                     setNewUserData({...newUserData, username: userData.username});
                     setModal(0);
                 }}>
-                <View style={styles.modalView}>
-                    <Text style={styles.modalText}>Edit Username</Text>
+                <View style={{...styles.modalView, backgroundColor: theme == "dark" ? Colors.darkBackground : Colors.white}}>
+                    <Text style={{...styles.modalText, color: theme == "dark" ? Colors.white : Colors.black}}>Edit Username</Text>
                     <Input
                         value={newUserData.username}
                         placeholder='Enter new username'
@@ -233,7 +235,7 @@ const Settings = ({ route, navigation }: any) => {
                         errorMessage={error.username}
                         errorStyle={styles.errorTextStyle}
                         onChangeText={text => setNewUserData({...newUserData, username: text})}
-                        style={styles.modalInput}
+                        style={{...styles.modalInput, color: theme == "dark" ? Colors.white : Colors.black}}
                     />
                     <Button 
                         title="Save"
@@ -277,8 +279,8 @@ const Settings = ({ route, navigation }: any) => {
                     setNewUserData({...newUserData, full_name: userData.full_name});
                     setModal(0);
                 }}>
-                <View style={styles.modalView}>
-                    <Text style={styles.modalText}>Edit Full Name</Text>
+                <View style={{...styles.modalView, backgroundColor: theme == "dark" ? Colors.darkBackground : Colors.white}}>
+                    <Text style={{...styles.modalText, color: theme == "dark" ? Colors.white : Colors.black}}>Edit Full Name</Text>
                     <Input
                         value={newUserData.full_name}
                         placeholder='Enter new full name'
@@ -286,7 +288,7 @@ const Settings = ({ route, navigation }: any) => {
                         errorStyle={styles.errorTextStyle}
                         autoCapitalize='none'
                         onChangeText={text => setNewUserData({...newUserData, full_name: text})}
-                        style={styles.modalInput}
+                        style={{...styles.modalInput, color: theme == "dark" ? Colors.white : Colors.black}}
                     />
                     <Button 
                         title="Save"
@@ -329,8 +331,8 @@ const Settings = ({ route, navigation }: any) => {
                     setNewUserData({...newUserData, birthday: userData.birthday});
                     setModal(0);
                 }}>
-                <View style={styles.modalView}>
-                    <Text style={styles.modalText}>Edit Birthday</Text>
+                <View style={{...styles.modalView, backgroundColor: theme == "dark" ? Colors.darkBackground : Colors.white}}>
+                    <Text style={{...styles.modalText, color: theme == "dark" ? Colors.white : Colors.black}}>Edit Birthday</Text>
                     <DatePicker 
                         mode='date'
                         date={new Date(newUserData.birthday)}
@@ -380,8 +382,8 @@ const Settings = ({ route, navigation }: any) => {
                     setOldPass("");
                     setModal(0);
                 }}>
-                <View style={styles.modalView}>
-                    <Text style={styles.modalText}>Edit Password</Text>
+                <View style={{...styles.modalView, backgroundColor: theme == "dark" ? Colors.darkBackground : Colors.white}}>
+                    <Text style={{...styles.modalText, color: theme == "dark" ? Colors.white : Colors.black}}>Edit Password</Text>
                     <Input
                         value={oldPass}
                         placeholder='Enter old password'
@@ -390,7 +392,8 @@ const Settings = ({ route, navigation }: any) => {
                         autoCapitalize='none'
                         onChangeText={text => setOldPass(text)}
                         rightIcon={<Ionicons name={hiddenOldPass ? 'eye-outline' : 'eye-off-outline'} size={24} color="gray" onPress={() => setHiddenOldPass(!hiddenOldPass)} />}
-                        style={styles.modalInput}
+                        secureTextEntry={hiddenOldPass}
+                        style={{...styles.modalInput, color: theme == "dark" ? Colors.white : Colors.black}}
                     />
                     <Input
                         value={newUserData.pass}
@@ -400,6 +403,7 @@ const Settings = ({ route, navigation }: any) => {
                         autoCapitalize='none'
                         onChangeText={text => setNewUserData({...newUserData, pass: text})}
                         rightIcon={<Ionicons name={hiddenNewPass ? 'eye-outline' : 'eye-off-outline'} size={24} color="gray" onPress={() => setHiddenNewPass(!hiddenNewPass)} />}
+                        secureTextEntry={hiddenNewPass}
                         style={styles.modalInput}
                     />
                     <Button 
@@ -443,6 +447,8 @@ const Settings = ({ route, navigation }: any) => {
 
 const styles = StyleSheet.create({
     container: {
+        width: '100%',
+        height: '100%',
         alignContent: 'center',
         textAlign: 'center',
         alignItems: 'center',
@@ -460,7 +466,7 @@ const styles = StyleSheet.create({
         paddingVertical: hp('0.5%'),
         width: wp('95%'),
         backgroundColor: Colors.lightGray,
-        flex: 1,
+        height: hp('7%'),
         flexDirection: 'row',
         borderRadius: hp('1%'),
         marginBottom: hp('1.5%'),
@@ -492,7 +498,7 @@ const styles = StyleSheet.create({
         marginBottom: hp('1%'),
     },
     pfpOptionsView: {
-        flex: 1,
+        height: hp('7%'),
         flexDirection: 'row',
         justifyContent: 'space-evenly',
         alignItems: 'center',

@@ -11,6 +11,7 @@ import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-nativ
 import FontAwesome6Icon from 'react-native-vector-icons/FontAwesome6';
 
 function Profile(props: any): React.JSX.Element {
+  const [theme, setTheme] = useState('light');
   const [currUser, setCurrUser] = useState<string|null>("");
   const [userData, setUserData] = useState<any>({});
   const [friendStatus, setFriendStatus] = useState<number>(-1); // -1 for not friends, 0 for pending, 1 for friends, -2 for pending
@@ -34,6 +35,7 @@ function Profile(props: any): React.JSX.Element {
         const user_id  = props.route.params.user_id;
         const curr_user_id = await AsyncStorage.getItem("user_id");
         setCurrUser(curr_user_id);
+        setTheme(await AsyncStorage.getItem("theme") || "light");
         if (user_id) {
             const userData = await getUser(user_id);
             setUserData(userData.user);
@@ -91,7 +93,7 @@ function Profile(props: any): React.JSX.Element {
     if (props.route.params.user_id == currUser) {
       return (
         <TouchableOpacity 
-            style={{...styles.requestOpacity, backgroundColor: Colors.lightOrange}}
+            style={{...styles.requestOpacity, backgroundColor: theme == "dark" ? Colors.mediumOrange : Colors.lightOrange}}
             onPress={() => props.navigation.navigate("Settings")}>
             <MaterialIcons name='edit' size={hp('2%')} color={Colors.white} />
             <Text style={styles.requestText}>Edit Profile</Text>
@@ -103,7 +105,7 @@ function Profile(props: any): React.JSX.Element {
       case -1:
         return (
           <TouchableOpacity 
-            style={{...styles.requestOpacity, backgroundColor: Colors.lightOrange}}
+            style={{...styles.requestOpacity, backgroundColor: theme == "dark" ? Colors.mediumOrange : Colors.lightOrange}}
             onPress={ async () => {
               createFriendRequest(currUser, userData.user_id);
               setFriendStatus(0);
@@ -126,7 +128,7 @@ function Profile(props: any): React.JSX.Element {
       case 1:
         return (
           <TouchableOpacity 
-            style={{...styles.requestOpacity, backgroundColor: Colors.mediumOrange}}
+            style={{...styles.requestOpacity, backgroundColor: theme == "dark" ? Colors.darkOrange : Colors.mediumOrange}}
             onPress={ async () => {
               deleteFriendRequest(currUser, userData.user_id);
               setFriendStatus(-1);
@@ -137,7 +139,7 @@ function Profile(props: any): React.JSX.Element {
       case -2:
         return (
           <TouchableOpacity 
-            style={{...styles.requestOpacity, backgroundColor: Colors.lightOrange}}
+            style={{...styles.requestOpacity, backgroundColor: theme == "dark" ? Colors.mediumOrange : Colors.lightOrange}}
             onPress={async() => {
               acceptFriendRequest(currUser, userData.user_id);
               setFriendStatus(1);
@@ -150,7 +152,7 @@ function Profile(props: any): React.JSX.Element {
   }
 
   return (
-    <ScrollView style={{width: '100%', height: '100%', backgroundColor: Colors.white}}
+    <ScrollView style={{width: '100%', height: '100%', backgroundColor: theme == "dark" ? Colors.darkBackground : Colors.white}}
       refreshControl={
         <RefreshControl
           refreshing={refreshing}
@@ -162,7 +164,7 @@ function Profile(props: any): React.JSX.Element {
       <View style={styles.profileContainer}>
         <Image source={userData && userData.profile_pic && userData.profile_pic != "" ? {uri: userData.profile_pic} : require('../../assets/images/default-pfp.jpg')} style={styles.pfpImage} />
         <View style={styles.nameContainer}>
-          <Text style={styles.fullNameStyle}>{userData.full_name}</Text>
+          <Text style={{...styles.fullNameStyle, color: theme == "dark" ? Colors.white : Colors.black}}>{userData.full_name}</Text>
           <Text style={styles.usernameStyle}>@{userData.username}</Text>
         </View>
       </View>
@@ -177,9 +179,9 @@ function Profile(props: any): React.JSX.Element {
           <Text style={styles.statTextNum}>{profileData.friends.length || 0}</Text>
           <Text style={styles.statTextLabel}>Friends</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={{...styles.statCard, backgroundColor: tagged ? Colors.mediumOrange : Colors.whiteOrange}} onPress={() => setTagged(!tagged)}>
+        <TouchableOpacity style={{...styles.statCard, backgroundColor: tagged ? Colors.darkOrange : Colors.whiteOrange}} onPress={() => setTagged(!tagged)}>
           <Text style={{...styles.statTextNum, color: tagged ? Colors.white : Colors.black}}>{profileData.tagged_pins.length || 0}</Text>
-          <Text style={{...styles.statTextLabel, color: tagged ? Colors.white : Colors.black}}>Tagged Pins</Text>
+          <Text style={{...styles.statTextLabel, color: tagged ? Colors.white : Colors.darkGray}}>Tagged Pins</Text>
         </TouchableOpacity>
       </View>
 

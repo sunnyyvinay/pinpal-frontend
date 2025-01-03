@@ -10,6 +10,7 @@ import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-nativ
 import FontAwesome6Icon from 'react-native-vector-icons/FontAwesome6';
 
 function Journal({ route, navigation }: any): React.JSX.Element {
+  const [theme, setTheme] = useState('light');
   const [userData, setUserData] = useState<any>({});
   type JournalState = {
     pins: any[];
@@ -29,6 +30,7 @@ function Journal({ route, navigation }: any): React.JSX.Element {
   const fetchUserData = async () => {
     try {
       const user_id  = await AsyncStorage.getItem("user_id");
+      setTheme(await AsyncStorage.getItem("theme") || "light");
       if (user_id) {
           const userData = await getUser(user_id);
           setUserData(userData.user);
@@ -51,7 +53,7 @@ function Journal({ route, navigation }: any): React.JSX.Element {
   );
 
   return (
-    <ScrollView style={{width: '100%', height: '100%', backgroundColor: Colors.white}}
+    <ScrollView style={{width: '100%', height: '100%', backgroundColor: theme == 'dark' ? Colors.darkBackground : Colors.white}}
       refreshControl={
         <RefreshControl
           refreshing={refreshing}
@@ -63,29 +65,29 @@ function Journal({ route, navigation }: any): React.JSX.Element {
       <View style={styles.profileContainer}>
         <Image source={userData && userData.profile_pic && userData.profile_pic != "" ? {uri: userData.profile_pic} : require('../../assets/images/default-pfp.jpg')} style={styles.pfpImage} />
         <View style={styles.nameContainer}>
-          <Text style={styles.fullNameStyle}>{userData && userData.full_name}</Text>
+          <Text style={{...styles.fullNameStyle, color: theme == 'dark' ? Colors.white : Colors.black}}>{userData && userData.full_name}</Text>
           <Text style={styles.usernameStyle}>{userData && ('@' + userData.username)}</Text>
         </View>
       </View>
 
       <View style={styles.statsContainer}>
-        <TouchableOpacity style={styles.statCard}>
-          <Text style={styles.statTextNum}>{journalData.pins.length}</Text>
-          <Text style={styles.statTextLabel}>Pins</Text>
+        <TouchableOpacity style={{...styles.statCard}}>
+          <Text style={{...styles.statTextNum}}>{journalData.pins.length}</Text>
+          <Text style={{...styles.statTextLabel}}>Pins</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.statCard}
+        <TouchableOpacity style={{...styles.statCard}}
           onPress={() => navigation.navigate("UserList", {id: userData.user_id, type: "Friends"})}>
-          <Text style={styles.statTextNum}>{journalData.friends.length}</Text>
-          <Text style={styles.statTextLabel}>Friends</Text>
+          <Text style={{...styles.statTextNum}}>{journalData.friends.length}</Text>
+          <Text style={{...styles.statTextLabel}}>Friends</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={{...styles.statCard, backgroundColor: tagged ? Colors.mediumOrange : Colors.whiteOrange}} onPress={() => setTagged(!tagged)}>
+        <TouchableOpacity style={{...styles.statCard, backgroundColor: tagged ? Colors.darkOrange : Colors.whiteOrange}} onPress={() => setTagged(!tagged)}>
           <Text style={{...styles.statTextNum, color: tagged ? Colors.white : Colors.black}}>{journalData.tagged_pins.length}</Text>
-          <Text style={{...styles.statTextLabel, color: tagged ? Colors.white : Colors.black}}>Tagged Pins</Text>
+          <Text style={{...styles.statTextLabel, color: tagged ? Colors.white :Colors.darkGray}}>Tagged Pins</Text>
         </TouchableOpacity>
       </View>
 
       <TouchableOpacity 
-          style={styles.editButtonContainer}
+          style={{...styles.editButtonContainer, backgroundColor: theme == 'dark' ? Colors.mediumOrange : Colors.lightOrange}}
           onPress={() => navigation.navigate("Settings")}>
           <MaterialIcons name='edit' size={hp('2%')} color={Colors.white} style={{marginRight: wp('1%')}}/>
           <Text style={styles.editButtonText}>Edit Profile</Text>
@@ -222,7 +224,7 @@ const styles = StyleSheet.create({
     marginVertical: hp('0.5%'),
     marginHorizontal: wp('2.5%'),
     alignSelf: 'center',
-    backgroundColor: Colors.whiteGray,
+    backgroundColor: Colors.mediumGray,
   },
   noPinsView: {
     width: '100%',

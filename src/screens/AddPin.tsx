@@ -223,12 +223,12 @@ const AddPin = ({ route, navigation }: any) => {
                             {error.caption != "" && <Text style={styles.errorText}>{error.caption}</Text>}
                         </View>
 
-                        <TouchableOpacity onPress={() => {setVisibilityModal(true)}} style={{...styles.visibilityInputView, backgroundColor: theme === 'dark' ? Colors.mediumGray : Colors.whiteGray}}>
+                        <TouchableOpacity onPress={() => {setVisibilityModal(true)}} style={{...styles.visibilityInputView}}>
                             <Text style={{...styles.visibilityTitleText, fontWeight: '700'}}>Visibility</Text>
                             <Text style={styles.visibilityText}>{getVisibilityString(pinData.visibility)}</Text>
                         </TouchableOpacity>
 
-                        <TouchableOpacity onPress={() => {setUserTagState({...userTagState,modalVisible: true, search: "", queryUsers: []})}} style={{...styles.userTagsInputView, backgroundColor: theme === 'dark' ? Colors.mediumGray : Colors.whiteGray}}>
+                        <TouchableOpacity onPress={() => {setUserTagState({...userTagState,modalVisible: true, search: "", queryUsers: []})}} style={{...styles.userTagsInputView}}>
                             <Text style={{...styles.visibilityTitleText, fontWeight: '700'}}>Tagged Users</Text>
                             <Text style={styles.userTagsText}>{userTagDisplayText()}</Text>
                         </TouchableOpacity>  
@@ -495,7 +495,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         marginTop: hp('2%'),
-        backgroundColor: Colors.whiteGray,
+        backgroundColor: Colors.whiteOrange,
     },
     visibilityTitleText: {
         fontSize: 13,
@@ -609,7 +609,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         marginTop: hp('3%'),
-        backgroundColor: Colors.whiteGray,
+        backgroundColor: Colors.whiteOrange,
     },
     userTagsTitleText: {
         color: Colors.black,

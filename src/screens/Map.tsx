@@ -205,7 +205,7 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
                     source={user.profile_pic ? {uri: user.profile_pic} : require('../../assets/images/default-pfp.jpg')} 
                     style={{...userSearchStyles.searchUserPfp}} />
                 <View style={{...userSearchStyles.searchUserTextView}}>
-                    <Text style={userSearchStyles.searchUserFullName}>{user.full_name}</Text>
+                    <Text style={{...userSearchStyles.searchUserFullName, color: theme == "dark" ? Colors.white : Colors.black}}>{user.full_name}</Text>
                     <Text style={userSearchStyles.searchUserUsernameText}>{user.username}</Text>
                 </View>
             </View>
@@ -225,7 +225,7 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
               title={personalPin.title} >
                 <Image source={require('../../assets/images/personal-pin.png')} style={{width: wp('5.5%'), height: hp('5.5%')}} resizeMode='contain' />
                 <Callout style={{...styles.pinCalloutStyle, height: hp('30%')}}>
-                  <View style={styles.pinCalloutView}>
+                  <View style={{...styles.pinCalloutView, backgroundColor: theme === "dark" ? Colors.darkBackground : Colors.white}}>
                     <Text style={styles.pinCalloutTitle}>{personalPin.title}</Text>
                     <Image source={{uri: personalPin.photo}} style={styles.pinCalloutImage}/>
                   </View>
@@ -262,7 +262,7 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
               title={friendPin.title} >
                 <Image source={require('../../assets/images/friend-pin.png')} style={{width: wp('5.5%'), height: hp('5.5%')}} resizeMode='contain' />
                 <Callout style={styles.pinCalloutStyle}>
-                  <View style={styles.pinCalloutView}>
+                  <View style={{...styles.pinCalloutView}}>
                     <Text style={styles.pinCalloutTitle}>{friendPin.title}</Text>
                     <Text style={styles.pinCalloutUsername}>@{friend.user.username}</Text>
                     <Image source={{uri: friendPin.photo}} style={styles.pinCalloutImage}/>
@@ -313,7 +313,7 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
           <Marker 
             key={0}
             coordinate={{latitude: changingRegion.latitude, longitude: changingRegion.longitude}} 
-            opacity={0.7}>
+            opacity={theme == 'dark' ? 0.9 : 0.7}>
               <Image source={require('../../assets/images/personal-pin.png')} style={{width: wp('5.5%'), height: hp('5.5%')}} resizeMode='contain' />
           </Marker>
         );
@@ -323,7 +323,7 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
           <Marker 
             key={0}
             coordinate={{latitude: changingRegion.latitude, longitude: changingRegion.longitude}} 
-            opacity={0.7}>
+            opacity={theme == 'dark' ? 0.9 : 0.7}>
               <Image source={require('../../assets/images/personal-pin.png')} style={{width: wp('5.5%'), height: hp('5.5%')}} resizeMode='contain' />
           </Marker>
         );   
@@ -385,9 +385,9 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
 
   return (
     <View style={{width: wp('100%'), height: hp('100%')}}>
-      <View style={styles.filterView}>
+      <View style={{...styles.filterView, backgroundColor: theme == 'dark' ? Colors.darkBackground : Colors.white}}>
         <TouchableOpacity style={styles.filterIcon} onPress={() => {if (dragMode.mode == 0) {setTempFilterState({...filterState}); setPinFilterModalVisible(true);}}}>
-          <Icon name="filter-circle" size={wp('8%')} color={Colors.lightOrange} />
+          <Icon name="filter-circle" size={wp('8%')} color={theme == 'dark' ? Colors.mediumOrange : Colors.lightOrange} />
         </TouchableOpacity>
         <View style={styles.verticalLine} />
         {filterState.location_tag ? 
@@ -426,16 +426,16 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
 
       <View style={styles.mapControlView}>
         {userFilterState.on ?
-          <TouchableOpacity style={styles.mapControlButton} onPress={() => {if (dragMode.mode == 0) setUserFilterState({modalVisible: false, search: "", queryUsers: [], on: false, user: ""})}}>
+          <TouchableOpacity style={{...styles.mapControlButton, backgroundColor: theme == 'dark' ? Colors.darkBackground : Colors.white}} onPress={() => {if (dragMode.mode == 0) setUserFilterState({modalVisible: false, search: "", queryUsers: [], on: false, user: ""})}}>
             <MaterialIcon name="search-off" size={wp('6%')} color={Colors.lightOrange} />
           </TouchableOpacity>
         :
-          <TouchableOpacity style={styles.mapControlButton} onPress={() => {if (dragMode.mode == 0) setUserFilterState({...userFilterState, modalVisible: true})}}>
-            <MaterialIcon name="person-search" size={wp('6%')} color={Colors.lightOrange} />
+          <TouchableOpacity style={{...styles.mapControlButton, backgroundColor: theme == 'dark' ? Colors.darkBackground : Colors.white}} onPress={() => {if (dragMode.mode == 0) setUserFilterState({...userFilterState, modalVisible: true})}}>
+            <MaterialIcon name="person-search" size={wp('6%')} color={theme == 'dark' ? Colors.mediumOrange : Colors.lightOrange} />
           </TouchableOpacity>
         }
-        <TouchableOpacity style={styles.mapControlButton} onPress={setCurrentLocation}>
-          <FontAwesome6 name="location-arrow" size={wp('6%')} color={Colors.lightOrange} />
+        <TouchableOpacity style={{...styles.mapControlButton, backgroundColor: theme == 'dark' ? Colors.darkBackground : Colors.white}} onPress={setCurrentLocation}>
+          <FontAwesome6 name="location-arrow" size={wp('6%')} color={theme == 'dark' ? Colors.mediumOrange : Colors.lightOrange} />
         </TouchableOpacity>
       </View>
       
@@ -445,8 +445,8 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
         isVisible={pinFilterModalVisible} 
         onBackdropPress={() => {setFilterState(tempFilterState); setPinFilterModalVisible(false)}}
         style={styles.pinFilterModal}>
-        <View style={styles.pinFilterModalView}>
-          <Text style={styles.pinFilterModalTitle}>Filter pins</Text>
+        <View style={{...styles.pinFilterModalView, backgroundColor: theme == 'dark' ? Colors.darkBackground : Colors.white}}>
+          <Text style={{...styles.pinFilterModalTitle, color: theme == 'dark' ? Colors.white : Colors.black}}>Filter pins</Text>
             <TouchableOpacity 
               style={styles.filterVisibilityOpacity}
               onPress={() => {
@@ -456,8 +456,8 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
                     setTempFilterState({...tempFilterState, private: true});
                   }
               }}>
-              <MaterialIcon name="lock" size={wp('6%')} style={{ flex: 0.25}}/>
-              <Text style={{...styles.filterVisibilityText, flex: 0.65}}>Personal</Text>
+              <MaterialIcon name="lock" size={wp('6%')} style={{ flex: 0.25}} color={theme == 'dark' ? Colors.white : Colors.black}/>
+              <Text style={{...styles.filterVisibilityText, flex: 0.65, color: theme == 'dark' ? Colors.white : Colors.black}}>Personal</Text>
               <Icon name="checkmark-sharp" size={wp('6%')} color={Colors.mediumOrange} style={tempFilterState.private ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
             </TouchableOpacity>
             <View style={styles.horizontalLine} />
@@ -471,8 +471,8 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
                     setTempFilterState({...tempFilterState, friends: true});
                   }
               }}>
-              <MaterialIcon name="people-alt" size={wp('6%')} style={{ flex: 0.25}}/>
-              <Text style={{...styles.filterVisibilityText, flex: 0.65}}>Friends</Text>
+              <MaterialIcon name="people-alt" size={wp('6%')} style={{ flex: 0.25}} color={theme == 'dark' ? Colors.white : Colors.black}/>
+              <Text style={{...styles.filterVisibilityText, flex: 0.65, color: theme == 'dark' ? Colors.white : Colors.black}}>Friends</Text>
               <Icon name="checkmark-sharp" size={wp('6%')} color={Colors.mediumOrange} style={tempFilterState.friends ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
             </TouchableOpacity>
             <View style={styles.horizontalLine} />
@@ -486,8 +486,8 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
                     setTempFilterState({...tempFilterState, public: true});
                   }
               }}>
-              <MaterialIcon name="public" size={wp('6%')} style={{ flex: 0.25}}/>
-              <Text style={{...styles.filterVisibilityText, flex: 0.65}}>Public</Text>
+              <MaterialIcon name="public" size={wp('6%')} style={{ flex: 0.25}} color={theme == 'dark' ? Colors.white : Colors.black}/>
+              <Text style={{...styles.filterVisibilityText, flex: 0.65, color: theme == 'dark' ? Colors.white : Colors.black}}>Public</Text>
               <Icon name="checkmark-sharp" size={wp('6%')} color={Colors.mediumOrange} style={tempFilterState.public ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
             </TouchableOpacity>
           </View>
@@ -497,9 +497,9 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
         isVisible={userFilterState.modalVisible} 
         onBackdropPress={() => setUserFilterState({...userFilterState, modalVisible: false})}
         style={userTagsStyles.userTagsModal}>
-        <View style={userTagsStyles.userTagsModalView}>
+        <View style={{...userTagsStyles.userTagsModalView, backgroundColor: theme == 'dark' ? Colors.darkBackground : Colors.white}}>
             <View style={userTagsStyles.userTagsModalHeader}>
-                <Text style={userTagsStyles.userTagsModalTitle}>Filter by user</Text>
+                <Text style={{...userTagsStyles.userTagsModalTitle, color: theme == 'dark' ? Colors.white : Colors.black}}>Filter by user</Text>
                 <Entypo name="cross" size={wp('6%')} color={Colors.mediumGray} onPress={() => setUserFilterState({...userFilterState, modalVisible: false})} style={{position: 'absolute', left: wp('50%')}}/>
             </View>
             <SearchBar 
@@ -508,7 +508,7 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
                 round={true}
                 autoCapitalize="none"
                 autoCorrect={false}
-                lightTheme={true}
+                lightTheme={theme == 'light'}
                 containerStyle={{...userSearchStyles.searchBarContainer, width: wp('80%')}}
                 onChangeText={(text) => setUserFilterState({...userFilterState, search: text})}/>
             <ScrollView style={{width: wp('100%'), flex: 1}}>
@@ -569,7 +569,6 @@ const styles = StyleSheet.create({
     height: hp('20%'),
     borderRadius: hp('1%'),
     resizeMode: 'center',
-    backgroundColor: Colors.whiteGray
   },
   pinCalloutViewButton: {
     backgroundColor: Colors.darkOrange,
