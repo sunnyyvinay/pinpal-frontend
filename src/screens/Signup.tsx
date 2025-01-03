@@ -69,7 +69,8 @@ const Signup = ({navigation}: {navigation: any}) => {
                             date={birthday}
                             onDateChange={(date: Date) => {setBirthday(date); setError("")}}
                             maximumDate={new Date()}
-                            modal={false} />
+                            modal={false} 
+                            theme="light"/>
                         {error === "birthday" && <Text style={styles.errorText}>You must be 13 years or older</Text>}                  
                     </View>
                 )
@@ -81,8 +82,10 @@ const Signup = ({navigation}: {navigation: any}) => {
                             value={fullName}
                             style={styles.input}
                             placeholder="Enter your full name"
+                            placeholderTextColor={Colors.mediumGray}
                             onChangeText={(text: string) => {setFullName(text); setError("")}} 
-                            autoCapitalize='none' />
+                            autoCapitalize='none' 
+                            autoCorrect={false} />
                     </View>
                     {error === "full_name" && <Text style={styles.errorText}>Please enter a full name</Text>}
                     {error === "full_name_long" && <Text style={styles.errorText}>Make sure your full name is less than 50 characters</Text>}
@@ -97,8 +100,10 @@ const Signup = ({navigation}: {navigation: any}) => {
                             value={username}
                             style={styles.input}
                             placeholder="Make a username"
+                            placeholderTextColor={Colors.mediumGray}
                             onChangeText={(text: string) => {setUsername(text); setError("")}} 
-                            autoCapitalize='none' />
+                            autoCapitalize='none' 
+                            autoCorrect={false} />
                     </View>
                     {error === "username_long" && <Text style={styles.errorText}>Make sure your username is between 5 and 25 characters</Text>}
                     {error === "username_badchar" && <Text style={styles.errorText}>Make sure your username only contains letters, numbers, periods, and underscores</Text>}
@@ -112,9 +117,12 @@ const Signup = ({navigation}: {navigation: any}) => {
                         <TextInput
                             style={styles.input}
                             placeholder="Make a password"
+                            placeholderTextColor={Colors.mediumGray}
                             secureTextEntry={hiddenPass}
                             onChangeText={(text: string) => {setPassword(text); setError("")}}
                             value={password}
+                            autoCorrect={false}
+                            autoCapitalize='none'
                         />
                         <Ionicon
                             name={hiddenPass ? 'eye-outline' : 'eye-off-outline'}
@@ -127,9 +135,12 @@ const Signup = ({navigation}: {navigation: any}) => {
                         <TextInput
                             style={styles.input}
                             placeholder="Confirm your password"
+                            placeholderTextColor={Colors.mediumGray}
                             secureTextEntry={hiddenConfirmPass}
                             onChangeText={(text: string) => {setConfirmPassword(text); setError("")}}
                             value={confirmPassword}
+                            autoCorrect={false}
+                            autoCapitalize='none'
                         />
                         <Ionicon
                             name={hiddenConfirmPass ? 'eye-outline' : 'eye-off-outline'}

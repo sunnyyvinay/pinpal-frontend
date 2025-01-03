@@ -64,7 +64,7 @@ const AddFriends = ({ route, navigation }: any) => {
     const userView = (user: any, request: boolean) => {
         searchedUserCount--;
         return (
-            <TouchableOpacity onPress={() => navigation.navigate("Profile", {user_id: user.user_id})} key={searchedUserCount}>
+            <TouchableOpacity onPress={() => navigation.push("Profile", {user_id: user.user_id})} key={searchedUserCount}>
                 { request ?
                     <View style={userSearchStyles.searchUserView}>
                         <Image 

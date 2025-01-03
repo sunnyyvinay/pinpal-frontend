@@ -243,7 +243,7 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
                     </CalloutSubview>
                     
                     <CalloutSubview style={{flex: 0.5, justifyContent: 'center', alignItems: 'center'}}
-                        onPress={() => { navigation.navigate("Pin detail", { pin_id: personalPin.pin_id, pin_user_id: personalPin.user_id })}}>
+                        onPress={() => { navigation.push("Pin detail", { pin_id: personalPin.pin_id, pin_user_id: personalPin.user_id })}}>
                       <View style={styles.pinCalloutViewButton}>
                         <Text style={styles.pinCalloutViewButtonText}>View</Text>
                       </View>
@@ -270,7 +270,7 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
 
                   <View style={{justifyContent: 'center', alignItems: 'center', flex: 1}}>
                     <CalloutSubview style={{justifyContent: 'center', alignItems: 'center'}}
-                        onPress={() => { navigation.navigate("Pin detail", { pin_id: friendPin.pin_id, pin_user_id: friendPin.user_id })}}>
+                        onPress={() => { navigation.push("Pin detail", { pin_id: friendPin.pin_id, pin_user_id: friendPin.user_id })}}>
                       <View style={styles.pinCalloutViewButton}>
                         <Text style={styles.pinCalloutViewButtonText}>View</Text>
                       </View>
@@ -296,7 +296,7 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
 
                   <View style={{justifyContent: 'space-evenly', alignItems: 'center', flex: 1, flexDirection: 'row'}}>
                     <CalloutSubview style={{flex: 0.5, justifyContent: 'center', alignItems: 'center'}}
-                        onPress={() => { navigation.navigate("Pin detail", { pin_id: publicPin.pin_id, pin_user_id: publicPin.user_id })}}>
+                        onPress={() => { navigation.push("Pin detail", { pin_id: publicPin.pin_id, pin_user_id: publicPin.user_id })}}>
                       <View style={styles.pinCalloutViewButton}>
                         <Text style={styles.pinCalloutViewButtonText}>View</Text>
                       </View>

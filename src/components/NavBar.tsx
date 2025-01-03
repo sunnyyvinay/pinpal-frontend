@@ -9,6 +9,7 @@ import { Image, StyleSheet, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ContextProvider } from '../AppContext';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 const Tab = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = 'Map';
@@ -23,19 +24,11 @@ function NavBar({ route, navigation }: any): React.JSX.Element {
 
   const [theme, setTheme] = React.useState('light');
     useEffect(() => {
-        const getTheme = async () => {
-            setTheme(await AsyncStorage.getItem('theme') || 'light');
-        }
-        getTheme();
+      const getTheme = async () => {
+          setTheme(await AsyncStorage.getItem('theme') || 'light');
+      }
+      getTheme();
     })
-
-  const addFriendsIcon = () => {
-    return (
-      <TouchableOpacity onPress={() => navigation.navigate("Add Friends")}> 
-        <Image source={require('../../assets/images/add-friends-icon.png')} style={{...styles.addFriendsButton, tintColor: theme === "dark" ? Colors.white : Colors.black}}/> 
-      </TouchableOpacity>
-    )
-  }
 
   return (
     <ContextProvider>
@@ -49,7 +42,7 @@ function NavBar({ route, navigation }: any): React.JSX.Element {
             tabBarIcon: ({ color, size }) => (
                 <Icon name="compass" color={color} size={size} />
             ),
-            headerLeft: () => (addFriendsIcon()),
+            headerLeft: () => <Icon name="people-outline" size={wp('8%')} style={styles.addFriendsButton} onPress={() => navigation.navigate("Add Friends")} color={theme === "dark" ? Colors.white : Colors.black}/>,
             headerTitle: () => <Image source={require('../../assets/images/full-logo.png')} style={styles.headerTitle}/>,
             headerRight: () => <Icon name="settings-outline" size={wp('8%')} style={styles.settingsButton} onPress={() => navigation.navigate("Settings")} color={theme === "dark" ? Colors.white : Colors.black}/>,
             headerStyle: {backgroundColor: theme === "dark" ? Colors.darkBackground : Colors.white}
@@ -69,9 +62,9 @@ function NavBar({ route, navigation }: any): React.JSX.Element {
             tabBarIcon: ({ color, size }) => (
                 <Icon name="journal" color={color} size={size} />
             ),
-            headerLeft: () => (addFriendsIcon()),
+            headerLeft: () => <Icon name="people-outline" size={wp('8%')} style={styles.addFriendsButton} onPress={() => navigation.navigate("Add Friends")} color={theme === "dark" ? Colors.white : Colors.black}/>,
             headerTitle: "My Journal",
-            headerTitleStyle: {color: theme === "dark" ? Colors.white : Colors.black},
+            headerTitleStyle: {color: theme === "dark" ? Colors.darkOrange : Colors.black},
             headerRight: () => <Icon name="settings-outline" size={wp('8%')} style={styles.settingsButton} onPress={() => navigation.navigate("Settings")} color={theme === "dark" ? Colors.white : Colors.black}/>,
             headerStyle: {backgroundColor: theme === "dark" ? Colors.darkBackground : Colors.white}
         }}
@@ -82,18 +75,14 @@ function NavBar({ route, navigation }: any): React.JSX.Element {
 }
 
 const styles = StyleSheet.create({
-  addFriendsButton: {
-    flex: 1,
-    width: wp('8%'),
-    height: wp('8%'),
-    resizeMode: 'contain',
-    marginLeft: wp('4%')
-  },
   headerTitle: {
     flex: 1,
     width: wp('25%'),
     height: wp('25%'),
     resizeMode: 'contain',
+  },
+  addFriendsButton: {
+    marginLeft: wp('4%')
   },
   settingsButton: {
     marginRight: wp('4%')

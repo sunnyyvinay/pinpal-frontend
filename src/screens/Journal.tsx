@@ -76,7 +76,7 @@ function Journal({ route, navigation }: any): React.JSX.Element {
           <Text style={{...styles.statTextLabel}}>Pins</Text>
         </TouchableOpacity>
         <TouchableOpacity style={{...styles.statCard}}
-          onPress={() => navigation.navigate("UserList", {id: userData.user_id, type: "Friends"})}>
+          onPress={() => navigation.push("UserList", {id: userData.user_id, type: "Friends"})}>
           <Text style={{...styles.statTextNum}}>{journalData.friends.length}</Text>
           <Text style={{...styles.statTextLabel}}>Friends</Text>
         </TouchableOpacity>
@@ -104,7 +104,7 @@ function Journal({ route, navigation }: any): React.JSX.Element {
         }
         {!tagged && journalData.pins.length != 0 && journalData.pins.map((pin: any) => {
           return (
-            <TouchableOpacity key={pin.pin_id} onPress={() => navigation.navigate("Pin detail", {pin_id: pin.pin_id, pin_user_id: pin.user_id})}>
+            <TouchableOpacity key={pin.pin_id} onPress={() => navigation.push("Pin detail", {pin_id: pin.pin_id, pin_user_id: pin.user_id})}>
               <Image source={{uri: pin.photo}} style={styles.journalPinImage} />
             </TouchableOpacity>
           )
@@ -118,7 +118,7 @@ function Journal({ route, navigation }: any): React.JSX.Element {
         }
         {tagged && journalData.tagged_pins.length != 0 && journalData.tagged_pins.map((pin: any) => {
           return (
-            <TouchableOpacity key={pin.pin_id} onPress={() => navigation.navigate("Pin detail", {pin_id: pin.pin_id, pin_user_id: pin.user_id})}>
+            <TouchableOpacity key={pin.pin_id} onPress={() => navigation.push("Pin detail", {pin_id: pin.pin_id, pin_user_id: pin.user_id})}>
               <Image source={{uri: pin.photo}} style={styles.journalPinImage} />
             </TouchableOpacity>
           )

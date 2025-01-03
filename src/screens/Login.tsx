@@ -29,19 +29,23 @@ const Login = ({navigation}: {navigation: any}) => {
           <TextInput
             style={styles.input}
             placeholder="Enter username"
+            placeholderTextColor={Colors.mediumGray}
             onChangeText={(text: string) => {setUsername(text); setLoginError(false)}}
             value={username}
             autoCapitalize="none"
+            autoCorrect={false}
           />
         </View>
         <View style={{...styles.inputContainer, borderColor: loginError ? Colors.errorRed : "gray"}}>
           <TextInput
             style={styles.input}
             placeholder="Enter your password"
+            placeholderTextColor={Colors.mediumGray}
             secureTextEntry={hiddenPass}
             onChangeText={(text: string) => {setPassword(text); setLoginError(false)}}
             value={password}
             autoCapitalize="none"
+            autoCorrect={false}
           />
           <Ionicon
             name={hiddenPass ? 'eye-outline' : 'eye-off-outline'}

@@ -411,7 +411,7 @@ const PinPost = (props:any) => {
   return (
     <ScrollView style={{backgroundColor: theme === 'dark' ? Colors.darkBackground : Colors.white}}>
       <View style={styles.topView}>
-        <TouchableOpacity style={styles.userView} onPress={() =>props.navigation.navigate('Profile', {user_id: pinUserData.user_id})}>
+        <TouchableOpacity style={styles.userView} onPress={() =>props.navigation.push('Profile', {user_id: pinUserData.user_id})}>
           <Image source={pinUserData && pinUserData.profile_pic ? {uri: pinUserData.profile_pic} : require('../../assets/images/default-pfp.jpg')} style={styles.pfpImage} />
           <Text style={{...styles.usernameText, color: theme === 'dark' ? Colors.white : Colors.black}}>{pinUserData && pinUserData.username}</Text>
         </TouchableOpacity>
@@ -486,7 +486,7 @@ const PinPost = (props:any) => {
             onPress={() => {setUserTagState({...userTagState, modalVisible: true})}} />  
             {userTagState && userTagState.editedTaggedUsers && userTagState.editedTaggedUsers.length > 0 && userTagState.editedTaggedUsers.map((user:any, index:number) => {
               return (
-                <TouchableOpacity style={styles.taggedUserIndivView} key={index} onPress={() => props.navigation.navigate('Profile', {user_id: user.user_id})}>
+                <TouchableOpacity style={styles.taggedUserIndivView} key={index} onPress={() => props.navigation.push('Profile', {user_id: user.user_id})}>
                   <Image source={user.profile_pic ? {uri: user.profile_pic} : require('../../assets/images/default-pfp.jpg')} style={styles.taggedUserPfp} />
                   <Text style={styles.taggedUserText}>{user.username}</Text>
                 </TouchableOpacity>
@@ -499,7 +499,7 @@ const PinPost = (props:any) => {
         <View style={styles.locationTagsButtonView}>
         {userTagState && userTagState.taggedUsers && userTagState.taggedUsers.length > 0 && userTagState.taggedUsers.map((user:any, index:number) => {
             return (
-              <TouchableOpacity style={styles.taggedUserIndivView} key={index} onPress={() => props.navigation.navigate('Profile', {user_id: user.user_id})}>
+              <TouchableOpacity style={styles.taggedUserIndivView} key={index} onPress={() => props.navigation.push('Profile', {user_id: user.user_id})}>
                 <Image source={user.profile_pic ? {uri: user.profile_pic} : require('../../assets/images/default-pfp.jpg')} style={styles.taggedUserPfp} />
                 <Text style={styles.taggedUserText}>{user.username}</Text>
               </TouchableOpacity>
@@ -573,9 +573,9 @@ const PinPost = (props:any) => {
             {likes.liked ? <Icon name="heart" size={hp('3%')} color={Colors.mediumOrange} /> : <Icon name="heart-outline" size={hp('3%')} color={theme === "dark" ? Colors.white : Colors.black} />}
           </TouchableOpacity>
           {likes.liked ? 
-            <Text style={{...styles.likesText, color: Colors.mediumOrange}} onPress={() => {props.navigation.navigate('UserList', {id: pin_id, type: "Likes"})}}>{likes.count === 1 ? (likes.count + " like") : (likes.count + " likes")}</Text> 
+            <Text style={{...styles.likesText, color: Colors.mediumOrange}} onPress={() => {props.navigation.push('UserList', {id: pin_id, type: "Likes"})}}>{likes.count === 1 ? (likes.count + " like") : (likes.count + " likes")}</Text> 
             : 
-            <Text style={{...styles.likesText, color: theme === "dark" ? Colors.white : Colors.black}} onPress={() => {props.navigation.navigate('UserList', {id: pin_id, type: "Likes"})}}>{likes.count === 0 ? "Like" : likes.count === 1 ? (likes.count + " like") : (likes.count + " likes")}</Text>}
+            <Text style={{...styles.likesText, color: theme === "dark" ? Colors.white : Colors.black}} onPress={() => {props.navigation.push('UserList', {id: pin_id, type: "Likes"})}}>{likes.count === 0 ? "Like" : likes.count === 1 ? (likes.count + " like") : (likes.count + " likes")}</Text>}
         </View>
         }
       </View>

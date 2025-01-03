@@ -37,7 +37,7 @@ function App(): React.JSX.Element {
         <Stack.Screen name="Welcome" component={Welcome} />
         <Stack.Screen name="Signup" component={Signup} />
         <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen name="NavBar" component={NavBar} />
+        <Stack.Screen name="NavBar" component={NavBar} options={{gestureEnabled: false}}/>
         <Stack.Screen name="Settings" component={Settings} options={({navigation}) => ({headerShown: true, headerLeft: () => <BackButton navigation={navigation} />, headerStyle: {backgroundColor: theme === "dark" ? Colors.darkBackground : Colors.white}, headerTitleStyle: {color: theme === "dark" ? Colors.white : Colors.black}})} />
         <Stack.Screen name="New pin" component={AddPin} options={({navigation}) => ({headerShown: true, headerLeft: () => <BackButton navigation={navigation} />, headerStyle: {backgroundColor: theme === "dark" ? Colors.darkBackground : Colors.white}, headerTitleStyle: {color: theme === "dark" ? Colors.white : Colors.black}})} />
         <Stack.Screen name="AddPinOptions" component={AddPinOptions} />

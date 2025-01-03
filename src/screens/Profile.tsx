@@ -175,7 +175,7 @@ function Profile(props: any): React.JSX.Element {
           <Text style={styles.statTextLabel}>Pins</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.statCard}
-          onPress={() => props.navigation.navigate("UserList", {id: userData.user_id, type: "Friends"})}>
+          onPress={() => props.navigation.push("UserList", {id: userData.user_id, type: "Friends"})}>
           <Text style={styles.statTextNum}>{profileData.friends.length || 0}</Text>
           <Text style={styles.statTextLabel}>Friends</Text>
         </TouchableOpacity>
@@ -200,7 +200,7 @@ function Profile(props: any): React.JSX.Element {
         }
         {!tagged && profileData.pins.length != 0 && profileData.pins.map((pin: any) => {
           return (
-            <TouchableOpacity key={pin.pin_id} onPress={() => props.navigation.navigate("Pin detail", {pin_id: pin.pin_id, pin_user_id: pin.user_id})}>
+            <TouchableOpacity key={pin.pin_id} onPress={() => props.navigation.push("Pin detail", {pin_id: pin.pin_id, pin_user_id: pin.user_id})}>
               <Image source={{uri: pin.photo}} style={styles.journalPinImage} />
             </TouchableOpacity>
           )
@@ -214,7 +214,7 @@ function Profile(props: any): React.JSX.Element {
         }
         {tagged && profileData.tagged_pins.length != 0 && profileData.tagged_pins.map((pin: any) => {
           return (
-            <TouchableOpacity key={pin.pin_id} onPress={() => props.navigation.navigate("Pin detail", {pin_id: pin.pin_id, pin_user_id: pin.user_id})}>
+            <TouchableOpacity key={pin.pin_id} onPress={() => props.navigation.push("Pin detail", {pin_id: pin.pin_id, pin_user_id: pin.user_id})}>
               <Image source={{uri: pin.photo}} style={styles.journalPinImage} />
             </TouchableOpacity>
           )
