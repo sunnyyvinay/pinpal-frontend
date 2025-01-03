@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { getFriendStatus, getUser, createFriendRequest, deleteFriendRequest, acceptFriendRequest, getUserFriends, getPins, getTaggedPins} from '../services/user.service';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ScrollView, StyleSheet, Text, View, TouchableOpacity, RefreshControl, Image } from 'react-native';
@@ -9,9 +9,10 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import FontAwesome6Icon from 'react-native-vector-icons/FontAwesome6';
+import { useAppContext } from '../AppContext';
 
 function Profile(props: any): React.JSX.Element {
-  const [theme, setTheme] = useState('light');
+  const {theme, setTheme} = useAppContext();
   const [currUser, setCurrUser] = useState<string|null>("");
   const [userData, setUserData] = useState<any>({});
   const [friendStatus, setFriendStatus] = useState<number>(-1); // -1 for not friends, 0 for pending, 1 for friends, -2 for pending
@@ -35,7 +36,6 @@ function Profile(props: any): React.JSX.Element {
         const user_id  = props.route.params.user_id;
         const curr_user_id = await AsyncStorage.getItem("user_id");
         setCurrUser(curr_user_id);
-        setTheme(await AsyncStorage.getItem("theme") || "light");
         if (user_id) {
             const userData = await getUser(user_id);
             setUserData(userData.user);
@@ -88,6 +88,13 @@ function Profile(props: any): React.JSX.Element {
   useEffect(() => {
     fetchUserData();
 }, [props.route.params.user_id]);
+
+useLayoutEffect(() => {
+        props.navigation.setOptions({
+            headerStyle: {backgroundColor: theme == "dark" ? Colors.darkBackground : Colors.white},
+            headerTitleStyle: {color: theme == "dark" ? Colors.white : Colors.black},
+        });
+    }, [props.navigation, theme]);
 
   const friendRequestView = () => {
     if (props.route.params.user_id == currUser) {

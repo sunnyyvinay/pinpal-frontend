@@ -1,5 +1,5 @@
 import { Button, SearchBar } from '@rneui/themed';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
@@ -14,9 +14,10 @@ import userSearchStyles from '../styles/usersearch';
 import userTagsStyles from '../styles/usertags';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import FontAwesome6Icon from 'react-native-vector-icons/FontAwesome6';
+import { useAppContext } from '../AppContext';
 
 const AddPin = ({ route, navigation }: any) => {
-    const [theme, setTheme] = React.useState('light');
+    const {theme, setTheme} = useAppContext();
     const [step, setStep] = useState<number>(1);
     const lat_long = [route.params.latitude, route.params.longitude];
     const [pinData, setPinData] = useState<any>({
@@ -89,13 +90,12 @@ const AddPin = ({ route, navigation }: any) => {
         fetchData();
       }, [JSON.stringify(pinData.user_tags)]);
 
-      useEffect(() => {
-        AsyncStorage.getItem("theme").then((value) => {
-            if (value) {
-                setTheme(value);
-            }
-        });
-      }, []);
+    useLayoutEffect(() => {
+            navigation.setOptions({
+                headerStyle: {backgroundColor: theme == "dark" ? Colors.darkBackground : Colors.white},
+                headerTitleStyle: {color: theme == "dark" ? Colors.white : Colors.black},
+            });
+        }, [navigation, theme]);
 
     const openImagePicker = () => {
         const options = {

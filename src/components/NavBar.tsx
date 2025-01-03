@@ -7,7 +7,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import * as Colors from '../constants/colors';
 import { Image, StyleSheet, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { ContextProvider } from '../AppContext';
+import { ContextProvider, useAppContext } from '../AppContext';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
@@ -22,13 +22,7 @@ function NavBar({ route, navigation }: any): React.JSX.Element {
   const user_id  = AsyncStorage.getItem("user_id");
   if (!user_id) navigation.navigate("Welcome");
 
-  const [theme, setTheme] = React.useState('light');
-    useEffect(() => {
-      const getTheme = async () => {
-          setTheme(await AsyncStorage.getItem('theme') || 'light');
-      }
-      getTheme();
-    })
+  const {theme, setTheme} = useAppContext();
 
   return (
     <ContextProvider>

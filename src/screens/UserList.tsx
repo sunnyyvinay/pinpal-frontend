@@ -4,9 +4,10 @@ import { getUser, getUserFriends, getPinLikes } from '../services/user.service';
 import * as Colors from '../constants/colors';
 import userListStyles from '../styles/userlist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useAppContext } from '../AppContext';
 
 function UserList(props: any): React.JSX.Element {
-    const [theme, setTheme] = useState<string>("light");
+    const {theme, setTheme} = useAppContext();
     const [users, setUsers] = useState<any>([]);
     const [refreshing, setRefreshing] = useState<boolean>(false);
 
@@ -14,7 +15,6 @@ function UserList(props: any): React.JSX.Element {
         try {
             const user_id = props.route.params.id;
             const type = props.route.params.type;
-            setTheme(await AsyncStorage.getItem("theme") || "light");
             if (user_id) {
                 if (type == "Friends") {
                     let friendData = await getUserFriends(user_id);
@@ -57,7 +57,9 @@ function UserList(props: any): React.JSX.Element {
 
     useLayoutEffect(() => {
         props.navigation.setOptions({
-            title: props.route.params.type
+            title: props.route.params.type,
+            headerStyle: {backgroundColor: theme == "dark" ? Colors.darkBackground : Colors.white},
+            headerTitleStyle: {color: theme == "dark" ? Colors.white : Colors.black}
         })
     }, []);
 

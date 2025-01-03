@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Button, Input } from '@rneui/themed';
 import Modal from "react-native-modal";
@@ -11,12 +11,12 @@ import DatePicker from 'react-native-date-picker';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import {ImagePickerResponse, launchImageLibrary, MediaType} from 'react-native-image-picker';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { useAppContext } from '../AppContext';
 const bcrypt = require("bcryptjs");
 
 const Settings = ({ route, navigation }: any) => {
-    const [theme, setTheme] = useState('light');
+    const {theme, setTheme} = useAppContext();
     const [userData, setUserData] = useState<any>({});
-    
     const [modal, setModal] = useState<number>(0);
     const [newUserData, setNewUserData] = useState<any>({});
     const [oldPass, setOldPass] = useState<string>("");
@@ -95,7 +95,6 @@ const Settings = ({ route, navigation }: any) => {
         const fetchUserData = async () => {
             try {
                 const user_id  = await AsyncStorage.getItem("user_id");
-                setTheme(await AsyncStorage.getItem("theme") || "light");
                 if (user_id) {
                     const userData = await getUser(user_id);
                     setUserData(userData.user);
@@ -109,6 +108,13 @@ const Settings = ({ route, navigation }: any) => {
         }
         fetchUserData();
     }, []);
+
+    useLayoutEffect(() => {
+        navigation.setOptions({
+            headerStyle: {backgroundColor: theme == "dark" ? Colors.darkBackground : Colors.white},
+            headerTitleStyle: {color: theme == "dark" ? Colors.white : Colors.black},
+        });
+    }, [navigation, theme]);
 
     return (
         <ScrollView contentContainerStyle={{...styles.container, backgroundColor: theme == "dark" ? Colors.darkBackground : Colors.white}}>

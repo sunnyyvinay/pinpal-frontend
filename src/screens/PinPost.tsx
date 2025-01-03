@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { addPinLike, deletePinLike, getPin, getPinLikes, getSearchUsers, getUser } from '../services/user.service';
 import { Dimensions, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import * as Colors from '../constants/colors';
@@ -15,9 +15,10 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import userTagsStyles from '../styles/usertags';
 import { ImagePickerResponse, launchImageLibrary, MediaType } from 'react-native-image-picker';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import { useAppContext } from '../AppContext';
 
 const PinPost = (props:any) => {
-    const [theme, setTheme] = useState('light');
+    const {theme, setTheme} = useAppContext();
     const { pin_id, pin_user_id } = props.route.params;
     const [pinData, setPinData] = useState<any>({
       title: "",
@@ -78,7 +79,6 @@ const PinPost = (props:any) => {
     useEffect(() => {
       const getInfo = async () => {
         const user_id = await AsyncStorage.getItem("user_id");
-        setTheme(await AsyncStorage.getItem("theme") || "light");
         if (user_id) {
             setPersonal(user_id === pin_user_id);
         } else {
@@ -157,6 +157,13 @@ const PinPost = (props:any) => {
       fetchTaggedUsers();
       
     }, [JSON.stringify(pinData.user_tags), JSON.stringify(editedPinData.user_tags)]);
+
+    useLayoutEffect(() => {
+            props.navigation.setOptions({
+                headerStyle: {backgroundColor: theme == "dark" ? Colors.darkBackground : Colors.white},
+                headerTitleStyle: {color: theme == "dark" ? Colors.white : Colors.black},
+            });
+        }, [props.navigation, theme]);
 
     const openImagePicker = () => {
       const options = {

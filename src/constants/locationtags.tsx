@@ -6,17 +6,12 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import * as Colors from '../constants/colors';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useAppContext } from "../AppContext";
 
 const locationTags = ['Food', 'Vibes','Viewpoint', 'Shopping', 'Beach', 'Club', 'Other'];
 
 const getLocationTagIcon = (locationTag: string) : JSX.Element => {
-    const [theme, setTheme] = React.useState('light');
-    useEffect(() => {
-        const getTheme = async () => {
-            setTheme(await AsyncStorage.getItem('theme') || 'light');
-        }
-        getTheme();
-    })
+    const {theme, setTheme} = useAppContext();
 
     switch (locationTag) {
         case "Food":

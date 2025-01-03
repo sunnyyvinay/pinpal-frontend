@@ -14,13 +14,7 @@ function AddPinOptions({ route, navigation }: any): React.JSX.Element {
   var lat_long = {latitude : 0, longitude: 0};
   const { dragMode, setDragMode } = useAppContext();
 
-  const [theme, setTheme] = React.useState('light');
-    useEffect(() => {
-        const getTheme = async () => {
-            setTheme(await AsyncStorage.getItem('theme') || 'light');
-        }
-        getTheme();
-    })
+  const {theme, setTheme} = useAppContext();
 
   const getCurrLocation = async () => {
     await GetLocation.getCurrentPosition({

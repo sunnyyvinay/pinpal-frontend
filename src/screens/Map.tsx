@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useLayoutEffect, useState } from 'react';
 import { Appearance, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import GetLocation, { isLocationError } from 'react-native-get-location';
 import MapView, { Callout, CalloutSubview, Marker } from 'react-native-maps';
@@ -20,7 +20,7 @@ import userSearchStyles from '../styles/usersearch';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.Element {
-  const [theme, setTheme] = useState('light');
+  const {theme, setTheme} = useAppContext();
   const { region, setRegion, dragMode, setDragMode } = useAppContext();
   type Region = {latitude: number, longitude: number, latitudeDelta: number, longitudeDelta: number};
   const [changingRegion, setChangingRegion] = useState<Region>({latitude: 34.0699, longitude: 118.4438, latitudeDelta: 0.03, longitudeDelta: 0.03});
@@ -116,7 +116,7 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
     useCallback(() => {
       const setPinState = async () => {
         const user_id = await AsyncStorage.getItem("user_id");
-        setTheme(await AsyncStorage.getItem("theme") || "light");
+        //setTheme(await AsyncStorage.getItem("theme") || "light");
         if (user_id) {
           // PERSONAL PINS
           if (filterState.private) {
@@ -193,6 +193,13 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
         setUserFilterState({...userFilterState, queryUsers: []});
     }
   }, [userFilterState.search]);
+
+  useLayoutEffect(() => {
+          navigation.setOptions({
+              headerStyle: {backgroundColor: theme == "dark" ? Colors.darkBackground : Colors.white},
+              headerTitleStyle: {color: theme == "dark" ? Colors.white : Colors.black},
+          });
+      }, [navigation, theme]);
 
   const userView = (user: any) => {
     searchedUserCount--;

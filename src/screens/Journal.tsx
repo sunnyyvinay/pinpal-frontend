@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useLayoutEffect, useState } from 'react';
 import { getPins, getTaggedPins, getUser, getUserFriends } from '../services/user.service';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Image, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
@@ -8,9 +8,10 @@ import { useFocusEffect } from '@react-navigation/native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import FontAwesome6Icon from 'react-native-vector-icons/FontAwesome6';
+import { useAppContext } from '../AppContext';
 
 function Journal({ route, navigation }: any): React.JSX.Element {
-  const [theme, setTheme] = useState('light');
+  const {theme, setTheme} = useAppContext();
   const [userData, setUserData] = useState<any>({});
   type JournalState = {
     pins: any[];
@@ -30,7 +31,6 @@ function Journal({ route, navigation }: any): React.JSX.Element {
   const fetchUserData = async () => {
     try {
       const user_id  = await AsyncStorage.getItem("user_id");
-      setTheme(await AsyncStorage.getItem("theme") || "light");
       if (user_id) {
           const userData = await getUser(user_id);
           setUserData(userData.user);
@@ -51,6 +51,13 @@ function Journal({ route, navigation }: any): React.JSX.Element {
       fetchUserData();
     }, [])
   );
+
+  useLayoutEffect(() => {
+          navigation.setOptions({
+              headerStyle: {backgroundColor: theme == "dark" ? Colors.darkBackground : Colors.white},
+              headerTitleStyle: {color: theme == "dark" ? Colors.white : Colors.black},
+          });
+      }, [navigation, theme]);
 
   return (
     <ScrollView style={{width: '100%', height: '100%', backgroundColor: theme == 'dark' ? Colors.darkBackground : Colors.white}}

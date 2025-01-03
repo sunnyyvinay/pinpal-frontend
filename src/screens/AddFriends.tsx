@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SearchBar } from '@rneui/themed';
 import { acceptFriendRequest, deleteFriendRequest, getSearchUsers, getUserRequests } from '../services/user.service';
@@ -7,9 +7,10 @@ import * as Colors from '../constants/colors';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import userSearchStyles from '../styles/usersearch';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import { useAppContext } from '../AppContext';
 
 const AddFriends = ({ route, navigation }: any) => {
-    const [theme, setTheme] = React.useState('light');
+    const {theme, setTheme} = useAppContext();
     let user_id: string | null = '';
     let searchedUserCount: number = 0;
     type State = {
@@ -26,7 +27,6 @@ const AddFriends = ({ route, navigation }: any) => {
     useEffect(() => {
         const getFriendsState = async () => {
             user_id = await AsyncStorage.getItem("user_id");
-            setTheme(await AsyncStorage.getItem('theme') || 'light');
             if (user_id) {
                 const friendRequestData = await getUserRequests(user_id);
                 setState({...state, friend_requests: friendRequestData.friend_requests});
@@ -60,6 +60,13 @@ const AddFriends = ({ route, navigation }: any) => {
         }
     
       }, [state.search]);
+
+      useLayoutEffect(() => {
+              navigation.setOptions({
+                  headerStyle: {backgroundColor: theme == "dark" ? Colors.darkBackground : Colors.white},
+                  headerTitleStyle: {color: theme == "dark" ? Colors.white : Colors.black},
+              });
+          }, [navigation, theme]);
 
     const userView = (user: any, request: boolean) => {
         searchedUserCount--;

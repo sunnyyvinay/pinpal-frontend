@@ -1,4 +1,5 @@
-import React, { createContext, useState, ReactNode, useContext } from 'react';
+import React, { createContext, useState, ReactNode, useContext, useEffect } from 'react';
+import { Appearance } from 'react-native';
 
 type Region = {latitude: number, longitude: number, latitudeDelta: number, longitudeDelta: number};
 type DragOptions = {mode: number, location: {latitude: number, longitude: number}, pin_index: number};
@@ -9,8 +10,8 @@ type ContextType = {
   setRegion: (value: Region) => void;
   dragMode: DragOptions;
   setDragMode: (value: DragOptions) => void;
-  darkTheme: boolean;
-  setDarkTheme: (value: boolean) => void;
+  theme: string;
+  setTheme: (value: string) => void;
 };
 
 // Create the context with a default value
@@ -20,10 +21,18 @@ const Context = createContext<ContextType | undefined>(undefined);
 export const ContextProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [region, setRegion] = useState<Region>({latitude: 34.0699, longitude: 118.4438, latitudeDelta: 0.03, longitudeDelta: 0.03});
   const [dragMode, setDragMode] = useState<DragOptions>({mode: 0, location: {latitude: 0, longitude: 0}, pin_index: -1});
-  const [darkTheme, setDarkTheme] = useState<boolean>(false);
+  const [theme, setTheme] = useState<string>(Appearance.getColorScheme() || 'light');
+
+  useEffect(() => {
+    const subscription = Appearance.addChangeListener(({ colorScheme }) => {
+      setTheme(colorScheme || 'light');
+    });
+
+    return () => subscription.remove();
+  }, []);
 
   return (
-    <Context.Provider value={{ region, setRegion, dragMode, setDragMode, darkTheme, setDarkTheme }}>
+    <Context.Provider value={{ region, setRegion, dragMode, setDragMode, theme, setTheme }}>
       {children}
     </Context.Provider>
   );
@@ -37,3 +46,4 @@ export const useAppContext = () => {
   }
   return context;
 };
+
