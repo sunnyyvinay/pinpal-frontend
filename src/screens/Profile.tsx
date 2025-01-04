@@ -148,7 +148,7 @@ useLayoutEffect(() => {
           <TouchableOpacity 
             style={{...styles.requestOpacity, backgroundColor: theme == "dark" ? Colors.mediumOrange : Colors.lightOrange}}
             onPress={async() => {
-              acceptFriendRequest(currUser, userData.user_id);
+              acceptFriendRequest(userData.user_id, currUser);
               setFriendStatus(1);
             }}>
             <FontAwesome5 name='user-check' size={hp('2%')} color={Colors.white} />

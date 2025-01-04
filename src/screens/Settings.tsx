@@ -1,5 +1,5 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react'
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Button, Input } from '@rneui/themed';
 import Modal from "react-native-modal";
 import FeatherIcon from 'react-native-vector-icons/Feather';
@@ -32,6 +32,7 @@ const Settings = ({ route, navigation }: any) => {
         password: "",
         old_password: ""
     });
+    const [loading, setLoading] = useState<boolean>(false); // For editing profile pic
 
     function formatBirthday(date: string) {
         return new Date(date).toLocaleDateString('en-US', {
@@ -77,12 +78,14 @@ const Settings = ({ route, navigation }: any) => {
                     });
 
                     try {
+                        setLoading(true);
                         await updateUserPic(user_id, formData);
                         setUserData({...userData, profile_pic: imageUri});
                     } catch (error) {
                         console.log("Error updating profile pic: ", error);
+                    } finally {
+                        setLoading(false);
                     }
-                    
                 } else {
                     navigation.navigate("Welcome");
                 }
@@ -124,21 +127,25 @@ const Settings = ({ route, navigation }: any) => {
                 <Image source={userData && userData.profile_pic && userData.profile_pic != "" ? {uri: userData.profile_pic} : require('../../assets/images/default-pfp.jpg')} style={styles.pfpImage} />
             </TouchableOpacity>
             {error.photo && <Text style={styles.errorTextStyle}>{error.photo}</Text>}
-            <View style={styles.pfpOptionsView}>
-                <TouchableOpacity style={styles.pfpEditIcon} onPress={openImagePicker}>
-                    <MaterialIcon name="add-a-photo" size={20} />
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.pfpDeleteIcon} onPress={async () => {
-                    try {
-                        setUserData({...userData, profile_pic: null});
-                        await updateUserPic(userData.user_id, null);
-                    } catch (error) {
-                        console.log("Error updating profile pic: ", error);
-                    }
-                }}>
-                    <Ionicons name="trash" size={20} color={Colors.lightRed} />
-                </TouchableOpacity>
-            </View>
+            { loading ?
+                <ActivityIndicator size="large" color={Colors.mediumOrange} style={{marginVertical: hp('1%')}}/>
+                :
+                <View style={styles.pfpOptionsView}>
+                    <TouchableOpacity style={styles.pfpEditIcon} onPress={openImagePicker}>
+                        <MaterialIcon name="add-a-photo" size={20} />
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.pfpDeleteIcon} onPress={async () => {
+                        try {
+                            setUserData({...userData, profile_pic: null});
+                            await updateUserPic(userData.user_id, null);
+                        } catch (error) {
+                            console.log("Error updating profile pic: ", error);
+                        }
+                    }}>
+                        <Ionicons name="trash" size={20} color={Colors.lightRed} />
+                    </TouchableOpacity>
+                </View>
+            }
             
             <TouchableOpacity 
                 style={{...styles.fieldView, backgroundColor: theme == "dark" ? Colors.mediumGray : Colors.lightGray}} 
