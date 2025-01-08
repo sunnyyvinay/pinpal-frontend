@@ -623,7 +623,7 @@ const PinPost = (props:any) => {
                           type: 'image/jpeg',
                           name: user_id + '.jpg',
                       });
-                      await updatePin(pin_user_id, pin_id, editedPinData, formData);
+                      await updatePin(pin_user_id, pin_id, editedPinData, editedPinData.photo);
                       setPinData(editedPinData);
                       setEditMode(false);
                     } catch (error) {

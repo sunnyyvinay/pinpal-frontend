@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-//const apiUrl = "http://localhost:3000/api/user";
-const apiUrl = "https://api.pinpal.info/api/user";
+const apiUrl = "http://localhost:3000/api/user";
+//const apiUrl = "https://api.pinpal.info/api/user";
 
 interface UserSignup {
     username: string;
@@ -103,17 +103,26 @@ interface Pin {
 // ADD PIN
 export const addPin = async (id: string, pin: Pin, photo: any) => {
   try {
-    const response = await axios.post(`${apiUrl}/${id}/pin/add`, photo, {
+    const formData = new FormData();
+
+    formData.append('photo', {
+      uri: photo,
+      type: 'image/jpeg',
+      name: id + '.jpg',
+    });
+
+    formData.append('latitude', pin.latitude.toString());
+    formData.append('longitude', pin.longitude.toString());
+    formData.append('title', pin.title);
+    formData.append('caption', pin.caption);
+    formData.append('create_date', pin.create_date);
+    formData.append('user_tags', JSON.stringify(pin.user_tags));
+    formData.append('visibility', pin.visibility);
+    formData.append('location_tags', JSON.stringify(pin.location_tags));
+
+    const response = await axios.post(`${apiUrl}/${id}/pin/add`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
-        'latitude': pin.latitude,
-        'longitude': pin.longitude,
-        'title': pin.title,
-        'caption': pin.caption,
-        'create_date': pin.create_date,
-        'user_tags': JSON.stringify(pin.user_tags),
-        'visibility': pin.visibility,
-        'location_tags': JSON.stringify(pin.location_tags)
       },
     });
     return response.data;
@@ -144,29 +153,28 @@ interface PinUpdate {
 // UPDATE PIN INFO
 export const updatePin = async (userid: string, pinid: string, pin: PinUpdate, photo: any) => {
   try {
-      let headers = {};
-      if (photo) {
-        headers = {
-          'Content-Type': 'multipart/form-data',
-          'title': pin.title,
-          'caption': pin.caption,
-          'create_date': pin.create_date,
-          'user_tags': JSON.stringify(pin.user_tags),
-          'visibility': pin.visibility,
-          'location_tags': JSON.stringify(pin.location_tags)
-        }
-      } else {
-        headers = {
-          'title': pin.title,
-          'caption': pin.caption,
-          'create_date': pin.create_date,
-          'user_tags': JSON.stringify(pin.user_tags),
-          'visibility': pin.visibility,
-          'location_tags': JSON.stringify(pin.location_tags)
-        }
+    const formData = new FormData();
+
+    formData.append('title', pin.title);
+    formData.append('caption', pin.caption);
+    formData.append('create_date', pin.create_date);
+    formData.append('user_tags', JSON.stringify(pin.user_tags));
+    formData.append('visibility', pin.visibility);
+    formData.append('location_tags', JSON.stringify(pin.location_tags));
+
+    let headers = {};
+    if (photo) {
+      headers = {
+        'Content-Type': 'multipart/form-data',
       }
+      formData.append('photo', {
+        uri: photo,
+        type: 'image/jpeg',
+        name: pinid + '.jpg',
+      });
+    }
       
-      const response = await axios.put(`${apiUrl}/${userid}/pin/${pinid}/update`, photo, { headers});
+      const response = await axios.put(`${apiUrl}/${userid}/pin/${pinid}/update`, formData, { headers });
       return response.data;
   } catch (error) {
       return error;

@@ -287,7 +287,7 @@ const AddPin = ({ route, navigation }: any) => {
                                                     name: user_id + '.jpg',
                                                 });
                                                 
-                                                await addPin(user_id, pinInput, formData);
+                                                await addPin(user_id, pinInput, pinData.photo);
                                                 navigation.navigate("NavBar", { screen: 'Map' });
                                             } else {
                                                 navigation.navigate("Welcome");
