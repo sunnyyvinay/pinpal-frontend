@@ -1,5 +1,5 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react';
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SearchBar } from '@rneui/themed';
 import { acceptFriendRequest, deleteFriendRequest, getSearchUsers, getUserRequests } from '../services/user.service';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -23,18 +23,20 @@ const AddFriends = ({ route, navigation }: any) => {
         friend_requests: [],
         queryUsers: []
     });
+
+    const [refreshing, setRefreshing] = useState<boolean>(false);
+
+    const getFriendsState = async () => {
+        user_id = await AsyncStorage.getItem("user_id");
+        if (user_id) {
+            const friendRequestData = await getUserRequests(user_id);
+            setState({...state, friend_requests: friendRequestData.friend_requests});
+        } else {
+            navigation.navigate("Welcome");
+        }
+    }
     
     useEffect(() => {
-        const getFriendsState = async () => {
-            user_id = await AsyncStorage.getItem("user_id");
-            if (user_id) {
-                const friendRequestData = await getUserRequests(user_id);
-                setState({...state, friend_requests: friendRequestData.friend_requests});
-            } else {
-                navigation.navigate("Welcome");
-            }
-        }
-
         getFriendsState();
     }, []);
 
@@ -61,12 +63,12 @@ const AddFriends = ({ route, navigation }: any) => {
     
       }, [state.search]);
 
-      useLayoutEffect(() => {
-              navigation.setOptions({
-                  headerStyle: {backgroundColor: theme == "dark" ? Colors.darkBackground : Colors.white},
-                  headerTitleStyle: {color: theme == "dark" ? Colors.white : Colors.black},
-              });
-          }, [navigation, theme]);
+    useLayoutEffect(() => {
+        navigation.setOptions({
+            headerStyle: {backgroundColor: theme == "dark" ? Colors.darkBackground : Colors.white},
+            headerTitleStyle: {color: theme == "dark" ? Colors.white : Colors.black},
+        });
+    }, [navigation, theme]);
 
     const userView = (user: any, request: boolean) => {
         searchedUserCount--;
@@ -131,7 +133,16 @@ const AddFriends = ({ route, navigation }: any) => {
             containerStyle={userSearchStyles.searchBarContainer}
             onChangeText={(text) => setState({...state, search: text})}/>
         
-        <ScrollView>
+        <ScrollView 
+            refreshControl={
+                <RefreshControl
+                  refreshing={refreshing}
+                  onRefresh={() => {setRefreshing(true); getFriendsState(); setRefreshing(false);}}
+                  colors={[Colors.whiteGray]}
+                  progressBackgroundColor={Colors.mediumGray}
+                />
+            }>
+                
             { state.search.length === 0 ?
                 <View style={{flex: 1}}>
                     { state && state.friend_requests && state.friend_requests.length > 0 ? <Text style={{...styles.friendRequestTitleText, color: theme === 'dark' ? Colors.whiteGray : Colors.black}}>Friend Requests</Text> : null }
