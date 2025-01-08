@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const apiUrl = "http://localhost:3000/api/user";
-//const apiUrl = "https://api.pinpal.info/api/user";
+//const apiUrl = "http://localhost:3000/api/user";
+const apiUrl = "https://api.pinpal.info/api/user";
 
 interface UserSignup {
     username: string;
