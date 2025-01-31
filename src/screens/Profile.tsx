@@ -10,6 +10,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import FontAwesome6Icon from 'react-native-vector-icons/FontAwesome6';
 import { useAppContext } from '../AppContext';
+import FastImage from 'react-native-fast-image';
 
 function Profile(props: any): React.JSX.Element {
   const {theme, setTheme} = useAppContext();
@@ -169,7 +170,7 @@ useLayoutEffect(() => {
         />
       }>
       <View style={styles.profileContainer}>
-        <Image source={userData && userData.profile_pic && userData.profile_pic != "" ? {uri: userData.profile_pic} : require('../../assets/images/default-pfp.jpg')} style={styles.pfpImage} />
+        <FastImage source={userData && userData.profile_pic && userData.profile_pic != "" ? {uri: userData.profile_pic} : require('../../assets/images/default-pfp.jpg')} style={styles.pfpImage} />
         <View style={styles.nameContainer}>
           <Text style={{...styles.fullNameStyle, color: theme == "dark" ? Colors.white : Colors.black}}>{userData.full_name}</Text>
           <Text style={styles.usernameStyle}>@{userData.username}</Text>
@@ -208,7 +209,7 @@ useLayoutEffect(() => {
         {!tagged && profileData.pins.length != 0 && profileData.pins.map((pin: any) => {
           return (
             <TouchableOpacity key={pin.pin_id} onPress={() => props.navigation.push("Pin detail", {pin_id: pin.pin_id, pin_user_id: pin.user_id})}>
-              <Image source={{uri: pin.photo}} style={styles.journalPinImage} />
+              <FastImage source={{uri: pin.photo}} style={styles.journalPinImage} />
             </TouchableOpacity>
           )
         }).reverse()}
@@ -222,7 +223,7 @@ useLayoutEffect(() => {
         {tagged && profileData.tagged_pins.length != 0 && profileData.tagged_pins.map((pin: any) => {
           return (
             <TouchableOpacity key={pin.pin_id} onPress={() => props.navigation.push("Pin detail", {pin_id: pin.pin_id, pin_user_id: pin.user_id})}>
-              <Image source={{uri: pin.photo}} style={styles.journalPinImage} />
+              <FastImage source={{uri: pin.photo}} style={styles.journalPinImage} />
             </TouchableOpacity>
           )
         }).reverse()}

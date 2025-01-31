@@ -5,6 +5,7 @@ import * as Colors from '../constants/colors';
 import userListStyles from '../styles/userlist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useAppContext } from '../AppContext';
+import FastImage from 'react-native-fast-image';
 
 function UserList(props: any): React.JSX.Element {
     const {theme, setTheme} = useAppContext();
@@ -76,7 +77,7 @@ function UserList(props: any): React.JSX.Element {
         {users.map((user: any, index: number) => (
             <TouchableOpacity onPress={() => props.navigation.push("Profile", {user_id: user.user.user_id})} key={index}>
                 <View style={userListStyles.userView}>
-                    <Image 
+                    <FastImage 
                         source={user.user.profile_pic ? {uri: user.user.profile_pic} : require('../../assets/images/default-pfp.jpg')} 
                         style={userListStyles.userPfp} />
                     <View style={userListStyles.userTextView}>

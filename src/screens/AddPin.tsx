@@ -16,6 +16,7 @@ import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-nativ
 import FontAwesome6Icon from 'react-native-vector-icons/FontAwesome6';
 import { useAppContext } from '../AppContext';
 import { color } from '@rneui/base';
+import FastImage from 'react-native-fast-image';
 
 const AddPin = ({ route, navigation }: any) => {
     const {theme, setTheme} = useAppContext();
@@ -182,7 +183,7 @@ const AddPin = ({ route, navigation }: any) => {
                     setPinData((prevData: any) => ({...prevData, user_tags: [...prevData.user_tags, user.user_id]}));
             }}>
                 <View style={userSearchStyles.searchUserView}>
-                    <Image 
+                    <FastImage 
                         source={user.profile_pic ? {uri: user.profile_pic} : require('../../assets/images/default-pfp.jpg')} 
                         style={{...userSearchStyles.searchUserPfp}} />
                     <View style={{...userSearchStyles.searchUserTextView}}>
@@ -373,7 +374,7 @@ const AddPin = ({ route, navigation }: any) => {
                             <View style={{flex: 0.8}}>
                                 {userTagState.taggedUsers && userTagState.taggedUsers.length > 0 && userTagState.taggedUsers.map((user: any, index: number) => (
                                 <View style={userSearchStyles.searchUserView} key={index}>
-                                    <Image 
+                                    <FastImage 
                                         source={user.profile_pic ? {uri: user.profile_pic} : require('../../assets/images/default-pfp.jpg')} 
                                         style={{...userSearchStyles.searchUserPfp}} />
                                     <View style={{...userSearchStyles.searchUserTextView, flex: 0.85}}>

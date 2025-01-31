@@ -8,6 +8,7 @@ import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import userSearchStyles from '../styles/usersearch';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import { useAppContext } from '../AppContext';
+import FastImage from 'react-native-fast-image';
 
 const AddFriends = ({ route, navigation }: any) => {
     const {theme, setTheme} = useAppContext();
@@ -76,7 +77,7 @@ const AddFriends = ({ route, navigation }: any) => {
             <TouchableOpacity onPress={() => navigation.push("Profile", {user_id: user.user_id})} key={searchedUserCount}>
                 { request ?
                     <View style={userSearchStyles.searchUserView}>
-                        <Image 
+                        <FastImage 
                             source={user && user.profile_pic ? {uri: user.profile_pic} : require('../../assets/images/default-pfp.jpg')} 
                             style={{...userSearchStyles.searchUserPfp, borderColor: theme === 'dark' ? Colors.mediumOrange : Colors.darkOrange}} />
                         <View style={{...userSearchStyles.searchUserTextView, flex: 0.6}}>
@@ -108,7 +109,7 @@ const AddFriends = ({ route, navigation }: any) => {
                     </View> 
                     :
                     <View style={userSearchStyles.searchUserView}>
-                        <Image 
+                        <FastImage 
                             source={user && user.profile_pic ? {uri: user.profile_pic} : require('../../assets/images/default-pfp.jpg')} 
                             style={{...userSearchStyles.searchUserPfp, borderColor: theme === 'dark' ? Colors.mediumOrange : Colors.darkOrange}} />
                         <View style={{...userSearchStyles.searchUserTextView}}>

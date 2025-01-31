@@ -18,6 +18,7 @@ import userTagsStyles from '../styles/usertags';
 import Entypo from 'react-native-vector-icons/Entypo';
 import userSearchStyles from '../styles/usersearch';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import FastImage from 'react-native-fast-image';
 
 function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.Element {
   const {theme, setTheme} = useAppContext();
@@ -208,7 +209,7 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
             setUserFilterState({modalVisible: false, search: "", on: true, queryUsers: [], user: user.user_id})
           }}>
             <View style={{...userSearchStyles.searchUserView, marginLeft: wp('10%')}}>
-                <Image 
+                <FastImage 
                     source={user.profile_pic ? {uri: user.profile_pic} : require('../../assets/images/default-pfp.jpg')} 
                     style={{...userSearchStyles.searchUserPfp}} />
                 <View style={{...userSearchStyles.searchUserTextView}}>
@@ -234,7 +235,7 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
                 <Callout style={{...styles.pinCalloutStyle, height: hp('30%')}}>
                   <View style={{...styles.pinCalloutView}}>
                     <Text style={styles.pinCalloutTitle}>{personalPin.title}</Text>
-                    <Image source={{uri: personalPin.photo}} style={styles.pinCalloutImage}/>
+                    <FastImage source={{uri: personalPin.photo}} style={styles.pinCalloutImage}/>
                   </View>
 
                   <View style={{justifyContent: 'space-evenly', alignItems: 'center', flex: 1, flexDirection: 'row'}}>
@@ -272,7 +273,7 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
                   <View style={{...styles.pinCalloutView}}>
                     <Text style={styles.pinCalloutTitle}>{friendPin.title}</Text>
                     <Text style={styles.pinCalloutUsername}>@{friend.user.username}</Text>
-                    <Image source={{uri: friendPin.photo}} style={styles.pinCalloutImage}/>
+                    <FastImage source={{uri: friendPin.photo}} style={styles.pinCalloutImage}/>
                   </View>
 
                   <View style={{justifyContent: 'center', alignItems: 'center', flex: 1}}>
@@ -298,7 +299,7 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
                   <View style={styles.pinCalloutView}>
                     <Text style={styles.pinCalloutTitle}>{publicPin.title}</Text>
                     <Text style={styles.pinCalloutUsername}>@{publicPin.user.username}</Text>
-                    <Image source={{uri: publicPin.photo}} style={styles.pinCalloutImage}/>
+                    <FastImage source={{uri: publicPin.photo}} style={styles.pinCalloutImage}/>
                   </View>
 
                   <View style={{justifyContent: 'space-evenly', alignItems: 'center', flex: 1, flexDirection: 'row'}}>

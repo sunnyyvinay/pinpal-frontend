@@ -16,6 +16,7 @@ import userTagsStyles from '../styles/usertags';
 import { ImagePickerResponse, launchImageLibrary, MediaType } from 'react-native-image-picker';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import { useAppContext } from '../AppContext';
+import FastImage from 'react-native-fast-image';
 
 const PinPost = (props:any) => {
     const {theme, setTheme} = useAppContext();
@@ -348,7 +349,7 @@ const PinPost = (props:any) => {
                 setEditedPinData((prevData: any) => ({...prevData, user_tags: [...prevData.user_tags, user.user_id]}));
         }}>
             <View style={userSearchStyles.searchUserView}>
-                <Image 
+                <FastImage 
                     source={user.profile_pic ? {uri: user.profile_pic} : require('../../assets/images/default-pfp.jpg')} 
                     style={{...userSearchStyles.searchUserPfp}} />
                 <View style={{...userSearchStyles.searchUserTextView}}>
@@ -393,7 +394,7 @@ const PinPost = (props:any) => {
                     <View style={{flex: 0.8}}>
                         {userTagState.editedTaggedUsers && userTagState.editedTaggedUsers.length > 0 && userTagState.editedTaggedUsers.map((user: any, index: number) => (
                         <View style={userSearchStyles.searchUserView} key={index}>
-                            <Image 
+                            <FastImage 
                                 source={user.profile_pic ? {uri: user.profile_pic} : require('../../assets/images/default-pfp.jpg')} 
                                 style={{...userSearchStyles.searchUserPfp}} />
                             <View style={{...userSearchStyles.searchUserTextView, flex: 0.9}}>
@@ -420,7 +421,7 @@ const PinPost = (props:any) => {
     <ScrollView style={{backgroundColor: theme === 'dark' ? Colors.darkBackground : Colors.white}}>
       <View style={styles.topView}>
         <TouchableOpacity style={styles.userView} onPress={() =>props.navigation.push('Profile', {user_id: pinUserData.user_id})}>
-          <Image source={pinUserData && pinUserData.profile_pic ? {uri: pinUserData.profile_pic} : require('../../assets/images/default-pfp.jpg')} style={styles.pfpImage} />
+          <FastImage source={pinUserData && pinUserData.profile_pic ? {uri: pinUserData.profile_pic} : require('../../assets/images/default-pfp.jpg')} style={styles.pfpImage} />
           <Text style={{...styles.usernameText, color: theme === 'dark' ? Colors.white : Colors.black}}>{pinUserData && pinUserData.username}</Text>
         </TouchableOpacity>
 
@@ -495,7 +496,7 @@ const PinPost = (props:any) => {
             {userTagState && userTagState.editedTaggedUsers && userTagState.editedTaggedUsers.length > 0 && userTagState.editedTaggedUsers.map((user:any, index:number) => {
               return (
                 <TouchableOpacity style={styles.taggedUserIndivView} key={index} onPress={() => props.navigation.push('Profile', {user_id: user.user_id})}>
-                  <Image source={user.profile_pic ? {uri: user.profile_pic} : require('../../assets/images/default-pfp.jpg')} style={styles.taggedUserPfp} />
+                  <FastImage source={user.profile_pic ? {uri: user.profile_pic} : require('../../assets/images/default-pfp.jpg')} style={styles.taggedUserPfp} />
                   <Text style={styles.taggedUserText}>{user.username}</Text>
                 </TouchableOpacity>
               )
@@ -508,7 +509,7 @@ const PinPost = (props:any) => {
         {userTagState && userTagState.taggedUsers && userTagState.taggedUsers.length > 0 && userTagState.taggedUsers.map((user:any, index:number) => {
             return (
               <TouchableOpacity style={styles.taggedUserIndivView} key={index} onPress={() => props.navigation.push('Profile', {user_id: user.user_id})}>
-                <Image source={user.profile_pic ? {uri: user.profile_pic} : require('../../assets/images/default-pfp.jpg')} style={styles.taggedUserPfp} />
+                <FastImage source={user.profile_pic ? {uri: user.profile_pic} : require('../../assets/images/default-pfp.jpg')} style={styles.taggedUserPfp} />
                 <Text style={styles.taggedUserText}>{user.username}</Text>
               </TouchableOpacity>
             )

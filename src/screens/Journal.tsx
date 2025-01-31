@@ -9,6 +9,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import FontAwesome6Icon from 'react-native-vector-icons/FontAwesome6';
 import { useAppContext } from '../AppContext';
+import FastImage from 'react-native-fast-image'
 
 function Journal({ route, navigation }: any): React.JSX.Element {
   const {theme, setTheme} = useAppContext();
@@ -70,7 +71,7 @@ function Journal({ route, navigation }: any): React.JSX.Element {
         />
       }>
       <View style={styles.profileContainer}>
-        <Image source={userData && userData.profile_pic && userData.profile_pic != "" ? {uri: userData.profile_pic} : require('../../assets/images/default-pfp.jpg')} style={styles.pfpImage} />
+        <FastImage source={userData && userData.profile_pic && userData.profile_pic != "" ? {uri: userData.profile_pic} : require('../../assets/images/default-pfp.jpg')} style={styles.pfpImage} />
         <View style={styles.nameContainer}>
           <Text style={{...styles.fullNameStyle, color: theme == 'dark' ? Colors.white : Colors.black}}>{userData && userData.full_name}</Text>
           <Text style={styles.usernameStyle}>{userData && ('@' + userData.username)}</Text>
@@ -112,7 +113,7 @@ function Journal({ route, navigation }: any): React.JSX.Element {
         {!tagged && journalData.pins.length != 0 && journalData.pins.map((pin: any) => {
           return (
             <TouchableOpacity key={pin.pin_id} onPress={() => navigation.push("Pin detail", {pin_id: pin.pin_id, pin_user_id: pin.user_id})}>
-              <Image source={{uri: pin.photo}} style={styles.journalPinImage} />
+              <FastImage source={{uri: pin.photo}} style={styles.journalPinImage} />
             </TouchableOpacity>
           )
         }).reverse()}
@@ -126,7 +127,7 @@ function Journal({ route, navigation }: any): React.JSX.Element {
         {tagged && journalData.tagged_pins.length != 0 && journalData.tagged_pins.map((pin: any) => {
           return (
             <TouchableOpacity key={pin.pin_id} onPress={() => navigation.push("Pin detail", {pin_id: pin.pin_id, pin_user_id: pin.user_id})}>
-              <Image source={{uri: pin.photo}} style={styles.journalPinImage} />
+              <FastImage source={{uri: pin.photo}} style={styles.journalPinImage} />
             </TouchableOpacity>
           )
         }).reverse()}
