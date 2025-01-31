@@ -131,7 +131,7 @@ const Settings = ({ route, navigation }: any) => {
                 <ActivityIndicator size="large" color={Colors.mediumOrange} style={{marginVertical: hp('1%')}}/>
                 :
                 <View style={styles.pfpOptionsView}>
-                    <TouchableOpacity style={styles.pfpEditIcon} onPress={openImagePicker}>
+                    <TouchableOpacity style={{...styles.pfpEditIcon, backgroundColor: theme == "dark" ? Colors.mediumGray : Colors.whiteGray}} onPress={openImagePicker}>
                         <MaterialIcon name="add-a-photo" size={20} />
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.pfpDeleteIcon} onPress={async () => {
@@ -148,75 +148,75 @@ const Settings = ({ route, navigation }: any) => {
             }
             
             <TouchableOpacity 
-                style={{...styles.fieldView, backgroundColor: theme == "dark" ? Colors.mediumGray : Colors.lightGray}} 
+                style={{...styles.fieldView, backgroundColor: theme == "dark" ? Colors.darkGray : Colors.lightGray}} 
                 onPress={() => {
                     setModal(1);
                 }}>
                 <View style={styles.textView}>
-                    <Text style={{...styles.fieldText}}>
+                    <Text style={{...styles.fieldText, color: theme == "dark" ? Colors.white : Colors.darkGray}}>
                         Username
                     </Text>
-                    <Text style={{...styles.fieldText, fontWeight: 'normal', color: theme == "dark" ? Colors.darkGray : Colors.mediumGray}}>
+                    <Text style={{...styles.fieldText, fontWeight: 'normal', color: theme == "dark" ? Colors.mediumGray : Colors.mediumGray}}>
                         {userData && userData.username}
                     </Text>
                 </View>
-                <FeatherIcon name="edit-2" size={15} style={styles.fieldIcon} />
+                <FeatherIcon name="edit-2" size={15} style={styles.fieldIcon} color={theme == "dark" ? Colors.mediumGray : Colors.black}/>
             </TouchableOpacity>
 
             <TouchableOpacity 
-                style={{...styles.fieldView, backgroundColor: theme =='dark' ? Colors.mediumGray : Colors.lightGray}}
+                style={{...styles.fieldView, backgroundColor: theme =='dark' ? Colors.darkGray : Colors.lightGray}}
                 onPress={() => {
                     setModal(2);
                 }}>
                 <View style={styles.textView}>
-                    <Text style={{...styles.fieldText}}>
+                    <Text style={{...styles.fieldText, color: theme == "dark" ? Colors.white : Colors.darkGray}}>
                         Full Name
                     </Text>
-                    <Text style={{...styles.fieldText, fontWeight: 'normal', color: theme == "dark" ? Colors.darkGray : Colors.mediumGray}}>
+                    <Text style={{...styles.fieldText, fontWeight: 'normal', color: theme == "dark" ? Colors.mediumGray : Colors.mediumGray}}>
                         {userData && userData.full_name}
                     </Text>
                 </View>
-                <FeatherIcon name="edit-2" size={15} style={styles.fieldIcon} />
+                <FeatherIcon name="edit-2" size={15} style={styles.fieldIcon} color={theme == "dark" ? Colors.mediumGray : Colors.black}/>
             </TouchableOpacity>
 
             <TouchableOpacity 
-                style={{...styles.fieldView, backgroundColor: theme =='dark' ? Colors.mediumGray : Colors.lightGray}}
+                style={{...styles.fieldView, backgroundColor: theme =='dark' ? Colors.darkGray : Colors.lightGray}}
                 onPress={() => {
                     setModal(3);
                 }}>
                 <View style={styles.textView}>
-                    <Text style={{...styles.fieldText}}>
+                    <Text style={{...styles.fieldText, color: theme == "dark" ? Colors.white : Colors.darkGray}}>
                         Birthday
                     </Text>
-                    <Text style={{...styles.fieldText, fontWeight: 'normal', color: theme == "dark" ? Colors.darkGray : Colors.mediumGray}}>
+                    <Text style={{...styles.fieldText, fontWeight: 'normal', color: theme == "dark" ? Colors.mediumGray : Colors.mediumGray}}>
                         {userData && formatBirthday(userData.birthday)}
                     </Text>
                 </View>
-                <FeatherIcon name="edit-2" size={15} style={styles.fieldIcon} />
+                <FeatherIcon name="edit-2" size={15} style={styles.fieldIcon} color={theme == "dark" ? Colors.mediumGray : Colors.black}/>
             </TouchableOpacity>
 
-            <TouchableOpacity style={{...styles.fieldView, backgroundColor: theme =='dark' ? Colors.mediumGray : Colors.lightGray}}>
+            <TouchableOpacity style={{...styles.fieldView, backgroundColor: theme =='dark' ? Colors.darkGray : Colors.lightGray}}>
                 <View style={styles.textView}>
-                    <Text style={{...styles.fieldText}}>
+                    <Text style={{...styles.fieldText, color: theme == "dark" ? Colors.white : Colors.darkGray}}>
                         Phone Number
                     </Text>
-                    <Text style={{...styles.fieldText, fontWeight: 'normal', color: theme == "dark" ? Colors.darkGray : Colors.mediumGray}}>
+                    <Text style={{...styles.fieldText, fontWeight: 'normal', color: theme == "dark" ? Colors.mediumGray : Colors.mediumGray}}>
                         {userData && userData.phone_no && userData.phone_no.substring(0, 2) + " " + userData.phone_no.substring(2, userData.phone_no.length)}
                     </Text>
                 </View>
             </TouchableOpacity>
 
             <TouchableOpacity 
-                style={{...styles.fieldView, height: hp('5.5%'), backgroundColor: theme =='dark' ? Colors.mediumGray : Colors.lightGray}}
+                style={{...styles.fieldView, height: hp('5.5%'), backgroundColor: theme =='dark' ? Colors.darkGray : Colors.lightGray}}
                 onPress={() => {
                     setModal(6);
                 }}>
                 <View style={{...styles.textView}}>
-                    <Text style={{...styles.fieldText, flex: 1}}>
+                    <Text style={{...styles.fieldText, flex: 1, color: theme == "dark" ? Colors.white : Colors.darkGray}}>
                         Change Your Password
                     </Text>
                 </View>
-                <MaterialIcon name="password" size={15} style={styles.fieldIcon} />
+                <MaterialIcon name="password" size={15} style={styles.fieldIcon} color={theme == "dark" ? Colors.mediumGray : Colors.black}/>
             </TouchableOpacity>
 
             <Button 
@@ -239,7 +239,7 @@ const Settings = ({ route, navigation }: any) => {
                     setNewUserData({...newUserData, username: userData.username});
                     setModal(0);
                 }}>
-                <View style={{...styles.modalView, backgroundColor: theme == "dark" ? Colors.darkBackground : Colors.white}}>
+                <View style={{...styles.modalView, backgroundColor: theme == "dark" ? Colors.darkSurface : Colors.white}}>
                     <Text style={{...styles.modalText, color: theme == "dark" ? Colors.white : Colors.black}}>Edit Username</Text>
                     <Input
                         value={newUserData.username}
@@ -292,7 +292,7 @@ const Settings = ({ route, navigation }: any) => {
                     setNewUserData({...newUserData, full_name: userData.full_name});
                     setModal(0);
                 }}>
-                <View style={{...styles.modalView, backgroundColor: theme == "dark" ? Colors.darkBackground : Colors.white}}>
+                <View style={{...styles.modalView, backgroundColor: theme == "dark" ? Colors.darkSurface : Colors.white}}>
                     <Text style={{...styles.modalText, color: theme == "dark" ? Colors.white : Colors.black}}>Edit Full Name</Text>
                     <Input
                         value={newUserData.full_name}
@@ -344,7 +344,7 @@ const Settings = ({ route, navigation }: any) => {
                     setNewUserData({...newUserData, birthday: userData.birthday});
                     setModal(0);
                 }}>
-                <View style={{...styles.modalView, backgroundColor: theme == "dark" ? Colors.darkBackground : Colors.white}}>
+                <View style={{...styles.modalView, backgroundColor: theme == "dark" ? Colors.darkSurface : Colors.white}}>
                     <Text style={{...styles.modalText, color: theme == "dark" ? Colors.white : Colors.black}}>Edit Birthday</Text>
                     <DatePicker 
                         mode='date'
@@ -395,7 +395,7 @@ const Settings = ({ route, navigation }: any) => {
                     setOldPass("");
                     setModal(0);
                 }}>
-                <View style={{...styles.modalView, backgroundColor: theme == "dark" ? Colors.darkBackground : Colors.white}}>
+                <View style={{...styles.modalView, backgroundColor: theme == "dark" ? Colors.darkSurface : Colors.white}}>
                     <Text style={{...styles.modalText, color: theme == "dark" ? Colors.white : Colors.black}}>Edit Password</Text>
                     <Input
                         value={oldPass}
@@ -478,7 +478,7 @@ const styles = StyleSheet.create({
     fieldView: {
         paddingVertical: hp('0.5%'),
         width: wp('95%'),
-        backgroundColor: Colors.lightGray,
+        backgroundColor: Colors.white,
         height: hp('7%'),
         flexDirection: 'row',
         borderRadius: hp('1%'),

@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import * as Colors from '../constants/colors';
-import { ImagePickerResponse, launchImageLibrary, MediaType } from 'react-native-image-picker';
+import { ImagePickerResponse, launchCamera, launchImageLibrary, MediaType } from 'react-native-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { addPin, getSearchUsers, getUser } from '../services/user.service';
 import Modal from "react-native-modal";
@@ -15,6 +15,7 @@ import userTagsStyles from '../styles/usertags';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import FontAwesome6Icon from 'react-native-vector-icons/FontAwesome6';
 import { useAppContext } from '../AppContext';
+import { color } from '@rneui/base';
 
 const AddPin = ({ route, navigation }: any) => {
     const {theme, setTheme} = useAppContext();
@@ -98,6 +99,32 @@ const AddPin = ({ route, navigation }: any) => {
             });
         }, [navigation, theme]);
 
+    const openCamera = () => {
+        const options = {
+            mediaType: 'photo' as MediaType,
+            includeBase64: true,
+            maxHeight: 2000,
+            maxWidth: 2000,
+        };
+    
+        launchCamera(options, async (response: ImagePickerResponse) => {
+            const user_id = await AsyncStorage.getItem("user_id");
+            if (response.errorCode) {
+                setError({...error, photo: "An error occurred. Please try again."});
+                console.log('Image picker error: ', response.errorMessage);
+            } else if (response.assets && response.assets.length > 0) {
+                if (response.assets[0].fileSize && response.assets[0].fileSize > 7340032) { // 7 MB
+                    setError({...error, photo: "File too large. Please upload a smaller file"});
+                } else if (user_id && response.assets) {
+                    setError({...error, photo: ""});
+                    setPinData({...pinData, photo: response.assets[0].uri});
+                } else {
+                    navigation.navigate("Welcome");
+                }
+            } 
+        });
+    };
+
     const openImagePicker = () => {
         const options = {
             mediaType: 'photo' as MediaType,
@@ -178,9 +205,15 @@ const AddPin = ({ route, navigation }: any) => {
                             <Image source={{ uri: pinData.photo }} style={styles.pickPhoto} /> 
                         </TouchableOpacity>
                         : 
-                        <TouchableOpacity onPress={openImagePicker} style={{...styles.pickPhotoContainer, backgroundColor: theme === 'dark' ? Colors.mediumGray : Colors.whiteGray}} >
-                            <MaterialIcon name="add-a-photo" size={hp('5%')} />
+                        <View style={styles.photoOptionsView}>
+                        <TouchableOpacity onPress={openCamera} style={{...styles.cameraOption, backgroundColor: theme === 'dark' ? Colors.darkOrange : Colors.darkOrange}} >
+                            <MaterialIcon name="add-a-photo" size={hp('10%')} color={theme === 'dark' ? Colors.black : Colors.white} />
                         </TouchableOpacity>
+                        {/* <Text style={{...styles.orText, color: theme === 'dark' ? Colors.white : Colors.black}}>or</Text> */}
+                        <TouchableOpacity onPress={openImagePicker} style={{...styles.libraryOption, backgroundColor: theme === 'dark' ? Colors.darkOrange : Colors.darkOrange}} >
+                            <MaterialIcon name="insert-photo" size={hp('10%')} color={theme === 'dark' ? Colors.black : Colors.white}/>
+                        </TouchableOpacity>
+                        </View>
                         }
                         <Button 
                             title="NEXT" 
@@ -314,7 +347,7 @@ const AddPin = ({ route, navigation }: any) => {
                 isVisible={userTagState.modalVisible} 
                 onBackdropPress={() => setUserTagState({...userTagState, modalVisible: false})}
                 style={userTagsStyles.userTagsModal} >
-                <View style={{...userTagsStyles.userTagsModalView, backgroundColor: theme === 'dark' ? Colors.darkBackground : Colors.white}}>
+                <View style={{...userTagsStyles.userTagsModalView, backgroundColor: theme === 'dark' ? Colors.darkSurface : Colors.white}}>
                     <View style={userTagsStyles.userTagsModalHeader}>
                         <Text style={{...userTagsStyles.userTagsModalTitle, color: theme === 'dark' ? Colors.white : Colors.black}}>Tag Users</Text>
                         <Entypo name="cross" size={hp('2.5%')} color={Colors.mediumGray} onPress={() => setUserTagState({...userTagState, modalVisible: false})} style={{position: 'absolute', left: wp('45%')}}/>
@@ -366,7 +399,7 @@ const AddPin = ({ route, navigation }: any) => {
                 isVisible={visibilityModal} 
                 onBackdropPress={() => setVisibilityModal(false)}
                 style={styles.visibilityModal} >
-                <View style={{...styles.visibilityModalView, backgroundColor: theme === 'dark' ? Colors.darkBackground : Colors.white}}>
+                <View style={{...styles.visibilityModalView, backgroundColor: theme === 'dark' ? Colors.darkSurface : Colors.white}}>
                     <Text style={{...styles.visibilityModalTitle, color: theme === 'dark' ? Colors.white : Colors.black}}>Select visibility</Text>
                     <TouchableOpacity style={styles.visibilityModalSubview} 
                         onPress={() => {
@@ -377,7 +410,7 @@ const AddPin = ({ route, navigation }: any) => {
                         <Text style={{...styles.visibilityModalSubviewText, color: theme === 'dark' ? Colors.white : Colors.black}}>Private</Text>
                         <Icon name="checkmark-sharp" size={hp('3%')} color={Colors.mediumOrange} style={pinData.visibility === 0 ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
                     </TouchableOpacity>
-                    <View style={styles.horizontalLine} />
+                    <View style={{...styles.horizontalLine, borderBottomColor: theme == 'dark' ? Colors.white : Colors.black}} />
                     
                     <TouchableOpacity style={styles.visibilityModalSubview} 
                         onPress={() => {
@@ -388,7 +421,7 @@ const AddPin = ({ route, navigation }: any) => {
                         <Text style={{...styles.visibilityModalSubviewText, color: theme === 'dark' ? Colors.white : Colors.black}}>Friends</Text>
                         <Icon name="checkmark-sharp" size={hp('3%')} color={Colors.mediumOrange} style={pinData.visibility === 1 ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
                     </TouchableOpacity>
-                    <View style={styles.horizontalLine} />
+                    <View style={{...styles.horizontalLine, borderBottomColor: theme == 'dark' ? Colors.white : Colors.black}} />
                     
                     <TouchableOpacity style={styles.visibilityModalSubview} 
                         onPress={() => {
@@ -406,7 +439,7 @@ const AddPin = ({ route, navigation }: any) => {
                 isVisible={locationTagsModal} 
                 onBackdropPress={() => setlocationTagsModal(false)}
                 style={styles.locationTagsModal} >
-                <View style={{...styles.locationTagsModalView, backgroundColor: theme === 'dark' ? Colors.darkBackground : Colors.white}}>
+                <View style={{...styles.locationTagsModalView, backgroundColor: theme === 'dark' ? Colors.darkSurface : Colors.white}}>
                     <Text style={{...styles.locationTagsModalTitle, color: theme === 'dark' ? Colors.white : Colors.black}}>Select location tags</Text>
                     <View>
                         {locationTags.map((tag, index) => {
@@ -425,7 +458,7 @@ const AddPin = ({ route, navigation }: any) => {
                                         <Text style={{...styles.locationTagsModalText, color: theme === 'dark' ? Colors.white : Colors.black}}>{tag}</Text>
                                         <Icon name="checkmark-sharp" size={hp('3%')} color={Colors.mediumOrange} style={pinData.location_tags.includes(tag) ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
                                     </TouchableOpacity>
-                                    <View style={styles.horizontalLine} />
+                                    <View style={{...styles.horizontalLine, borderBottomColor: theme == 'dark' ? Colors.white : Colors.black}} />
                                 </View>
                             )
                         })}
@@ -477,16 +510,29 @@ const styles = StyleSheet.create({
         marginHorizontal: wp('10%'),
         marginTop: hp('4%'),
     },
-    pickPhotoContainer: {
-        width: wp('90%'),
-        height: wp('90%'),
-        borderWidth: 2,
-        borderColor: Colors.mediumOrange,
-        backgroundColor: Colors.whiteGray,
-        justifyContent: 'center',
+    photoOptionsView: {
+        flex: 0.85,
+        flexDirection: 'column',
+        justifyContent: 'space-around',
         alignItems: 'center',
-        marginBottom: hp('3%'),
-        marginTop: hp('3%'),
+    },
+    cameraOption: {
+        width: wp('50%'),
+        height: wp('50%'),
+        borderRadius: wp('25%'),
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    libraryOption: {
+        width: wp('50%'),
+        height: wp('50%'),
+        borderRadius: wp('25%'),
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    orText: {
+        fontFamily: 'Futura',
+        fontSize: 22,
     },
     pickPhoto: {
         width: '100%',

@@ -17,7 +17,8 @@ export const whiteGray = '#e8e6e6';
 
 export const white = '#FFFFFF';
 export const black = '#000000';
-export const darkBackground = '#3b3b3b';
+export const darkBackground = '#000000';
+export const darkSurface = '#121212';
 
 export const errorRed = '#ff1c1c';
 export const lightRed = '#ff6666';

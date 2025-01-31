@@ -211,7 +211,7 @@ const PinPost = (props:any) => {
         onBackdropPress={() => {setEditPinVisibility(false); setPinActionModalVisible(false);}} 
         style={styles.pinActionModalStyle}>
           {editPinVisibility ?
-            (<View style={{...styles.pinActionModalView, backgroundColor: theme === 'dark' ? Colors.darkBackground : Colors.white}}>
+            (<View style={{...styles.pinActionModalView, backgroundColor: theme === 'dark' ? Colors.darkSurface : Colors.white}}>
               <TouchableOpacity style={styles.pinActionModelSubview}
                 onPress={async () => {
                   try {
@@ -227,7 +227,7 @@ const PinPost = (props:any) => {
                   <Text style={{...styles.pinActionModelSubviewText, flex: 0.65, color: theme === 'dark' ? Colors.white : Colors.black}}>Private</Text>
                   <Icon name="checkmark-sharp" size={hp('2.5%')} color={Colors.mediumOrange} style={pinData.visibility === 0 ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
               </TouchableOpacity>
-              <View style={styles.horizontalLine} />
+              <View style={{...styles.horizontalLine, borderBottomColor: theme == 'dark' ? Colors.white : Colors.black}} />
 
               <TouchableOpacity style={styles.pinActionModelSubview}
                 onPress={async () => {
@@ -244,7 +244,7 @@ const PinPost = (props:any) => {
                   <Text style={{...styles.pinActionModelSubviewText, flex: 0.65, color: theme === 'dark' ? Colors.white : Colors.black}}>Friends</Text>
                   <Icon name="checkmark-sharp" size={hp('2.5%')} color={Colors.mediumOrange} style={pinData.visibility === 1 ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
               </TouchableOpacity>
-              <View style={styles.horizontalLine} />
+              <View style={{...styles.horizontalLine, borderBottomColor: theme == 'dark' ? Colors.white : Colors.black}} />
 
               <TouchableOpacity style={styles.pinActionModelSubview}
                 onPress={async () => {
@@ -272,7 +272,7 @@ const PinPost = (props:any) => {
                   <MaterialIcon name="edit" size={hp('2%')} color={theme === 'dark' ? Colors.white : Colors.black} />
                   <Text style={{...styles.pinActionModelSubviewText, color: theme === 'dark' ? Colors.white : Colors.black}}>Edit pin</Text>
               </TouchableOpacity>
-              <View style={styles.horizontalLine} />
+              <View style={{...styles.horizontalLine, borderBottomColor: theme == 'dark' ? Colors.white : Colors.black}} />
 
               <TouchableOpacity style={styles.pinActionModelSubview}
                 onPress={() => {
@@ -281,7 +281,7 @@ const PinPost = (props:any) => {
                   <MaterialIcon name="visibility" size={hp('2%')} color={theme === 'dark' ? Colors.white : Colors.black} />
                   <Text style={{...styles.pinActionModelSubviewText, color: theme === 'dark' ? Colors.white : Colors.black}}>Change visibility</Text>
               </TouchableOpacity>
-              <View style={styles.horizontalLine} />
+              <View style={{...styles.horizontalLine, borderBottomColor: theme == 'dark' ? Colors.white : Colors.black}} />
 
               <TouchableOpacity style={styles.pinActionModelSubview} 
                 onPress={async () => {
@@ -309,7 +309,7 @@ const PinPost = (props:any) => {
         isVisible={editPinLocationTags} 
         onBackdropPress={() => setEditPinLocationTags(false)}
         style={styles.locationTagsModal} >
-        <View style={{...styles.locationTagsModalView, backgroundColor: theme === 'dark' ? Colors.darkBackground : Colors.white}}>
+        <View style={{...styles.locationTagsModalView, backgroundColor: theme === 'dark' ? Colors.darkSurface : Colors.white}}>
             <Text style={{...styles.locationTagsModalTitle, color: theme === 'dark' ? Colors.white : Colors.black}}>Select location tags</Text>
             <View>
                 {locationTags.map((tag, index) => {
@@ -328,7 +328,7 @@ const PinPost = (props:any) => {
                                 <Text style={{...styles.locationTagsModalText, color: theme === 'dark' ? Colors.white : Colors.black}}>{tag}</Text>
                                 <Icon name="checkmark-sharp" size={hp('2.5%')} color={Colors.mediumOrange} style={editedPinData.location_tags.includes(tag) ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
                             </TouchableOpacity>
-                            <View style={styles.horizontalLine} />
+                            <View style={{...styles.horizontalLine, borderBottomColor: theme == 'dark' ? Colors.white : Colors.black}} />
                         </View>
                     )
                 })}
@@ -367,7 +367,7 @@ const PinPost = (props:any) => {
         isVisible={userTagState.modalVisible} 
         onBackdropPress={() => setUserTagState({...userTagState, modalVisible: false})}
         style={userTagsStyles.userTagsModal} >
-        <View style={{...userTagsStyles.userTagsModalView, backgroundColor: theme === 'dark' ? Colors.darkBackground : Colors.white}}>
+        <View style={{...userTagsStyles.userTagsModalView, backgroundColor: theme === 'dark' ? Colors.darkSurface : Colors.white}}>
             <View style={userTagsStyles.userTagsModalHeader}>
                 <Text style={{...userTagsStyles.userTagsModalTitle, color: theme === 'dark' ? Colors.white : Colors.black}}>Tag Users</Text>
                 <Entypo name="cross" size={hp('2.5%')} color={Colors.mediumGray} onPress={() => setUserTagState({...userTagState, modalVisible: false})} style={{position: 'absolute', left: wp('45%')}}/>

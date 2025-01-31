@@ -452,7 +452,7 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
         isVisible={pinFilterModalVisible} 
         onBackdropPress={() => {setFilterState(tempFilterState); setPinFilterModalVisible(false)}}
         style={styles.pinFilterModal}>
-        <View style={{...styles.pinFilterModalView, backgroundColor: theme == 'dark' ? Colors.darkBackground : Colors.white}}>
+        <View style={{...styles.pinFilterModalView, backgroundColor: theme == 'dark' ? Colors.darkSurface : Colors.white}}>
           <Text style={{...styles.pinFilterModalTitle, color: theme == 'dark' ? Colors.white : Colors.black}}>Filter pins</Text>
             <TouchableOpacity 
               style={styles.filterVisibilityOpacity}
@@ -467,7 +467,7 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
               <Text style={{...styles.filterVisibilityText, flex: 0.65, color: theme == 'dark' ? Colors.white : Colors.black}}>Personal</Text>
               <Icon name="checkmark-sharp" size={wp('6%')} color={Colors.mediumOrange} style={tempFilterState.private ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
             </TouchableOpacity>
-            <View style={styles.horizontalLine} />
+            <View style={{...styles.horizontalLine, borderBottomColor: theme == 'dark' ? Colors.white : Colors.black}} />
 
             <TouchableOpacity 
               style={styles.filterVisibilityOpacity}
@@ -482,7 +482,7 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
               <Text style={{...styles.filterVisibilityText, flex: 0.65, color: theme == 'dark' ? Colors.white : Colors.black}}>Friends</Text>
               <Icon name="checkmark-sharp" size={wp('6%')} color={Colors.mediumOrange} style={tempFilterState.friends ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
             </TouchableOpacity>
-            <View style={styles.horizontalLine} />
+            <View style={{...styles.horizontalLine, borderBottomColor: theme == 'dark' ? Colors.white : Colors.black}} />
 
             <TouchableOpacity 
               style={styles.filterVisibilityOpacity}
@@ -504,7 +504,7 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
         isVisible={userFilterState.modalVisible} 
         onBackdropPress={() => setUserFilterState({...userFilterState, modalVisible: false})}
         style={userTagsStyles.userTagsModal}>
-        <View style={{...userTagsStyles.userTagsModalView, backgroundColor: theme == 'dark' ? Colors.darkBackground : Colors.white}}>
+        <View style={{...userTagsStyles.userTagsModalView, backgroundColor: theme == 'dark' ? Colors.darkSurface : Colors.white}}>
             <View style={userTagsStyles.userTagsModalHeader}>
                 <Text style={{...userTagsStyles.userTagsModalTitle, color: theme == 'dark' ? Colors.white : Colors.black}}>Filter by user</Text>
                 <Entypo name="cross" size={wp('6%')} color={Colors.mediumGray} onPress={() => setUserFilterState({...userFilterState, modalVisible: false})} style={{position: 'absolute', left: wp('50%')}}/>

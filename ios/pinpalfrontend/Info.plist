@@ -33,9 +33,11 @@
 		<true/>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>PinPal needs to use your location..</string>
+	<string>PinPal needs permission to access your location..</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>PinPal needs permission to access your photos..</string>
+	<key>NSCameraUsageDescription</key>
+	<string>PinPal needs permission to access your camera..</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>
