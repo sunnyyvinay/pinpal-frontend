@@ -19,6 +19,9 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import userSearchStyles from '../styles/usersearch';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import FastImage from 'react-native-fast-image';
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import 'react-native-get-random-values';
+import { v4 as uuidv4 } from 'uuid';
 
 function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.Element {
   const {theme, setTheme} = useAppContext();
@@ -80,6 +83,10 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
     friends: true,
     public: true,
     location_tag: "",
+  });
+  const [locationSearch, setLocationSearch] = useState({
+    modalVisible: false,
+    search: "",
   });
 
   const setCurrentLocation = async () => {
@@ -196,11 +203,11 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
   }, [userFilterState.search]);
 
   useLayoutEffect(() => {
-          navigation.setOptions({
-              headerStyle: {backgroundColor: theme == "dark" ? Colors.darkBackground : Colors.white},
-              headerTitleStyle: {color: theme == "dark" ? Colors.white : Colors.black},
-          });
-      }, [navigation, theme]);
+      navigation.setOptions({
+          headerStyle: {backgroundColor: theme == "dark" ? Colors.darkBackground : Colors.white},
+          headerTitleStyle: {color: theme == "dark" ? Colors.white : Colors.black},
+      });
+  }, [navigation, theme]);
 
   const userView = (user: any) => {
     searchedUserCount--;
@@ -442,13 +449,17 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
             <MaterialIcon name="person-search" size={wp('6%')} color={theme == 'dark' ? Colors.mediumOrange : Colors.lightOrange} />
           </TouchableOpacity>
         }
+        <TouchableOpacity style={{...styles.mapControlButton, backgroundColor: theme == 'dark' ? Colors.darkBackground : Colors.white}} onPress={() => {setLocationSearch({...locationSearch, modalVisible: true})}}>
+          <MaterialIcon name="search" size={wp('6%')} color={theme == 'dark' ? Colors.mediumOrange : Colors.lightOrange} />
+        </TouchableOpacity>
         <TouchableOpacity style={{...styles.mapControlButton, backgroundColor: theme == 'dark' ? Colors.darkBackground : Colors.white}} onPress={setCurrentLocation}>
           <FontAwesome6 name="location-arrow" size={wp('6%')} color={theme == 'dark' ? Colors.mediumOrange : Colors.lightOrange} />
         </TouchableOpacity>
       </View>
       
       {handleDragOptions()}
-
+      
+      {/* Visibility Filter Modal */}
       <Modal 
         isVisible={pinFilterModalVisible} 
         onBackdropPress={() => {setFilterState(tempFilterState); setPinFilterModalVisible(false)}}
@@ -500,7 +511,8 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
             </TouchableOpacity>
           </View>
       </Modal>
-
+      
+      {/* User tag filter modal */}
       <Modal 
         isVisible={userFilterState.modalVisible} 
         onBackdropPress={() => setUserFilterState({...userFilterState, modalVisible: false})}
@@ -527,7 +539,73 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
               </View>
             </ScrollView>
         </View>
-    </Modal>
+      </Modal>
+      
+      { /* Location search modal */ }
+      <Modal 
+        isVisible={locationSearch.modalVisible} 
+        onBackdropPress={() => setLocationSearch({...locationSearch, modalVisible: false})}
+        style={userTagsStyles.userTagsModal}>
+        <View style={{...userTagsStyles.userTagsModalView, flex: 0.5,backgroundColor: theme == 'dark' ? Colors.darkSurface : Colors.white}}>
+            <View style={userTagsStyles.userTagsModalHeader}>
+                <Text style={{...userTagsStyles.userTagsModalTitle, color: theme == 'dark' ? Colors.white : Colors.black}}>Search Location</Text>
+                <Entypo name="cross" size={wp('6%')} color={Colors.mediumGray} onPress={() => setLocationSearch({...locationSearch, modalVisible: false})} style={{position: 'absolute', left: wp('50%')}}/>
+            </View>
+            <GooglePlacesAutocomplete
+              placeholder="Search"
+              textInputProps={{
+                autoCapitalize: "none",
+                autoCorrect: false,
+              }}
+              onPress={(data, details = null) => {
+                setLocationSearch({...locationSearch, modalVisible: false});
+                if (details && details.geometry && details.geometry.location) {
+                  setChangingRegion({
+                    latitude: details.geometry.location.lat,
+                    longitude: details.geometry.location.lng,
+                    latitudeDelta: 0.0008,
+                    longitudeDelta: 0.0008,
+                  });
+                } else {
+                  console.log('No details found for', data);
+                  setCurrentLocation();
+                }
+              }}
+              query={{
+                key: 'AIzaSyC68_tPg4ZLMBR8YTz7aSMLW43qwIXHWa4',
+                language: 'en',
+              }}
+              styles={{
+                textInputContainer: {
+                  width: '90%',
+                  marginTop: hp('2%'),
+                },
+                textInput: {
+                  height: 38,
+                  color: Colors.mediumGray,
+                  fontSize: 16,
+                  backgroundColor: Colors.darkSurface
+                },
+                row: {
+                  backgroundColor: Colors.darkSurface
+                },
+                poweredContainer: {
+                  backgroundColor: Colors.darkSurface
+                },
+                predefinedPlacesDescription: {
+                  color: Colors.mediumGray,
+                },
+                description: {
+                  color: Colors.mediumGray,
+                },
+                powered: {
+                  color: Colors.mediumGray,
+                }
+              }}
+              fetchDetails={true}
+            />
+        </View>
+      </Modal>
     </View> 
   )
 }
@@ -535,7 +613,7 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
 const styles = StyleSheet.create({
   mapContainer: {
     width: wp('100%'),
-    height: hp('80%'),
+    height: hp('74%'),
   },
   draggableOptionsView: {
     position: 'absolute',

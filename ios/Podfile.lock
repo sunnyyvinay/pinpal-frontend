@@ -951,6 +951,8 @@ PODS:
     - React-debug
   - react-native-date-picker (5.0.4):
     - React-Core
+  - react-native-get-random-values (1.11.0):
+    - React-Core
   - react-native-image-picker (7.1.2):
     - DoubleConversion
     - glog
@@ -1367,6 +1369,7 @@ DEPENDENCIES:
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - React-Mapbuffer (from `../node_modules/react-native/ReactCommon`)
   - react-native-date-picker (from `../node_modules/react-native-date-picker`)
+  - react-native-get-random-values (from `../node_modules/react-native-get-random-values`)
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - react-native-maps (from `../node_modules/react-native-maps`)
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
@@ -1475,6 +1478,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   react-native-date-picker:
     :path: "../node_modules/react-native-date-picker"
+  react-native-get-random-values:
+    :path: "../node_modules/react-native-get-random-values"
   react-native-image-picker:
     :path: "../node_modules/react-native-image-picker"
   react-native-maps:
@@ -1578,6 +1583,7 @@ SPEC CHECKSUMS:
   React-logger: fa92ba4d3a5d39ac450f59be2a3cec7b099f0304
   React-Mapbuffer: 9f68550e7c6839d01411ac8896aea5c868eff63a
   react-native-date-picker: 6891317e850deae5b53d51355226e07a495aba61
+  react-native-get-random-values: 21325b2244dfa6b58878f51f9aa42821e7ba3d06
   react-native-image-picker: c3afe5472ef870d98a4b28415fc0b928161ee5f7
   react-native-maps: 2e6e9896195781327ee15b33e3e84bf73c08207a
   react-native-netinfo: f0a9899081c185db1de5bb2fdc1c88c202a059ac

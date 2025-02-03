@@ -29,6 +29,8 @@
     "react-native-fast-image": "^8.6.3",
     "react-native-gesture-handler": "^2.19.0",
     "react-native-get-location": "^5.0.0",
+    "react-native-get-random-values": "^1.11.0",
+    "react-native-google-places-autocomplete": "^2.5.7",
     "react-native-image-picker": "^7.1.2",
     "react-native-international-phone-number": "^0.8.0",
     "react-native-linear-gradient": "^2.8.3",
@@ -44,7 +46,8 @@
     "react-native-vector-icons": "^10.2.0",
     "react-navigation-stack": "^2.10.4",
     "react-phone-number-input": "^3.4.5",
-    "undici": "^7.3.0"
+    "undici": "^7.3.0",
+    "uuid": "^11.0.5"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

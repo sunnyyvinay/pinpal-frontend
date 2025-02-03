@@ -71,7 +71,7 @@ function AddPinOptions({ route, navigation }: any): React.JSX.Element {
                   navigation.navigate("New pin", { latitude: lat_long.latitude, longitude: lat_long.longitude });
                 }} />
             <Button 
-                title="Dragged location" 
+                title="Map location" 
                 color={Colors.white}
                 buttonStyle={styles.optionButton}
                 titleStyle={{ color: Colors.white, fontWeight: '400', fontFamily: 'ChunkFive' }}
