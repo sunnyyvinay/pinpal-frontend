@@ -58,14 +58,6 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
   const [friendPins, setFriendPins] = useState<FriendPin[]>([]);
   const [publicPins, setPublicPins] = useState([]);
 
-  // const [pinFilterModalVisible, setPinFilterModalVisible] = useState(false);
-  // const [userFilterState, setUserFilterState] = useState({
-  //   modalVisible: false,
-  //   search: "",
-  //   queryUsers: [],
-  //   on: false,
-  //   user: ""
-  // });
   let searchedUserCount: number = 0;
   type FilterState = {
     private: boolean,
@@ -78,17 +70,6 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
     on: boolean,
     user: ""
   }
-  const [tempFilterState, setTempFilterState] = useState<FilterState>({
-    private: true,
-    friends: true,
-    public: true,
-    location_tag: "",
-    modalState: 0,
-    search: "",
-    queryUsers: [],
-    on: false,
-    user: ""
-  });
   const [filterState, setFilterState] = useState<FilterState>({
     private: true,
     friends: true,
@@ -454,45 +435,45 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
             <TouchableOpacity 
               style={styles.filterVisibilityOpacity}
               onPress={() => {
-                  if (tempFilterState.private) {
-                    setTempFilterState({...tempFilterState, private: false});
+                  if (filterState.private) {
+                    setFilterState({...filterState, private: false});
                   } else {
-                    setTempFilterState({...tempFilterState, private: true});
+                    setFilterState({...filterState, private: true});
                   }
               }}>
               <MaterialIcon name="lock" size={wp('6%')} style={{ flex: 0.25}} color={theme == 'dark' ? Colors.white : Colors.black}/>
               <Text style={{...styles.filterVisibilityText, flex: 0.65, color: theme == 'dark' ? Colors.white : Colors.black}}>Personal</Text>
-              <Icon name="checkmark-sharp" size={wp('6%')} color={Colors.mediumOrange} style={tempFilterState.private ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
+              <Icon name="checkmark-sharp" size={wp('6%')} color={Colors.mediumOrange} style={filterState.private ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
             </TouchableOpacity>
             <View style={{...styles.horizontalLine, borderBottomColor: theme == 'dark' ? Colors.white : Colors.black}} />
 
             <TouchableOpacity 
               style={styles.filterVisibilityOpacity}
               onPress={() => {
-                  if (tempFilterState.friends) {
-                    setTempFilterState({...tempFilterState, friends: false});
-                  } else {
-                    setTempFilterState({...tempFilterState, friends: true});
-                  }
+                if (filterState.friends) {
+                  setFilterState({...filterState, friends: false});
+                } else {
+                  setFilterState({...filterState, friends: true});
+                }
               }}>
               <MaterialIcon name="people-alt" size={wp('6%')} style={{ flex: 0.25}} color={theme == 'dark' ? Colors.white : Colors.black}/>
               <Text style={{...styles.filterVisibilityText, flex: 0.65, color: theme == 'dark' ? Colors.white : Colors.black}}>Friends</Text>
-              <Icon name="checkmark-sharp" size={wp('6%')} color={Colors.mediumOrange} style={tempFilterState.friends ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
+              <Icon name="checkmark-sharp" size={wp('6%')} color={Colors.mediumOrange} style={filterState.friends ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
             </TouchableOpacity>
             <View style={{...styles.horizontalLine, borderBottomColor: theme == 'dark' ? Colors.white : Colors.black}} />
 
             <TouchableOpacity 
               style={styles.filterVisibilityOpacity}
               onPress={() => {
-                  if (tempFilterState.public) {
-                    setTempFilterState({...tempFilterState, public: false});
-                  } else {
-                    setTempFilterState({...tempFilterState, public: true});
-                  }
+                if (filterState.public) {
+                  setFilterState({...filterState, public: false});
+                } else {
+                  setFilterState({...filterState, public: true});
+                }
               }}>
               <MaterialIcon name="public" size={wp('6%')} style={{ flex: 0.25}} color={theme == 'dark' ? Colors.white : Colors.black}/>
               <Text style={{...styles.filterVisibilityText, flex: 0.65, color: theme == 'dark' ? Colors.white : Colors.black}}>Public</Text>
-              <Icon name="checkmark-sharp" size={wp('6%')} color={Colors.mediumOrange} style={tempFilterState.public ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
+              <Icon name="checkmark-sharp" size={wp('6%')} color={Colors.mediumOrange} style={filterState.public ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
             </TouchableOpacity>
           </View>
         );
@@ -527,8 +508,10 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
 
   return (
     <View style={{width: wp('100%'), height: hp('100%')}}>
+
+      {/* Filter View */ }
       <View style={{...styles.filterView, backgroundColor: theme == 'dark' ? Colors.darkBackground : Colors.white}}>
-        <TouchableOpacity style={styles.filterIcon} onPress={() => {if (dragMode.mode == 0) {setTempFilterState({...filterState}); setFilterState({...filterState, modalState: 1});}}}>
+        <TouchableOpacity style={styles.filterIcon} onPress={() => {if (dragMode.mode == 0) {setFilterState({...filterState, modalState: 1});}}}>
           <Icon name="filter-circle" size={wp('8%')} color={theme == 'dark' ? Colors.mediumOrange : Colors.lightOrange} />
         </TouchableOpacity>
         <View style={styles.verticalLine} />
@@ -553,9 +536,6 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
 
       <MapView
         region={changingRegion}
-        // onRegionChange={(newRegion) => {
-        //   setChangingRegion(newRegion);
-        // }}
         onRegionChangeComplete={(newRegion) => {
           setChangingRegion(newRegion);
         }}
@@ -565,7 +545,8 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
         userInterfaceStyle={theme === "dark" ? "dark" : "light"}>
         {handleDragMode()}
       </MapView>
-
+      
+      { /* Map controls */}
       <View style={{...styles.mapControlView, marginTop: filterState.on ? hp('55.5%') : hp('62.5%')}}>
         {filterState.on &&
           <TouchableOpacity style={{...styles.mapControlButton, backgroundColor: theme == 'dark' ? Colors.darkBackground : Colors.white}} onPress={() => {if (dragMode.mode == 0) setFilterState({...filterState, search: "", queryUsers: [], on: false, user: ""})}}>
@@ -585,17 +566,17 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
       {/* Filter Modal */}
       <Modal 
         isVisible={filterState.modalState > 0} 
-        onBackdropPress={() => {setFilterState(tempFilterState); setFilterState({...filterState, modalState: 0})}}
+        onBackdropPress={() => {setFilterState({...filterState, modalState: 0})}}
         style={styles.pinFilterModal}>
-          {handleFilterModal()}
+          <>{handleFilterModal()}</>
       </Modal>
       
-      { /* Location search modal */ }
+      { /* Location Search Modal */ }
       <Modal 
         isVisible={locationSearch.modalVisible} 
         onBackdropPress={() => setLocationSearch({...locationSearch, modalVisible: false})}
         style={userTagsStyles.userTagsModal}>
-        <View style={{...userTagsStyles.userTagsModalView, flex: 0.5,backgroundColor: theme == 'dark' ? Colors.darkSurface : Colors.white}}>
+        <SafeAreaView style={{...userTagsStyles.userTagsModalView, flex: 0.5, backgroundColor: theme == 'dark' ? Colors.darkSurface : Colors.white}}>
             <View style={userTagsStyles.userTagsModalHeader}>
                 <Text style={{...userTagsStyles.userTagsModalTitle, color: theme == 'dark' ? Colors.white : Colors.black}}>Search Location</Text>
                 <Entypo name="cross" size={wp('6%')} color={Colors.mediumGray} onPress={() => setLocationSearch({...locationSearch, modalVisible: false})} style={{position: 'absolute', left: wp('50%')}}/>
@@ -612,8 +593,8 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
                   setChangingRegion({
                     latitude: details.geometry.location.lat,
                     longitude: details.geometry.location.lng,
-                    latitudeDelta: 0.0008,
-                    longitudeDelta: 0.0008,
+                    latitudeDelta: 0.01,
+                    longitudeDelta: 0.01,
                   });
                 } else {
                   console.log('No details found for', data);
@@ -627,13 +608,17 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
               styles={{
                 textInputContainer: {
                   width: '90%',
-                  marginTop: hp('2%'),
+                  marginTop: hp('1%'),
+                  alignSelf: 'center',
+                  borderWidth: wp('1.5%'),
+                  borderColor: Colors.darkGray,
+                  borderRadius: wp('3%'),
                 },
                 textInput: {
                   height: 38,
                   color: Colors.mediumGray,
                   fontSize: 16,
-                  backgroundColor: Colors.darkSurface
+                  backgroundColor: Colors.darkSurface,
                 },
                 row: {
                   backgroundColor: Colors.darkSurface
@@ -645,15 +630,17 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
                   color: Colors.mediumGray,
                 },
                 description: {
+                  fontSize: 11,
+                  fontFamily: 'Futura',
                   color: Colors.mediumGray,
                 },
                 powered: {
                   color: Colors.mediumGray,
-                }
+                },
               }}
               fetchDetails={true}
             />
-        </View>
+        </SafeAreaView>
       </Modal>
     </View> 
   )
