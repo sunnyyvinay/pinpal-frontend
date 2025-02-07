@@ -22,6 +22,7 @@ import FastImage from 'react-native-fast-image';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.Element {
   const {theme, setTheme} = useAppContext();
@@ -57,32 +58,47 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
   const [friendPins, setFriendPins] = useState<FriendPin[]>([]);
   const [publicPins, setPublicPins] = useState([]);
 
-  const [pinFilterModalVisible, setPinFilterModalVisible] = useState(false);
-  const [userFilterState, setUserFilterState] = useState({
-    modalVisible: false,
-    search: "",
-    queryUsers: [],
-    on: false,
-    user: ""
-  });
+  // const [pinFilterModalVisible, setPinFilterModalVisible] = useState(false);
+  // const [userFilterState, setUserFilterState] = useState({
+  //   modalVisible: false,
+  //   search: "",
+  //   queryUsers: [],
+  //   on: false,
+  //   user: ""
+  // });
   let searchedUserCount: number = 0;
   type FilterState = {
     private: boolean,
     friends: boolean,
     public: boolean,
     location_tag: string,
+    modalState: number,  // 0 - not visible, 1 - options, 2 - visibility, 3 - user
+    search: string,
+    queryUsers: [],
+    on: boolean,
+    user: ""
   }
   const [tempFilterState, setTempFilterState] = useState<FilterState>({
     private: true,
     friends: true,
     public: true,
     location_tag: "",
+    modalState: 0,
+    search: "",
+    queryUsers: [],
+    on: false,
+    user: ""
   });
   const [filterState, setFilterState] = useState<FilterState>({
     private: true,
     friends: true,
     public: true,
     location_tag: "",
+    modalState: 0,
+    search: "",
+    queryUsers: [],
+    on: false,
+    user: ""
   });
   const [locationSearch, setLocationSearch] = useState({
     modalVisible: false,
@@ -182,15 +198,15 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
   useEffect(() => {
     const fetchData = async () => {
         try {
-            const users = await getSearchUsers(userFilterState.search);
+            const users = await getSearchUsers(filterState.search);
             searchedUserCount = users.users.length + 1;
-            setUserFilterState({...userFilterState, queryUsers: users.users});
+            setFilterState({...filterState, queryUsers: users.users});
         } catch (error) {
             console.error(error);
         }
     };
 
-    if (userFilterState.search.length > 0) {
+    if (filterState.search.length > 0) {
         // Debounce the API call to avoid too many requests
         const timeoutId = setTimeout(() => {
             fetchData();
@@ -198,9 +214,9 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
         
         return () => clearTimeout(timeoutId);
     } else {
-        setUserFilterState({...userFilterState, queryUsers: []});
+        setFilterState({...filterState, queryUsers: []});
     }
-  }, [userFilterState.search]);
+  }, [filterState.search]);
 
   useLayoutEffect(() => {
       navigation.setOptions({
@@ -213,7 +229,7 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
     searchedUserCount--;
         return (
         <TouchableOpacity key={searchedUserCount} onPress={() => {
-            setUserFilterState({modalVisible: false, search: "", on: true, queryUsers: [], user: user.user_id})
+            setFilterState({...filterState, modalState: 0, search: "", on: true, queryUsers: [], user: user.user_id})
           }}>
             <View style={{...userSearchStyles.searchUserView, marginLeft: wp('10%')}}>
                 <FastImage 
@@ -233,7 +249,7 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
       case 0:
         return (
           <React.Fragment>
-            {pins && !userFilterState.on && pins.map((personalPin: any, index: number) => (
+            {pins && !filterState.on && pins.map((personalPin: any, index: number) => (
             <Marker
               key={personalPin.pin_id}  
               coordinate={{latitude: personalPin.latitude, longitude: personalPin.longitude}}
@@ -270,7 +286,7 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
           
         {friendPins && friendPins.map((friend: any, index: number) => (
           friend && friend.pins && friend.pins.map((friendPin: any, index: number) => (
-            friendPin.visibility > 0 && (!userFilterState.on || (userFilterState.on && friendPin.user_id == userFilterState.user)) &&
+            friendPin.visibility > 0 && (!filterState.on || (filterState.on && friendPin.user_id == filterState.user)) &&
             <Marker
               key={friendPin.pin_id}  
               coordinate={{latitude: friendPin.latitude, longitude: friendPin.longitude}}
@@ -296,7 +312,7 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
           ))))}
 
         {publicPins && publicPins.map((publicPin: any, index: number) => (
-          (!userFilterState.on || (userFilterState.on && publicPin.user_id == userFilterState.user)) &&
+          (!filterState.on || (filterState.on && publicPin.user_id == filterState.user)) &&
             <Marker
               key={publicPin.pin_id}  
               coordinate={{latitude: publicPin.latitude, longitude: publicPin.longitude}}
@@ -398,74 +414,43 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
     }
   }
 
-  return (
-    <View style={{width: wp('100%'), height: hp('100%')}}>
-      <View style={{...styles.filterView, backgroundColor: theme == 'dark' ? Colors.darkBackground : Colors.white}}>
-        <TouchableOpacity style={styles.filterIcon} onPress={() => {if (dragMode.mode == 0) {setTempFilterState({...filterState}); setPinFilterModalVisible(true);}}}>
-          <Icon name="filter-circle" size={wp('8%')} color={theme == 'dark' ? Colors.mediumOrange : Colors.lightOrange} />
-        </TouchableOpacity>
-        <View style={styles.verticalLine} />
-        {filterState.location_tag ? 
-          <TouchableOpacity style={{...styles.locationTagOpacity, backgroundColor: Colors.lightOrange}} onPress={() => { setFilterState({...filterState, location_tag: ""}); }}>
-            <Text style={styles.locationTagText}>{filterState.location_tag}</Text>
-          </TouchableOpacity>
-          :
-          <ScrollView style={styles.locationTagView} horizontal={true} showsHorizontalScrollIndicator={false}>
-            {locationTags.map((tag: string, index: number) => {
-              return (
-                  <TouchableOpacity key={index} style={styles.locationTagOpacity} onPress={() =>{
-                    setFilterState({...filterState, location_tag: tag});
-                  }}>
-                    <Text style={styles.locationTagText}>{tag}</Text>
-                  </TouchableOpacity>
-              )
-            })}
-          </ScrollView>
-        }
-      </View>
+  const handleFilterModal = () => {
+    switch (filterState.modalState) {
+      case 1:
+        return (
+          <View style={{...styles.pinFilterModalView, backgroundColor: theme == 'dark' ? Colors.darkSurface : Colors.white}}>
+            <View style={userTagsStyles.userTagsModalHeader}>
+                <Text style={{...userTagsStyles.userTagsModalTitle, color: theme == 'dark' ? Colors.white : Colors.black}}>Filter pins by</Text>
+                <Entypo name="cross" size={wp('6%')} color={Colors.mediumGray} onPress={() => setFilterState({...filterState, modalState: 0})} style={{position: 'absolute', left: wp('50%')}}/>
+            </View>
+            <TouchableOpacity 
+              style={styles.filterVisibilityOpacity}
+              onPress={() => {
+                setFilterState({...filterState, modalState: 2});
+              }}>
+              <MaterialIcon name="visibility" size={wp('6%')} style={{ flex: 0.25}} color={theme == 'dark' ? Colors.white : Colors.black}/>
+              <Text style={{...styles.filterVisibilityText, flex: 0.65, color: theme == 'dark' ? Colors.white : Colors.black}}>Visibility</Text>
+            </TouchableOpacity>
+            <View style={{...styles.horizontalLine, borderBottomColor: theme == 'dark' ? Colors.white : Colors.black}} />
 
-      <MapView
-        region={changingRegion}
-        // onRegionChange={(newRegion) => {
-        //   setChangingRegion(newRegion);
-        // }}
-        onRegionChangeComplete={(newRegion) => {
-          setChangingRegion(newRegion);
-        }}
-        style={styles.mapContainer}
-        showsPointsOfInterest={true}
-        showsUserLocation={true}
-        userInterfaceStyle={theme === "dark" ? "dark" : "light"}>
-        {handleDragMode()}
-      </MapView>
-
-      <View style={styles.mapControlView}>
-        {userFilterState.on ?
-          <TouchableOpacity style={{...styles.mapControlButton, backgroundColor: theme == 'dark' ? Colors.darkBackground : Colors.white}} onPress={() => {if (dragMode.mode == 0) setUserFilterState({modalVisible: false, search: "", queryUsers: [], on: false, user: ""})}}>
-            <MaterialIcon name="search-off" size={wp('6%')} color={Colors.lightOrange} />
-          </TouchableOpacity>
-        :
-          <TouchableOpacity style={{...styles.mapControlButton, backgroundColor: theme == 'dark' ? Colors.darkBackground : Colors.white}} onPress={() => {if (dragMode.mode == 0) setUserFilterState({...userFilterState, modalVisible: true})}}>
-            <MaterialIcon name="person-search" size={wp('6%')} color={theme == 'dark' ? Colors.mediumOrange : Colors.lightOrange} />
-          </TouchableOpacity>
-        }
-        <TouchableOpacity style={{...styles.mapControlButton, backgroundColor: theme == 'dark' ? Colors.darkBackground : Colors.white}} onPress={() => {setLocationSearch({...locationSearch, modalVisible: true})}}>
-          <MaterialIcon name="search" size={wp('6%')} color={theme == 'dark' ? Colors.mediumOrange : Colors.lightOrange} />
-        </TouchableOpacity>
-        <TouchableOpacity style={{...styles.mapControlButton, backgroundColor: theme == 'dark' ? Colors.darkBackground : Colors.white}} onPress={setCurrentLocation}>
-          <FontAwesome6 name="location-arrow" size={wp('6%')} color={theme == 'dark' ? Colors.mediumOrange : Colors.lightOrange} />
-        </TouchableOpacity>
-      </View>
-      
-      {handleDragOptions()}
-      
-      {/* Visibility Filter Modal */}
-      <Modal 
-        isVisible={pinFilterModalVisible} 
-        onBackdropPress={() => {setFilterState(tempFilterState); setPinFilterModalVisible(false)}}
-        style={styles.pinFilterModal}>
-        <View style={{...styles.pinFilterModalView, backgroundColor: theme == 'dark' ? Colors.darkSurface : Colors.white}}>
-          <Text style={{...styles.pinFilterModalTitle, color: theme == 'dark' ? Colors.white : Colors.black}}>Filter pins</Text>
+            <TouchableOpacity 
+              style={styles.filterVisibilityOpacity}
+              onPress={() => {
+                setFilterState({...filterState, modalState: 3});
+              }}>
+              <MaterialIcon name="person" size={wp('6%')} style={{ flex: 0.25}} color={theme == 'dark' ? Colors.white : Colors.black}/>
+              <Text style={{...styles.filterVisibilityText, flex: 0.65, color: theme == 'dark' ? Colors.white : Colors.black}}>User</Text>
+            </TouchableOpacity>
+          </View>
+        );
+      case 2: // Visibility
+        return (
+          <View style={{...styles.pinFilterModalView, backgroundColor: theme == 'dark' ? Colors.darkSurface : Colors.white}}>
+            <View style={userTagsStyles.userTagsModalHeader}>
+                <Ionicons name="arrow-back" size={wp('6%')} color={Colors.mediumGray} onPress={() => setFilterState({...filterState, modalState: 1})} style={{position: 'absolute', right: wp('40%')}}/>
+                <Text style={{...userTagsStyles.userTagsModalTitle, color: theme == 'dark' ? Colors.white : Colors.black}}>Visibility</Text>
+                <Entypo name="cross" size={wp('6%')} color={Colors.mediumGray} onPress={() => setFilterState({...filterState, modalState: 0})} style={{position: 'absolute', left: wp('40%')}}/>
+            </View>
             <TouchableOpacity 
               style={styles.filterVisibilityOpacity}
               onPress={() => {
@@ -510,35 +495,99 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
               <Icon name="checkmark-sharp" size={wp('6%')} color={Colors.mediumOrange} style={tempFilterState.public ? { flex: 0.1} : { flex: 0.1, opacity: 0}}/>
             </TouchableOpacity>
           </View>
-      </Modal>
-      
-      {/* User tag filter modal */}
-      <Modal 
-        isVisible={userFilterState.modalVisible} 
-        onBackdropPress={() => setUserFilterState({...userFilterState, modalVisible: false})}
-        style={userTagsStyles.userTagsModal}>
-        <View style={{...userTagsStyles.userTagsModalView, backgroundColor: theme == 'dark' ? Colors.darkSurface : Colors.white}}>
+        );
+      case 3: // User
+        return(
+          <View style={{...userTagsStyles.userTagsModalView, backgroundColor: theme == 'dark' ? Colors.darkSurface : Colors.white}}>
             <View style={userTagsStyles.userTagsModalHeader}>
-                <Text style={{...userTagsStyles.userTagsModalTitle, color: theme == 'dark' ? Colors.white : Colors.black}}>Filter by user</Text>
-                <Entypo name="cross" size={wp('6%')} color={Colors.mediumGray} onPress={() => setUserFilterState({...userFilterState, modalVisible: false})} style={{position: 'absolute', left: wp('50%')}}/>
+                <Ionicons name="arrow-back" size={wp('6%')} color={Colors.mediumGray} onPress={() => setFilterState({...filterState, modalState: 1})} style={{position: 'absolute', right: wp('40%')}}/>
+                <Text style={{...userTagsStyles.userTagsModalTitle, color: theme == 'dark' ? Colors.white : Colors.black}}>User</Text>
+                <Entypo name="cross" size={wp('6%')} color={Colors.mediumGray} onPress={() => setFilterState({...filterState, modalState: 0})} style={{position: 'absolute', left: wp('40%')}}/>
             </View>
             <SearchBar 
                 placeholder='Search...'
-                value={userFilterState.search}
+                value={filterState.search}
                 round={true}
                 autoCapitalize="none"
                 autoCorrect={false}
                 lightTheme={theme == 'light'}
                 containerStyle={{...userSearchStyles.searchBarContainer, width: wp('80%')}}
-                onChangeText={(text) => setUserFilterState({...userFilterState, search: text})}/>
+                onChangeText={(text) => setFilterState({...filterState, search: text})}/>
             <ScrollView style={{width: wp('100%'), flex: 1}}>
               <View style={{flex: 0.8}}>
-                  { userFilterState.queryUsers && userFilterState.queryUsers.length > 0 && userFilterState.queryUsers.map((user: any) => (
+                  { filterState.queryUsers && filterState.queryUsers.length > 0 && filterState.queryUsers.map((user: any) => (
                       userView(user)
                   ))}
               </View>
             </ScrollView>
-        </View>
+          </View>
+        );
+    }
+  }
+
+  return (
+    <View style={{width: wp('100%'), height: hp('100%')}}>
+      <View style={{...styles.filterView, backgroundColor: theme == 'dark' ? Colors.darkBackground : Colors.white}}>
+        <TouchableOpacity style={styles.filterIcon} onPress={() => {if (dragMode.mode == 0) {setTempFilterState({...filterState}); setFilterState({...filterState, modalState: 1});}}}>
+          <Icon name="filter-circle" size={wp('8%')} color={theme == 'dark' ? Colors.mediumOrange : Colors.lightOrange} />
+        </TouchableOpacity>
+        <View style={styles.verticalLine} />
+        {filterState.location_tag ? 
+          <TouchableOpacity style={{...styles.locationTagOpacity, backgroundColor: Colors.lightOrange}} onPress={() => { setFilterState({...filterState, location_tag: ""}); }}>
+            <Text style={styles.locationTagText}>{filterState.location_tag}</Text>
+          </TouchableOpacity>
+          :
+          <ScrollView style={styles.locationTagView} horizontal={true} showsHorizontalScrollIndicator={false}>
+            {locationTags.map((tag: string, index: number) => {
+              return (
+                  <TouchableOpacity key={index} style={styles.locationTagOpacity} onPress={() =>{
+                    setFilterState({...filterState, location_tag: tag});
+                  }}>
+                    <Text style={styles.locationTagText}>{tag}</Text>
+                  </TouchableOpacity>
+              )
+            })}
+          </ScrollView>
+        }
+      </View>
+
+      <MapView
+        region={changingRegion}
+        // onRegionChange={(newRegion) => {
+        //   setChangingRegion(newRegion);
+        // }}
+        onRegionChangeComplete={(newRegion) => {
+          setChangingRegion(newRegion);
+        }}
+        style={styles.mapContainer}
+        showsPointsOfInterest={true}
+        showsUserLocation={true}
+        userInterfaceStyle={theme === "dark" ? "dark" : "light"}>
+        {handleDragMode()}
+      </MapView>
+
+      <View style={{...styles.mapControlView, marginTop: filterState.on ? hp('55.5%') : hp('62.5%')}}>
+        {filterState.on &&
+          <TouchableOpacity style={{...styles.mapControlButton, backgroundColor: theme == 'dark' ? Colors.darkBackground : Colors.white}} onPress={() => {if (dragMode.mode == 0) setFilterState({...filterState, search: "", queryUsers: [], on: false, user: ""})}}>
+            <MaterialIcon name="search-off" size={wp('6%')} color={Colors.lightOrange} />
+          </TouchableOpacity>
+        }
+        <TouchableOpacity style={{...styles.mapControlButton, backgroundColor: theme == 'dark' ? Colors.darkBackground : Colors.white}} onPress={() => {setLocationSearch({...locationSearch, modalVisible: true})}}>
+          <MaterialIcon name="search" size={wp('6%')} color={theme == 'dark' ? Colors.mediumOrange : Colors.lightOrange} />
+        </TouchableOpacity>
+        <TouchableOpacity style={{...styles.mapControlButton, backgroundColor: theme == 'dark' ? Colors.darkBackground : Colors.white}} onPress={setCurrentLocation}>
+          <FontAwesome6 name="location-arrow" size={wp('6%')} color={theme == 'dark' ? Colors.mediumOrange : Colors.lightOrange} />
+        </TouchableOpacity>
+      </View>
+      
+      {handleDragOptions()}
+      
+      {/* Filter Modal */}
+      <Modal 
+        isVisible={filterState.modalState > 0} 
+        onBackdropPress={() => {setFilterState(tempFilterState); setFilterState({...filterState, modalState: 0})}}
+        style={styles.pinFilterModal}>
+          {handleFilterModal()}
       </Modal>
       
       { /* Location search modal */ }
@@ -744,7 +793,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: hp('1%'),
-    flex: 0.4,
+    flex: 0.3,
   },
   pinFilterModalTitle: {
     fontSize: 20,

@@ -16,7 +16,7 @@ const userTagsStyles = StyleSheet.create({
     userTagsModalHeader: {
         flexDirection: 'row',
         marginTop: hp('1%'),
-        marginBottom: hp('1%'),
+        marginBottom: hp('3%'),
     },
     userTagsModalTitle: {
         fontSize: 20,
