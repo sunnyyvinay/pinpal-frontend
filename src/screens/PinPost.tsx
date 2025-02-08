@@ -195,13 +195,29 @@ const PinPost = (props:any) => {
 
     function formatTimestamp(timestamp: string): string {
       const date = new Date(timestamp);
-  
-      const options: Intl.DateTimeFormatOptions = {
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric'
-      };
-  
+      const now = new Date();
+
+      const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+      if (diffInSeconds < 60) {
+        return `${diffInSeconds} seconds ago`;
+      }
+      const diffInMinutes = Math.floor(diffInSeconds / 60);
+      if (diffInMinutes < 60) {
+        return `${diffInMinutes} minutes ago`;
+      }
+      const diffInHours = Math.floor(diffInMinutes / 60);
+      if (diffInHours < 24) {
+        return `${diffInHours} hours ago`;
+      }
+      const diffInDays = Math.floor(diffInHours / 24);
+      if (diffInDays <= 3) {
+        return `${diffInDays} days ago`;
+      }
+      const options: Intl.DateTimeFormatOptions = { month: 'long', day: 'numeric' };
+      if (now.getFullYear() !== date.getFullYear()) {
+        options.year = 'numeric';
+      }
+
       return date.toLocaleDateString('en-US', options);
   }
 
@@ -475,7 +491,7 @@ const PinPost = (props:any) => {
         :
           <View style={styles.captionView}>
             <Text style={{textAlign: 'center'}}>
-              <Text style={{...styles.createDateText, color: theme === 'dark' ? Colors.mediumGray : Colors.darkGray}}>{formatTimestamp(pinData.create_date)}</Text>
+              <Text style={{...styles.createDateText, color: theme === 'dark' ? Colors.lightOrange : Colors.darkGray}}>{formatTimestamp(pinData.create_date)}</Text>
               <Text style={{...styles.captionText, color: theme === 'dark' ? Colors.white : Colors.black}}>{pinData && pinData.caption ? " - \"" + pinData.caption + "\"" : null}</Text>
             </Text>
           </View>

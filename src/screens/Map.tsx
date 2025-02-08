@@ -23,6 +23,7 @@ import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplet
 import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 
 function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.Element {
   const {theme, setTheme} = useAppContext();
@@ -428,9 +429,9 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
         return (
           <View style={{...styles.pinFilterModalView, backgroundColor: theme == 'dark' ? Colors.darkSurface : Colors.white}}>
             <View style={userTagsStyles.userTagsModalHeader}>
-                <Ionicons name="arrow-back" size={wp('6%')} color={Colors.mediumGray} onPress={() => setFilterState({...filterState, modalState: 1})} style={{position: 'absolute', right: wp('40%')}}/>
-                <Text style={{...userTagsStyles.userTagsModalTitle, color: theme == 'dark' ? Colors.white : Colors.black}}>Visibility</Text>
-                <Entypo name="cross" size={wp('6%')} color={Colors.mediumGray} onPress={() => setFilterState({...filterState, modalState: 0})} style={{position: 'absolute', left: wp('40%')}}/>
+                <Ionicons name="arrow-back" size={wp('6%')} color={Colors.mediumGray} onPress={() => setFilterState({...filterState, modalState: 1})} style={{position: 'absolute', right: wp('50%')}}/>
+                <Text style={{...userTagsStyles.userTagsModalTitle, color: theme == 'dark' ? Colors.white : Colors.black}}>Filter by Visibility</Text>
+                <Entypo name="cross" size={wp('6%')} color={Colors.mediumGray} onPress={() => setFilterState({...filterState, modalState: 0})} style={{position: 'absolute', left: wp('50%')}}/>
             </View>
             <TouchableOpacity 
               style={styles.filterVisibilityOpacity}
@@ -481,9 +482,9 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
         return(
           <View style={{...userTagsStyles.userTagsModalView, backgroundColor: theme == 'dark' ? Colors.darkSurface : Colors.white}}>
             <View style={userTagsStyles.userTagsModalHeader}>
-                <Ionicons name="arrow-back" size={wp('6%')} color={Colors.mediumGray} onPress={() => setFilterState({...filterState, modalState: 1})} style={{position: 'absolute', right: wp('40%')}}/>
-                <Text style={{...userTagsStyles.userTagsModalTitle, color: theme == 'dark' ? Colors.white : Colors.black}}>User</Text>
-                <Entypo name="cross" size={wp('6%')} color={Colors.mediumGray} onPress={() => setFilterState({...filterState, modalState: 0})} style={{position: 'absolute', left: wp('40%')}}/>
+                <Ionicons name="arrow-back" size={wp('6%')} color={Colors.mediumGray} onPress={() => setFilterState({...filterState, modalState: 1})} style={{position: 'absolute', right: wp('50%')}}/>
+                <Text style={{...userTagsStyles.userTagsModalTitle, color: theme == 'dark' ? Colors.white : Colors.black}}>Filter by User</Text>
+                <Entypo name="cross" size={wp('6%')} color={Colors.mediumGray} onPress={() => setFilterState({...filterState, modalState: 0})} style={{position: 'absolute', left: wp('50%')}}/>
             </View>
             <SearchBar 
                 placeholder='Search...'
@@ -547,14 +548,14 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
       </MapView>
       
       { /* Map controls */}
-      <View style={{...styles.mapControlView, marginTop: filterState.on ? hp('55.5%') : hp('62.5%')}}>
+      <View style={{...styles.mapControlView, marginTop: filterState.on ? hp('56.5%') : hp('63.5%')}}>
         {filterState.on &&
           <TouchableOpacity style={{...styles.mapControlButton, backgroundColor: theme == 'dark' ? Colors.darkBackground : Colors.white}} onPress={() => {if (dragMode.mode == 0) setFilterState({...filterState, search: "", queryUsers: [], on: false, user: ""})}}>
             <MaterialIcon name="search-off" size={wp('6%')} color={Colors.lightOrange} />
           </TouchableOpacity>
         }
         <TouchableOpacity style={{...styles.mapControlButton, backgroundColor: theme == 'dark' ? Colors.darkBackground : Colors.white}} onPress={() => {setLocationSearch({...locationSearch, modalVisible: true})}}>
-          <MaterialIcon name="search" size={wp('6%')} color={theme == 'dark' ? Colors.mediumOrange : Colors.lightOrange} />
+          <FontAwesome5Icon name="search" size={wp('5%')} color={theme == 'dark' ? Colors.mediumOrange : Colors.lightOrange} />
         </TouchableOpacity>
         <TouchableOpacity style={{...styles.mapControlButton, backgroundColor: theme == 'dark' ? Colors.darkBackground : Colors.white}} onPress={setCurrentLocation}>
           <FontAwesome6 name="location-arrow" size={wp('6%')} color={theme == 'dark' ? Colors.mediumOrange : Colors.lightOrange} />
