@@ -611,31 +611,32 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
                   marginTop: hp('1%'),
                   alignSelf: 'center',
                   borderWidth: wp('1.5%'),
-                  borderColor: Colors.darkGray,
+                  borderColor: Colors.lightGray,
                   borderRadius: wp('3%'),
                 },
                 textInput: {
                   height: 38,
-                  color: Colors.mediumGray,
+                  color: theme == 'dark' ? Colors.mediumGray : Colors.black,
                   fontSize: 16,
-                  backgroundColor: Colors.darkSurface,
+                  backgroundColor: theme == 'dark' ? Colors.darkSurface : Colors.white,
+                  fontFamily: 'Futura',
                 },
                 row: {
-                  backgroundColor: Colors.darkSurface
+                  backgroundColor: theme == 'dark' ? Colors.darkSurface : Colors.white
                 },
                 poweredContainer: {
-                  backgroundColor: Colors.darkSurface
+                  backgroundColor: theme == 'dark' ? Colors.darkSurface : Colors.white
                 },
                 predefinedPlacesDescription: {
-                  color: Colors.mediumGray,
+                  color: theme == 'dark' ? Colors.mediumGray : Colors.black,
                 },
                 description: {
                   fontSize: 11,
                   fontFamily: 'Futura',
-                  color: Colors.mediumGray,
+                  color: theme == 'dark' ? Colors.mediumGray : Colors.black,
                 },
                 powered: {
-                  color: Colors.mediumGray,
+                  color: theme == 'dark' ? Colors.mediumGray : Colors.black,
                 },
               }}
               fetchDetails={true}
