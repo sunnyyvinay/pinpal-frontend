@@ -122,7 +122,7 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
     useCallback(() => {
       const setPinState = async () => {
         const user_id = await AsyncStorage.getItem("user_id");
-        //setTheme(await AsyncStorage.getItem("theme") || "light");
+        const now = new Date();
         if (user_id) {
           // PERSONAL PINS
           if (filterState.private) {
@@ -144,6 +144,7 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
               }
               if (pin.pins) {
                 pin = pin.pins.filter((pin: any) => pin.visibility > 0 && (filterState.location_tag == "" || pin.location_tags.includes(filterState.location_tag)));
+                if (!filterState.on && filterState.location_tag == "") pin = pin.filter((pin: any) => Math.floor((now.getTime() - new Date(pin.create_date).getTime()) / (1000*60*60)) <= 120); // last 5 days
                 friendData.friends[i] = {user: friend.user, pins: pin};
               }
             }
@@ -612,7 +613,7 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
                   marginTop: hp('1%'),
                   alignSelf: 'center',
                   borderWidth: wp('1.5%'),
-                  borderColor: Colors.lightGray,
+                  borderColor: theme == 'dark' ? Colors.darkGray : Colors.lightGray,
                   borderRadius: wp('3%'),
                 },
                 textInput: {
