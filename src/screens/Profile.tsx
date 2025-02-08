@@ -279,13 +279,14 @@ const styles = StyleSheet.create({
   statTextNum: {
     color: Colors.black,
     fontFamily: 'Futura',
-    fontSize: 15,
+    fontSize: 14,
     alignSelf: 'center',
+    fontWeight: 'bold'
   },
   statTextLabel: {
     color: Colors.darkGray,
     fontFamily: 'Futura',
-    fontSize: 12,
+    fontSize: 13,
     alignSelf: 'center',
   },
   dividerStyle: {

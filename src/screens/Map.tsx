@@ -763,10 +763,11 @@ const styles = StyleSheet.create({
     padding: hp('1%'),
   },
   locationTagText: {
-    fontSize: 12,
+    fontSize: 11,
     fontFamily: 'Futura',
     color: Colors.darkGray,
     textAlign: "center",
+    fontWeight: 'bold'
   },
   horizontalLine: {
     borderBottomColor: 'black',

@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { addPinLike, deletePinLike, getPin, getPinLikes, getSearchUsers, getUser } from '../services/user.service';
-import { ActivityIndicator, Dimensions, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Dimensions, Image, Linking, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import * as Colors from '../constants/colors';
 import { Button, SearchBar } from '@rneui/themed';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -17,6 +17,7 @@ import { ImagePickerResponse, launchImageLibrary, MediaType } from 'react-native
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import { useAppContext } from '../AppContext';
 import FastImage from 'react-native-fast-image';
+import FontAwesome6Icon from 'react-native-vector-icons/FontAwesome6';
 
 const PinPost = (props:any) => {
     const {theme, setTheme} = useAppContext();
@@ -77,6 +78,16 @@ const PinPost = (props:any) => {
     const [loading, setLoading] = useState<any>({editSave: false});
 
     const { width: screenWidth } = Dimensions.get('window');
+
+    const openAppleMaps = (lat: number, lon: number) => {
+      const url = Platform.select({
+        ios: `http://maps.apple.com/?ll=${lat},${lon}`,  // Opens in Apple Maps on iOS
+        android: `geo:${lat},${lon}?q=${lat},${lon}`,    // Opens in default maps app on Android
+      });
+  
+      if (url) Linking.openURL(url).catch(err => console.error("An error occurred", err));
+      else console.error("Invalid URL");
+    };
 
     useEffect(() => {
       const getInfo = async () => {
@@ -491,7 +502,7 @@ const PinPost = (props:any) => {
         :
           <View style={styles.captionView}>
             <Text style={{textAlign: 'center'}}>
-              <Text style={{...styles.createDateText, color: theme === 'dark' ? Colors.lightOrange : Colors.darkGray}}>{formatTimestamp(pinData.create_date)}</Text>
+              <Text style={{...styles.createDateText, color: theme === 'dark' ? Colors.lightOrange : Colors.mediumOrange}}>{formatTimestamp(pinData.create_date)}</Text>
               <Text style={{...styles.captionText, color: theme === 'dark' ? Colors.white : Colors.black}}>{pinData && pinData.caption ? " - \"" + pinData.caption + "\"" : null}</Text>
             </Text>
           </View>
@@ -543,7 +554,7 @@ const PinPost = (props:any) => {
             icon={<MaterialIcon name="edit" size={hp('1.5%')} color={Colors.black} style={{ marginRight: wp('0.5%') }}/>}
             color={Colors.black}
             iconContainerStyle={{ marginRight: wp('0.5%') }}
-            titleStyle={{ color: Colors.black, fontFamily: 'Futura', fontSize: 15 }}
+            titleStyle={{ color: Colors.white, fontFamily: 'Futura', fontSize: 15 }}
             buttonStyle={styles.locationTagsAddButton}
             containerStyle={styles.locationTagsAddButtonContainer} 
             onPress={() => {setEditPinLocationTags(true)}} />  
@@ -552,8 +563,8 @@ const PinPost = (props:any) => {
                 <Button 
                   title={tag} 
                   key={index}
-                  buttonStyle={styles.locationTagButton}
-                  titleStyle={{ color: Colors.darkGray, fontFamily: 'Futura', fontSize: 15 }} />
+                  buttonStyle={{...styles.locationTagButton, backgroundColor: theme === 'dark' ? Colors.mediumOrange : Colors.lightOrange}}
+                  titleStyle={{ color: theme === 'dark' ? Colors.black : Colors.lightGray, fontFamily: 'Futura', fontSize: 13, fontWeight: 'bold' }} />
               )
           })}
         </View>
@@ -566,8 +577,8 @@ const PinPost = (props:any) => {
               <Button 
                 title={tag} 
                 key={index}
-                buttonStyle={styles.locationTagButton}
-                titleStyle={{ color: Colors.darkGray, fontFamily: 'Futura', fontSize: 15 }} />
+                buttonStyle={{...styles.locationTagButton, backgroundColor: theme === 'dark' ? Colors.mediumOrange : Colors.lightOrange}}
+                titleStyle={{ color: theme === 'dark' ? Colors.black : Colors.lightGray, fontFamily: 'Futura', fontSize: 13, fontWeight: 'bold' }} />
             )
         })}
         </View>
@@ -576,32 +587,53 @@ const PinPost = (props:any) => {
         }
         
         {editMode ? null : 
-        <View style={styles.likesView}>
-          <TouchableOpacity onPress={async () => {
-            const user_id = await AsyncStorage.getItem("user_id");
-            if (likes.liked) {
-              try {
-                setLikes({liked: false, count: likes.count - 1});
-                await deletePinLike(user_id, pin_id);
-              } catch (error) {
-                console.log(error);
+        <View style={styles.actionView}>
+          <View style={styles.actionSubview}>
+            <TouchableOpacity onPress={async () => {
+              openAppleMaps(pinData.latitude, pinData.longitude)
+            }}>
+              <FontAwesome6Icon name="map-location-dot" size={hp('3%')} color={theme === "dark" ? Colors.darkOrange : Colors.mediumOrange} />
+            </TouchableOpacity>
+            <Text style={{...styles.likesText, color: theme === "dark" ? Colors.darkOrange : Colors.mediumOrange}}>Go To Pin</Text>
+          </View>
+      
+          <View style={styles.actionSubview}>
+            <TouchableOpacity onPress={async () => {
+              const user_id = await AsyncStorage.getItem("user_id");
+              if (likes.liked) {
+                try {
+                  setLikes({liked: false, count: likes.count - 1});
+                  await deletePinLike(user_id, pin_id);
+                } catch (error) {
+                  console.log(error);
+                }
+              } else {
+                try {
+                  setLikes({liked: true, count: likes.count + 1});
+                  await addPinLike(user_id, pin_id);
+                } catch (error) {
+                  console.log(error);
+                }
               }
-            } else {
-              try {
-                setLikes({liked: true, count: likes.count + 1});
-                await addPinLike(user_id, pin_id);
-              } catch (error) {
-                console.log(error);
-              }
-            }
-          }}>
-            {likes.liked ? <Icon name="heart" size={hp('3%')} color={Colors.mediumOrange} /> : <Icon name="heart-outline" size={hp('3%')} color={theme === "dark" ? Colors.white : Colors.black} />}
-          </TouchableOpacity>
-          {likes.liked ? 
-            <Text style={{...styles.likesText, color: Colors.mediumOrange}} onPress={() => {props.navigation.push('UserList', {id: pin_id, type: "Likes"})}}>{likes.count === 1 ? (likes.count + " like") : (likes.count + " likes")}</Text> 
-            : 
-            <Text style={{...styles.likesText, color: theme === "dark" ? Colors.white : Colors.black}} onPress={() => {props.navigation.push('UserList', {id: pin_id, type: "Likes"})}}>{likes.count === 0 ? "Like" : likes.count === 1 ? (likes.count + " like") : (likes.count + " likes")}</Text>}
+            }}>
+              {likes.liked ? <Icon name="heart" size={hp('3%')} color={Colors.pink} /> : <Icon name="heart-outline" size={hp('3%')} color={theme === "dark" ? Colors.white : Colors.black} />}
+            </TouchableOpacity>
+            {likes.liked ? 
+              <Text style={{...styles.likesText, color: Colors.pink}} onPress={() => {props.navigation.push('UserList', {id: pin_id, type: "Likes"})}}>{likes.count === 1 ? (likes.count + " like") : (likes.count + " likes")}</Text> 
+              : 
+              <Text style={{...styles.likesText, color: theme === "dark" ? Colors.white : Colors.black}} onPress={() => {props.navigation.push('UserList', {id: pin_id, type: "Likes"})}}>{likes.count === 0 ? "Like" : likes.count === 1 ? (likes.count + " like") : (likes.count + " likes")}</Text>}
+          </View>
+
+          <View style={styles.actionSubview}>
+            <TouchableOpacity onPress={async () => {
+              openAppleMaps(pinData.latitude, pinData.longitude)
+            }}>
+              <MaterialIcon name="directions" size={hp('3%')} color={theme === "dark" ? Colors.darkYellow : Colors.lightBlue} />
+            </TouchableOpacity>
+            <Text style={{...styles.likesText, color: theme === "dark" ? Colors.darkYellow : Colors.lightBlue}}>Directions</Text>
+          </View>
         </View>
+        
         }
       </View>
 
@@ -651,7 +683,7 @@ const PinPost = (props:any) => {
                   }
               }
           }/>
-          {loading.editSave ? <ActivityIndicator style={{marginRight: wp('1%')}} size="small" color={Colors.mediumOrange} /> : null}
+          {loading.editSave ? <ActivityIndicator style={{marginRight: wp('1%')}} size="small" color={Colors.pink} /> : null}
       </View>
       : null
       }
@@ -703,9 +735,14 @@ const styles = StyleSheet.create({
     marginBottom: hp('0.5%'),
     flexWrap: 'wrap',
   },
-  likesView: {
+  actionView: {
+    flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-evenly',
     marginVertical: 10,
+  },
+  actionSubview: {
+    alignItems: 'center',
   },
   likesText: {
     marginTop: hp('0.5%'),
@@ -752,9 +789,10 @@ const styles = StyleSheet.create({
     marginHorizontal: wp('1%'),
   },
   locationTagButton: {
-    backgroundColor: Colors.whiteOrange,
+    backgroundColor: Colors.lightOrange,
     borderWidth: 0,
     borderRadius: hp('2%'),
+    marginHorizontal: wp('0.5%'),
   },
   userTagButton: {
     backgroundColor: Colors.mediumOrange,
@@ -843,7 +881,7 @@ const styles = StyleSheet.create({
       marginBottom: hp('0.5%'),
   },
   locationTagsAddButton: {
-    backgroundColor: Colors.whiteGray,
+    backgroundColor: Colors.mediumGray,
     borderColor: 'transparent',
     borderWidth: 0,
     borderRadius: hp('2%'),
