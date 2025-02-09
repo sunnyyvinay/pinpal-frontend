@@ -513,10 +513,10 @@ const PinPost = (props:any) => {
         <View style={styles.locationTagsButtonView}>
           <Button 
             title={editedPinData && editedPinData.user_tags.length > 0 ? "Edit user tags" : "Add user tags"}
-            icon={<MaterialIcon name="edit" size={hp('1.5%')} color={Colors.black} style={{ marginRight: wp('0.5%') }}/>}
+            icon={<MaterialIcon name="edit" size={hp('1.5%')} color={theme == "dark" ? Colors.black : Colors.white} style={{ marginRight: wp('0.5%') }}/>}
             color={Colors.black}
             iconContainerStyle={{ marginRight: wp('0.5%') }}
-            titleStyle={{ color: Colors.black, fontFamily: 'Futura', fontSize: 15 }}
+            titleStyle={{ color: theme == "dark" ? Colors.black : Colors.white, fontFamily: 'Futura', fontSize: 15 }}
             buttonStyle={styles.locationTagsAddButton}
             containerStyle={{...styles.locationTagsAddButtonContainer}} 
             onPress={() => {setUserTagState({...userTagState, modalVisible: true})}} />  
