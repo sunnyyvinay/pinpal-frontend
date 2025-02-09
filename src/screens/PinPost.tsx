@@ -210,18 +210,22 @@ const PinPost = (props:any) => {
 
       const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
       if (diffInSeconds < 60) {
+        if (diffInSeconds == 1) return "1 second ago";
         return `${diffInSeconds} seconds ago`;
       }
       const diffInMinutes = Math.floor(diffInSeconds / 60);
       if (diffInMinutes < 60) {
+        if (diffInMinutes == 1) return "1 minute ago";
         return `${diffInMinutes} minutes ago`;
       }
       const diffInHours = Math.floor(diffInMinutes / 60);
       if (diffInHours < 24) {
+        if (diffInHours == 1) return "1 hour ago";
         return `${diffInHours} hours ago`;
       }
       const diffInDays = Math.floor(diffInHours / 24);
       if (diffInDays <= 3) {
+        if (diffInDays == 1) return "1 day ago";
         return `${diffInDays} days ago`;
       }
       const options: Intl.DateTimeFormatOptions = { month: 'long', day: 'numeric' };

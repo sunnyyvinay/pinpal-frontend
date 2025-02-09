@@ -1,17 +1,17 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import React, { useCallback, useEffect, useLayoutEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import Map from '../screens/Map';
 import Journal from '../screens/Journal';
 import AddPinModal from '../screens/AddPinOptions';
 import Icon from 'react-native-vector-icons/Ionicons';
 import * as Colors from '../constants/colors';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, StyleSheet, View } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ContextProvider, useAppContext } from '../AppContext';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { getUserRequests } from '../services/user.service';
 import { useFocusEffect } from '@react-navigation/native';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const Tab = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = 'Map';
@@ -47,7 +47,7 @@ function NavBar({ route, navigation }: any): React.JSX.Element {
   const FriendRequestIcon = () => {
     return (
       <View style={styles.container}>
-        <Icon name="people-outline" size={wp('8%')} style={styles.addFriendsButton} onPress={() => navigation.navigate("Add Friends")} color={theme === "dark" ? Colors.white : Colors.black}/>
+        <MaterialCommunityIcons name="account-search-outline" size={wp('8%')} style={styles.addFriendsButton} onPress={() => navigation.navigate("Add Friends")} color={theme === "dark" ? Colors.white : Colors.black}/>
         {friendRequests && (
           <View style={styles.badge}/>
         )}
@@ -117,12 +117,12 @@ const styles = StyleSheet.create({
   },
   badge: {
     position: 'absolute',
-    right: -wp('1.5%'),
-    top: -wp('1%'),
-    backgroundColor: Colors.pink,
+    right: -wp('1%'),
+    top: -wp('0.75%'),
+    backgroundColor: Colors.darkOrange,
     borderRadius: wp('3%'),
-    width: wp('3%'),
-    height: wp('3%'),
+    width: wp('2.5%'),
+    height: wp('2.5%'),
     justifyContent: 'center',
     alignItems: 'center',
   },
