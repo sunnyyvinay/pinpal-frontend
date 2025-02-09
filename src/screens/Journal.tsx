@@ -116,7 +116,7 @@ function Journal({ route, navigation }: any): React.JSX.Element {
               <FastImage source={{uri: pin.photo}} style={styles.journalPinImage} />
             </TouchableOpacity>
           )
-        }).reverse()}
+        })}
 
         {tagged && journalData.tagged_pins.length == 0 &&
           <View style={styles.noPinsView}>
@@ -130,7 +130,7 @@ function Journal({ route, navigation }: any): React.JSX.Element {
               <FastImage source={{uri: pin.photo}} style={styles.journalPinImage} />
             </TouchableOpacity>
           )
-        }).reverse()}
+        })}
       </View>
     </ScrollView>
   );

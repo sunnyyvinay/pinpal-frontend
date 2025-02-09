@@ -1,7 +1,7 @@
-import React, { useCallback, useEffect, useLayoutEffect, useState } from 'react';
+import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { Appearance, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import GetLocation, { isLocationError } from 'react-native-get-location';
-import MapView, { Callout, CalloutSubview, Marker } from 'react-native-maps';
+import MapView, { Callout, CalloutSubview, MapMarker, Marker } from 'react-native-maps';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { getPins, getPublicPins, getSearchUsers, getUser, getUserFriends, updatePinLocation } from '../services/user.service';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -29,7 +29,7 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
   const {theme, setTheme} = useAppContext();
   const { region, setRegion, dragMode, setDragMode } = useAppContext();
   type Region = {latitude: number, longitude: number, latitudeDelta: number, longitudeDelta: number};
-  const [changingRegion, setChangingRegion] = useState<Region>({latitude: 34.0699, longitude: 118.4438, latitudeDelta: 0.03, longitudeDelta: 0.03});
+  const [changingRegion, setChangingRegion] = useState<Region>({latitude: 34.0699, longitude: 118.4438, latitudeDelta: 0.01, longitudeDelta: 0.01});
   type Pin = {
     user_id: string,
     pin_id: string,
@@ -87,6 +87,8 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
     search: "",
   });
 
+  const markerRefs = useRef<Record<string, MapMarker | null>>({});
+
   const setCurrentLocation = async () => {
     const user_id = await AsyncStorage.getItem("user_id");
     if (!user_id) navigation.navigate("Welcome");
@@ -99,15 +101,15 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
       },
     })
     .then(newLocation => {
-      //setRegion({latitude: newLocation.latitude, longitude: newLocation.longitude, latitudeDelta: 0.03, longitudeDelta: 0.03});
-      setChangingRegion({latitude: newLocation.latitude, longitude: newLocation.longitude, latitudeDelta: 0.03, longitudeDelta: 0.03});
+      //setRegion({latitude: newLocation.latitude, longitude: newLocation.longitude, latitudeDelta: 0.01, longitudeDelta: 0.01});
+      setChangingRegion({latitude: newLocation.latitude, longitude: newLocation.longitude, latitudeDelta: 0.01, longitudeDelta: 0.01});
     })
     .catch(ex => {
       if (isLocationError(ex)) {
         const {code, message} = ex;
         console.warn(code, message);
-        //setRegion({latitude: 34.0699, longitude: 118.4438, latitudeDelta: 0.03, longitudeDelta: 0.03});
-        setChangingRegion({latitude: 34.0699, longitude: 118.4438, latitudeDelta: 0.03, longitudeDelta: 0.03});
+        //setRegion({latitude: 34.0699, longitude: 118.4438, latitudeDelta: 0.01, longitudeDelta: 0.01});
+        setChangingRegion({latitude: 34.0699, longitude: 118.4438, latitudeDelta: 0.01, longitudeDelta: 0.01});
       } else {
         console.warn(ex);
       }
@@ -143,8 +145,14 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
                   friend = await getUser(friendData.friends[i].target_id);
               }
               if (pin.pins) {
-                pin = pin.pins.filter((pin: any) => pin.visibility > 0 && (filterState.location_tag == "" || pin.location_tags.includes(filterState.location_tag)));
-                if (!filterState.on && filterState.location_tag == "") pin = pin.filter((pin: any) => Math.floor((now.getTime() - new Date(pin.create_date).getTime()) / (1000*60*60)) <= 120); // last 5 days
+                pin = pin.pins.filter((pin: any) => {
+                  if (route.params && pin.pin_id == route.params.pin_id) return true;
+                  return pin.visibility > 0 && (filterState.location_tag == "" || pin.location_tags.includes(filterState.location_tag))
+                });
+                if (!filterState.on && filterState.location_tag == "") pin = pin.filter((pin: any) => {
+                  if (route.params && pin.pin_id == route.params.pin_id) return true;
+                  return Math.floor((now.getTime() - new Date(pin.create_date).getTime()) / (1000*60*60)) <= 120 // last 5 days
+                }); 
                 friendData.friends[i] = {user: friend.user, pins: pin};
               }
             }
@@ -174,8 +182,22 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
       } catch (error) {
         console.error(error);
       }
-    }, [filterState])
+    }, [filterState, route.params])
   );
+
+  useEffect(() => {
+    setChangingRegion({latitude: route.params.latitude, longitude: route.params.longitude, latitudeDelta: 0.005, longitudeDelta: 0.005});
+    const timer = setTimeout(() => {
+      if (route.params) {
+        const marker = markerRefs.current[route.params.pin_id];
+        if (marker) {
+          marker.showCallout();
+        }
+      }
+    }, 1000);  // Delay ensures refs are set after initial render
+
+    return () => clearTimeout(timer);  // Cleanup
+  }, [route.params]);
 
   // USE EFFECT: SEARCH USERS
   useEffect(() => {
@@ -236,7 +258,8 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
             <Marker
               key={personalPin.pin_id}  
               coordinate={{latitude: personalPin.latitude, longitude: personalPin.longitude}}
-              title={personalPin.title} >
+              title={personalPin.title}
+              ref={ref => (markerRefs.current[personalPin.pin_id] = ref)}>
                 <Image source={require('../../assets/images/personal-pin.png')} style={{width: wp('5.5%'), height: hp('5.5%')}} resizeMode='contain' />
                 <Callout style={{...styles.pinCalloutStyle, height: hp('30%')}}>
                   <View style={{...styles.pinCalloutView}}>
@@ -273,7 +296,8 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
             <Marker
               key={friendPin.pin_id}  
               coordinate={{latitude: friendPin.latitude, longitude: friendPin.longitude}}
-              title={friendPin.title} >
+              title={friendPin.title} 
+              ref={ref => (markerRefs.current[friendPin.pin_id] = ref)}>
                 <Image source={require('../../assets/images/friend-pin.png')} style={{width: wp('5.5%'), height: hp('5.5%')}} resizeMode='contain' />
                 <Callout style={styles.pinCalloutStyle}>
                   <View style={{...styles.pinCalloutView}}>
@@ -299,7 +323,8 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
             <Marker
               key={publicPin.pin_id}  
               coordinate={{latitude: publicPin.latitude, longitude: publicPin.longitude}}
-              title={publicPin.title} >
+              title={publicPin.title} 
+              ref={ref => (markerRefs.current[publicPin.pin_id] = ref)}>
                 <Image source={require('../../assets/images/public-pin.png')} style={{width: wp('5.5%'), height: hp('5.5%')}} resizeMode='contain' />
                 <Callout style={styles.pinCalloutStyle}>
                   <View style={styles.pinCalloutView}>

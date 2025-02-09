@@ -212,7 +212,7 @@ useLayoutEffect(() => {
               <FastImage source={{uri: pin.photo}} style={styles.journalPinImage} />
             </TouchableOpacity>
           )
-        }).reverse()}
+        })}
 
         {tagged && profileData.tagged_pins.length == 0 &&
           <View style={styles.noPinsView}>
@@ -226,7 +226,7 @@ useLayoutEffect(() => {
               <FastImage source={{uri: pin.photo}} style={styles.journalPinImage} />
             </TouchableOpacity>
           )
-        }).reverse()}
+        })}
       </View>
     </ScrollView>
   );

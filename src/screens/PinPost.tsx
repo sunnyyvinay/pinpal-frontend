@@ -81,7 +81,7 @@ const PinPost = (props:any) => {
 
     const openAppleMaps = (lat: number, lon: number) => {
       const url = Platform.select({
-        ios: `http://maps.apple.com/?ll=${lat},${lon}`,  // Opens in Apple Maps on iOS
+        ios: `https://maps.apple.com/?daddr=${lat},${lon}`,  // Opens in Apple Maps on iOS
         android: `geo:${lat},${lon}?q=${lat},${lon}`,    // Opens in default maps app on Android
       });
   
@@ -454,7 +454,7 @@ const PinPost = (props:any) => {
 
         {personal && !editMode ? 
         <TouchableOpacity onPress={() => setPinActionModalVisible(true)}>
-          <MaterialCommunityIcons name="dots-vertical-circle" size={hp('3%')} color={Colors.mediumGray} />
+          <MaterialCommunityIcons name="dots-vertical-circle" size={hp('3%')} color={theme == "dark" ? Colors.darkGray : Colors.mediumGray} />
         </TouchableOpacity>
         : null}
       </View>
@@ -590,7 +590,7 @@ const PinPost = (props:any) => {
         <View style={styles.actionView}>
           <View style={styles.actionSubview}>
             <TouchableOpacity onPress={async () => {
-              openAppleMaps(pinData.latitude, pinData.longitude)
+              props.navigation.navigate("NavBar", { screen: 'Map', params: { pin_id: pinData.pin_id, latitude: pinData.latitude, longitude: pinData.longitude}}); 
             }}>
               <FontAwesome6Icon name="map-location-dot" size={hp('3%')} color={theme === "dark" ? Colors.darkOrange : Colors.mediumOrange} />
             </TouchableOpacity>
