@@ -186,7 +186,7 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
   );
 
   useEffect(() => {
-    setChangingRegion({latitude: route.params.latitude, longitude: route.params.longitude, latitudeDelta: 0.005, longitudeDelta: 0.005});
+    if (route.params) setChangingRegion({latitude: route.params.latitude, longitude: route.params.longitude, latitudeDelta: 0.005, longitudeDelta: 0.005});
     const timer = setTimeout(() => {
       if (route.params) {
         const marker = markerRefs.current[route.params.pin_id];
