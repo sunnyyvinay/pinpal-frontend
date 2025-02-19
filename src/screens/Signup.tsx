@@ -6,7 +6,7 @@ import * as Colors from '../constants/colors';
 import Icon from 'react-native-vector-icons/Ionicons';
 import PhoneInput, { ICountry } from 'react-native-international-phone-number';
 import DatePicker from 'react-native-date-picker';
-import { checkUsername, loginUser, signupUser } from '../services/user.service';
+import { checkUsername, checkPhoneNo, loginUser, signupUser } from '../services/user.service';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
@@ -57,7 +57,8 @@ const Signup = ({navigation}: {navigation: any}) => {
                             onChangeSelectedCountry={(country: ICountry | undefined) => {setPhoneNo({number: phoneNo.number, country: country}); setError("")}}
                             defaultCountry='US'
                             popularCountries={['US']} />  
-                        {error === "phone" && <Text style={styles.errorText}>Please enter a valid phone number</Text>}                  
+                        {error === "phone" && <Text style={styles.errorText}>Please enter a valid phone number</Text>}              
+                        {error === "phone_exists" && <Text style={styles.errorText}>This phone number already exists</Text>}         
                     </View>
                 )
             case 2:
@@ -182,11 +183,18 @@ const Signup = ({navigation}: {navigation: any}) => {
                     containerStyle={styles.buttonContainerStyle} 
                     onPress={ async () => {
                         if (step === 1) {
-                            if (!phoneNo.number) {
-                                setError("phone");
-                            } else {
-                                setError("");
-                                setStep(step + 1);
+                            try {
+                                const result = await checkPhoneNo(phoneNo.number);
+                                if (!phoneNo.number) {
+                                    setError("phone");
+                                } else if (!result.success) {
+                                    setError("phone_exists");
+                                } else {
+                                    setError("");
+                                    setStep(step + 1);
+                                }
+                            } catch (error) {
+                                console.log(error);
                             }
                         } else if (step === 2) {
                             const now = new Date();

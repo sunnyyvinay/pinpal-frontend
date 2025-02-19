@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-//const apiUrl = "http://localhost:3000/api/user";
-const apiUrl = "https://api.pinpal.info/api/user";
+const apiUrl = "http://localhost:3000/api/user";
+//const apiUrl = "https://api.pinpal.info/api/user";
 
 interface UserSignup {
     username: string;
@@ -41,6 +41,17 @@ export const loginUser = async (user: UserLogin) => {
 export const checkUsername = async (username: string) => {
   try {
       const response = await axios.get(`${apiUrl}/username_exists/${username}`);
+      return response.data;
+  } catch (error) {
+      console.log(error);
+      return error;
+  }
+}
+
+// CHECK IF PHONE NO EXISTS
+export const checkPhoneNo = async (phone_no: string) => {
+  try {
+      const response = await axios.get(`${apiUrl}/phone_no_exists/${phone_no}`);
       return response.data;
   } catch (error) {
       console.log(error);

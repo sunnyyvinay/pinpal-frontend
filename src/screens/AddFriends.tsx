@@ -17,11 +17,13 @@ const AddFriends = ({ route, navigation }: any) => {
     type State = {
         search: string;
         friend_requests: any[];
+        reccFriends: any[];
         queryUsers: any[];
     }
     const [state, setState] = useState<State>({
         search: "",
         friend_requests: [],
+        reccFriends: [],
         queryUsers: []
     });
 
@@ -146,10 +148,11 @@ const AddFriends = ({ route, navigation }: any) => {
                 
             { state.search.length === 0 ?
                 <View style={{flex: 1}}>
-                    { state && state.friend_requests && state.friend_requests.length > 0 ? <Text style={{...styles.friendRequestTitleText, color: theme === 'dark' ? Colors.whiteGray : Colors.black}}>Friend Requests</Text> : null }
+                    { state && state.friend_requests && state.friend_requests.length > -1 ? <Text style={{...styles.friendRequestTitleText, color: theme === 'dark' ? Colors.whiteGray : Colors.black}}>Friend Requests</Text> : null }
                     { state && state.friend_requests && state.friend_requests.length > 0 && state.friend_requests.map((user: any) => (
                         userView(user, true)
                     ))}
+                    { state && state.reccFriends && state.reccFriends.length > -1 ? <Text style={{...styles.friendRequestTitleText, color: theme === 'dark' ? Colors.whiteGray : Colors.black}}>Recommended Friends</Text> : null }
                 </View> 
                 :
                 <View style={{flex: 1}}>
@@ -168,7 +171,7 @@ const styles = StyleSheet.create({
         marginLeft: wp('5%'),
         fontSize: 18,
         fontFamily: 'ChunkFive',
-        marginBottom: hp('0.5%'),
+        marginBottom: hp('3%'),
         marginTop: hp('1.5%')
     },
     acceptButton: {
