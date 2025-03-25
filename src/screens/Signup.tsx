@@ -184,10 +184,12 @@ const Signup = ({navigation}: {navigation: any}) => {
                     onPress={ async () => {
                         if (step === 1) {
                             try {
-                                const result = await checkPhoneNo(phoneNo.number);
                                 if (!phoneNo.number) {
                                     setError("phone");
-                                } else if (!result.success) {
+                                    return;
+                                }
+                                const result = await checkPhoneNo(phoneNo.country?.callingCode + phoneNo.number.replace(/\s/g, ""));
+                                if (!result.success) {
                                     setError("phone_exists");
                                 } else {
                                     setError("");
