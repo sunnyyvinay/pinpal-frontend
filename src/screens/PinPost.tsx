@@ -488,7 +488,7 @@ const PinPost = (props:any) => {
               value={editedPinData && editedPinData.title}
               placeholder='Enter new pin title'
               autoCapitalize='none'
-              onChangeText={text => {setEditedPinData({...editedPinData, title: text}); setError({...error, title: ""})}}
+              onChangeText={text => {setEditedPinData({...editedPinData, title: text.trim()}); setError({...error, title: ""})}}
               style={{...styles.editTitleInput, color: theme === 'dark' ? Colors.white : Colors.black}}
           />
           {error.title != "" && <Text style={styles.errorText}>{error.title}</Text>}
@@ -515,7 +515,7 @@ const PinPost = (props:any) => {
           value={editedPinData && editedPinData.caption}
           placeholder="Write a caption..."
           style={{...styles.editCaptionInput, color: theme === 'dark' ? Colors.white : Colors.black}}
-          onChangeText={text => {setEditedPinData({...editedPinData, caption: text}); setError({...error, caption: ""})}}
+          onChangeText={text => {setEditedPinData({...editedPinData, caption: text.trim()}); setError({...error, caption: ""})}}
           autoCapitalize="none"
           multiline={true}
           textAlignVertical="top" />

@@ -274,7 +274,7 @@ const AddPin = ({ route, navigation }: any) => {
                                 value={pinData.title}
                                 placeholder="Give a pin title"
                                 style={{...styles.input, color: theme === 'dark' ? Colors.white : Colors.black}}
-                                onChangeText={(text: string) => {setPinData({ ...pinData, title: text }); setError({...error, title: ""})}}
+                                onChangeText={(text: string) => {setPinData({ ...pinData, title: text.trim() }); setError({...error, title: ""})}}
                                 autoCapitalize="none"
                             />
                             {error.title != "" && <Text style={styles.errorText}>{error.title}</Text>}
@@ -285,7 +285,7 @@ const AddPin = ({ route, navigation }: any) => {
                                 value={pinData.caption}
                                 placeholder="Write a caption..."
                                 style={{...styles.input, height: hp('12.5%'), color: theme === 'dark' ? Colors.white : Colors.black}}
-                                onChangeText={(text: string) => {setPinData({ ...pinData, caption: text }); setError({...error, caption: ""})}}
+                                onChangeText={(text: string) => {setPinData({ ...pinData, caption: text.trim() }); setError({...error, caption: ""})}}
                                 autoCapitalize="none"
                                 multiline={true}
                                 textAlignVertical="top"
