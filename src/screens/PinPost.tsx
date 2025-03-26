@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { addPinLike, deletePinLike, getPin, getPinLikes, getSearchUsers, getUser } from '../services/user.service';
-import { ActivityIndicator, Dimensions, Image, Linking, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Alert, Dimensions, Image, Linking, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import * as Colors from '../constants/colors';
 import { Button, SearchBar } from '@rneui/themed';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -18,6 +18,7 @@ import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-nativ
 import { useAppContext } from '../AppContext';
 import FastImage from 'react-native-fast-image';
 import FontAwesome6Icon from 'react-native-vector-icons/FontAwesome6';
+import { check, request, PERMISSIONS, RESULTS } from 'react-native-permissions';
 
 const PinPost = (props:any) => {
     const {theme, setTheme} = useAppContext();
@@ -178,31 +179,48 @@ const PinPost = (props:any) => {
             });
         }, [props.navigation, theme]);
 
-    const openImagePicker = () => {
+    const openGallery = () => {
       const options = {
-          mediaType: 'photo' as MediaType,
-          includeBase64: true,
-          maxHeight: 2000,
-          maxWidth: 2000,
+        mediaType: 'photo' as MediaType,
+        includeBase64: true,
+        maxHeight: 2000,
+        maxWidth: 2000,
       };
-  
+
       launchImageLibrary(options, async (response: ImagePickerResponse) => {
-          const user_id = await AsyncStorage.getItem("user_id");
-          if (response.errorCode) {
-            setError({...error, photo: "An error occurred. Please try again."});
-            console.log('Image picker error: ', response.errorMessage);
-          } else if (response.assets && response.assets.length > 0) {
-            if (response.assets[0].fileSize && response.assets[0].fileSize > 7340032) { // 7 MB
-                setError({...error, photo: "File too large. Please upload a smaller file"});
-            } else if (user_id && response.assets) {
-                setError({...error, photo: ""});
-                setEditedPinData({...editedPinData, photo: response.assets[0].uri});
-            } else {
-                props.navigation.navigate("Welcome");
-              }
-          } 
+        const user_id = await AsyncStorage.getItem("user_id");
+        if (response.errorCode) {
+          setError({...error, photo: "An error occurred. Please try again."});
+          console.log('Image picker error: ', response.errorMessage);
+        } else if (response.assets && response.assets.length > 0) {
+          if (response.assets[0].fileSize && response.assets[0].fileSize > 7340032) { // 7 MB
+              setError({...error, photo: "File too large. Please upload a smaller file"});
+          } else if (user_id && response.assets) {
+              setError({...error, photo: ""});
+              setEditedPinData({...editedPinData, photo: response.assets[0].uri});
+          } else {
+              props.navigation.navigate("Welcome");
+            }
+        } 
       });
-  };
+    }
+
+    const openGalleryPermission = async () => {
+        const permission = Platform.OS === 'ios' ? PERMISSIONS.IOS.PHOTO_LIBRARY : PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE;
+        const status = await check(permission);
+        if (status === RESULTS.GRANTED) {
+            openGallery();
+        } else if (status === RESULTS.DENIED) {
+            const newStatus = await request(permission);
+            if (newStatus === RESULTS.GRANTED) openGallery();
+        } else if (status === RESULTS.BLOCKED) {
+            Alert.alert(`Photo Library Permission Required`, `Please enable photo library access in Settings.`,
+                [{ text: 'Cancel', style: 'cancel' },
+                  { text: 'Open Settings', onPress: () => Linking.openSettings(), }],
+                { cancelable: false }
+            );
+        }
+    };
 
     function formatTimestamp(timestamp: string): string {
       const date = new Date(timestamp);
@@ -481,7 +499,7 @@ const PinPost = (props:any) => {
 
         <View style={styles.photosView}>
           {editMode ?
-            <TouchableOpacity onPress={openImagePicker} style={{justifyContent: 'center'}}>
+            <TouchableOpacity onPress={openGalleryPermission} style={{justifyContent: 'center'}}>
               <Image source={editedPinData && editedPinData.photo && {uri: editedPinData.photo}} style={{width: screenWidth, height: hp('20%'), opacity: 0.75}} />
               <MaterialIcon name="add-a-photo" size={hp('5%')} style={{position: 'absolute', alignSelf: 'center', opacity: 0.75}} />
               <Text style={styles.errorText}>{error.photo}</Text>

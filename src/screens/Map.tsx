@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import { Appearance, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Image, Linking, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import GetLocation, { isLocationError } from 'react-native-get-location';
 import MapView, { Callout, CalloutSubview, MapMarker, Marker } from 'react-native-maps';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -21,7 +21,7 @@ import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-nativ
 import FastImage from 'react-native-fast-image';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import 'react-native-get-random-values';
-import { v4 as uuidv4 } from 'uuid';
+import { check, request, PERMISSIONS, RESULTS } from 'react-native-permissions';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 
@@ -90,30 +90,48 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
   const markerRefs = useRef<Record<string, MapMarker | null>>({});
 
   const setCurrentLocation = async () => {
+    const getLocation = async () => {
+      await GetLocation.getCurrentPosition({
+        enableHighAccuracy: true,
+        timeout: 30000,
+        rationale: {
+          title: 'Location permission', message: 'PinPal needs the permission to request your location.', buttonPositive: 'Ok',
+        },
+      })
+      .then(newLocation => {
+        //setRegion({latitude: newLocation.latitude, longitude: newLocation.longitude, latitudeDelta: 0.01, longitudeDelta: 0.01});
+        setChangingRegion({latitude: newLocation.latitude, longitude: newLocation.longitude, latitudeDelta: 0.01, longitudeDelta: 0.01});
+      })
+      .catch(ex => {
+        if (isLocationError(ex)) {
+          const {code, message} = ex;
+          console.warn(code, message);
+          //setRegion({latitude: 34.0699, longitude: 118.4438, latitudeDelta: 0.01, longitudeDelta: 0.01});
+          setChangingRegion({latitude: 34.0699, longitude: 118.4438, latitudeDelta: 0.01, longitudeDelta: 0.01});
+        } else {
+          console.warn(ex);
+        }
+      })
+    }
+
     const user_id = await AsyncStorage.getItem("user_id");
     if (!user_id) navigation.navigate("Welcome");
 
-    await GetLocation.getCurrentPosition({
-      enableHighAccuracy: true,
-      timeout: 30000,
-      rationale: {
-        title: 'Location permission', message: 'PinPal needs the permission to request your location.', buttonPositive: 'Ok',
-      },
-    })
-    .then(newLocation => {
-      //setRegion({latitude: newLocation.latitude, longitude: newLocation.longitude, latitudeDelta: 0.01, longitudeDelta: 0.01});
-      setChangingRegion({latitude: newLocation.latitude, longitude: newLocation.longitude, latitudeDelta: 0.01, longitudeDelta: 0.01});
-    })
-    .catch(ex => {
-      if (isLocationError(ex)) {
-        const {code, message} = ex;
-        console.warn(code, message);
-        //setRegion({latitude: 34.0699, longitude: 118.4438, latitudeDelta: 0.01, longitudeDelta: 0.01});
-        setChangingRegion({latitude: 34.0699, longitude: 118.4438, latitudeDelta: 0.01, longitudeDelta: 0.01});
-      } else {
-        console.warn(ex);
-      }
-    })
+    const permission = Platform.OS === 'ios' ? PERMISSIONS.IOS.LOCATION_WHEN_IN_USE : PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION;
+    const status = await check(permission);
+    if (status === RESULTS.GRANTED) {
+        getLocation();
+    } else if (status === RESULTS.DENIED) {
+        const newStatus = await request(permission);
+        if (newStatus === RESULTS.GRANTED) getLocation();
+    } else {
+      setChangingRegion({latitude: 34.0699, longitude: 118.4438, latitudeDelta: 0.01, longitudeDelta: 0.01});
+      Alert.alert(`Location Access`, `Please enable location access for a better experience.`,
+        [{ text: 'Cancel', style: 'cancel' },
+          { text: 'Open Settings', onPress: () => Linking.openSettings(), }],
+        { cancelable: false }
+      );
+    }
   }
 
   useEffect(() => {

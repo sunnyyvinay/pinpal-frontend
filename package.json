@@ -37,6 +37,7 @@
     "react-native-maps": "^1.18.0",
     "react-native-modal": "^13.0.1",
     "react-native-multiple-choice": "^0.0.8",
+    "react-native-permissions": "^5.3.0",
     "react-native-phone-number-input": "^2.1.0",
     "react-native-reanimated": "^3.15.1",
     "react-native-reanimated-carousel": "^3.5.1",

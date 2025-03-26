@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import Modal from "react-native-modal";
 import { Button } from '@rneui/themed';
-import {StyleSheet, View, TouchableOpacity, Text } from 'react-native';
+import {StyleSheet, View, TouchableOpacity, Text, Platform, Alert, Linking } from 'react-native';
 // import FontAwesome6Icon from 'react-native-vector-icons/fon';
 import * as Colors from '../constants/colors';
 import GetLocation, { isLocationError } from 'react-native-get-location';
@@ -9,6 +9,7 @@ import { useAppContext } from '../AppContext';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import FontAwesome6Icon from 'react-native-vector-icons/FontAwesome6';
+import { check, request, PERMISSIONS, RESULTS } from 'react-native-permissions';
 
 function AddPinOptions({ route, navigation }: any): React.JSX.Element {
   const [modalVisible, setModalVisible] = useState(false);
@@ -18,26 +19,43 @@ function AddPinOptions({ route, navigation }: any): React.JSX.Element {
   const {theme, setTheme} = useAppContext();
 
   const getCurrLocation = async () => {
-    await GetLocation.getCurrentPosition({
-      enableHighAccuracy: true,
-      timeout: 30000,
-      rationale: {
-        title: 'Location permission',
-        message: 'PinPal needs the permission to request your location.',
-        buttonPositive: 'Ok',
-      },
-    })
-    .then(newLocation => {
-      lat_long = {latitude: newLocation.latitude, longitude: newLocation.longitude};
-    })
-    .catch(ex => {
-      if (isLocationError(ex)) {
-        const {code, message} = ex;
-        console.warn(code, message);
-      } else {
-        console.warn(ex);
-      }
-    })
+    const getLocation = async () => {
+      await GetLocation.getCurrentPosition({
+        enableHighAccuracy: true,
+        timeout: 30000,
+        rationale: {
+          title: 'Location permission',
+          message: 'PinPal needs the permission to request your location.',
+          buttonPositive: 'Ok',
+        },
+      })
+      .then(newLocation => {
+        lat_long = {latitude: newLocation.latitude, longitude: newLocation.longitude};
+      })
+      .catch(ex => {
+        if (isLocationError(ex)) {
+          const {code, message} = ex;
+          console.warn(code, message);
+        } else {
+          console.warn(ex);
+        }
+      });
+    }
+
+    const permission = Platform.OS === 'ios' ? PERMISSIONS.IOS.LOCATION_WHEN_IN_USE : PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION;
+    const status = await check(permission);
+    if (status === RESULTS.GRANTED) {
+        getLocation();
+    } else if (status === RESULTS.DENIED) {
+        const newStatus = await request(permission);
+        if (newStatus === RESULTS.GRANTED) getLocation();
+    } else {
+        Alert.alert(`Location Permission Required`, `Please enable location access in Settings.`,
+            [{ text: 'Cancel', style: 'cancel' },
+              { text: 'Open Settings', onPress: () => Linking.openSettings(), }],
+            { cancelable: false }
+        );
+    }
   }
 
   return (

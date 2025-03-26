@@ -1,6 +1,6 @@
 import { Button, SearchBar } from '@rneui/themed';
 import React, { useEffect, useLayoutEffect, useState } from 'react'
-import { ActivityIndicator, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Platform, ActivityIndicator, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, Alert, Linking } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -17,6 +17,7 @@ import FontAwesome6Icon from 'react-native-vector-icons/FontAwesome6';
 import { useAppContext } from '../AppContext';
 import { color } from '@rneui/base';
 import FastImage from 'react-native-fast-image';
+import { check, request, PERMISSIONS, RESULTS } from 'react-native-permissions';
 
 const AddPin = ({ route, navigation }: any) => {
     const {theme, setTheme} = useAppContext();
@@ -98,7 +99,7 @@ const AddPin = ({ route, navigation }: any) => {
                 headerStyle: {backgroundColor: theme == "dark" ? Colors.darkBackground : Colors.white},
                 headerTitleStyle: {color: theme == "dark" ? Colors.white : Colors.black},
             });
-        }, [navigation, theme]);
+    }, [navigation, theme]);
 
     const openCamera = () => {
         const options = {
@@ -124,9 +125,26 @@ const AddPin = ({ route, navigation }: any) => {
                 }
             } 
         });
+    }
+
+    const openCameraPermission = async () => {
+        const permission = Platform.OS === 'ios' ? PERMISSIONS.IOS.CAMERA : PERMISSIONS.ANDROID.CAMERA;
+        const status = await check(permission);
+        if (status === RESULTS.GRANTED) {
+            openCamera();
+        } else if (status === RESULTS.DENIED) {
+            const newStatus = await request(permission);
+            if (newStatus === RESULTS.GRANTED) openCamera();
+        } else {
+            Alert.alert(`Camera Permission Required`, `Please enable camera access in Settings.`,
+                [{ text: 'Cancel', style: 'cancel' },
+                 { text: 'Open Settings', onPress: () => Linking.openSettings(), }],
+                { cancelable: false }
+            );
+        }
     };
 
-    const openImagePicker = () => {
+    const openGallery = () => {
         const options = {
             mediaType: 'photo' as MediaType,
             includeBase64: true,
@@ -150,6 +168,23 @@ const AddPin = ({ route, navigation }: any) => {
                 }
             } 
         });
+    }
+
+    const openGalleryPermission = async () => {
+        const permission = Platform.OS === 'ios' ? PERMISSIONS.IOS.PHOTO_LIBRARY : PERMISSIONS.ANDROID.READ_MEDIA_IMAGES;
+        const status = await check(permission);
+        if (status === RESULTS.GRANTED) {
+            openGallery();
+        } else if (status === RESULTS.DENIED) {
+            const newStatus = await request(permission);
+            if (newStatus === RESULTS.GRANTED) openGallery();
+        } else {
+            Alert.alert(`Photo Library Permission Required`, `Please enable photo library access in Settings.`,
+                [{ text: 'Cancel', style: 'cancel' },
+                 { text: 'Open Settings', onPress: () => Linking.openSettings(), }],
+                { cancelable: false }
+            );
+        }
     };
 
     const getVisibilityString = (visibilityNum: number) => {
@@ -202,16 +237,16 @@ const AddPin = ({ route, navigation }: any) => {
                 return (
                     <View style={styles.inputViewContainer}>
                         {pinData.photo ? 
-                        <TouchableOpacity onPress={openImagePicker} style={{width: wp('90%'), height: hp('50%')}}>
+                        <TouchableOpacity onPress={openGalleryPermission} style={{width: wp('90%'), height: hp('50%')}}>
                             <Image source={{ uri: pinData.photo }} style={styles.pickPhoto} /> 
                         </TouchableOpacity>
                         : 
                         <View style={styles.photoOptionsView}>
-                        <TouchableOpacity onPress={openCamera} style={{...styles.cameraOption, backgroundColor: theme === 'dark' ? Colors.darkOrange : Colors.darkOrange}} >
+                        <TouchableOpacity onPress={openCameraPermission} style={{...styles.cameraOption, backgroundColor: theme === 'dark' ? Colors.darkOrange : Colors.darkOrange}} >
                             <MaterialIcon name="add-a-photo" size={hp('10%')} color={theme === 'dark' ? Colors.black : Colors.white} />
                         </TouchableOpacity>
                         {/* <Text style={{...styles.orText, color: theme === 'dark' ? Colors.white : Colors.black}}>or</Text> */}
-                        <TouchableOpacity onPress={openImagePicker} style={{...styles.libraryOption, backgroundColor: theme === 'dark' ? Colors.darkOrange : Colors.darkOrange}} >
+                        <TouchableOpacity onPress={openGalleryPermission} style={{...styles.libraryOption, backgroundColor: theme === 'dark' ? Colors.darkOrange : Colors.darkOrange}} >
                             <MaterialIcon name="insert-photo" size={hp('10%')} color={theme === 'dark' ? Colors.black : Colors.white}/>
                         </TouchableOpacity>
                         </View>
