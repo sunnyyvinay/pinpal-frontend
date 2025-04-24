@@ -1,5 +1,5 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react';
-import { Image, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View, Share } from 'react-native';
 import { SearchBar } from '@rneui/themed';
 import { acceptFriendRequest, deleteFriendRequest, getSearchUsers, getUserRequests } from '../services/user.service';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -124,46 +124,77 @@ const AddFriends = ({ route, navigation }: any) => {
         )
     }
 
-  return (
-    <View style={{width: "100%", height: "100%", backgroundColor: theme === 'dark' ? Colors.darkBackground : Colors.white}}>
-        <SearchBar 
-            placeholder='Search...'
-            value={state.search}
-            round={true}
-            autoCapitalize="none"
-            autoCorrect={false}
-            lightTheme={theme === 'dark' ? false : true}
-            containerStyle={userSearchStyles.searchBarContainer}
-            onChangeText={(text) => setState({...state, search: text})}/>
-        
-        <ScrollView 
-            refreshControl={
-                <RefreshControl
-                  refreshing={refreshing}
-                  onRefresh={() => {setRefreshing(true); getFriendsState(); setRefreshing(false);}}
-                  colors={[Colors.whiteGray]}
-                  progressBackgroundColor={Colors.mediumGray}
-                />
-            }>
+    const handleShare = async () => {
+        try {
+            const result = await Share.share({
+                message: 'Join me on PinPal! The social app for sharing and discovering places with friends.',
+                // You can add your app's store links here once published
+                // url: 'https://apps.apple.com/app/pinpal' for iOS
+                // url: 'https://play.google.com/store/apps/details?id=com.pinpal' for Android
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    return (
+        <View style={{width: "100%", height: "100%", backgroundColor: theme === 'dark' ? Colors.darkBackground : Colors.white}}>
+            <SearchBar 
+                placeholder='Search...'
+                value={state.search}
+                round={true}
+                autoCapitalize="none"
+                autoCorrect={false}
+                lightTheme={theme === 'dark' ? false : true}
+                containerStyle={userSearchStyles.searchBarContainer}
+                onChangeText={(text) => setState({...state, search: text})}/>
+            
+            <ScrollView 
+                refreshControl={
+                    <RefreshControl
+                      refreshing={refreshing}
+                      onRefresh={() => {setRefreshing(true); getFriendsState(); setRefreshing(false);}}
+                      colors={[Colors.whiteGray]}
+                      progressBackgroundColor={Colors.mediumGray}
+                    />
+                }>
                 
-            { state.search.length === 0 ?
-                <View style={{flex: 1}}>
-                    { state && state.friend_requests && state.friend_requests.length > -1 ? <Text style={{...styles.friendRequestTitleText, color: theme === 'dark' ? Colors.whiteGray : Colors.black}}>Friend Requests</Text> : null }
-                    { state && state.friend_requests && state.friend_requests.length > 0 && state.friend_requests.map((user: any) => (
-                        userView(user, true)
-                    ))}
-                    {/* { state && state.reccFriends && state.reccFriends.length > -1 ? <Text style={{...styles.friendRequestTitleText, color: theme === 'dark' ? Colors.whiteGray : Colors.black}}>Recommended Friends</Text> : null } */}
-                </View> 
-                :
-                <View style={{flex: 1}}>
-                    { state && state.queryUsers && state.queryUsers.length > 0 && state.queryUsers.map((user: any) => (
-                        userView(user, false)
-                    ))}
-                </View>
-            }
-        </ScrollView>
-    </View>
-  )
+                { state.search.length === 0 ?
+                    <View style={{flex: 1}}>
+                        <TouchableOpacity 
+                            style={styles.inviteContainer}
+                            onPress={handleShare}>
+                            <View style={{...styles.logoContainer, backgroundColor: theme === 'dark' ? Colors.mediumOrange : Colors.darkOrange}}>
+                                <FastImage 
+                                    source={require('../../assets/images/appstore-logo.png')}
+                                    style={styles.logoImage}
+                                    resizeMode={FastImage.resizeMode.cover}
+                                />
+                            </View>
+                            <Text style={{
+                                ...styles.inviteText,
+                                color: theme === 'dark' ? Colors.white : Colors.black
+                            }}>
+                                Invite friends to PinPal
+                            </Text>
+                        </TouchableOpacity>
+                        
+                        { state && state.friend_requests && state.friend_requests.length > -1 ? <Text style={{...styles.friendRequestTitleText, color: theme === 'dark' ? Colors.whiteGray : Colors.black}}>Friend Requests</Text> : null }
+                        { state && state.friend_requests && state.friend_requests.length > 0 && state.friend_requests.map((user: any) => (
+                            userView(user, true)
+                        ))}
+                        {/* { state && state.reccFriends && state.reccFriends.length > -1 ? <Text style={{...styles.friendRequestTitleText, color: theme === 'dark' ? Colors.whiteGray : Colors.black}}>Recommended Friends</Text> : null } */}
+                    </View> 
+                    :
+                    <View style={{flex: 1}}>
+                        { state && state.queryUsers && state.queryUsers.length > 0 && state.queryUsers.map((user: any) => (
+                            userView(user, false)
+                        ))}
+                    </View>
+                }
+            </ScrollView>
+        </View>
+    )
 }
 
 const styles = StyleSheet.create({
@@ -192,6 +223,32 @@ const styles = StyleSheet.create({
         fontFamily: 'ChunkFive',
         fontSize: 14,
         textAlign: 'center'
+    },
+    inviteContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: wp('4%'),
+        marginHorizontal: wp('4%'),
+        marginVertical: hp('2%'),
+        borderRadius: wp('3%'),
+        backgroundColor: 'rgba(255, 126, 41, 0.1)',
+    },
+    logoContainer: {
+        width: wp('12%'),
+        height: wp('12%'),
+        borderRadius: wp('6%'),
+        overflow: 'hidden',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    logoImage: {
+        width: '100%',
+        height: '100%',
+    },
+    inviteText: {
+        marginLeft: wp('3%'),
+        fontSize: 16,
+        fontFamily: 'ChunkFive',
     },
 });
 
