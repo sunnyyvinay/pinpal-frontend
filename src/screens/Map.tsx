@@ -695,7 +695,7 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
 const styles = StyleSheet.create({
   mapContainer: {
     width: wp('100%'),
-    height: hp('74%'),
+    height: hp('100%'),
   },
   draggableOptionsView: {
     position: 'absolute',

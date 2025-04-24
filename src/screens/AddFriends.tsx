@@ -152,7 +152,7 @@ const AddFriends = ({ route, navigation }: any) => {
                     { state && state.friend_requests && state.friend_requests.length > 0 && state.friend_requests.map((user: any) => (
                         userView(user, true)
                     ))}
-                    { state && state.reccFriends && state.reccFriends.length > -1 ? <Text style={{...styles.friendRequestTitleText, color: theme === 'dark' ? Colors.whiteGray : Colors.black}}>Recommended Friends</Text> : null }
+                    {/* { state && state.reccFriends && state.reccFriends.length > -1 ? <Text style={{...styles.friendRequestTitleText, color: theme === 'dark' ? Colors.whiteGray : Colors.black}}>Recommended Friends</Text> : null } */}
                 </View> 
                 :
                 <View style={{flex: 1}}>
