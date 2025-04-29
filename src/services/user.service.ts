@@ -37,6 +37,26 @@ export const loginUser = async (user: UserLogin) => {
     }
 };
 
+// SEND OTP VERIFICATION CODE
+export const sendVerification = async (phone_no: any) => {
+  try {
+      const response = await axios.post(`${apiUrl}/send-verification`, phone_no);
+      return response.data;
+  } catch (error) {
+      return error;
+  }
+};
+
+// VERIFY OTP CODE
+export const verifyCode = async (verification_obj: any) => {
+  try {
+      const response = await axios.post(`${apiUrl}/verify-code`, verification_obj);
+      return response.data;
+  } catch (error) {
+      return error;
+  }
+};
+
 // CHECK IF USERNAME EXISTS
 export const checkUsername = async (username: string) => {
   try {

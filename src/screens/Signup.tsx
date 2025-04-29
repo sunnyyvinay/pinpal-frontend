@@ -6,7 +6,7 @@ import * as Colors from '../constants/colors';
 import Icon from 'react-native-vector-icons/Ionicons';
 import PhoneInput, { ICountry } from 'react-native-international-phone-number';
 import DatePicker from 'react-native-date-picker';
-import { checkUsername, checkPhoneNo, loginUser, signupUser } from '../services/user.service';
+import { checkUsername, checkPhoneNo, loginUser, signupUser, sendVerification, verifyCode } from '../services/user.service';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
@@ -33,6 +33,8 @@ const Signup = ({navigation}: {navigation: any}) => {
     const [hiddenPass, setHiddenPass] = useState<boolean>(true);
     const [hiddenConfirmPass, setHiddenConfirmPass] = useState<boolean>(true);
     const [error, setError] = useState<string>("");
+
+    const [verificationCode, setVerificationCode] = useState<string>('');
 
     function isValidFullName(fullName: string) {
         return /^[a-zA-Z\s]*$/.test(fullName);
@@ -63,6 +65,24 @@ const Signup = ({navigation}: {navigation: any}) => {
                 )
             case 2:
                 return (
+                    <>
+                    {/* <Text style={styles.phoneOTPText}>Enter the verification code sent to your phone</Text> */}
+                    <View style={{...styles.inputContainer, borderColor: error !== "" ? Colors.errorRed : "gray"}}>
+                      <TextInput
+                        value={verificationCode}
+                        style={styles.input}
+                        placeholder="Enter OTP verification code"
+                        placeholderTextColor={Colors.mediumGray}
+                        onChangeText={(text: string) => { setVerificationCode(text); setError(''); }}
+                        keyboardType="numeric"
+                        autoCapitalize='none' 
+                        autoCorrect={false} />
+                    </View>
+                    {error === 'verification' && <Text style={styles.errorText}>Invalid verification code</Text>}
+                    </>
+                  );
+            case 3:
+                return (
                     <View style={styles.inputViewContainer}>
                         <Text style={styles.birthdayInputText}>Enter your birthday</Text>
                         <DatePicker 
@@ -75,7 +95,7 @@ const Signup = ({navigation}: {navigation: any}) => {
                         {error === "birthday" && <Text style={styles.errorText}>You must be 13 years or older</Text>}                  
                     </View>
                 )
-            case 3:
+            case 4:
                 return (
                     <>
                     <View style={{...styles.inputContainer, borderColor: error !== "" ? Colors.errorRed : "gray"}}>
@@ -93,7 +113,7 @@ const Signup = ({navigation}: {navigation: any}) => {
                     {error === "full_name_nonalpha" && <Text style={styles.errorText}>Make sure your full name only contains letters and whitespace</Text>}
                     </>
                 )
-            case 4:
+            case 5:
                 return (
                     <>
                     <View style={{...styles.inputContainer, borderColor: error !== "" ? Colors.errorRed : "gray"}}>
@@ -111,7 +131,7 @@ const Signup = ({navigation}: {navigation: any}) => {
                     {error === "username_exists" && <Text style={styles.errorText}>This username already exists</Text>}
                     </>
                 )
-            case 5:
+            case 6:
                 return (
                     <>
                     <View style={{...styles.inputContainer, borderColor: error !== "" ? Colors.errorRed : "gray"}}>
@@ -165,14 +185,16 @@ const Signup = ({navigation}: {navigation: any}) => {
                 buttonStyle={styles.backButton}
                 containerStyle={styles.backButtonContainer} 
                 onPress={() => {
-                    step == 1 ? navigation.navigate("Welcome") : setStep(step - 1)
+                    if (step === 1) navigation.navigate("Welcome");
+                    else if (step === 3) setStep(1);
+                    else setStep(step - 1);
                 }} />
             <Image source={require('../../assets/images/full-logo.png')} style={styles.logo} />
 
             {renderStep(step)}
             
             {
-                step < 5 ? 
+                step < 6 ? 
                 <Button 
                     title="NEXT" 
                     icon={<FontAwesome6Icon name="arrow-right-long" size={20} color={Colors.white} style={{ paddingLeft: wp('1%'), textAlign: 'center' }}/>}
@@ -184,21 +206,43 @@ const Signup = ({navigation}: {navigation: any}) => {
                     onPress={ async () => {
                         if (step === 1) {
                             try {
-                                if (!phoneNo.number) {
-                                    setError("phone");
-                                    return;
-                                }
-                                const result = await checkPhoneNo(phoneNo.country?.callingCode + phoneNo.number.replace(/\s/g, ""));
-                                if (!result.success) {
-                                    setError("phone_exists");
-                                } else {
-                                    setError("");
-                                    setStep(step + 1);
-                                }
+                              if (!phoneNo.number) {
+                                setError('phone');
+                                return;
+                              }
+                              const result = await checkPhoneNo(phoneNo.country?.callingCode + phoneNo.number.replace(/\s/g, ''));
+                              if (!result.success) {
+                                setError('phone_exists');
+                              } else {
+                                await sendVerification({ phoneNumber: phoneNo.country?.callingCode + phoneNo.number.replace(/\s/g, '') });
+                                setError('');
+                                setVerificationCode('');
+                                setStep(step + 1);
+                              }
                             } catch (error) {
                                 console.log(error);
                             }
                         } else if (step === 2) {
+                            try {
+                                if (!verificationCode) {
+                                    setError('verification');
+                                    return;
+                                }
+                                const response = await verifyCode({ 
+                                    phoneNumber: phoneNo.country?.callingCode + phoneNo.number.replace(/\s/g, ''), 
+                                    code: verificationCode 
+                                });
+                                if (response.success) {
+                                  setError('');
+                                  setStep(step + 1);
+                                } else {
+                                  setError('verification');
+                                }
+                            } catch (error) {
+                                setError('verification');
+                                console.log(error);
+                            }
+                        } else if (step === 3) {
                             const now = new Date();
                             const thirteenYearsAgo = new Date();
                             thirteenYearsAgo.setFullYear(now.getFullYear() - 13);
@@ -208,7 +252,7 @@ const Signup = ({navigation}: {navigation: any}) => {
                                 setError("");
                                 setStep(step + 1);
                             }
-                        } else if (step === 3) {
+                        } else if (step === 4) {
                             if (!fullName) {
                                 setError("full_name");
                             } else if (fullName.length > 50) {
@@ -220,7 +264,7 @@ const Signup = ({navigation}: {navigation: any}) => {
                                 setError("");
                                 setStep(step + 1);
                             }
-                        } else if (step === 4) {
+                        } else if (step === 5) {
                             try {
                                 const result = await checkUsername(username);
                                 if (!username || username.length < 5 || username.length > 25) {
