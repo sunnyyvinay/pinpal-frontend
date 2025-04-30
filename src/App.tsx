@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Alert } from 'react-native';
 import NavBar from './components/NavBar';
 import Welcome from './screens/Welcome';
 import Signup from './screens/Signup';
@@ -14,13 +15,28 @@ import PinPost from './screens/PinPost';
 import AddFriends from './screens/AddFriends';
 import Profile from './screens/Profile';
 import UserList from './screens/UserList';
-import { Appearance } from 'react-native';
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import * as Colors from './constants/colors';
+import messaging from '@react-native-firebase/messaging';
 
 const Stack = createNativeStackNavigator();
-function App(): React.JSX.Element {
 
+async function requestNotificationPermission() {
+  const authStatus = await messaging().requestPermission();
+  const enabled =
+    authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+    authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
+  if (enabled) {
+    console.log('Notification permission granted.');
+  } else {
+    Alert.alert('Permission required', 'Enable notifications to receive friend requests.');
+  }
+}
+
+function App(): React.JSX.Element {
+  useEffect(() => {
+    requestNotificationPermission();
+  }, []);
+  
   return (
     <ContextProvider>
     <NavigationContainer>
