@@ -37,9 +37,7 @@ async function requestNotificationPermission() {
     authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
     authStatus === messaging.AuthorizationStatus.PROVISIONAL;
 
-  if (enabled) {
-    console.log('Notification permission granted.');
-  } else {
+  if (!enabled) {
     Alert.alert('Permission required', 'Enable notifications to receive friend requests.');
   }
 }
@@ -56,6 +54,10 @@ function App(): React.JSX.Element {
         remoteMessage.notification?.title || 'New notification',
         remoteMessage.notification?.body || ''
       );
+    });
+
+    messaging().setBackgroundMessageHandler(async remoteMessage => {
+      console.log('Message handled in the background!', remoteMessage);
     });
     
     // Handle background/quit state notifications opening the app
