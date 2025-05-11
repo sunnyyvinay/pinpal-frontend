@@ -355,3 +355,14 @@ export const getTaggedPins = async (id: string) => {
       return error;
   }
 };
+
+// SAVE USER TOKEN (for push notifications)
+export const saveUserToken = async (userId: string, token: string) => {
+  try {
+    const response = await axios.post(`${apiUrl}/user/${userId}/token`, { token });
+    return response.data;
+  } catch (error) {
+    console.error('Error saving user token:', error);
+    throw error;
+  }
+};

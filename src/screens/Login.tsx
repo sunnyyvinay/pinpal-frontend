@@ -7,6 +7,7 @@ import Ionicon from 'react-native-vector-icons/Ionicons';
 import { loginUser } from '../services/user.service';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import NotificationService from '../services/NotificationService';
 
 const Login = ({navigation}: {navigation: any}) => {
   const [username, setUsername] = useState<string>("");
@@ -77,6 +78,9 @@ const Login = ({navigation}: {navigation: any}) => {
                 try {
                   const loginResult = await loginUser(loginData);
                   await AsyncStorage.setItem("user_id", loginResult.user.user_id);
+
+                  await NotificationService.saveToken(loginResult.user.user_id);
+                  
                   navigation.navigate("NavBar");
                 } catch (error) {
                   setLoginError(true);

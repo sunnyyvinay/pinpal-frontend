@@ -2137,9 +2137,9 @@
   integrity sha512-B0BYAkghz3Q2V09BF88RA601XursIEA111tnc2JOaN7axJWmNefmfjZqw/KdSxKZp7CZUuPpjBmz/WCR9uaHYg==
 
 "@react-native-firebase/app@^22.0.0":
-  version "22.0.0"
-  resolved "https://registry.npmjs.org/@react-native-firebase/app/-/app-22.0.0.tgz"
-  integrity sha512-fbagoIrTJy8edCTiEI7OeAUqO5XoifMirEKoXJDHlsFrPJBfxqMGDhSJutUoWLNHt8KxDtLG9JWnKuW23ISq2Q==
+  version "22.1.0"
+  resolved "https://registry.npmjs.org/@react-native-firebase/app/-/app-22.1.0.tgz"
+  integrity sha512-s01yjF92Fpre7Ff5UzNpVE4q25x2eF+nD8SGzZzBp7nTQjK+4U+VllJ3ajvbjJkfIyMYNBowM135iK/DO5cwDA==
   dependencies:
     firebase "11.3.1"
 

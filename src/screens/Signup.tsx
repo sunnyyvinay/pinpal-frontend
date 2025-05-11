@@ -11,6 +11,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import FontAwesome6Icon from 'react-native-vector-icons/FontAwesome6';
+import NotificationService from '../services/NotificationService';
 
 const Signup = ({navigation}: {navigation: any}) => {
     const [step, setStep] = useState<number>(1);
@@ -312,6 +313,9 @@ const Signup = ({navigation}: {navigation: any}) => {
                                 const signupResult = await signupUser(signupData);
                                 const loginResult = await loginUser(loginData);
                                 await AsyncStorage.setItem("user_id", loginResult.user.user_id);
+
+                                await NotificationService.saveToken(loginResult.user.user_id);
+
                                 navigation.navigate("NavBar");
                             } catch (error) {
                                 console.log("SIGNUP ERROR: ", error);

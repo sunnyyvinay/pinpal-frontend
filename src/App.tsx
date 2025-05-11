@@ -6,7 +6,7 @@ import Signup from './screens/Signup';
 import Login from './screens/Login';
 import Settings from './screens/Settings';
 import AddPin from './screens/AddPin';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import BackButton from './components/BackButton';
 import AddPinOptions from './screens/AddPinOptions';
@@ -16,8 +16,20 @@ import AddFriends from './screens/AddFriends';
 import Profile from './screens/Profile';
 import UserList from './screens/UserList';
 import messaging from '@react-native-firebase/messaging';
+import {initializeApp} from '@react-native-firebase/app';
 
 const Stack = createNativeStackNavigator();
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDz2-8fHgFCiVQbnjMw6BcODWdmwElEW9I",
+  authDomain: "pinpal-32a9b.firebaseapp.com",
+  projectId: "pinpal-32a9b",
+  storageBucket: "pinpal-32a9b.firebasestorage.app",
+  messagingSenderId: "983925870336",
+  appId: "1:983925870336:web:9bf5d5633a06f20993ade5",
+  measurementId: "G-LZ4GL1JHT6"
+};
+
 
 async function requestNotificationPermission() {
   const authStatus = await messaging().requestPermission();
@@ -33,8 +45,39 @@ async function requestNotificationPermission() {
 }
 
 function App(): React.JSX.Element {
+  //const navigationRef = useNavigationContainerRef();
+
   useEffect(() => {
     requestNotificationPermission();
+    
+    // Handle foreground messages
+    const unsubscribeOnMessage = messaging().onMessage(async remoteMessage => {
+      Alert.alert(
+        remoteMessage.notification?.title || 'New notification',
+        remoteMessage.notification?.body || ''
+      );
+    });
+    
+    // Handle background/quit state notifications opening the app
+    messaging().onNotificationOpenedApp(remoteMessage => {
+      console.log('Notification caused app to open:', remoteMessage);
+      // Check if it's a friend request notification
+      if (remoteMessage.data?.type === 'FRIEND_REQUEST') {
+        // Use the navigation reference to navigate
+        //navigationRef.current.navigate('Add Friends');
+        console.log('Friend Request Notification:');
+      }   
+    });
+    
+    // Check if app was opened from a notification
+    messaging().getInitialNotification().then(remoteMessage => {
+      if (remoteMessage) {
+        console.log('App opened from notification:', remoteMessage);
+        // Handle initial navigation if needed
+      }
+    });
+    
+    return () => unsubscribeOnMessage();
   }, []);
   
   return (
