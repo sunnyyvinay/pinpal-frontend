@@ -6,9 +6,7 @@ class NotificationService {
   async getDeviceToken() {
     try {
       const result = await messaging().registerDeviceForRemoteMessages();
-      console.log('Device registered for remote messages:', result);
       const token = await messaging().getToken();
-      console.log('Device token:', token);
       return token;
     } catch (error) {
       console.error('Failed to get device token:', error);

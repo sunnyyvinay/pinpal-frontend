@@ -699,7 +699,7 @@ const styles = StyleSheet.create({
   },
   draggableOptionsView: {
     position: 'absolute',
-    top: hp('40%'),
+    top: hp('50%'),
     alignItems: 'center',
     alignSelf: 'center',
     flex: 1,
