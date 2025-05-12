@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const apiUrl = "http://localhost:3000/api/user";
-//const apiUrl = "https://api.pinpal.info/api/user";
+//const apiUrl = "http://localhost:3000/api/user";
+const apiUrl = "https://api.pinpal.info/api/user";
 
 interface UserSignup {
     username: string;
@@ -359,7 +359,7 @@ export const getTaggedPins = async (id: string) => {
 // SAVE USER TOKEN (for push notifications)
 export const saveUserToken = async (userId: string, token: string) => {
   try {
-    const response = await axios.post(`${apiUrl}/user/${userId}/token`, { token });
+    const response = await axios.post(`${apiUrl}/${userId}/token`, { token });
     return response.data;
   } catch (error) {
     console.error('Error saving user token:', error);
