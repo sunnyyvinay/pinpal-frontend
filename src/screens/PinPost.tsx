@@ -99,7 +99,7 @@ const PinPost = (props:any) => {
             props.navigation.navigate("Welcome");
         }
 
-        const pin_data = await getPin(pin_user_id, pin_id);
+        const pin_data = await getPin(pin_id, pin_user_id);
         const userData = await getUser(pin_user_id);
         setPinData(pin_data.pin);
         setEditedPinData(pin_data.pin);

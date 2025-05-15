@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-//const apiUrl = "http://localhost:3000/api/user";
-const apiUrl = "https://api.pinpal.info/api/user";
+const apiUrl = "http://localhost:3000/api/user";
+//const apiUrl = "https://api.pinpal.info/api/user";
 
 interface UserSignup {
     username: string;
@@ -163,10 +163,16 @@ export const addPin = async (id: string, pin: Pin, photo: any) => {
 };
 
 // GET PIN
-export const getPin = async (user_id: string, pin_id: string) => {
+export const getPin = async (pin_id: string, user_id?: string) => {
   try {
-      const response = await axios.get(`${apiUrl}/${user_id}/pin/${pin_id}/info`);
-      return response.data;
+      // If user_id is not provided, use the pin_id directly
+      if (!user_id) {
+          const response = await axios.get(`${apiUrl}/pin/${pin_id}`);
+          return response.data;
+      } else {
+        const response = await axios.get(`${apiUrl}/${user_id}/pin/${pin_id}/info`);
+        return response.data;
+      }
   } catch (error) {
       return error;
   }
@@ -330,6 +336,16 @@ export const addPinLike = async (userid: string|null, pinid: string) => {
 export const deletePinLike = async (userid: string|null, pinid: string) => {
   try {
       const response = await axios.delete(`${apiUrl}/${pinid}/user/${userid}/unlike`);
+      return response.data;
+  } catch (error) {
+      return error;
+  }
+};
+
+// GET FRIEND PINS
+export const getFriendPins = async (userid: string|null) => {
+  try {
+      const response = await axios.get(`${apiUrl}/${userid}/pins/friends`);
       return response.data;
   } catch (error) {
       return error;

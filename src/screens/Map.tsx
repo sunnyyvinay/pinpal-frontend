@@ -3,7 +3,7 @@ import { Alert, Image, Linking, Platform, ScrollView, StyleSheet, Text, Touchabl
 import GetLocation, { isLocationError } from 'react-native-get-location';
 import MapView, { Callout, CalloutSubview, MapMarker, Marker } from 'react-native-maps';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { getPins, getPublicPins, getSearchUsers, getUser, getUserFriends, updatePinLocation } from '../services/user.service';
+import { getFriendPins, getPin, getPins, getPublicPins, getSearchUsers, getUser, getUserFriends, updatePinLocation } from '../services/user.service';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
 import * as Colors from '../constants/colors';
@@ -44,19 +44,7 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
     visibility: number
   }
   const [pins, setPins] = useState<Pin[]>([]);
-  type FriendPin = {
-    user: {
-      user_id: string,
-      username: string,
-      full_name: string,
-      pass: string,
-      birthday: Date,
-      phone_no: string | undefined,
-      profile_pic: string | null
-    },
-    pins: Pin[]
-  }
-  const [friendPins, setFriendPins] = useState<FriendPin[]>([]);
+  const [friendPins, setFriendPins] = useState([]);
   const [publicPins, setPublicPins] = useState([]);
 
   let searchedUserCount: number = 0;
@@ -152,29 +140,21 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
           
           // FRIEND PINS
           if (filterState.friends) {
-            var friendData = await getUserFriends(user_id);
-            for (let i = 0; i < friendData.friends.length; i++) {
-              var friend; var pin;
-              if (friendData.friends[i].source_id != user_id) {
-                  pin = await getPins(friendData.friends[i].source_id);
-                  friend = await getUser(friendData.friends[i].source_id);
-              } else {
-                  pin = await getPins(friendData.friends[i].target_id);
-                  friend = await getUser(friendData.friends[i].target_id);
-              }
-              if (pin.pins) {
-                pin = pin.pins.filter((pin: any) => {
-                  if (route.params && pin.pin_id == route.params.pin_id) return true;
-                  return pin.visibility > 0 && (filterState.location_tag == "" || pin.location_tags.includes(filterState.location_tag))
-                });
-                if (!filterState.on && filterState.location_tag == "") pin = pin.filter((pin: any) => {
-                  if (route.params && pin.pin_id == route.params.pin_id) return true;
-                  return Math.floor((now.getTime() - new Date(pin.create_date).getTime()) / (1000*60*60)) <= 120 // last 5 days
-                }); 
-                friendData.friends[i] = {user: friend.user, pins: pin};
-              }
+            var friendPins = await getFriendPins(user_id);
+            friendPins = friendPins.pins;
+            if (friendPins && friendPins.length > 0) {
+              friendPins = friendPins.filter((friendPin: any) => {
+                if (route.params && friendPin.pin.pin_id == route.params.pin_id) return true;
+                return friendPin.pin.visibility > 0 && (filterState.location_tag == "" || friendPin.pin.location_tags.includes(filterState.location_tag))
+              });
+              
+              if (!filterState.on && filterState.location_tag == "") friendPins = friendPins.filter((friendPin: any) => {
+                if (route.params && friendPin.pin.pin_id == route.params.pin_id) return true;
+                return Math.floor((now.getTime() - new Date(friendPin.pin.create_date).getTime()) / (1000*60*60)) <= 120 // last 5 days
+              });
             }
-            setFriendPins([...friendData.friends]);
+
+            setFriendPins(friendPins);
           } else setFriendPins([]);
 
           // PUBLIC PINS
@@ -308,25 +288,24 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
             </Marker>
           ))}
           
-        {friendPins && friendPins.map((friend: any, index: number) => (
-          friend && friend.pins && friend.pins.map((friendPin: any, index: number) => (
-            friendPin.visibility > 0 && (!filterState.on || (filterState.on && friendPin.user_id == filterState.user)) &&
+        {friendPins && friendPins.map((friendPin: any, index: number) => (
+            friendPin.pin.visibility > 0 && (!filterState.on || (filterState.on && friendPin.user.user_id == filterState.user)) &&
             <Marker
-              key={friendPin.pin_id}  
-              coordinate={{latitude: friendPin.latitude, longitude: friendPin.longitude}}
-              title={friendPin.title} 
-              ref={ref => (markerRefs.current[friendPin.pin_id] = ref)}>
+              key={friendPin.pin.pin_id}  
+              coordinate={{latitude: friendPin.pin.latitude, longitude: friendPin.pin.longitude}}
+              title={friendPin.pin.title} 
+              ref={ref => (markerRefs.current[friendPin.pin.pin_id] = ref)}>
                 <Image source={require('../../assets/images/friend-pin.png')} style={{width: wp('5.5%'), height: hp('5.5%')}} resizeMode='contain' />
                 <Callout style={styles.pinCalloutStyle}>
                   <View style={{...styles.pinCalloutView}}>
-                    <Text style={styles.pinCalloutTitle}>{friendPin.title}</Text>
-                    <Text style={styles.pinCalloutUsername}>@{friend.user.username}</Text>
-                    <FastImage source={{uri: friendPin.photo}} style={styles.pinCalloutImage}/>
+                    <Text style={styles.pinCalloutTitle}>{friendPin.pin.title}</Text>
+                    <Text style={styles.pinCalloutUsername}>@{friendPin.user.username}</Text>
+                    <FastImage source={{uri: friendPin.pin.photo}} style={styles.pinCalloutImage}/>
                   </View>
 
                   <View style={{justifyContent: 'center', alignItems: 'center', flex: 1}}>
                     <CalloutSubview style={{justifyContent: 'center', alignItems: 'center'}}
-                        onPress={() => { navigation.push("Pin detail", { pin_id: friendPin.pin_id, pin_user_id: friendPin.user_id })}}>
+                        onPress={() => { navigation.push("Pin detail", { pin_id: friendPin.pin.pin_id, pin_user_id: friendPin.user.user_id })}}>
                       <View style={styles.pinCalloutViewButton}>
                         <Text style={styles.pinCalloutViewButtonText}>View</Text>
                       </View>
@@ -334,7 +313,7 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
                   </View>
                 </Callout>
             </Marker>
-          ))))}
+          ))}
 
         {publicPins && publicPins.map((publicPin: any, index: number) => (
           (!filterState.on || (filterState.on && publicPin.user_id == filterState.user)) &&
