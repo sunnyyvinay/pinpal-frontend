@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { Alert } from 'react-native';
+import React, { useEffect } from 'react';
 import NavBar from './components/NavBar';
 import Welcome from './screens/Welcome';
 import Signup from './screens/Signup';
@@ -10,13 +9,12 @@ import { NavigationContainer, useNavigationContainerRef } from '@react-navigatio
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import BackButton from './components/BackButton';
 import AddPinOptions from './screens/AddPinOptions';
-import { ContextProvider, useAppContext } from './AppContext';
+import { ContextProvider } from './AppContext';
 import PinPost from './screens/PinPost';
 import AddFriends from './screens/AddFriends';
 import Profile from './screens/Profile';
 import UserList from './screens/UserList';
-import messaging from '@react-native-firebase/messaging';
-import {initializeApp} from '@react-native-firebase/app';
+import NotificationService from './services/NotificationService';
 
 const Stack = createNativeStackNavigator();
 
@@ -30,75 +28,36 @@ const firebaseConfig = {
   measurementId: "G-LZ4GL1JHT6"
 };
 
-
-async function requestNotificationPermission() {
-  const authStatus = await messaging().requestPermission();
-  const enabled =
-    authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-    authStatus === messaging.AuthorizationStatus.PROVISIONAL;
-
-  if (!enabled) {
-    Alert.alert('Permission required', 'Enable notifications to receive friend requests.');
-  }
-}
-
 function App(): React.JSX.Element {
-  //const navigationRef = useNavigationContainerRef();
+  const navigationRef = useNavigationContainerRef();
 
   useEffect(() => {
-    requestNotificationPermission();
+    // Initialize the notification service with the navigation reference
+    const unsubscribeNotifications = NotificationService.initialize(navigationRef);
     
-    // Handle foreground messages
-    const unsubscribeOnMessage = messaging().onMessage(async remoteMessage => {
-      Alert.alert(
-        remoteMessage.notification?.title || 'New notification',
-        remoteMessage.notification?.body || ''
-      );
-    });
-
-    messaging().setBackgroundMessageHandler(async remoteMessage => {
-      console.log('Message handled in the background!', remoteMessage);
-    });
-    
-    // Handle background/quit state notifications opening the app
-    messaging().onNotificationOpenedApp(remoteMessage => {
-      console.log('Notification caused app to open:', remoteMessage);
-      // Check if it's a friend request notification
-      if (remoteMessage.data?.type === 'FRIEND_REQUEST') {
-        // Use the navigation reference to navigate
-        //navigationRef.current.navigate('Add Friends');
-        console.log('Friend Request Notification:');
-      }   
-    });
-    
-    // Check if app was opened from a notification
-    messaging().getInitialNotification().then(remoteMessage => {
-      if (remoteMessage) {
-        console.log('App opened from notification:', remoteMessage);
-        // Handle initial navigation if needed
-      }
-    });
-    
-    return () => unsubscribeOnMessage();
-  }, []);
+    // Clean up on unmount
+    return () => {
+      unsubscribeNotifications();
+    };
+  }, [navigationRef]);
   
   return (
     <ContextProvider>
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName={"Welcome"} screenOptions={{ headerShown: false }} >
-        <Stack.Screen name="Welcome" component={Welcome} />
-        <Stack.Screen name="Signup" component={Signup} />
-        <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen name="NavBar" component={NavBar} options={{gestureEnabled: false}}/>
-        <Stack.Screen name="Settings" component={Settings} options={({navigation}) => ({headerShown: true, headerLeft: () => <BackButton navigation={navigation} />})} />
-        <Stack.Screen name="New pin" component={AddPin} options={({navigation}) => ({headerShown: true, headerLeft: () => <BackButton navigation={navigation} /> })} />
-        <Stack.Screen name="AddPinOptions" component={AddPinOptions} />
-        <Stack.Screen name="Pin detail" component={PinPost} options={({navigation}) => ({headerShown: true, headerLeft: () => <BackButton navigation={navigation} /> })} />
-        <Stack.Screen name="Add Friends" component={AddFriends} options={({navigation}) => ({headerShown: true, headerLeft: () => <BackButton navigation={navigation} /> })} />
-        <Stack.Screen name="Profile" component={Profile} options={({navigation}) => ({headerShown: true, headerLeft: () => <BackButton navigation={navigation} /> })} />
-        <Stack.Screen name="UserList" component={UserList} options={({navigation}) => ({headerShown: true, headerLeft: () => <BackButton navigation={navigation} /> })} />  
-      </Stack.Navigator>
-    </NavigationContainer>
+      <NavigationContainer ref={navigationRef}>
+        <Stack.Navigator initialRouteName={"Welcome"} screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="Welcome" component={Welcome} />
+          <Stack.Screen name="Signup" component={Signup} />
+          <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen name="NavBar" component={NavBar} options={{gestureEnabled: false}}/>
+          <Stack.Screen name="Settings" component={Settings} options={({navigation}) => ({headerShown: true, headerLeft: () => <BackButton navigation={navigation} />})} />
+          <Stack.Screen name="New pin" component={AddPin} options={({navigation}) => ({headerShown: true, headerLeft: () => <BackButton navigation={navigation} /> })} />
+          <Stack.Screen name="AddPinOptions" component={AddPinOptions} />
+          <Stack.Screen name="Pin detail" component={PinPost} options={({navigation}) => ({headerShown: true, headerLeft: () => <BackButton navigation={navigation} /> })} />
+          <Stack.Screen name="Add Friends" component={AddFriends} options={({navigation}) => ({headerShown: true, headerLeft: () => <BackButton navigation={navigation} /> })} />
+          <Stack.Screen name="Profile" component={Profile} options={({navigation}) => ({headerShown: true, headerLeft: () => <BackButton navigation={navigation} /> })} />
+          <Stack.Screen name="UserList" component={UserList} options={({navigation}) => ({headerShown: true, headerLeft: () => <BackButton navigation={navigation} /> })} />  
+        </Stack.Navigator>
+      </NavigationContainer>
     </ContextProvider>
   );
 }
