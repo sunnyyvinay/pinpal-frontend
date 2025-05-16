@@ -160,13 +160,13 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
           // PUBLIC PINS
           if (filterState.public) {
             var publicPins = await getPublicPins(user_id);
+            publicPins = publicPins.pins;
             
-            if (publicPins.pins) {
-              for (let i = 0; i < publicPins.pins.length; i++) {
-                const user = await getUser(publicPins.pins[i].user_id);
-                publicPins.pins[i] = {...publicPins.pins[i], user: user.user};
-              }
-              setPublicPins(publicPins.pins.filter((pin: any) => filterState.location_tag == "" || pin.location_tags.includes(filterState.location_tag)));
+            if (publicPins && publicPins.length > 0) {
+              setPublicPins(publicPins.filter((pin: any) => {
+                if (route.params && publicPins.pin.pin_id == route.params.pin_id) return true;
+                return filterState.location_tag == "" || pin.location_tags.includes(filterState.location_tag)
+            }));
             }
           } else setPublicPins([]);
 
@@ -318,16 +318,16 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
         {publicPins && publicPins.map((publicPin: any, index: number) => (
           (!filterState.on || (filterState.on && publicPin.user_id == filterState.user)) &&
             <Marker
-              key={publicPin.pin_id}  
-              coordinate={{latitude: publicPin.latitude, longitude: publicPin.longitude}}
-              title={publicPin.title} 
-              ref={ref => (markerRefs.current[publicPin.pin_id] = ref)}>
+              key={publicPin.pin.pin_id}  
+              coordinate={{latitude: publicPin.pin.latitude, longitude: publicPin.pin.longitude}}
+              title={publicPin.pin.title} 
+              ref={ref => (markerRefs.current[publicPin.pin.pin_id] = ref)}>
                 <Image source={require('../../assets/images/public-pin.png')} style={{width: wp('5.5%'), height: hp('5.5%')}} resizeMode='contain' />
                 <Callout style={styles.pinCalloutStyle}>
                   <View style={styles.pinCalloutView}>
-                    <Text style={styles.pinCalloutTitle}>{publicPin.title}</Text>
+                    <Text style={styles.pinCalloutTitle}>{publicPin.pin.title}</Text>
                     <Text style={styles.pinCalloutUsername}>@{publicPin.user.username}</Text>
-                    <FastImage source={{uri: publicPin.photo}} style={styles.pinCalloutImage}/>
+                    <FastImage source={{uri: publicPin.pin.photo}} style={styles.pinCalloutImage}/>
                   </View>
 
                   <View style={{justifyContent: 'space-evenly', alignItems: 'center', flex: 1, flexDirection: 'row'}}>
