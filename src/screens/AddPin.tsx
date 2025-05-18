@@ -274,7 +274,7 @@ const AddPin = ({ route, navigation }: any) => {
                                 value={pinData.title}
                                 placeholder="Give a pin title"
                                 style={{...styles.input, color: theme === 'dark' ? Colors.white : Colors.black}}
-                                onChangeText={(text: string) => {setPinData({ ...pinData, title: text.trim() }); setError({...error, title: ""})}}
+                                onChangeText={(text: string) => {setPinData({ ...pinData, title: text }); setError({...error, title: ""})}}
                                 autoCapitalize="none"
                             />
                             {error.title != "" && <Text style={styles.errorText}>{error.title}</Text>}
@@ -285,7 +285,7 @@ const AddPin = ({ route, navigation }: any) => {
                                 value={pinData.caption}
                                 placeholder="Write a caption..."
                                 style={{...styles.input, height: hp('12.5%'), color: theme === 'dark' ? Colors.white : Colors.black}}
-                                onChangeText={(text: string) => {setPinData({ ...pinData, caption: text.trim() }); setError({...error, caption: ""})}}
+                                onChangeText={(text: string) => {setPinData({ ...pinData, caption: text }); setError({...error, caption: ""})}}
                                 autoCapitalize="none"
                                 multiline={true}
                                 textAlignVertical="top"
@@ -348,7 +348,7 @@ const AddPin = ({ route, navigation }: any) => {
                                         } else {
                                             const user_id = await AsyncStorage.getItem("user_id");
                                             if (user_id) {
-                                                const pinInput = {...pinData, latitude: lat_long[0], longitude: lat_long[1]};
+                                                const pinInput = {...pinData, title: pinData.title.trim(), caption: pinData.caption.trim(), latitude: lat_long[0], longitude: lat_long[1]};
                                                 const formData = new FormData();
                                                 formData.append('photo', {
                                                     uri: pinData.photo,
