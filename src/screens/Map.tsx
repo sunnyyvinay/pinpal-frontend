@@ -626,7 +626,7 @@ function Map({ route, navigation }: { route: any, navigation: any }): React.JSX.
                 }
               }}
               query={{
-                key: 'AIzaSyC68_tPg4ZLMBR8YTz7aSMLW43qwIXHWa4',
+                key: process.env.GOOGLE_MAP_API,
                 language: 'en',
               }}
               styles={{

@@ -174,6 +174,7 @@ class NotificationService {
         }
         break;
       default:
+        this._navigationRef.navigate('NavBar');
         console.log('Unknown notification type:', data.type);
         break;
     }
